@@ -50,16 +50,19 @@ function App() {
 
 const getActiveFrequencies = () => {
 
-  const activeScales = {}
+  let activeScales = {}
 
-  activeKeys.map(key => {
-    activeScales[key] = scales[key]
-  })
+  if (activeKeys.length) {
 
-  console.log(activeScales)
+    activeKeys.map(key => {
+      activeScales[key] = scales[key]
+    })
 
-  // console.log(scales)
-  // console.log(activeScales)
+    // console.log(scales)
+    // console.log(activeScales)
+  } else {
+    activeScales = scales
+  }
   
   const frequencyArray = Object.keys(activeScales).map(key => scales[key].major).flat(Infinity)
 
