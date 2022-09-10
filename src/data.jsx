@@ -13,7 +13,7 @@ const   frequencies = {
   B   : [30.87, 61.74, 123.47,  246.94, 493.88, 987.77, 1975.53,  3951.07,  7902.13,  15804.26, 31608.52]
 }
 
-export  const keys = {
+export  const scales = {
   C   : {major: [frequencies.C    ,   frequencies.D,      frequencies.E,      frequencies.F,      frequencies.G,      frequencies.A,      frequencies.B     ]},
   'C#': {major: [frequencies['C#'],   frequencies['D#'],  frequencies.F,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'],  frequencies.C     ]},
   D   : {major: [frequencies.D    ,   frequencies.E,      frequencies['F#'],  frequencies.G,      frequencies.A,      frequencies.B,      frequencies['C#'] ]},

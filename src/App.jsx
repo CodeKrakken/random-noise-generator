@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom/client';
-import { keys } from './data';
+import { scales } from './data';
 
 function App() {
 
@@ -40,7 +40,7 @@ function App() {
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
     const maxFrequency = +document.getElementById('maxFrequency').value
-    const activeFrequencies = getActiveFrequencies(keys) 
+    const activeFrequencies = getActiveFrequencies() 
 
     let filteredFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*filteredFrequencies.length)
@@ -48,10 +48,22 @@ function App() {
     return filteredFrequencies[randomIndex]
   }
 
-const getActiveFrequencies = (keys) => {
-  const outputKeys = Object.keys(keys).map(key => keys[key].major).flat(Infinity)
+const getActiveFrequencies = () => {
 
-  return outputKeys
+  const activeScales = {}
+
+  activeKeys.map(key => {
+    activeScales[key] = scales[key]
+  })
+
+  console.log(activeScales)
+
+  // console.log(scales)
+  // console.log(activeScales)
+  
+  const frequencyArray = Object.keys(activeScales).map(key => scales[key].major).flat(Infinity)
+
+  return frequencyArray
 }
 
   const stopNote = () => {
@@ -67,6 +79,7 @@ const getActiveFrequencies = (keys) => {
       const waveType = waveTypes[Math.floor(Math.random() * 4)]
       oscillator10.type = waveType
       const frequency = getRandomFrequency();
+      console.log(frequency)
       oscillator10.frequency.value = frequency
       const level = Math.random()
       gain10.gain.value = level
