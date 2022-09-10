@@ -30,8 +30,8 @@ function App() {
     'square'
   ]
 
-  const [minNoteLength, setMinNoteLength] = useState(1);
-  const [maxNoteLength, setMaxNoteLength] = useState(1000);
+  const [minNoteLength, setMinNoteLength] = useState(125);
+  const [maxNoteLength, setMaxNoteLength] = useState(125);
   const [minFrequency , setMinFrequency ] = useState(20);
   const [maxFrequency , setMaxFrequency ] = useState(20000);
   const [checked,       setChecked      ] = useState(false)
@@ -40,7 +40,6 @@ function App() {
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
     const maxFrequency = +document.getElementById('maxFrequency').value
-
     const activeFrequencies = getActiveFrequencies(keys) 
 
     let filteredFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
@@ -50,8 +49,8 @@ function App() {
   }
 
 const getActiveFrequencies = (keys) => {
-
   const outputKeys = Object.keys(keys).map(key => keys[key].major).flat(Infinity)
+
   return outputKeys
 }
 
@@ -95,11 +94,13 @@ const getActiveFrequencies = (keys) => {
   }
 
   const handleChange = (e) => {
+
     setChecked(!checked)
     const toggledKey = e.target.value
+
     if (activeKeys.includes(toggledKey)) {
-      const filteredKeys = activeKeys.filter(key => key !== toggledKey)
-      setActiveKeys(filteredKeys)
+      const toggledKeyIndex = activeKeys.indexOf(toggledKey)
+      activeKeys.splice(toggledKeyIndex, 1)
     } else {
       activeKeys.push(toggledKey)
     }
