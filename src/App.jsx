@@ -83,7 +83,13 @@ const getActiveFrequencies = () => {
       oscillator10.type = waveType
       const frequency = getRandomFrequency();
       console.log(frequency)
-      oscillator10.frequency.value = frequency
+
+      try {
+        oscillator10.frequency.value = frequency
+      } catch (error) {
+        console.log(error)
+      }
+      
       const level = Math.random()
       gain10.gain.value = level
       setTimeout(stopNote, noteLength)
@@ -158,12 +164,19 @@ const getActiveFrequencies = () => {
           )
         }
       </form>
-      <input 
-        type="checkbox"
-        value="C"
-        checked={checked}
-        onChange={handleChange}
-      />
+      {
+        Object.keys(scales).map(key =>
+          <>
+            <label>{key}</label>
+            <input
+              type="checkbox"
+              value={key}
+              checked={activeKeys.includes(key)}
+              onChange={handleChange}
+            />
+          </>
+        )
+      }
     </div>
   );
 }

@@ -23,7 +23,10 @@ export  const scales = {
   'F#': {major: [frequencies['F#'],   frequencies['G#'],  frequencies['A#'],  frequencies.B,      frequencies['C#'],  frequencies['D#'],  frequencies.F,    ]},
   G   : {major: [frequencies.G,       frequencies.A,      frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies['F#'] ]},
   'G#': {major: [frequencies['G#'],   frequencies['A#'],  frequencies.C,      frequencies['C#'],  frequencies['D#'],  frequencies.F,      frequencies.G,    ]},
-  A   : {major: [frequencies.A,       frequencies.B,      frequencies['C#'],  frequencies.D,      frequencies.E,      frequencies['F#'],  frequencies['G#'] ]},
+  A   : {
+    major:  [frequencies.A,       frequencies.B,      frequencies['C#'],  frequencies.D,      frequencies.E,      frequencies['F#'],  frequencies['G#']],
+    minor:  [frequencies.A,       frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies.F,      frequencies['G#']]
+  },  
   'A#': {major: [frequencies['A#'],   frequencies.C,      frequencies.D,      frequencies['D#'],  frequencies.F,      frequencies.G,      frequencies.A,    ]},
   B   : {major: [frequencies.B,       frequencies['C#'],  frequencies['D#'],  frequencies.E,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'] ]},
 }
