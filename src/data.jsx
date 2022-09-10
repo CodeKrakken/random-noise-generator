@@ -14,19 +14,18 @@ const   frequencies = {
 }
 
 export  const scales = {
-  C   : {major: [frequencies.C    ,   frequencies.D,      frequencies.E,      frequencies.F,      frequencies.G,      frequencies.A,      frequencies.B     ]},
-  'C#': {major: [frequencies['C#'],   frequencies['D#'],  frequencies.F,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'],  frequencies.C     ]},
-  D   : {major: [frequencies.D    ,   frequencies.E,      frequencies['F#'],  frequencies.G,      frequencies.A,      frequencies.B,      frequencies['C#'] ]},
-  'D#': {major: [frequencies['D#'],   frequencies.F,      frequencies.G,      frequencies['G#'],  frequencies['A#'],  frequencies.C,      frequencies.D     ]},
-  E   : {major: [frequencies.E,       frequencies['F#'],  frequencies['G#'],  frequencies.A,      frequencies.B,      frequencies['C#'],  frequencies['D#'] ]},
-  F   : {major: [frequencies.F,       frequencies.G,      frequencies.A,      frequencies['A#'],  frequencies.C,      frequencies.D,      frequencies.E,    ]},
-  'F#': {major: [frequencies['F#'],   frequencies['G#'],  frequencies['A#'],  frequencies.B,      frequencies['C#'],  frequencies['D#'],  frequencies.F,    ]},
-  G   : {major: [frequencies.G,       frequencies.A,      frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies['F#'] ]},
-  'G#': {major: [frequencies['G#'],   frequencies['A#'],  frequencies.C,      frequencies['C#'],  frequencies['D#'],  frequencies.F,      frequencies.G,    ]},
-  A   : {
-    major:  [frequencies.A,       frequencies.B,      frequencies['C#'],  frequencies.D,      frequencies.E,      frequencies['F#'],  frequencies['G#']],
-    minor:  [frequencies.A,       frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies.F,      frequencies['G#']]
-  },  
-  'A#': {major: [frequencies['A#'],   frequencies.C,      frequencies.D,      frequencies['D#'],  frequencies.F,      frequencies.G,      frequencies.A,    ]},
-  B   : {major: [frequencies.B,       frequencies['C#'],  frequencies['D#'],  frequencies.E,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'] ]},
+  C   : [frequencies.C    ,   frequencies.D,      frequencies.E,      frequencies.F,      frequencies.G,      frequencies.A,      frequencies.B     ],
+  'C#': [frequencies['C#'],   frequencies['D#'],  frequencies.F,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'],  frequencies.C     ],
+  D   : [frequencies.D    ,   frequencies.E,      frequencies['F#'],  frequencies.G,      frequencies.A,      frequencies.B,      frequencies['C#'] ],
+  'D#': [frequencies['D#'],   frequencies.F,      frequencies.G,      frequencies['G#'],  frequencies['A#'],  frequencies.C,      frequencies.D     ],
+  E   : [frequencies.E,       frequencies['F#'],  frequencies['G#'],  frequencies.A,      frequencies.B,      frequencies['C#'],  frequencies['D#'] ],
+  F   : [frequencies.F,       frequencies.G,      frequencies.A,      frequencies['A#'],  frequencies.C,      frequencies.D,      frequencies.E,    ],
+  'F#': [frequencies['F#'],   frequencies['G#'],  frequencies['A#'],  frequencies.B,      frequencies['C#'],  frequencies['D#'],  frequencies.F,    ],
+  G   : [frequencies.G,       frequencies.A,      frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies['F#'] ],
+  'G#': [frequencies['G#'],   frequencies['A#'],  frequencies.C,      frequencies['C#'],  frequencies['D#'],  frequencies.F,      frequencies.G,    ],
+  A   : [frequencies.A,       frequencies.B,      frequencies['C#'],  frequencies.D,      frequencies.E,      frequencies['F#'],  frequencies['G#']],
+  'A#': [frequencies['A#'],   frequencies.C,      frequencies.D,      frequencies['D#'],  frequencies.F,      frequencies.G,      frequencies.A,    ],
+  B   : [frequencies.B,       frequencies['C#'],  frequencies['D#'],  frequencies.E,      frequencies['F#'],  frequencies['G#'],  frequencies['A#'] ],
+  Am  : [frequencies.A,       frequencies.B,      frequencies.C,      frequencies.D,      frequencies.E,      frequencies.F,      frequencies['G#']],  
+
 }

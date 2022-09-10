@@ -64,7 +64,7 @@ const getActiveFrequencies = () => {
     activeScales = scales
   }
   
-  const frequencyArray = Object.keys(activeScales).map(key => scales[key].major).flat(Infinity)
+  const frequencyArray = Object.keys(activeScales).map(key => scales[key]).flat(Infinity)
 
   return frequencyArray
 }
@@ -165,8 +165,10 @@ const getActiveFrequencies = () => {
         }
       </form>
       {
-        Object.keys(scales).map(key =>
-          <>
+        Object.keys(scales).map(key => {
+          const scaleLabels = Object.keys(scales)
+          return <>
+            {scaleLabels.indexOf(key) === Math.ceil(scaleLabels.length/2) && <br/>}
             <label>{key}</label>
             <input
               type="checkbox"
@@ -175,7 +177,7 @@ const getActiveFrequencies = () => {
               onChange={handleChange}
             />
           </>
-        )
+        })
       }
     </div>
   );
