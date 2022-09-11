@@ -36,6 +36,7 @@ function App() {
   const [maxFrequency , setMaxFrequency ] = useState(20000);
   const [checked,       setChecked      ] = useState(false)
   const [activeKeys,    setActiveKeys   ] = useState([])
+  const [activeNumbers, setActiveNumbers] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -128,6 +129,22 @@ const getActiveFrequencies = () => {
     }
   }
 
+
+  const handleNumberChange = (e) => {
+
+    setChecked(!checked)
+    const toggledNumber = +e.target.value
+
+    if (activeNumbers.includes(toggledNumber)) {
+      const toggledNumberIndex = activeNumbers.indexOf(toggledNumber)
+      activeNumbers.splice(toggledNumberIndex, 1)
+    } else {
+      activeNumbers.push(toggledNumber)
+    }
+    console.log(activeNumbers)
+  }
+
+
   const inputs = [
     {
       id: 'minLength',
@@ -147,6 +164,8 @@ const getActiveFrequencies = () => {
       action: setMaxFrequency
     }
   ]
+
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
   return (
     <div>
@@ -178,6 +197,20 @@ const getActiveFrequencies = () => {
             />
           </>
         })
+      }
+      <br/>
+      {
+        numbers.map(number => 
+          <>
+            <label>{number}</label>
+            <input
+              type="checkbox"
+              value={number}
+              checked={activeNumbers.includes(number)}
+              onChange={handleNumberChange}
+            />
+          </>
+        )
       }
     </div>
   );
