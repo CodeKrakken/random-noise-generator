@@ -42,33 +42,43 @@ function App() {
     const minFrequency = +document.getElementById('minFrequency').value
     const maxFrequency = +document.getElementById('maxFrequency').value
     const activeFrequencies = getActiveFrequencies() 
-
     let filteredFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*filteredFrequencies.length)
 
     return filteredFrequencies[randomIndex]
   }
 
-const getActiveFrequencies = () => {
-
-  let activeScales = {}
-
-  if (activeKeys.length) {
-
-    activeKeys.map(key => {
-      activeScales[key] = scales[key]
-    })
-
-    // console.log(scales)
-    // console.log(activeScales)
-  } else {
-    activeScales = scales
+  const unique = (value, index, self) => {
+    return self.indexOf(value) === index;
   }
-  
-  const frequencyArray = Object.keys(activeScales).map(key => scales[key]).flat(Infinity)
 
-  return frequencyArray
-}
+  const getActiveFrequencies = () => {
+
+    let activeScales = {}
+
+    if (activeKeys.length) {
+
+      activeKeys.map(key => {
+        activeScales[key] = JSON.parse(JSON.stringify(scales[key]))
+      })
+
+    } else {
+      activeScales = JSON.parse(JSON.stringify(scales))
+    }
+
+    const sortedActiveNumbers = activeNumbers.sort((a, b) => b - a)
+
+    Object.keys(activeScales).map(key => {
+      console.log(activeScales[key])
+    })
+    console.log(sortedActiveNumbers)
+    console.log(activeScales)
+    
+    
+    const frequencyArray = Object.keys(activeScales).map(key => scales[key]).flat(Infinity)
+
+    return frequencyArray
+  }
 
   const stopNote = () => {
     gain10.gain.value = 0
@@ -83,7 +93,6 @@ const getActiveFrequencies = () => {
       const waveType = waveTypes[Math.floor(Math.random() * 4)]
       oscillator10.type = waveType
       const frequency = getRandomFrequency();
-      console.log(frequency)
 
       try {
         oscillator10.frequency.value = frequency
@@ -141,7 +150,6 @@ const getActiveFrequencies = () => {
     } else {
       activeNumbers.push(toggledNumber)
     }
-    console.log(activeNumbers)
   }
 
 
@@ -165,7 +173,7 @@ const getActiveFrequencies = () => {
     }
   ]
 
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  const numbers = [1,2,3,4,5,6,7,8,9,10,11,12]
 
   return (
     <div>
