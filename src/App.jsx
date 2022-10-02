@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom/client';
 import { scales } from './data';
+
+let cycling = false
 
 function App() {
 
@@ -18,8 +20,6 @@ function App() {
   gain10.gain.value = 0
 
   oscillator10.start(0);
-
-  let cycling = false
 
   let i = 0
 
@@ -67,13 +67,6 @@ function App() {
     }
 
     const sortedActiveNumbers = activeNumbers.sort((a, b) => b - a)
-
-    Object.keys(activeScales).map(key => {
-      console.log(activeScales[key])
-    })
-    console.log(sortedActiveNumbers)
-    console.log(activeScales)
-    
     
     const frequencyArray = Object.keys(activeScales).map(key => scales[key]).flat(Infinity)
 
@@ -86,7 +79,11 @@ function App() {
   }
 
   const playNote = function(e) {
+
+    console.log(cycling)
     if (cycling)  {
+
+
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
       const noteLength = minLength + (Math.random() * (maxLength - minLength))
