@@ -30,13 +30,14 @@ function App() {
     'square'
   ]
 
-  const [minNoteLength, setMinNoteLength] = useState(125);
-  const [maxNoteLength, setMaxNoteLength] = useState(125);
-  const [minFrequency , setMinFrequency ] = useState(20);
-  const [maxFrequency , setMaxFrequency ] = useState(20000);
-  const [checked,       setChecked      ] = useState(false)
-  const [activeKeys,    setActiveKeys   ] = useState([])
-  const [activeNumbers, setActiveNumbers] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+  const [minNoteLength,     setMinNoteLength    ] = useState(125);
+  const [maxNoteLength,     setMaxNoteLength    ] = useState(125);
+  const [minFrequency ,     setMinFrequency     ] = useState(20);
+  const [maxFrequency ,     setMaxFrequency     ] = useState(20000);
+  const [checked,           setChecked          ] = useState(false)
+  const [activeKeys,        setActiveKeys       ] = useState([])
+  const [activeNumbers,     setActiveNumbers    ] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -80,9 +81,7 @@ function App() {
 
   const playNote = function(e) {
 
-    console.log(cycling)
     if (cycling)  {
-
 
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
@@ -105,6 +104,7 @@ function App() {
 
   const start = () => {
     cycling = true
+    setCycleButtonLabel('Stop')
     context.resume()
     playNote()
   }
@@ -113,6 +113,7 @@ function App() {
     if (cycling) {
       gain10.gain.value = 0
       cycling = false
+      setCycleButtonLabel('Start')
     } else {
       start()
     }
@@ -135,7 +136,6 @@ function App() {
     }
   }
 
-
   const handleNumberChange = (e) => {
 
     setChecked(!checked)
@@ -148,7 +148,6 @@ function App() {
       activeNumbers.push(toggledNumber)
     }
   }
-
 
   const inputs = [
     {
@@ -175,7 +174,7 @@ function App() {
   return (
     <div>
       RANDOM NOISE GENERATOR
-      <button value="Start/Stop" onClick={startStop}>Start/Stop</button>
+      <button value="Start/Stop" onClick={startStop}>{cycleButtonLabel}</button>
       <form onSubmit={handleSubmit}>
         {
           inputs.map(input => 
