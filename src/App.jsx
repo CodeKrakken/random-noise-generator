@@ -32,7 +32,7 @@ function App() {
   oscillator10.start(0);
   oscillator20.start(0);
 
-  const waveTypes = [
+  const waveShapes = [
     'sine',
     'sawtooth',
     'triangle',
@@ -45,9 +45,12 @@ function App() {
   const [maxFrequency ,     setMaxFrequency     ] = useState(20000);
   const [checked,           setChecked          ] = useState(false)
   const [activeKeys,        setActiveKeys       ] = useState([])
-  const [activeNotes,     setActiveNotes    ] = useState([1, 3, 5, 6, 8, 10, 12])
+  const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
+  const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
+
+  console.log(activeWaveShapes)
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -57,10 +60,6 @@ function App() {
     const randomIndex = Math.floor(Math.random()*filteredFrequencies.length)
 
     return filteredFrequencies[randomIndex]
-  }
-
-  const unique = (value, index, self) => {
-    return self.indexOf(value) === index;
   }
 
   const getActiveFrequencies = () => {
@@ -86,8 +85,8 @@ function App() {
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
       const noteLength = minLength + (Math.random() * (maxLength - minLength))
-      const waveType = waveTypes[Math.floor(Math.random() * 4)]
-      oscillator10.type = waveType
+      const waveShape = waveShapes[Math.floor(Math.random() * 4)]
+      oscillator10.type = waveShape
       const frequency = getRandomFrequency();
 
       try {
@@ -162,7 +161,23 @@ function App() {
     }
   }
 
-  const inputs = [
+  const handleWaveShapeChange = (e) => {
+
+    setChecked(!checked)
+    const toggledWaveShape = e.target.value
+
+    console.log(toggledWaveShape)
+
+    if (activeWaveShapes.includes(toggledWaveShape)) {
+      const toggledWaveShapeIndex = activeWaveShapes.indexOf(toggledWaveShape)
+      activeWaveShapes.splice(toggledWaveShapeIndex, 1)
+    } else {
+      activeWaveShapes.push(toggledWaveShape)
+    }
+  }
+
+
+  const lengthInputs = [
     {
       label:  'Min length',
       id: 'minLength',
@@ -173,7 +188,10 @@ function App() {
       id: 'maxLength',
       value: maxNoteLength,
       action: setMaxNoteLength
-    },  
+    }
+  ]
+
+  const pitchInputs = [
     {
       label: 'Min pitch',
       id: 'minFrequency',
@@ -187,16 +205,29 @@ function App() {
     }
   ]
 
-  const notes = [1,2,3,4,5,6,7,8,9,10,11,12]
-  const scales = [0,1,2,3,4,5,6,7,8,9,10]
+  const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+  const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return (
     <div>
       RANDOM NOISE GENERATOR
       <button value="Start/Stop" onClick={startStop}>{cycleButtonLabel}</button>
+      <br /><br />
       <form onSubmit={handleSubmit}>
         {
-          inputs.map(input => <>
+          lengthInputs.map(input => <>
+            <label>{input.label}</label>
+            <input
+              id={input.id}
+              type="number" 
+              value={input.value}
+              onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+            />
+          </>)
+        }
+        <br /><br />
+        {
+          pitchInputs.map(input => <>
             <label>{input.label}</label>
             <input
               id={input.id}
@@ -208,7 +239,7 @@ function App() {
         }
       </form>
       
-      <br/>
+      <br />
       Notes
       <br />
       {
@@ -224,7 +255,7 @@ function App() {
           </>
         )
       }
-      <br/>
+      <br /><br />
       Scales
       <br/>
       {
@@ -238,6 +269,23 @@ function App() {
               onChange={handleScaleChange}
             />
           </>
+        )
+      }
+      <br /><br />
+      Wave Shapes
+      <br />
+      {
+        waveShapes.map(waveShape => {
+          return <>
+            <label>{waveShape}</label>
+            <input
+              type="checkbox"
+              value={waveShape}
+              checked={activeWaveShapes.includes(waveShape)}
+              onChange={handleWaveShapeChange}
+            />
+          </>
+        }
         )
       }
 
