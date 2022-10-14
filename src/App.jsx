@@ -51,8 +51,7 @@ function App() {
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
-
-
+  const [bpm,               setBpm              ] = useState(120)
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -75,11 +74,6 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const stopNote = () => {
-    gain10.gain.value = 0
-    playNote()
-  }
-
   const playNote = function(e) {
 
     if (cycling)  {
@@ -88,10 +82,13 @@ function App() {
       const maxLength = +document.getElementById('maxLength').value
       const minVolume = +document.getElementById('minVolume').value
       const maxVolume = +document.getElementById('maxVolume').value
+      const bpm       = +document.getElementById('bpm').value
+      console.log(bpm)
+      const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
 
-      const noteLength = minLength + (Math.random() * (maxLength - minLength))
       const waveShape = waveShapes[Math.floor(Math.random() * 4)]
       oscillator10.type = waveShape
+
       const frequency = getRandomFrequency();
 
       try {
@@ -102,9 +99,14 @@ function App() {
       
       const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
       gain10.gain.value = level
-      console.log(maxVolume)
+
       setTimeout(stopNote, noteLength)
     }
+  }
+
+  const stopNote = () => {
+    gain10.gain.value = 0
+    playNote()
   }
 
   const start = () => {
@@ -232,45 +234,58 @@ function App() {
       RANDOM NOISE GENERATOR
       <button value="Start/Stop" onClick={startStop}>{cycleButtonLabel}</button>
       <br /><br />
-      <form onSubmit={handleSubmit}>
-        {
-          lengthInputs.map(input => <>
-            <label>{input.label}</label>
-            <input
-              id={input.id}
-              type="number" 
-              value={input.value}
-              onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-            />
-          </>)
-        }
-        <br /><br />
-        {
-          pitchInputs.map(input => <>
-            <label>{input.label}</label>
-            <input
-              id={input.id}
-              type="number" 
-              value={input.value}
-              onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-            />
-          </>)
-        }
-        <br /><br />
+      {
+        <>
+          <label>BPM</label>
+          <input  
+            id={'bpm'}
+            type="number" 
+            value={bpm}
+            onChange={(e) => +e !== NaN && setBpm(+e.target.value)}
+          />
+        </>
+        
+      }
+      <span>OR  {" "}</span>
+      {
+        lengthInputs.map(input => <>
+          <label>{input.label}</label>
+          <input
+            id={input.id}
+            type="number" 
+            value={input.value}
+            onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+          />
+        </>)
+      }
+      <br /><br />
+      {
+        pitchInputs.map(input => <>
+          <label>{input.label}</label>
+          <input
+            id={input.id}
+            type="number" 
+            value={input.value}
+            onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+          />
+        </>)
+      }
+      <br /><br />
 
-        {
-          volumeInputs.map(input => <>
-            <label>{input.label}</label>
-            <input
-              id={input.id}
-              type="number" 
-              value={input.value}
-              onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-            />
-          </>)
-        }
-      </form>
-      
+      {
+        volumeInputs.map(input => <>
+          <label>{input.label}</label>
+          <input
+            id={input.id}
+            type="number" 
+            value={input.value}
+            onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+            min={0}
+            max={100}
+          />
+        </>)
+      }      
+      <br />
       <br />
       Notes
       <br />
@@ -320,6 +335,10 @@ function App() {
         }
         )
       }
+      <br /><br />
+      
+
+
 
       {/* <SheetMusic
       // Textual representation of music in ABC notation
