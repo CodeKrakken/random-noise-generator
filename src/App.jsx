@@ -43,6 +43,8 @@ function App() {
   const [maxNoteLength,     setMaxNoteLength    ] = useState(125);
   const [minFrequency ,     setMinFrequency     ] = useState(20);
   const [maxFrequency ,     setMaxFrequency     ] = useState(20000);
+  const [minVolume,         setMinVolume        ] = useState(0);
+  const [maxVolume,         setMaxVolume        ] = useState(100);
   const [checked,           setChecked          ] = useState(false)
   const [activeKeys,        setActiveKeys       ] = useState([])
   const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
@@ -50,7 +52,7 @@ function App() {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
 
-  console.log(activeWaveShapes)
+
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -84,6 +86,9 @@ function App() {
 
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
+      const minVolume = +document.getElementById('minVolume').value
+      const maxVolume = +document.getElementById('maxVolume').value
+
       const noteLength = minLength + (Math.random() * (maxLength - minLength))
       const waveShape = waveShapes[Math.floor(Math.random() * 4)]
       oscillator10.type = waveShape
@@ -95,8 +100,9 @@ function App() {
         console.log(error)
       }
       
-      const level = Math.random()
+      const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
       gain10.gain.value = level
+      console.log(maxVolume)
       setTimeout(stopNote, noteLength)
     }
   }
@@ -166,7 +172,6 @@ function App() {
     setChecked(!checked)
     const toggledWaveShape = e.target.value
 
-    console.log(toggledWaveShape)
 
     if (activeWaveShapes.includes(toggledWaveShape)) {
       const toggledWaveShapeIndex = activeWaveShapes.indexOf(toggledWaveShape)
@@ -204,6 +209,20 @@ function App() {
       action: setMaxFrequency
     }
   ]
+  
+  const volumeInputs = [
+    {
+      label: 'Min volume',
+      id: 'minVolume',
+      value:  minVolume,
+      action: setMinVolume
+    },  {
+      label:  'Max volume',
+      id: 'maxVolume',
+      value:  maxVolume,
+      action: setMaxVolume
+    }
+  ]
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
@@ -228,6 +247,19 @@ function App() {
         <br /><br />
         {
           pitchInputs.map(input => <>
+            <label>{input.label}</label>
+            <input
+              id={input.id}
+              type="number" 
+              value={input.value}
+              onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+            />
+          </>)
+        }
+        <br /><br />
+
+        {
+          volumeInputs.map(input => <>
             <label>{input.label}</label>
             <input
               id={input.id}
