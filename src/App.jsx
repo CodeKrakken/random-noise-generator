@@ -14,7 +14,6 @@ function App() {
   const oscillator10 = context.createOscillator();
   const oscillator20 = context.createOscillator();
 
-
   const gain10 = context.createGain()
   const gain20 = context.createGain()
 
@@ -86,7 +85,7 @@ function App() {
       console.log(bpm)
       const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
 
-      const waveShape = waveShapes[Math.floor(Math.random() * 4)]
+      const waveShape = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
       oscillator10.type = waveShape
 
       const frequency = getRandomFrequency();
