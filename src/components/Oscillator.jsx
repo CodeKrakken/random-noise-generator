@@ -58,11 +58,10 @@ export default function Oscillator(props) {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const playNote = function(e) {
-    console.log(cycling)
+  const playNote = () => {
 
     if (cycling)  {
-
+      console.log(cycling)
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
       const minVolume = +document.getElementById('minVolume').value
@@ -96,22 +95,16 @@ export default function Oscillator(props) {
   }
 
   const start = () => {
-    console.log('started')
     setCycleButtonLabel('Stop')
     context.resume()
     playNote()
   }
 
   const stop = () => {
-    console.log('stopped')
     setCycleButtonLabel('Start')
     gain10.gain.value = 0
   }
   
-  const handleSubmit = (e) => {
-    e.preventDefault()
-  }
-
   const handleKeyChange = (e) => {
 
     setChecked(!checked)
