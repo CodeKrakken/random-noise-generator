@@ -4,9 +4,20 @@ import ReactDOM from 'react-dom/client';
 import { scales } from './data';
 import { allFrequencies } from './data'
 import Oscillator from './components/Oscillator';
+import Oscillator2 from './components/Oscillator2';
+
 // import SheetMusic from '@slnsw/react-sheet-music';
 
-let cycling = false
+const context = new AudioContext();
+
+let oscillators = [<Oscillator context={context} />, <Oscillator2 context = {context} />]
+
+const addOscillator = () => {
+  oscillators.push(<Oscillator context={context} />)
+  console.log(oscillators)
+}
+
+
 
 function App() {
 
@@ -15,7 +26,11 @@ function App() {
       RANDOM NOISE GENERATOR
       <br /><br />
 
-      <Oscillator />
+      {oscillators.map(oscillator => 
+        oscillator)
+      }
+
+      <button onClick={addOscillator}>Add Oscillator</button>
 
       {/* <SheetMusic
       // Textual representation of music in ABC notation

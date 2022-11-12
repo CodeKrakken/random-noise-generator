@@ -6,12 +6,12 @@ let cycling = false
 export default function Oscillator(props) {
 
   const context = props.context
-  const oscillator10 = context.createOscillator();
-  const gain10 = context.createGain()
-  oscillator10.connect(gain10);
-  gain10.connect(context.destination);
-  gain10.gain.value = 0
-  oscillator10.start(0);
+  const oscillator20 = context.createOscillator();
+  const gain20 = context.createGain()
+  oscillator20.connect(gain20);
+  gain20.connect(context.destination);
+  gain20.gain.value = 0
+  oscillator20.start(0);
 
   const waveShapes = [
     'sine',
@@ -68,25 +68,25 @@ export default function Oscillator(props) {
       const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
 
       const waveShape = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
-      oscillator10.type = waveShape
+      oscillator20.type = waveShape
 
       const frequency = getRandomFrequency();
 
       try {
-        oscillator10.frequency.value = frequency
+        oscillator20.frequency.value = frequency
       } catch (error) {
         console.log(error)
       }
       
       const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
-      gain10.gain.value = level
+      gain20.gain.value = level
 
       setTimeout(stopNote, noteLength)
     }
   }
 
   const stopNote = () => {
-    gain10.gain.value = 0
+    gain20.gain.value = 0
     playNote()
   }
 
@@ -99,7 +99,7 @@ export default function Oscillator(props) {
   
   const startStop = () => {
     if (cycling) {
-      gain10.gain.value = 0
+      gain20.gain.value = 0
       cycling = false
       setCycleButtonLabel('Start')
     } else {
