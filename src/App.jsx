@@ -11,7 +11,6 @@ const context = new AudioContext();
 
 let oscillators = [
   <Oscillator id={0} context={context} />,
-  <Oscillator id={1} context={context} />
 ]
 
 const addOscillator = () => {

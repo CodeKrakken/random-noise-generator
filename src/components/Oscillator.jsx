@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { allFrequencies } from '../data'
-
-let cycling = false
 
 export default function Oscillator(props) {
 
@@ -33,6 +31,11 @@ export default function Oscillator(props) {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
   const [bpm,               setBpm              ] = useState(120)
+  const [cycling,           setCycling          ] = useState(false)
+
+  useEffect(() => {
+    cycling ? start() : stop()
+  }, [cycling])
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -56,6 +59,7 @@ export default function Oscillator(props) {
   }
 
   const playNote = function(e) {
+    console.log(cycling)
 
     if (cycling)  {
 
@@ -64,7 +68,6 @@ export default function Oscillator(props) {
       const minVolume = +document.getElementById('minVolume').value
       const maxVolume = +document.getElementById('maxVolume').value
       const bpm       = +document.getElementById('bpm').value
-      console.log(bpm)
       const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
 
       const waveShape = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
@@ -82,6 +85,8 @@ export default function Oscillator(props) {
       gain10.gain.value = level
 
       setTimeout(stopNote, noteLength)
+    } else {
+      stop()
     }
   }
 
@@ -91,22 +96,18 @@ export default function Oscillator(props) {
   }
 
   const start = () => {
-    cycling = true
+    console.log('started')
     setCycleButtonLabel('Stop')
     context.resume()
     playNote()
   }
-  
-  const startStop = () => {
-    if (cycling) {
-      gain10.gain.value = 0
-      cycling = false
-      setCycleButtonLabel('Start')
-    } else {
-      start()
-    }
-  }
 
+  const stop = () => {
+    console.log('stopped')
+    setCycleButtonLabel('Start')
+    gain10.gain.value = 0
+  }
+  
   const handleSubmit = (e) => {
     e.preventDefault()
   }
@@ -164,6 +165,10 @@ export default function Oscillator(props) {
     }
   }
 
+  const handleStartStop = () => {
+    setCycling(!cycling)
+  }
+
 
   const lengthInputs = [
     {
@@ -211,7 +216,12 @@ export default function Oscillator(props) {
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return <>
-    <button value="Start/Stop" onClick={startStop}>{cycleButtonLabel}</button>
+    <button 
+      value="Start/Stop" 
+      onClick={handleStartStop}
+    >
+      {cycleButtonLabel}
+    </button>
 
     {
       <>
