@@ -107,6 +107,7 @@ function App() {
     } else {
       stop(gain)
     }
+
   }
 
   const changeNote = (oscillator, gain) => {
@@ -114,11 +115,13 @@ function App() {
     playNote(oscillator, gain)
   }
 
-  const start = (oscillator, gain) => {
+  const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
-    
-    playNote(oscillator, gain)
+
+    nodes.map(node => {
+      playNote(node.oscillator, node.gain)
+    })
   }
 
   const stop = (gain) => {
@@ -167,11 +170,9 @@ function App() {
 
   const handleStartStop = () => {
     cycling = !cycling
-    nodes.map(node => {
-      const oscillator  = node.oscillator
-      const gain        = node.gain
-      cycling ? start(oscillator, gain) : stop(gain)
-    })
+
+      cycling ? start() : nodes.map(node => {stop(node.gain)})
+    }
   }
 
   const lengthInputs = [
@@ -219,10 +220,6 @@ function App() {
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
-  const logNodes = () => {
-    console.log(nodes)
-  }
-
   return (
     <div>
       RANDOM NOISE GENERATOR
@@ -233,10 +230,9 @@ function App() {
       >
         {cycleButtonLabel}
       </button>
-
+      
       {
-        logNodes()}
-        {
+
         nodes.map((node) => <>
 
           <label>BPM</label>
