@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { allFrequencies } from '../data'
 
+let cycling = false
+
 export default function Oscillator(props) {
 
   const context = props.context
-  const oscillator10 = context.createOscillator();
-  const gain10 = context.createGain()
-  oscillator10.connect(gain10);
-  gain10.connect(context.destination);
-  gain10.gain.value = 0
-  oscillator10.start(0);
 
   const waveShapes = [
     'sine',
@@ -31,11 +27,14 @@ export default function Oscillator(props) {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
   const [bpm,               setBpm              ] = useState(120)
-  const [cycling,           setCycling          ] = useState(false)
+  // const [cycling,           setCycling          ] = useState(false)
   
-  useEffect(() => {
-    cycling ? start() : stop()
-  }, [cycling])
+  // useEffect(() => {
+  //   cycling ? start() : stop()
+  // }, [cycling])
+
+  const oscillator  = props.oscillator
+  const gain        = props.gain
 
   const getRandomFrequency = () => {
     const minFrequency = +document.getElementById('minFrequency').value
@@ -58,10 +57,9 @@ export default function Oscillator(props) {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const playNote = () => {
+  const playNote = (oscillator, gain) => {
 
     if (cycling)  {
-      console.log(cycling)
       const minLength = +document.getElementById('minLength').value
       const maxLength = +document.getElementById('maxLength').value
       const minVolume = +document.getElementById('minVolume').value
@@ -70,39 +68,40 @@ export default function Oscillator(props) {
       const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
 
       const waveShape = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
-      oscillator10.type = waveShape
+      oscillator.type = waveShape
 
       const frequency = getRandomFrequency();
 
       try {
-        oscillator10.frequency.value = frequency
+        oscillator.frequency.value = frequency
       } catch (error) {
         console.log(error)
       }
       
       const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
-      gain10.gain.value = level
+      gain.gain.value = level
 
-      setTimeout(stopNote, noteLength)
+      setTimeout(() => {changeNote(oscillator, gain)}, noteLength)
     } else {
-      stop()
+      stop(gain)
     }
   }
 
-  const stopNote = () => {
-    gain10.gain.value = 0
-    playNote()
+  const changeNote = (oscillator, gain) => {
+    gain.gain.value = 0
+    playNote(oscillator, gain)
   }
 
-  const start = () => {
+  const start = (oscillator, gain) => {
     setCycleButtonLabel('Stop')
     context.resume()
-    playNote()
+    
+    playNote(oscillator, gain)
   }
 
-  const stop = () => {
+  const stop = (gain) => {
     setCycleButtonLabel('Start')
-    gain10.gain.value = 0
+    gain.gain.value = 0
   }
   
   const handleKeyChange = (e) => {
@@ -149,7 +148,6 @@ export default function Oscillator(props) {
     setChecked(!checked)
     const toggledWaveShape = e.target.value
 
-
     if (activeWaveShapes.includes(toggledWaveShape)) {
       const toggledWaveShapeIndex = activeWaveShapes.indexOf(toggledWaveShape)
       activeWaveShapes.splice(toggledWaveShapeIndex, 1)
@@ -159,9 +157,9 @@ export default function Oscillator(props) {
   }
 
   const handleStartStop = () => {
-    setCycling(!cycling)
+    cycling = !cycling
+    cycling ? start(oscillator, gain) : stop(gain)
   }
-
 
   const lengthInputs = [
     {
