@@ -32,7 +32,7 @@ export default function Oscillator(props) {
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
   const [bpm,               setBpm              ] = useState(120)
   const [cycling,           setCycling          ] = useState(false)
-
+  
   useEffect(() => {
     cycling ? start() : stop()
   }, [cycling])
