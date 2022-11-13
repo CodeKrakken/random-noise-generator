@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom/client';
-import { scales } from './data';
 import { allFrequencies } from './data'
 import Oscillator from './components/Oscillator';
 
@@ -170,9 +169,8 @@ function App() {
 
   const handleStartStop = () => {
     cycling = !cycling
-
-      cycling ? start() : nodes.map(node => {stop(node.gain)})
-    }
+    cycling ? start() : nodes.map(node => {stop(node.gain)})
+    
   }
 
   const lengthInputs = [
