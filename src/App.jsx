@@ -102,30 +102,29 @@ function App() {
       const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
       gain.gain.value = level
 
-      setTimeout(() => {changeNote(oscillator, gain)}, noteLength)
+      setTimeout(() => {newNote(oscillator, gain)}, noteLength)
     } else {
-      stop(gain)
+      stop()
     }
 
   }
 
-  const changeNote = (oscillator, gain) => {
-    gain.gain.value = 0
-    playNote(oscillator, gain)
+  const newNote = () => {
+    nodes.map(node => {
+      node.gain.gain.value = 0
+      playNote(node.oscillator, node.gain)
+    })
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
-
-    nodes.map(node => {
-      playNote(node.oscillator, node.gain)
-    })
+    newNote()
   }
 
-  const stop = (gain) => {
+  const stop = () => {
     setCycleButtonLabel('Start')
-    gain.gain.value = 0
+    nodes.map(node => {node.gain.gain.value = 0})
   }
   
   const handleNoteChange = (e) => {
@@ -169,7 +168,7 @@ function App() {
 
   const handleStartStop = () => {
     cycling = !cycling
-    cycling ? start() : nodes.map(node => {stop(node.gain)})
+    cycling ? start() : stop()
     
   }
 
