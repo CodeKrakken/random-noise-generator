@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom/client';
 import { allFrequencies } from './data'
-import Oscillator from './components/Oscillator';
 
 // import SheetMusic from '@slnsw/react-sheet-music';
 
@@ -96,9 +95,9 @@ function App() {
         console.log('node')
         console.log(Date.now() - node.nextNoteAt)
         const minLength   = +document.getElementById('minLength').value
-        const maxLength   = +document.getElementById('maxLength').value
+        const maxlength   = +document.getElementById('maxlength').value
         const bpm         = +document.getElementById(`bpm${i}`).value
-        const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
+        const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxlength - minLength))
         const minVolume   = +document.getElementById('minVolume').value
         const maxVolume   = +document.getElementById('maxVolume').value
 
@@ -190,7 +189,7 @@ function App() {
       action: setMinNoteLength
     },  {
       label:  'Max length',
-      id: 'maxLength',
+      id: 'maxlength',
       value: maxNoteLength,
       action: setMaxNoteLength
     }
@@ -229,124 +228,134 @@ function App() {
 
   return (
     <div>
-      RANDOM NOISE GENERATOR
-      <br /><br />
+      RANDOM NOISE GENERATOR{" "}
       <button 
         value="Start/Stop" 
         onClick={handleStartStop}
       >
         {cycleButtonLabel}
       </button>
-      
-      {
-
-        nodes.map((node, i) => <>
-
-          <label>BPM</label>
-          <input  
-            id={`bpm${i}`}
-            type="number" 
-            value={bpms[i]}
-            onChange={(e) => +e !== NaN && setBpms(+e.target.value)}
-          />
-            
-          <span>OR  {" "}</span>
-          {
-            lengthInputs.map(input => <>
-              <label>{input.label}</label>
-              <input
-                id={input.id}
-                type="number" 
-                value={input.value}
-                onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-              />
-            </>)
-          }
-          <br /><br />
-          {
-            pitchInputs.map(input => <>
-              <label>{input.label}</label>
-              <input
-                id={input.id}
-                type="number" 
-                value={input.value}
-                onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-              />
-            </>)
-          }
-          <br /><br />
-
-          {
-            volumeInputs.map(input => <>
-              <label>{input.label}</label>
-              <input
-                id={input.id}
-                type="number" 
-                value={input.value}
-                onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-                min={0}
-                max={100}
-              />
-            </>)
-          }      
-          <br />
-          <br />
-          Notes
-          <br />
-          {
-            notes.map(note => 
-              <>
-                <label>{note}</label>
-                <input
-                  type="checkbox"
-                  value={note}
-                  checked={activeNotes.includes(note)}
-                  onChange={handleNoteChange}
-                />
-              </>
-            )
-          }
-          <br /><br />
-          Scales
-          <br/>
-          {
-            scales.map(scale =>
-              <>
-                <label>{scale}</label>
-                <input
-                  type="checkbox"
-                  value={scale}
-                  checked={activeScales.includes(scale)}
-                  onChange={handleScaleChange}
-                />
-              </>
-            )
-          }
-          <br /><br />
-          Wave Shapes
-          <br />
-          { 
-            waveShapes.map(waveShape => {
-              return <>
-                <label>{waveShape}</label>
-                <input
-                  type="checkbox"
-                  value={waveShape}
-                  checked={activeWaveShapes.includes(waveShape)}
-                  onChange={handleWaveShapeChange}
-                />
-              </>
-            }
-            )
-          }
-          <br /><br />  
-        </>)
-      }
-
+      {" "}
       <button onClick={addOscillator}>Add Oscillator</button>
 
-    </div>
+      <br />< br />
+      {
+        nodes.map((node, i) => <div className="node">
+          <div className="row">
+            <div className="column">
+              <input  
+                title="BPM"
+                id={`bpm${i}`}
+                type="number" 
+                value={bpms[i]}
+                onChange={(e) => +e !== NaN && setBpms(+e.target.value)}
+                maxlength={5}
+                min={0}
+                max={60000}
 
+              />
+                
+              <span>OR  {" "}</span>
+              {
+                lengthInputs.map(input => <>
+                  <label>{input.label}</label>
+                  <input
+                    id={input.id}
+                    type="number" 
+                    value={input.value}
+                    onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+                  />
+                </>)
+              }
+              <br /><br />
+              {
+                pitchInputs.map(input => <>
+                  <label>{input.label}</label>
+                  <input
+                    id={input.id}
+                    type="number" 
+                    value={input.value}
+                    onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+                    maxlength={5}
+                    min={0}
+                    max={100000}
+                  />
+                </>)
+              }
+
+              <br /><br />
+
+              {
+                volumeInputs.map(input => <>
+                  <label>{input.label}</label>
+                  <input
+                    id={input.id}
+                    type="number" 
+                    value={input.value}
+                    onChange={(e) => +e !== NaN && input.action(+e.target.value)}
+                    min={0}
+                    max={100}
+                    maxlength={3}
+                  />
+                </>)
+              }
+
+            </div>
+
+            <div className="column">
+              Notes
+              <br />
+              {
+                notes.map(note => 
+                  <>
+                    <label>{note}</label>
+                    <input
+                      type="checkbox"
+                      value={note}
+                      checked={activeNotes.includes(note)}
+                      onChange={handleNoteChange}
+                    />
+                  </>
+                )
+              }
+              <br /><br />
+              Scales
+              <br/>
+              {
+                scales.map(scale =>
+                  <>
+                    <label>{scale}</label>
+                    <input
+                      type="checkbox"
+                      value={scale}
+                      checked={activeScales.includes(scale)}
+                      onChange={handleScaleChange}
+                    />
+                  </>
+                )
+              }
+              <br /><br />
+              Wave Shapes
+              <br />
+              { 
+                waveShapes.map(waveShape => {
+                  return <>
+                    <label>{waveShape}</label>
+                    <input
+                      type="checkbox"
+                      value={waveShape}
+                      checked={activeWaveShapes.includes(waveShape)}
+                      onChange={handleWaveShapeChange}
+                    />
+                  </>
+                }
+                )
+              }
+            </div>
+          </div>
+        </div>)
+      }
+    </div>
   );
 }
 
