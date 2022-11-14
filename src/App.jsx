@@ -83,35 +83,42 @@ function App() {
 
   const newNote = () => {
     nodes.map((node, i) => {
-      playNote(node.oscillator, node.gain, i)
+      const startTime = Date.now()
+      node.nextNoteAt = startTime
+      playNote(node, i)
     })
   }
 
-  const playNote = (oscillator, gain, i) => {
+  const playNote = (node, i) => {
     
     if (cycling)  {
-      const minLength = +document.getElementById('minLength').value
-      const maxLength = +document.getElementById('maxLength').value
-      const bpm       = +document.getElementById(`bpm${i}`).value
-      const noteLength = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
-      const minVolume = +document.getElementById('minVolume').value
-      const maxVolume = +document.getElementById('maxVolume').value
+      if (Date.now() >= node.nextNoteAt) {
+        console.log('node')
+        console.log(Date.now() - node.nextNoteAt)
+        const minLength   = +document.getElementById('minLength').value
+        const maxLength   = +document.getElementById('maxLength').value
+        const bpm         = +document.getElementById(`bpm${i}`).value
+        const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
+        const minVolume   = +document.getElementById('minVolume').value
+        const maxVolume   = +document.getElementById('maxVolume').value
 
-      const waveShape = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
-      oscillator.type = waveShape
+        const waveShape   = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
+        node.oscillator.type   = waveShape
 
-      const frequency = getRandomFrequency();
+        const frequency   = getRandomFrequency();
 
-      try {
-        oscillator.frequency.value = frequency
-      } catch (error) {
-        console.log(error)
+        try {
+          node.oscillator.frequency.value = frequency
+        } catch (error) {
+          console.log(error)
+        }
+        
+        const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
+        node.gain.gain.value = level
+        node.nextNoteAt += noteLength
+
       }
-      
-      const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
-      gain.gain.value = level
-
-      setTimeout(() => {playNote(oscillator, gain, i)}, noteLength)
+      setTimeout(() => {playNote(node, i)}, 1)
 
     } else {
       stop()
