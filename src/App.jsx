@@ -32,7 +32,6 @@ function App() {
     gain.gain.value = 0
     oscillator.start(0);
     setBpms([bpms, 120].flat())
-    playNote()
 
     return {
       oscillator  : oscillator, 
@@ -183,12 +182,12 @@ function App() {
 
   const lengthInputs = [
     {
-      label:  'Min length',
+      label:  'min length',
       id: 'minLength',
       value: minNoteLength,
       action: setMinNoteLength
     },  {
-      label:  'Max length',
+      label:  'max length',
       id: 'maxlength',
       value: maxNoteLength,
       action: setMaxNoteLength
@@ -238,7 +237,7 @@ function App() {
       {" "}
       <button onClick={addOscillator}>Add Oscillator</button>
 
-      <br />< br />
+      <br />
       {
         nodes.map((node, i) => <div className="node">
           <div className="row">
@@ -255,23 +254,24 @@ function App() {
 
               />
                 
-              <span>OR  {" "}</span>
+              <span>{" "}OR{" "}</span>
               {
-                lengthInputs.map(input => <>
-                  <label>{input.label}</label>
+                lengthInputs.map((input, i) => <>
                   <input
+                    title={input.label}
                     id={input.id}
                     type="number" 
                     value={input.value}
                     onChange={(e) => +e !== NaN && input.action(+e.target.value)}
                   />
+                  {!i && ' ... '}
                 </>)
               }
-              <br /><br />
+              <br />
               {
                 pitchInputs.map(input => <>
-                  <label>{input.label}</label>
                   <input
+                    title={input.label}
                     id={input.id}
                     type="number" 
                     value={input.value}
@@ -283,12 +283,12 @@ function App() {
                 </>)
               }
 
-              <br /><br />
+              <br />
 
               {
                 volumeInputs.map(input => <>
-                  <label>{input.label}</label>
                   <input
+                    title={input.label}
                     id={input.id}
                     type="number" 
                     value={input.value}
@@ -304,12 +304,11 @@ function App() {
 
             <div className="column">
               Notes
-              <br />
               {
                 notes.map(note => 
                   <>
-                    <label>{note}</label>
                     <input
+                      title={note}
                       type="checkbox"
                       value={note}
                       checked={activeNotes.includes(note)}
@@ -318,14 +317,13 @@ function App() {
                   </>
                 )
               }
-              <br /><br />
+              <br />
               Scales
-              <br/>
               {
                 scales.map(scale =>
                   <>
-                    <label>{scale}</label>
                     <input
+                      title={scale}
                       type="checkbox"
                       value={scale}
                       checked={activeScales.includes(scale)}
@@ -334,14 +332,13 @@ function App() {
                   </>
                 )
               }
-              <br /><br />
-              Wave Shapes
               <br />
+              Wave Shapes
               { 
                 waveShapes.map(waveShape => {
                   return <>
-                    <label>{waveShape}</label>
                     <input
+                      title={waveShape}
                       type="checkbox"
                       value={waveShape}
                       checked={activeWaveShapes.includes(waveShape)}
