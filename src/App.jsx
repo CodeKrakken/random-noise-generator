@@ -31,11 +31,11 @@ function App() {
     gain.connect(context.destination);
     gain.gain.value = 0
     oscillator.start(0);
-    setBpms([bpms, 120].flat())
 
     return {
       oscillator  : oscillator, 
-      gain        : gain
+      gain        : gain,
+      bpm         : 120
     }
   }
 
@@ -50,17 +50,15 @@ function App() {
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
-  const [bpms,               setBpms            ] = useState([])
   const [nodes,             setNodes            ] = useState([])
-  // // const [cycling,           setCycling          ] = useState(false)
-  
-  // // useEffect(() => {
-  // //   cycling ? start() : stop()
-  // // }, [cycling])
 
-  const getRandomFrequency = () => {
-    const minFrequency = +document.getElementById('minFrequency').value
-    const maxFrequency = +document.getElementById('maxFrequency').value
+  useEffect(() => {
+    console.log(nodes)
+  }, [nodes])
+
+  const getRandomFrequency = (i) => {
+    const minFrequency = +document.getElementById(`minFrequency${i}`).value
+    const maxFrequency = +document.getElementById(`maxFrequency${i}`).value
     const activeFrequencies = getActiveFrequencies() 
     let filteredFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*filteredFrequencies.length)
@@ -88,22 +86,19 @@ function App() {
   }
 
   const playNote = (node, i) => {
-    
     if (cycling)  {
       if (Date.now() >= node.nextNoteAt) {
-        console.log('node')
-        console.log(Date.now() - node.nextNoteAt)
-        const minLength   = +document.getElementById('minLength').value
-        const maxlength   = +document.getElementById('maxlength').value
+        const minLength   = +document.getElementById(`minLength${i}`).value
+        const maxLength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
-        const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxlength - minLength))
-        const minVolume   = +document.getElementById('minVolume').value
-        const maxVolume   = +document.getElementById('maxVolume').value
+        const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxLength - minLength))
+        const minVolume   = +document.getElementById(`minVolume${i}`).value
+        const maxVolume   = +document.getElementById(`maxVolume${i}`).value
 
         const waveShape   = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
         node.oscillator.type   = waveShape
 
-        const frequency   = getRandomFrequency();
+        const frequency   = getRandomFrequency(i);
 
         try {
           node.oscillator.frequency.value = frequency
@@ -177,7 +172,13 @@ function App() {
   const handleStartStop = () => {
     cycling = !cycling
     cycling ? start() : stop()
-    
+  }
+
+  const handleBpmChange = (e, i) => {
+    let newNodes = nodes
+    const updatedNode = newNodes[i]
+    updatedNode.bpm = +e.target.value
+    setNodes([nodes.slice[0, i], updatedNode, nodes.slice[i+1]].flat())
   }
 
   const lengthInputs = [
@@ -188,7 +189,7 @@ function App() {
       action: setMinNoteLength
     },  {
       label:  'max length',
-      id: 'maxlength',
+      id: 'maxLength',
       value: maxNoteLength,
       action: setMaxNoteLength
     }
@@ -231,6 +232,7 @@ function App() {
       <button 
         value="Start/Stop" 
         onClick={handleStartStop}
+        style={nodes.length ? null : {visibility: 'hidden'}}
       >
         {cycleButtonLabel}
       </button>
@@ -246,8 +248,8 @@ function App() {
                 title="BPM"
                 id={`bpm${i}`}
                 type="number" 
-                value={bpms[i]}
-                onChange={(e) => +e !== NaN && setBpms(+e.target.value)}
+                value={node.bpm}
+                onChange={(e) => {handleBpmChange(e, i)}}
                 maxlength={5}
                 min={0}
                 max={60000}
@@ -256,15 +258,15 @@ function App() {
                 
               <span>{" "}OR{" "}</span>
               {
-                lengthInputs.map((input, i) => <>
+                lengthInputs.map((input, j) => <>
                   <input
                     title={input.label}
-                    id={input.id}
+                    id={`${input.id}${i}`}
                     type="number" 
                     value={input.value}
                     onChange={(e) => +e !== NaN && input.action(+e.target.value)}
                   />
-                  {!i && ' ... '}
+                  {!j && ' ... '}
                 </>)
               }
               <br />
@@ -272,7 +274,7 @@ function App() {
                 pitchInputs.map(input => <>
                   <input
                     title={input.label}
-                    id={input.id}
+                    id={`${input.id}${i}`}
                     type="number" 
                     value={input.value}
                     onChange={(e) => +e !== NaN && input.action(+e.target.value)}
@@ -289,7 +291,7 @@ function App() {
                 volumeInputs.map(input => <>
                   <input
                     title={input.label}
-                    id={input.id}
+                    id={`${input.id}${i}`}
                     type="number" 
                     value={input.value}
                     onChange={(e) => +e !== NaN && input.action(+e.target.value)}
