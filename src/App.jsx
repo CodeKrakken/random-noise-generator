@@ -31,15 +31,14 @@ function App() {
     gain.connect(context.destination);
     gain.gain.value = 0
     oscillator.start(0);
-    const newBpm = bpms.length ? bpms[bpms.length-1] : 120
-    const newBpms = [bpms, newBpm].flat()
-    setBpms(newBpms)
-
+    const newBpm = nodes.length ? nodes[nodes.length-1].bpm : 120
+    
     return {
       oscillator  : oscillator, 
       gain        : gain,
       minFrequency: 20,
-      maxFrequency: 20000
+      maxFrequency: 20000,
+      bpm         : newBpm
     }
   }
 
@@ -52,7 +51,6 @@ function App() {
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
-  const [bpms,               setBpms            ] = useState([])
   const [nodes,             setNodes            ] = useState([])
 
   const getRandomFrequency = (i) => {
@@ -231,8 +229,8 @@ function App() {
                   title="BPM"
                   id={`bpm${i}`}
                   type="number" 
-                  value={bpms[i]}
-                  onChange={(e) => setBpms([bpms.slice(0,i), +e.target.value, bpms.slice(i+1)].flat())}
+                  value={node.bpm}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat())}
                   maxlength={5}
                   min={0}
                   max={60000}
