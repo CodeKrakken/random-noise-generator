@@ -9,6 +9,8 @@ let cycling = false
 
 function App() {
 
+
+
   const addOscillator = () => {
     const newOscillator = setUpOscillator()
     const newNodes = [nodes, newOscillator].flat()
@@ -47,7 +49,6 @@ function App() {
     }
   }
 
-  const [checked,           setChecked          ] = useState(false)
   // const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
@@ -87,7 +88,7 @@ function App() {
     
     if (cycling)  {
       if (Date.now() >= node.nextNoteAt) {
-        console.log(`Latency: ${Date.now() - node.nextNoteAt} ms`)
+        // console.log(`Latency: ${Date.now() - node.nextNoteAt} ms`)
         const minLength   = +document.getElementById(`minLength${i}`).value
         const maxlength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
@@ -132,7 +133,6 @@ function App() {
   
   const handleScaleChange = (e) => {
 
-    setChecked(!checked)
     const toggledScale = +e.target.value
 
     if (activeScales.includes(toggledScale)) {
@@ -145,7 +145,6 @@ function App() {
 
   const handleWaveShapeChange = (e) => {
 
-    setChecked(!checked)
     const toggledWaveShape = e.target.value
 
     if (activeWaveShapes.includes(toggledWaveShape)) {
@@ -165,6 +164,10 @@ function App() {
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
+  useEffect(() => {
+    console.log(nodes)
+  }, [nodes])
+
   return <>
     <div>
       RANDOM NOISE GENERATOR{" "}
@@ -180,7 +183,7 @@ function App() {
       <br />
       {
         nodes.map((node, i) => {
-          
+          console.log(node.activeNotes)
           return <div className="node">
             <div className="row">
               <div className="column">
@@ -274,12 +277,8 @@ function App() {
                         title={note}
                         type="checkbox"
                         value={note}
-                        checked={node.activeNotes.includes(note)}
-                        onChange={(e) => setNodes([
-                          nodes.activeNotes.slice(0, i), 
-                          {...node, activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.splice(node.activeNotes.indexOf(+e.target.value), 1) : node.activeNotes.push(+e.target.value)}, 
-                          nodes.activeNotes.slice(i+1)
-                        ].flat())}
+                        checked={node.activeNotes?.includes(note)}
+                        onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.filter(note => note !== +e.target.value) : [node.activeNotes, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                       />
                     </>
                   )
