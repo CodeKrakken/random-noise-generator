@@ -34,18 +34,18 @@ function App() {
     const newBpm = nodes.length ? nodes[nodes.length-1].bpm : 120
     
     return {
-      oscillator  : oscillator, 
-      gain        : gain,
-      minFrequency: 20,
-      maxFrequency: 20000,
-      bpm         : newBpm
+      oscillator    : oscillator, 
+      gain          : gain,
+      minFrequency  : 20,
+      maxFrequency  : 20000,
+      bpm           : newBpm,
+      minNoteLength : 500,
+      maxNoteLength : 500,
+      minVolume     : 0,
+      maxVolume     : 100
     }
   }
 
-  const [minNoteLength,     setMinNoteLength    ] = useState(125);
-  const [maxNoteLength,     setMaxNoteLength    ] = useState(125);
-  const [minVolume,         setMinVolume        ] = useState(0);
-  const [maxVolume,         setMaxVolume        ] = useState(100);
   const [checked,           setChecked          ] = useState(false)
   const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
@@ -87,12 +87,12 @@ function App() {
     if (cycling)  {
       if (Date.now() >= node.nextNoteAt) {
         console.log(`Latency: ${Date.now() - node.nextNoteAt} ms`)
-        const minLength   = +document.getElementById('minLength').value
-        const maxlength   = +document.getElementById('maxlength').value
+        const minLength   = +document.getElementById(`minLength${i}`).value
+        const maxlength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
         const noteLength  = bpm ? 60000/bpm : minLength + (Math.random() * (maxlength - minLength))
-        const minVolume   = +document.getElementById('minVolume').value
-        const maxVolume   = +document.getElementById('maxVolume').value
+        const minVolume   = +document.getElementById(`minVolume${i}`).value
+        const maxVolume   = +document.getElementById(`maxVolume${i}`).value
 
         const waveShape   = activeWaveShapes[Math.floor(Math.random() * activeWaveShapes.length)]
         node.oscillator.type   = waveShape
@@ -174,35 +174,6 @@ function App() {
     
   }
 
-  const lengthInputs = [
-    {
-      label:  'min length',
-      id: 'minLength',
-      value: minNoteLength,
-      action: setMinNoteLength
-    },  {
-      label:  'max length',
-      id: 'maxlength',
-      value: maxNoteLength,
-      action: setMaxNoteLength
-    }
-  ]
-
-  
-  const volumeInputs = [
-    {
-      label: 'Min volume',
-      id: 'minVolume',
-      value:  minVolume,
-      action: setMinVolume
-    },  {
-      label:  'Max volume',
-      id: 'maxVolume',
-      value:  maxVolume,
-      action: setMaxVolume
-    }
-  ]
-
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
@@ -237,18 +208,24 @@ function App() {
                 />
                   
                 <span>{" "}OR{" "}</span>
-                {
-                  lengthInputs.map((input, i) => <>
-                    <input
-                      title={input.label}
-                      id={input.id}
-                      type="number" 
-                      value={input.value}
-                      onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-                    />
-                    {!i && ' ... '}
-                  </>)
-                }
+                
+                <input
+                  title={'min length'}
+                  id={`minLength${i}`}
+                  type="number" 
+                  value={node.minNoteLength}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
+                />
+                ...
+                <input
+                  title={'max length'}
+                  id={`maxLength${i}`}
+                  type="number" 
+                  value={node.maxNoteLength}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
+                />
+                
+                
                 <br />
 
                 <input
@@ -275,21 +252,29 @@ function App() {
 
                 <br />
 
-                {
-                  volumeInputs.map(input => <>
-                    <input
-                      title={input.label}
-                      id={input.id}
-                      type="number" 
-                      value={input.value}
-                      onChange={(e) => +e !== NaN && input.action(+e.target.value)}
-                      min={0}
-                      max={100}
-                      maxlength={3}
-                    />
-                  </>)
-                }
+                <input
+                  title={'Min volume'}
+                  id={`minVolume${i}`}
+                  type="number" 
+                  value={node.minVolume}
+                  onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minVolume: +e.target.value}, nodes.slice(i+1)].flat())}
+                  min={0}
+                  max={100}
+                  maxlength={3}
+                />
 
+                ...
+
+                <input
+                  title={'Max volume'}
+                  id={`maxVolume${i}`}
+                  type="number" 
+                  value={node.maxVolume}
+                  onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxVolume: +e.target.value}, nodes.slice(i+1)].flat())}
+                  min={0}
+                  max={100}
+                  maxlength={3}
+                />
               </div>
 
               <div className="column">
