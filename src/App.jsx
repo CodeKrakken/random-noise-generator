@@ -75,7 +75,7 @@ function App() {
   }
 
   const newNote = () => {
-    nodes.map((node, i) => {
+    nodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
       playNote(node, i)
