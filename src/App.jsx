@@ -38,7 +38,7 @@ function App() {
       gain            : gain,
       minFrequency    : 20,
       maxFrequency    : 20000,
-      bpm             : bpm ?? newBpm,
+      bpm             : typeof bpm === 'number' ? bpm : newBpm,
       minNoteLength   : 500,
       maxNoteLength   : 500,
       minVolume       : 0,
@@ -103,7 +103,6 @@ function App() {
         }
         
         const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
-        console.log(level)
         node.gain.gain.value = level
         node.nextNoteAt += noteLength
 
