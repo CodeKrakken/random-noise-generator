@@ -45,12 +45,11 @@ function App() {
       maxNoteLength : 500,
       minVolume     : 0,
       maxVolume     : 100,
-      activeNotes   : [1, 3, 5, 6, 8, 10, 12, 13]
+      activeNotes   : [1, 3, 5, 6, 8, 10, 12, 13],
+      activeScales  : [0,1,2,3,4,5,6,7,8,9,10,11]
     }
   }
 
-  // const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
-  const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
   const [nodes,             setNodes            ] = useState([])
@@ -67,7 +66,7 @@ function App() {
 
   const getActiveFrequencies = (node) => {
 
-    let currentFrequencies = allFrequencies.filter((scale, i) => activeScales.includes(i))
+    let currentFrequencies = allFrequencies.filter((scale, i) => node.activeScales.includes(i))
     
     let filteredFrequencies = currentFrequencies.map(scale =>
       scale.filter((note, i) => node.activeNotes.includes(i+1))
@@ -131,18 +130,6 @@ function App() {
     nodes.map(node => {node.gain.gain.value = 0})
   }
   
-  const handleScaleChange = (e) => {
-
-    const toggledScale = +e.target.value
-
-    if (activeScales.includes(toggledScale)) {
-      const toggledScaleIndex = activeScales.indexOf(toggledScale)
-      activeScales.splice(toggledScaleIndex, 1)
-    } else {
-      activeScales.push(toggledScale)
-    }
-  }
-
   const handleWaveShapeChange = (e) => {
 
     const toggledWaveShape = e.target.value
@@ -295,8 +282,8 @@ function App() {
                         title={scale}
                         type="checkbox"
                         value={scale}
-                        checked={activeScales.includes(scale)}
-                        onChange={handleScaleChange}
+                        checked={node.activeScales.includes(scale)}
+                        onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeScales: node.activeScales.includes(+e.target.value) ? node.activeScales.filter(note => note !== +e.target.value) : [node.activeScales, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                       />
                     </>
                   )
