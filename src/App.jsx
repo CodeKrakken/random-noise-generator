@@ -42,12 +42,13 @@ function App() {
       minNoteLength : 500,
       maxNoteLength : 500,
       minVolume     : 0,
-      maxVolume     : 100
+      maxVolume     : 100,
+      activeNotes   : [1, 3, 5, 6, 8, 10, 12, 13]
     }
   }
 
   const [checked,           setChecked          ] = useState(false)
-  const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
+  // const [activeNotes,       setActiveNotes      ] = useState([1, 3, 5, 6, 8, 10, 12, 13])
   const [activeScales,      setActiveScales     ] = useState([0,1,2,3,4,5,6,7,8,9,10,11])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [activeWaveShapes,  setActiveWaveShapes ] = useState(waveShapes)
@@ -56,19 +57,19 @@ function App() {
   const getRandomFrequency = (i) => {
     const minFrequency = +document.getElementById(`minFrequency${i}`).value
     const maxFrequency = +document.getElementById(`maxFrequency${i}`).value
-    const activeFrequencies = getActiveFrequencies() 
+    const activeFrequencies = getActiveFrequencies(nodes[i]) 
     const filteredFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*filteredFrequencies.length)
 
     return filteredFrequencies[randomIndex]
   }
 
-  const getActiveFrequencies = () => {
+  const getActiveFrequencies = (node) => {
 
     let currentFrequencies = allFrequencies.filter((scale, i) => activeScales.includes(i))
     
     let filteredFrequencies = currentFrequencies.map(scale =>
-      scale.filter((note, i) => activeNotes.includes(i+1))
+      scale.filter((note, i) => node.activeNotes.includes(i+1))
     )
 
     return filteredFrequencies.flat(Infinity)
@@ -129,19 +130,6 @@ function App() {
     nodes.map(node => {node.gain.gain.value = 0})
   }
   
-  const handleNoteChange = (e) => {
-
-    setChecked(!checked)
-    const toggledNote = +e.target.value
-
-    if (activeNotes.includes(toggledNote)) {
-      const toggledNoteIndex = activeNotes.indexOf(toggledNote)
-      activeNotes.splice(toggledNoteIndex, 1)
-    } else {
-      activeNotes.push(toggledNote)
-    }
-  }
-
   const handleScaleChange = (e) => {
 
     setChecked(!checked)
@@ -286,14 +274,21 @@ function App() {
                         title={note}
                         type="checkbox"
                         value={note}
-                        checked={activeNotes.includes(note)}
-                        onChange={handleNoteChange}
+                        checked={node.activeNotes.includes(note)}
+                        onChange={(e) => setNodes([
+                          nodes.activeNotes.slice(0, i), 
+                          {...node, activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.splice(node.activeNotes.indexOf(+e.target.value), 1) : node.activeNotes.push(+e.target.value)}, 
+                          nodes.activeNotes.slice(i+1)
+                        ].flat())}
                       />
                     </>
                   )
                 }
+
                 <br />
+
                 Scales
+
                 {
                   scales.map(scale =>
                     <>
