@@ -105,8 +105,8 @@ function App() {
     maxVolume       : 75,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [1,2],
-    activeWaveShapes: ['square'],
-    rest            : 50
+    activeWaveShapes: ['sine'],
+    rest            : 25
   },
   {
     oscillator      : oscillator2, 
@@ -120,8 +120,8 @@ function App() {
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
-    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
-    rest            : 50
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0
 
   },
   {
@@ -136,8 +136,8 @@ function App() {
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
-    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
-    rest            : 50
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0
 
   },
   {
@@ -152,8 +152,8 @@ function App() {
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
-    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
-    rest            : 50
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0
 
   },
   {
@@ -193,13 +193,13 @@ function App() {
     gain            : gain7,
     minFrequency    : 20,
     maxFrequency    : 20000,
-    bpm             : 1024,
+    bpm             : 512,
     minNoteLength   : 500,
     maxNoteLength   : 500,
-    minVolume       : 100,
+    minVolume       : 0,
     maxVolume       : 100,
     activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-    activeScales    : [10, 11],
+    activeScales    : [9],
     activeWaveShapes: ['sine', 'triangle'],
     rest            : 50
 
@@ -262,7 +262,7 @@ function App() {
         }
         
         const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
-        node.gain.gain.value = level
+        node.gain.gain.value = level/nodes.length
         node.nextNoteAt += noteLength
 
       }
