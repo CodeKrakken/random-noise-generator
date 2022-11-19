@@ -105,92 +105,105 @@ function App() {
     maxVolume       : 75,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [1,2],
-    activeWaveShapes: ['square']
+    activeWaveShapes: ['square'],
+    rest            : 50
   },
-  // {
-  //   oscillator      : oscillator2, 
-  //   gain            : gain2,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle', 'sawtooth']
-  // },
-  // {
-  //   oscillator      : oscillator3, 
-  //   gain            : gain3,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle', 'sawtooth']
-  // },
-  // {
-  //   oscillator      : oscillator4, 
-  //   gain            : gain4,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle', 'sawtooth']
-  // },
-  // {
-  //   oscillator      : oscillator5, 
-  //   gain            : gain5,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 75,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [6,7],
-  //   activeWaveShapes: ['triangle']
-  // },
-  // {
-  //   oscillator      : oscillator6, 
-  //   gain            : gain6,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 256,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 75,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [7,8,9],
-  //   activeWaveShapes: ['sine']
-  // },
-  // {
-  //   oscillator      : oscillator7, 
-  //   gain            : gain7,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 1024,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 100,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [10, 11],
-  //   activeWaveShapes: ['sine', 'triangle']
-  // },
+  {
+    oscillator      : oscillator2, 
+    gain            : gain2,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 16,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
+    rest            : 50
+
+  },
+  {
+    oscillator      : oscillator3, 
+    gain            : gain3,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 16,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
+    rest            : 50
+
+  },
+  {
+    oscillator      : oscillator4, 
+    gain            : gain4,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 16,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle', 'sawtooth'],
+    rest            : 50
+
+  },
+  {
+    oscillator      : oscillator5, 
+    gain            : gain5,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 75,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [6,7],
+    activeWaveShapes: ['triangle'],
+    rest            : 50
+
+  },
+  {
+    oscillator      : oscillator6, 
+    gain            : gain6,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 256,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 75,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [7,8,9],
+    activeWaveShapes: ['sine'],
+    rest            : 50
+
+  },
+  {
+    oscillator      : oscillator7, 
+    gain            : gain7,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 1024,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 100,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [10, 11],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 50
+
+  },
 ])
 
   const getRandomFrequency = (i) => {
@@ -234,8 +247,13 @@ function App() {
 
         const waveShape   = node.activeWaveShapes[Math.floor(Math.random() * node.activeWaveShapes.length)]
         node.oscillator.type   = waveShape
-        const frequency   = Math.random() > 0.5 ? getRandomFrequency(i) : 0;
-        console.log(frequency)
+
+        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
+        console.log(`Chance of Rest: ${chanceOfRest}`)
+        const diceRoll = Math.random()
+        console.log(`Dice roll: ${diceRoll}`)
+        console.log(diceRoll >= chanceOfRest ? 'note' : 'no note')
+        const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
 
         try {
           node.oscillator.frequency.value = frequency
@@ -301,6 +319,8 @@ function App() {
                 <div className="row inner-row">BPM</div>
                 <div className="row inner-row">Min lev</div>
                 <div className="row inner-row">Max lev</div>
+                <div className="row inner-row">Rest %</div>
+
               </div>
 
               <div className="column">
@@ -387,6 +407,19 @@ function App() {
                     type="number" 
                     value={node.maxVolume}
                     onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxVolume: +e.target.value}, nodes.slice(i+1)].flat())}
+                    min={0}
+                    max={100}
+                    maxlength={3}
+                  />
+                </div>
+                <div className="row inner-row">
+                  <input
+                    className='textbox'
+                    title={'Rest %'}
+                    id={`rest${i}`}
+                    type="number" 
+                    value={node.rest}
+                    onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat())}
                     min={0}
                     max={100}
                     maxlength={3}
