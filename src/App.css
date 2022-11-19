@@ -1,13 +1,22 @@
 .row {
   display: flex;
-  
+}
+
+.inner-row {
+  height: 25px
 }
 
 .column {
-  flex: 50%;
+  column-width: auto;
+  padding: 5px
 }
 
 .node {
   border: 1px dotted black;
-  padding: 5px
+  padding: 5px;
+  width: auto
+}
+
+.textbox {
+  width: 60px
 }
