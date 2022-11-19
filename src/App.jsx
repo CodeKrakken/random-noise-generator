@@ -48,10 +48,49 @@ function App() {
       activeWaveShapes: waveShapes
     }
   }
-  
+
+  const oscillator = context.createOscillator()
+  const oscillator2 = context.createOscillator()
+  const gain = context.createGain()
+  const gain2 = context.createGain()
+  oscillator.connect(gain);
+  oscillator2.connect(gain2);
+  gain.connect(context.destination);
+  gain2.connect(context.destination);
+  gain.gain.value = 0
+  gain2.gain.value = 0
+  oscillator.start(0);
+  oscillator2.start(0);
 
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
-  const [nodes,             setNodes            ] = useState([])
+  const [nodes,             setNodes            ] = useState([{
+    oscillator      : oscillator, 
+    gain            : gain,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 64,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 0,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 5, 6, 8, 10, 12, 13],
+    activeScales    : [0,1,2,3,4,5,6,7,8,9,10,11],
+    activeWaveShapes: waveShapes
+  },
+  {
+    oscillator      : oscillator2, 
+    gain            : gain2,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 0,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 5, 6, 8, 10, 12, 13],
+    activeScales    : [0,1,2,3,4,5,6,7,8,9,10,11],
+    activeWaveShapes: waveShapes
+  }])
 
   const getRandomFrequency = (i) => {
     const minFrequency = +document.getElementById(`minFrequency${i}`).value
@@ -147,9 +186,9 @@ function App() {
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
-  useEffect(() => {
-    setUpSample()
-  }, [])
+  // useEffect(() => {
+  //   setUpSample()
+  // }, [])
 
   const setUpSample = async () => {
     addOscillator(64)
