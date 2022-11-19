@@ -42,7 +42,7 @@ function App() {
       maxNoteLength   : 500,
       minVolume       : 0,
       maxVolume       : 100,
-      activeNotes     : [1, 3, 5, 6, 8, 10, 12, 13],
+      activeNotes     : [1, 4, 6, 8, 11, 13],
       activeScales    : [0,1,2,3,4,5,6,7,8,9,10,11],
       activeWaveShapes: waveShapes
     }
