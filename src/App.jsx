@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
-import ReactDOM from 'react-dom/client';
 import { allFrequencies } from './data'
 
 // import SheetMusic from '@slnsw/react-sheet-music';
@@ -282,7 +281,7 @@ function App() {
 
   const stop = () => {
     setCycleButtonLabel('Start')
-    nodes.map(node => {node.gain.gain.value = 0})
+    nodes.forEach(node => {node.gain.gain.value = 0})
   }
 
   const handleStartStop = () => {
@@ -293,10 +292,6 @@ function App() {
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
-
-  const setUpSample = async () => {
-    addOscillator(64)
-  }
 
   return <>
     <div>
