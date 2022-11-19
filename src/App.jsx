@@ -21,6 +21,8 @@ function App() {
     'square'
   ]
 
+  const intervals = [1, 1/2, 1/4, 1/8, 1/16]
+
   const context = new AudioContext();
 
   const setUpOscillator = (bpm) => {
@@ -46,7 +48,7 @@ function App() {
       activeScales      : [0,1,2,3,4,5,6,7,8,9,10,11],
       activeWaveShapes  : waveShapes,
       rest              : 50,
-      activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+      activeIntervals : [1, 1/2, 1/4, 1/8, 1/16]
     }
   }
 
@@ -99,7 +101,7 @@ function App() {
     gain            : gain,
     minFrequency    : 20,
     maxFrequency    : 20000,
-    bpm             : 64,
+    bpm             : 128,
     minNoteLength   : 500,
     maxNoteLength   : 500,
     minVolume       : 75,
@@ -108,117 +110,115 @@ function App() {
     activeScales    : [1,2],
     activeWaveShapes: ['sine'],
     rest            : 25,
-    activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+    activeIntervals : [1/4, 1/8]
 
   },
-  // {
-  //   oscillator      : oscillator2, 
-  //   gain            : gain2,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+  {
+    oscillator      : oscillator2, 
+    gain            : gain2,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator3, 
-  //   gain            : gain3,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+  },
+  {
+    oscillator      : oscillator3, 
+    gain            : gain3,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator4, 
-  //   gain            : gain4,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 16,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+  },
+  {
+    oscillator      : oscillator4, 
+    gain            : gain4,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
+  },
+  {
+    oscillator      : oscillator5, 
+    gain            : gain5,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 75,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [6,7],
+    activeWaveShapes: ['triangle'],
+    rest            : 50,
+    activeIntervals : [1/2, 1/4]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator5, 
-  //   gain            : gain5,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 75,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [6,7],
-  //   activeWaveShapes: ['triangle'],
-  //   rest            : 50,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+  },
+  {
+    oscillator      : oscillator6, 
+    gain            : gain6,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 75,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [7,8,9],
+    activeWaveShapes: ['sine'],
+    rest            : 50,
+    activeIntervals : [1/4, 1/8]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator6, 
-  //   gain            : gain6,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 256,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 75,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [7,8,9],
-  //   activeWaveShapes: ['sine'],
-  //   rest            : 50,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
+  },
+  {
+    oscillator      : oscillator7, 
+    gain            : gain7,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 0,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [9],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 50,
+    activeIntervals : [1/8, 1/16]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator7, 
-  //   gain            : gain7,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 512,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 0,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [9],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 50,
-  //   activeNoteLengths : [1, 1/2, 1/4, 1/8, 1/16]
-
-
-  // },
+  },
 ])
 
   const getRandomFrequency = (i) => {
@@ -256,7 +256,7 @@ function App() {
         // const minLength   = +document.getElementById(`minLength${i}`).value
         // const maxLength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
-        const randomNoteLength = node.activeNoteLengths[Math.floor(Math.random() * node.activeNoteLengths.length)]
+        const randomNoteLength = node.activeIntervals[Math.floor(Math.random() * node.activeIntervals.length)]
         const noteLengthBpmAdjuster = 4
         const noteLength  = 60000/bpm * randomNoteLength * noteLengthBpmAdjuster
         console.log(noteLength)
@@ -451,6 +451,9 @@ function App() {
                 <div className="row inner-row">
                   Waves
                 </div>
+                <div>
+                  Intervals
+                </div>
               </div>
               <div className="column">
                 <div className="row inner-row">
@@ -493,6 +496,21 @@ function App() {
                           value={waveShape}
                           checked={node.activeWaveShapes.includes(waveShape)}
                           onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeWaveShapes: node.activeWaveShapes.includes(e.target.value) ? node.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [node.activeWaveShapes, e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                        />
+                      </>
+                    })
+                  }
+                </div>
+                <div className="row inner-row">
+                  { 
+                    intervals.map(noteLength => {
+                      return <>
+                        <input
+                          title={noteLength}
+                          type="checkbox"
+                          value={noteLength}
+                          checked={node.activeIntervals.includes(noteLength)}
+                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(noteLength => noteLength !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                         />
                       </>
                     })
