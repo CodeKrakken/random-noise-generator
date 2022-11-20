@@ -113,110 +113,110 @@ function App() {
     activeIntervals : [1/4, 1/8]
 
   },
-  // {
-  //   oscillator      : oscillator2, 
-  //   gain            : gain2,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeIntervals : [1]
+  {
+    oscillator      : oscillator2, 
+    gain            : gain2,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator3, 
-  //   gain            : gain3,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeIntervals : [1]
+  },
+  {
+    oscillator      : oscillator3, 
+    gain            : gain3,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator4, 
-  //   gain            : gain4,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 50,
-  //   activeNotes     : [1, 4, 6, 8, 11, 13],
-  //   activeScales    : [3,4,5],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 0,
-  //   activeIntervals : [1]
-  // },
-  // {
-  //   oscillator      : oscillator5, 
-  //   gain            : gain5,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 50,
-  //   maxVolume       : 75,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [6,7],
-  //   activeWaveShapes: ['triangle'],
-  //   rest            : 50,
-  //   activeIntervals : [1/2, 1/4]
+  },
+  {
+    oscillator      : oscillator4, 
+    gain            : gain4,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 50,
+    activeNotes     : [1, 4, 6, 8, 11, 13],
+    activeScales    : [3,4,5],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 0,
+    activeIntervals : [1]
+  },
+  {
+    oscillator      : oscillator5, 
+    gain            : gain5,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 50,
+    maxVolume       : 75,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [6,7],
+    activeWaveShapes: ['triangle'],
+    rest            : 50,
+    activeIntervals : [1/2, 1/4]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator6, 
-  //   gain            : gain6,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 75,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [7,8,9],
-  //   activeWaveShapes: ['sine'],
-  //   rest            : 50,
-  //   activeIntervals : [1/4, 1/8]
+  },
+  {
+    oscillator      : oscillator6, 
+    gain            : gain6,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 75,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [7,8,9],
+    activeWaveShapes: ['sine'],
+    rest            : 50,
+    activeIntervals : [1/4, 1/8]
 
 
-  // },
-  // {
-  //   oscillator      : oscillator7, 
-  //   gain            : gain7,
-  //   minFrequency    : 20,
-  //   maxFrequency    : 20000,
-  //   bpm             : 128,
-  //   minNoteLength   : 500,
-  //   maxNoteLength   : 500,
-  //   minVolume       : 0,
-  //   maxVolume       : 100,
-  //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-  //   activeScales    : [9],
-  //   activeWaveShapes: ['sine', 'triangle'],
-  //   rest            : 50,
-  //   activeIntervals : [1/8, 1/16]
-  // },
+  },
+  {
+    oscillator      : oscillator7, 
+    gain            : gain7,
+    minFrequency    : 20,
+    maxFrequency    : 20000,
+    bpm             : 128,
+    minNoteLength   : 500,
+    maxNoteLength   : 500,
+    minVolume       : 0,
+    maxVolume       : 100,
+    activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    activeScales    : [9],
+    activeWaveShapes: ['sine', 'triangle'],
+    rest            : 50,
+    activeIntervals : [1/8, 1/16]
+  },
 ])
 
   const getRandomFrequency = (i) => {
@@ -254,10 +254,13 @@ function App() {
         // const minLength   = +document.getElementById(`minLength${i}`).value
         // const maxLength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
-        const randomNoteLength = node.activeIntervals[Math.floor(Math.random() * node.activeIntervals.length)]
-        const noteLengthBpmAdjuster = 4
-        const noteLength  = 60000/bpm * randomNoteLength * noteLengthBpmAdjuster
-        console.log(noteLength)
+        const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
+        // const interval = node.activeIntervals[Math.floor(Math.random() * node.activeIntervals.length)]
+        const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+
+        const intervalBpmAdjuster = 4
+        const noteLength  = 60000/bpm * interval * intervalBpmAdjuster
+
         const minVolume   = +document.getElementById(`minVolume${i}`).value
         const maxVolume   = +document.getElementById(`maxVolume${i}`).value
 
@@ -511,14 +514,15 @@ function App() {
                 </div>
                 <div className="row inner-row">
                   { 
-                    intervals.map(noteLength => {
+                    intervals.map(interval => {
                       return <>
                         <input
-                          title={noteLength}
+                          className={`interval${i}`}
+                          title={interval}
                           type="checkbox"
-                          value={noteLength}
-                          checked={node.activeIntervals.includes(noteLength)}
-                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(noteLength => noteLength !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                          value={interval}
+                          checked={node.activeIntervals.includes(interval)}
+                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                         />
                       </>
                     })
