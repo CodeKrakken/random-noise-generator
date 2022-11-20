@@ -312,11 +312,7 @@ function App() {
   }
 
   const handleDelete = (i, e) => {
-    setNodes([
-      nodes.slice(0, i), 
-      {...nodes[i], gain: {...gain, gain: 0}}, 
-      nodes.slice(i+1
-    )].flat())
+    nodes[i].gain.gain.value = 0
     setNodes(nodes.filter((node, j) => i !== j))
   }
 
