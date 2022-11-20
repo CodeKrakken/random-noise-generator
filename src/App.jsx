@@ -222,19 +222,22 @@ function App() {
   const getRandomFrequency = (i) => {
     // const minFrequency = +document.getElementById(`minFrequency${i}`).value
     // const maxFrequency = +document.getElementById(`maxFrequency${i}`).value
-    let activeFrequencies = getActiveFrequencies(nodes[i]) 
+    let activeFrequencies = getActiveFrequencies(i) 
     // activeFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
     return activeFrequencies[randomIndex]
   }
 
-  const getActiveFrequencies = (node) => {
+  const getActiveFrequencies = (i) => {
 
-    let currentFrequencies = allFrequencies.filter((scale, i) => node.activeScales.includes(i))
+    const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(scale => scale.checked).map(scale => { return +scale.value})
+    const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(note  =>  note.checked).map(note => { return +note.value})
+
+    let currentFrequencies = allFrequencies.filter((scale, j) => activeScales.includes(j))
     
     let filteredFrequencies = currentFrequencies.map(scale =>
-      scale.filter((note, i) => node.activeNotes.includes(i+1))
+      scale.filter((note, j) => activeNotes.includes(j+1))
     )
 
     return filteredFrequencies.flat(Infinity)
@@ -269,10 +272,7 @@ function App() {
         node.oscillator.type   = waveShape
 
         const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-        console.log(`Chance of Rest: ${chanceOfRest}`)
         const diceRoll = Math.random()
-        console.log(`Dice roll: ${diceRoll}`)
-        console.log(diceRoll >= chanceOfRest ? 'note' : 'no note')
         const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
 
         try {
@@ -318,7 +318,6 @@ function App() {
       nodes.slice(i+1
     )].flat())
     setNodes(nodes.filter((node, j) => i !== j))
-    console.log('delete node')
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -473,6 +472,7 @@ function App() {
                     notes.map(note => 
                       <>
                         <input
+                          className={`note${i}`}
                           title={note}
                           type="checkbox"
                           value={note}
@@ -488,6 +488,7 @@ function App() {
                     scales.map(scale =>
                       <>
                         <input
+                          className={`scale${i}`}
                           title={scale}
                           type="checkbox"
                           value={scale}
