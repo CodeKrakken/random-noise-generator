@@ -255,7 +255,6 @@ function App() {
         // const maxLength   = +document.getElementById(`maxLength${i}`).value
         const bpm         = +document.getElementById(`bpm${i}`).value
         const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-        // const interval = node.activeIntervals[Math.floor(Math.random() * node.activeIntervals.length)]
         const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
 
         const intervalBpmAdjuster = 4
@@ -264,7 +263,9 @@ function App() {
         const minVolume   = +document.getElementById(`minVolume${i}`).value
         const maxVolume   = +document.getElementById(`maxVolume${i}`).value
 
-        const waveShape   = node.activeWaveShapes[Math.floor(Math.random() * node.activeWaveShapes.length)]
+        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+
+        const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
         node.oscillator.type   = waveShape
 
         const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
@@ -503,6 +504,7 @@ function App() {
                       return <>
                         <input
                           title={waveShape}
+                          className={`wave${i}`}
                           type="checkbox"
                           value={waveShape}
                           checked={node.activeWaveShapes.includes(waveShape)}
