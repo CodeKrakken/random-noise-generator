@@ -102,16 +102,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 75,
     maxVolume       : 75,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [1,2],
-    activeWaveShapes: ['sine'],
+    activeWaveShapes: ['sawtooth'],
     rest            : 25,
-    activeIntervals : [1/4, 1/8]
-
+    activeIntervals : [1/4, 1/8],
+    minNoteLength   : 0,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator2, 
@@ -119,17 +118,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 50,
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
     activeWaveShapes: ['sine', 'triangle'],
     rest            : 0,
-    activeIntervals : [1]
-
-
+    activeIntervals : [1],
+    minNoteLength   : 100,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator3, 
@@ -137,17 +134,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 50,
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
     activeWaveShapes: ['sine', 'triangle'],
     rest            : 0,
-    activeIntervals : [1]
-
-
+    activeIntervals : [1],
+    minNoteLength   : 100,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator4, 
@@ -155,15 +150,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 50,
     maxVolume       : 50,
     activeNotes     : [1, 4, 6, 8, 11, 13],
     activeScales    : [3,4,5],
     activeWaveShapes: ['sine', 'triangle'],
     rest            : 0,
-    activeIntervals : [1]
+    activeIntervals : [1],
+    minNoteLength   : 100,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator5, 
@@ -171,17 +166,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 50,
     maxVolume       : 75,
     activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
     activeScales    : [6,7],
     activeWaveShapes: ['triangle'],
     rest            : 50,
-    activeIntervals : [1/2, 1/4]
-
-
+    activeIntervals : [1/2, 1/4],
+    minNoteLength   : 0,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator6, 
@@ -189,17 +182,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 75,
     maxVolume       : 100,
     activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
     activeScales    : [7,8,9],
     activeWaveShapes: ['sine'],
     rest            : 50,
-    activeIntervals : [1/4, 1/8]
-
-
+    activeIntervals : [1/4, 1/8],
+    minNoteLength   : 0,
+    maxNoteLength   : 100
   },
   {
     oscillator      : oscillator7, 
@@ -207,15 +198,15 @@ function App() {
     minFrequency    : 20,
     maxFrequency    : 20000,
     bpm             : 128,
-    minNoteLength   : 500,
-    maxNoteLength   : 500,
     minVolume       : 0,
     maxVolume       : 100,
     activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
     activeScales    : [9],
     activeWaveShapes: ['sine', 'triangle'],
     rest            : 50,
-    activeIntervals : [1/8, 1/16]
+    activeIntervals : [1/8, 1/16],
+    minNoteLength   : 0,
+    maxNoteLength   : 100
   },
 ])
 
@@ -261,10 +252,12 @@ function App() {
         const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
 
         const intervalBpmAdjuster = 4
-        const noteLength  = 60000/bpm * interval * intervalBpmAdjuster
+        const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
 
         const minVolume   = +document.getElementById(`minVolume${i}`).value
         const maxVolume   = +document.getElementById(`maxVolume${i}`).value
+        const minLength   = +document.getElementById(`minLength${i}`).value
+        const maxLength   = +document.getElementById(`maxLength${i}`).value
 
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
@@ -281,9 +274,13 @@ function App() {
           console.log(error)
         }
         
-        const level = (minVolume + Math.random() * (maxVolume - minVolume))/100
+        const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
+        const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
         node.gain.gain.value = level/nodes.length
-        node.nextNoteAt += noteLength
+        node.nextNoteAt += intervalLength
+        const noteLength = intervalLength / 100 * noteLengthPercentage
+        console.log(noteLength)
+        setTimeout(() => {node.gain.gain.value = 0}, intervalLength/100 * noteLength)
 
       }
       setTimeout(() => {playNote(node, i)}, 1)
@@ -338,10 +335,11 @@ function App() {
             <div className="row">
               <div className="column">
                 <div className="row inner-row">BPM</div>
-                <div className="row inner-row">Min lev</div>
-                <div className="row inner-row">Max lev</div>
+                <div className="row inner-row">Min level</div>
+                <div className="row inner-row">Max level</div>
+                <div className="row inner-row">Min length</div>
+                <div className="row inner-row">Max length</div>
                 <div className="row inner-row">Rest %</div>
-
               </div>
 
               <div className="column">
@@ -357,27 +355,7 @@ function App() {
                     min={0}
                     max={60000}
                   />
-                    
-                {/* <span>{" "}OR{" "}</span>
-                <label></label>
-
-                <input
-                  className='textbox'  
-                  title={'min length'}
-                  id={`minLength${i}`}
-                  type="number" 
-                  value={node.minNoteLength}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
-                />
-                ...
-                <input
-                  className='textbox'
-                  title={'max length'}
-                  id={`maxLength${i}`}
-                  type="number" 
-                  value={node.maxNoteLength}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
-                /> */}
+                   
                 
                 
                 {/* <br />
@@ -433,6 +411,34 @@ function App() {
                     maxlength={3}
                   />
                 </div>
+                <div className="row inner-row">
+                  <input
+                    className='textbox'  
+                    title={'min length'}
+                    id={`minLength${i}`}
+                    type="number"
+                    min={0}                     
+                    max={100} 
+                    maxlength={3}
+                    value={node.minNoteLength}
+                    onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
+                  />
+                </div>
+
+                <div className="row inner-row">
+                  <input
+                    className='textbox'
+                    title={'max length'}
+                    id={`maxLength${i}`}
+                    type="number"
+                    min={0} 
+                    max={100} 
+                    maxlength={3}
+                    value={node.maxNoteLength}
+                    onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
+                  />
+                </div>
+
                 <div className="row inner-row">
                   <input
                     className='textbox'
