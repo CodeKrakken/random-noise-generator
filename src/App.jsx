@@ -238,52 +238,60 @@ function App() {
     nodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
-      playNote(node, i)
     })
+    playNote()
   }
 
-  const playNote = (node, i) => {
+  const playNote = () => {
     if (cycling)  {
-      if (Date.now() >= node.nextNoteAt) {
-        // const minLength   = +document.getElementById(`minLength${i}`).value
-        // const maxLength   = +document.getElementById(`maxLength${i}`).value
-        const bpm         = +document.getElementById(`bpm${i}`).value
-        const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-        const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+      nodes.forEach((node, i) => {
+        if (Date.now() >= node.nextNoteAt) {
 
-        const intervalBpmAdjuster = 4
-        const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
+          const bpm           = +document.getElementById(`bpm${i}`      ).value
+          const minVolume     = +document.getElementById(`minVolume${i}`).value
+          const maxVolume     = +document.getElementById(`maxVolume${i}`).value
+          const minLength     = +document.getElementById(`minLength${i}`).value
+          const maxLength     = +document.getElementById(`maxLength${i}`).value
+          const chanceOfRest  = +document.getElementById(`rest${i}`     ).value/100
 
-        const minVolume   = +document.getElementById(`minVolume${i}`).value
-        const maxVolume   = +document.getElementById(`maxVolume${i}`).value
-        const minLength   = +document.getElementById(`minLength${i}`).value
-        const maxLength   = +document.getElementById(`maxLength${i}`).value
+          const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}` )).filter(interval  => interval.checked )
+          const liveWaves     = Array.from(document.getElementsByClassName(`wave${i}`     )).filter(wave      => wave.checked     )
+          
+          const interval            = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+          const intervalBpmAdjuster = 4
+          const intervalLength      = 60000 / bpm * interval * intervalBpmAdjuster
+          
+          const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+          node.oscillator.type  = waveShape
 
-        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+          const diceRoll  = Math.random()
+          const frequency = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
 
-        const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
-        node.oscillator.type   = waveShape
+          try {
+            node.oscillator.frequency.value = frequency
+          } catch (error) {
+            console.log(error)
+          }
 
-        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-        const diceRoll = Math.random()
-        const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+          let noteLengthPercentage = 100
 
-        try {
-          node.oscillator.frequency.value = frequency
-        } catch (error) {
-          console.log(error)
+          if (frequency) {
+            const level           = (minVolume + Math.random() * (maxVolume - minVolume))/100
+            node.gain.gain.value  = level/nodes.length
+            noteLengthPercentage  = minLength + Math.random() * (maxLength - minLength)
+          }
+
+          node.nextNoteAt   +=  intervalLength
+          const noteLength  =   intervalLength / 100 * noteLengthPercentage
+          setTimeout(() => {node.gain.gain.value = 0}, intervalLength/100 * noteLength)
+
         }
-        
-        const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
-        const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-        node.gain.gain.value = level/nodes.length
-        node.nextNoteAt += intervalLength
-        const noteLength = intervalLength / 100 * noteLengthPercentage
-        console.log(noteLength)
-        setTimeout(() => {node.gain.gain.value = 0}, intervalLength/100 * noteLength)
 
-      }
-      setTimeout(() => {playNote(node, i)}, 1)
+        const nextNoteAtCollection = nodes.map(node => node.nextNoteAt)
+        const nextNoteAt = Math.min(nextNoteAtCollection)
+        setTimeout(playNote, nextNoteAt - Date.now())
+
+      })
 
     } else {
       stop()
