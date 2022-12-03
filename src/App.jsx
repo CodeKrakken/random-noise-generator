@@ -212,10 +212,8 @@ function App() {
   ])
 
   const getRandomFrequency = (i) => {
-    // const minFrequency = +document.getElementById(`minFrequency${i}`).value
-    // const maxFrequency = +document.getElementById(`maxFrequency${i}`).value
+
     let activeFrequencies = getActiveFrequencies(i) 
-    // activeFrequencies = activeFrequencies.filter(frequency => frequency >= minFrequency && frequency <= maxFrequency)
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
     return activeFrequencies[randomIndex]
@@ -236,7 +234,9 @@ function App() {
   }
 
   const newNote = () => {
-    nodes.forEach((node, i) => {
+    const liveNodes = Array.from(document.getElementsByClassName('node'))
+    console.log(liveNodes)
+    liveNodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
       playNote(node, i)
@@ -290,10 +290,7 @@ function App() {
 
         if (noteLength < intervalLength) {
 
-          setTimeout(() => {
-            node.gain.gain.value = 0
-            console.log(`Shortening after ${noteLength}`)
-          }, noteLength)
+          setTimeout(() => {node.gain.gain.value = 0}, noteLength)
           
         }
       }
@@ -370,35 +367,6 @@ function App() {
                     min={0}
                     max={60000}
                   />
-                   
-                
-                
-                {/* <br />
-
-                <input
-                  className='textbox'
-                  title='Min pitch'
-                  id={`minFrequency${i}`}
-                  type="number" 
-                  value={node.minFrequency}
-                  onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFrequency: +e.target.value}, nodes.slice(i+1)].flat())}
-                  maxlength={5}
-                  min={0}
-                  max={100000}
-                />
-
-                <input
-                  className='textbox'
-                  title='Max pitch'
-                  id={`maxFrequency${i}`}
-                  type="number" 
-                  value={node.maxFrequency}
-                  onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFrequency: +e.target.value}, nodes.slice(i+1)].flat())}
-                  maxlength={5}
-                  min={0}
-                  max={100000}
-                /> */}
-
                 </div>
                 <div className="row inner-row">
                   <input
