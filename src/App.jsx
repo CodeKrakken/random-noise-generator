@@ -105,7 +105,8 @@ function App() {
     {
       drums : [snare],
       activeIntervals : [1],
-
+      bpm: 120,
+      rest              : 50,
 
     }
     // {
@@ -246,21 +247,18 @@ function App() {
 
   const newNote = () => {
     const liveNodes = Array.from(document.getElementsByClassName('node'))
-    console.log(liveNodes)
     nodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
-      if (node.oscillator) {
-        playNote(node, i)
-      }
-      if (node.drums) {
-        playDrum(node, i)
-      }
+      if (node.oscillator)  { playNote(node, i) }
+      if (node.drums)       { drumHit (node, i) }
     })
   }
 
-  const playDrum = (node, i) => {
+  const drumHit = (node, i) => {
+    
     if (cycling) {
+
       let interval
       let latency
 
@@ -279,6 +277,7 @@ function App() {
         const diceRoll = Math.random()
 
         try {
+          // console.log('playing sample')
           play0()
         } catch (error) {
           console.log(error)
@@ -288,8 +287,7 @@ function App() {
 
       }
 
-      setTimeout(() => {playNote(node, i)}, interval - latency)
-
+      setTimeout(() => {drumHit(node, i)}, interval - latency)
 
     }
   }
@@ -358,6 +356,7 @@ function App() {
     setCycleButtonLabel('Stop')
     context.resume()
     newNote()
+
   }
 
   const stop = () => {
@@ -368,7 +367,6 @@ function App() {
   const handleStartStop = () => {
     cycling = !cycling
     cycling ? start() : stop()
-    
   }
 
   const handleDelete = (i, e) => {
@@ -396,11 +394,10 @@ function App() {
       </button>
       {" "}
       <button onClick={addOscillator}>Add Oscillator</button>
-      {/* <button onClick={addDrumTrack }>Add Drum Track</button> */}
       <br />
       {
         nodes.map((node, i) => {
-          return <div className="node">
+          return node.oscillator ? <div className="node">
             <div className="row">
               <div className="column">
                 <div className="row inner-row">BPM</div>
@@ -582,7 +579,66 @@ function App() {
               </div>
             </div>
           </div>
-          
+          :
+          <div className="node">
+            <div className="row">
+              <div className="column">
+                <div className="row inner-row">
+                  BPM
+                </div>
+                <div className="row inner-row">
+                  Intervals
+                </div>
+                <div className="row inner-row">Rest %</div>
+
+              </div>
+              <div className="column">
+                <div className="row inner-row">
+                  <input
+                    className='textbox'  
+                    title="BPM"
+                    id={`bpm${i}`}
+                    type="number" 
+                    value={node.bpm}
+                    onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat())}
+                    maxlength={5}
+                    min={0}
+                    max={60000}
+                  />
+                </div>
+                
+              </div>
+              <div className="row inner-row">
+                  { 
+                    intervals.map(interval => {
+                      return <>
+                        <input
+                          className={`interval${i}`}
+                          title={interval}
+                          type="checkbox"
+                          value={interval}
+                          checked={node.activeIntervals.includes(interval)}
+                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                        />
+                      </>
+                    })
+                  }
+                  <div className="row inner-row">
+                  <input
+                    className='textbox'
+                    title={'Rest %'}
+                    id={`rest${i}`}
+                    type="number" 
+                    value={node.rest}
+                    onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat())}
+                    min={0}
+                    max={100}
+                    maxlength={3}
+                  />
+                </div>
+                </div>
+            </div>
+          </div>
         })
       }
     </div>
