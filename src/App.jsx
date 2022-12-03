@@ -236,7 +236,7 @@ function App() {
   const newNote = () => {
     const liveNodes = Array.from(document.getElementsByClassName('node'))
     console.log(liveNodes)
-    liveNodes.forEach((node, i) => {
+    nodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
       playNote(node, i)
