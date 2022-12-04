@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import './App.css';
 import { allFrequencies } from './data'
+import useSound from 'use-sound';
+import snareFile  from './sounds/snare.wav';
+import kickFile   from './sounds/kick.wav';
 
 // import SheetMusic from '@slnsw/react-sheet-music';
 
 let cycling = false
 
 function App() {
+
+
 
   const addOscillator = (bpm) => {
     const newOscillator = setUpOscillator(bpm)
@@ -26,6 +31,18 @@ function App() {
   const intervals = [1, 1/2, 1/4, 1/8, 1/16]
 
   const context = new AudioContext();
+
+  let snare
+  let snareSample
+
+  if (typeof document !== 'undefined') {
+    snareSample = document.getElementById("snare");
+
+    if (snareSample) {
+      snare = context.createMediaElementSource(snareSample);
+      snare.connect(context.destination)
+    }
+  }
 
   const setUpOscillator = (bpm) => {
     const oscillator = context.createOscillator()
@@ -304,6 +321,7 @@ function App() {
           } catch (error) {
             console.log(error)
           }
+        } else {       snareSample.play()
         }
         
       }
@@ -342,6 +360,7 @@ function App() {
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return <>
+    <audio id="snare" src="src/sounds/snare.wav"></audio>
     <div>
       RANDOM NOISE GENERATOR{" "}
       <button 
