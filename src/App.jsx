@@ -5,6 +5,7 @@ import useSound from 'use-sound';
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Node from './components/Node';
+import Header from './components/Header';
 
 // import SheetMusic from '@slnsw/react-sheet-music';
 
@@ -377,15 +378,11 @@ function App() {
   return <>
     <div id="snare" src="src/sounds/snare.wav"></div>
     <div>
-      RANDOM NOISE GENERATOR{" "}
-      <button 
-        value="Start/Stop" 
-        onClick={handleStartStop}
-      >
-        {cycleButtonLabel}
-      </button>
-      {" "}
-      <button onClick={addOscillator}>Add Oscillator</button>
+      <Header 
+        handleStartStop   = {handleStartStop}
+        cycleButtonLabel  = {cycleButtonLabel}
+        addOscillator     = {addOscillator}
+      />
 
       <br />
       {nodes.map((node, i) => 
