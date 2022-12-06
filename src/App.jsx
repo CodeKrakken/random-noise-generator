@@ -324,8 +324,8 @@ function App() {
           } else {
             try {
               if (diceRoll >= chanceOfRest) {
-                if (waveShape === 'kick'  ) {kickSample.  play()}
-                if (waveShape === 'snare' ) {snareSample. play()}
+                if (waveShape === 'kick'  ) {kickSample.play()}
+                if (waveShape === 'snare' ) {snareSample.play()}
               }
             } catch (error) {
               console.log(error.message)
