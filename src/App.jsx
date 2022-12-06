@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-import useSound from 'use-sound';
-
-import './App.css';
-import { allFrequencies } from './data'
-import snare  from './sounds/snare.wav';
-import kick   from './sounds/kick.wav';
-=======
 import { useState, useEffect } from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
@@ -14,7 +5,6 @@ import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Node from './components/Node';
 import Header from './components/Header';
->>>>>>> integrated
 
 // import SheetMusic from '@slnsw/react-sheet-music';
 
@@ -22,29 +12,12 @@ let cycling = false
 
 function App() {
 
-  const [play0] = useSound(kick);
-  const [play1] = useSound(snare);
-
   const addOscillator = (bpm) => {
     const newOscillator = setUpOscillator(bpm)
     const newNodes = [nodes, newOscillator].flat()
     setNodes(newNodes)
   }
 
-<<<<<<< HEAD
-  const drums = ['kick', 'snare']
-
-  const waveShapes = [
-    'sine',
-    'triangle',
-    'sawtooth',
-    'square'
-  ]
-
-  const intervals = [1, 1/2, 1/4, 1/8, 1/16]
-
-=======
->>>>>>> integrated
   const context = new AudioContext();
 
   const snareSample = new Audio(snareFile)
@@ -124,12 +97,6 @@ function App() {
   gain7.connect(context.destination);
   gain7.gain.value = 0
   oscillator7.start(0);
-<<<<<<< HEAD
-
-  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
-  const [nodes,             setNodes            ] = useState([
-    
-=======
   const oscillator8 = context.createOscillator()
   const gain8 = context.createGain()
   oscillator8.connect(gain8);
@@ -138,7 +105,6 @@ function App() {
   oscillator8.start(0);
 
   const demo = [
->>>>>>> integrated
     {
       type            : 'oscillator',
       oscillator      : oscillator, 
@@ -274,23 +240,10 @@ function App() {
       minNoteLength   : 0,
       maxNoteLength   : 100
     },
-<<<<<<< HEAD
-    {
-      type            : 'percussion',
-      activeDrums     : ['kick', 'snare'],
-      activeIntervals : [1],
-      bpm             : 120,
-      rest            : 50,
-
-    },
-    
-  ])
-=======
   ]
 
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [nodes,             setNodes            ] = useState(demo)
->>>>>>> integrated
 
   const getRandomFrequency = (i) => {
 
@@ -314,61 +267,6 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
-<<<<<<< HEAD
-  const newNote = () => {
-    const liveNodes = Array.from(document.getElementsByClassName('node'))
-    nodes.forEach((node, i) => {
-      const startTime = Date.now()
-      node.nextNoteAt = startTime
-      if (node.type === 'oscillator') { playNote(node, i) }
-      if (node.type === 'percussion') { drumHit (node, i) }
-    })
-  }
-
-  const drumHit = (node, i) => {
-    
-    if (cycling) {
-
-      let interval
-      let latency
-
-      const timeNow = Date.now()
-
-      if (timeNow >= node.nextNoteAt) {
-
-        latency = timeNow - node.nextNoteAt
-
-        const bpm         = +document.getElementById(`bpm${i}`).value
-        const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-        interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
-        const intervalBpmAdjuster = 4
-        const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-        const diceRoll = Math.random()
-
-        const liveDrums = Array.from(document.getElementsByClassName(`drum${i}`)).filter(drum => drum.checked)
-        console.log(liveDrums)
-
-        const drum      = liveDrums[Math.floor(Math.random() * liveDrums.length)].value
-        try {
-          // console.log('playing sample')
-          if (drum === 'kick') play0()
-          if (drum === 'snare') play1()
-        } catch (error) {
-          console.log(error)
-        }
-
-        node.nextNoteAt += intervalLength
-
-      }
-      setTimeout(() => {drumHit(node, i)}, interval - latency)
-
-    }
-  }
-
-
-=======
->>>>>>> integrated
   const playNote = (node, i) => {
     if (cycling)  {
 
@@ -471,6 +369,7 @@ function App() {
   const handleStartStop = () => {
     cycling = !cycling
     cycling ? start() : stop()
+    
   }
 
   const handleDelete = (i, e) => {
@@ -483,17 +382,20 @@ function App() {
 
   return <>
     <div>
-      <Header 
-        handleStartStop   = {handleStartStop}
-        cycleButtonLabel  = {cycleButtonLabel}
-        addOscillator     = {addOscillator}
-      />
+      RANDOM NOISE GENERATOR{" "}
+      <button 
+        value="Start/Stop" 
+        onClick={handleStartStop}
+      >
+        {cycleButtonLabel}
+      </button>
+      {" "}
+      <button onClick={addOscillator}>Add Oscillator</button>
 
       <br />
-<<<<<<< HEAD
       {
         nodes.map((node, i) => {
-          return node.type === 'oscillator' ? <div className="node">
+          return <div className="node">
             <div className="row">
               <div className="column">
                 <div className="row inner-row">BPM</div>
@@ -675,95 +577,9 @@ function App() {
               </div>
             </div>
           </div>
-        :
-          <div className="node">
-            <div className="row">
-              <div className="column">
-                <div className="row inner-row">BPM</div>
-                <div className="row inner-row">Rest %</div>
-                <div className="row inner-row">Drums</div>
-                <div className="row inner-row">Intervals</div>
-              </div>
-              <div className="column">
-                <div className="row inner-row">
-                  <input
-                    className='textbox'  
-                    title="BPM"
-                    id={`bpm${i}`}
-                    type="number" 
-                    value={node.bpm}
-                    onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat())}
-                    maxlength={5}
-                    min={0}
-                    max={60000}
-                  />
-                </div>
-                <div className="row inner-row">
-                  <input
-                    className='textbox'
-                    title={'Rest %'}
-                    id={`rest${i}`}
-                    type="number" 
-                    value={node.rest}
-                    onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat())}
-                    min={0}
-                    max={100}
-                    maxlength={3}
-                  />
-                </div>         
-                <div className="row inner-row">
-                  {
-                    drums.map(drum => {
-                      return <>
-                        <input
-                          className={`drum${i}`}
-                          title={drum}
-                          type="checkbox"
-                          value={drum}
-                          checked={node.activeDrums.includes(drum)}
-                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeDrums: node.activeDrums.includes(+e.target.value) ? node.activeDrums.filter(drum => drum !== +e.target.value) : [node.activeDrums, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
-                        />
-                      </>
-                    })
-                  }
-                </div>
-                <div className="row inner-row">
-                  { 
-                    intervals.map(interval => {
-                      return <>
-                        <input
-                          className={`interval${i}`}
-                          title={interval}
-                          type="checkbox"
-                          value={interval}
-                          checked={node.activeIntervals.includes(interval)}
-                          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
-                        />
-                      </>
-                    })
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
+          
         })
       }
-=======
-      
-      {nodes.map((node, i) => 
-        <Node 
-          node={node} 
-          i={i} 
-          setNodes    = {setNodes} 
-          nodes       = {nodes}
-          notes       = {notes}
-          scales      = {scales}
-          waveShapes  = {waveShapes}
-          intervals   = {intervals}
-          handleDelete= {handleDelete}
-        />
-      )}
->>>>>>> integrated
     </div>
   </>
 }
