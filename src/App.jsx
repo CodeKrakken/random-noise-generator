@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { allFrequencies } from './data'
-import useSound from 'use-sound';
+import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Node from './components/Node';
@@ -19,41 +18,15 @@ function App() {
     setNodes(newNodes)
   }
 
-  const waveShapes = [
-    'sine',
-    'triangle',
-    'sawtooth',
-    'square',
-    'kick',
-    'snare'
-  ]
-
-  const intervals = [1, 1/2, 1/4, 1/8, 1/16]
-
   const context = new AudioContext();
 
-  let snare
-  let snareSample
-
-  useEffect(() => {
-
-    const getSnareSample = async () => {
-      if (typeof document !== 'undefined') {
-        const snareSample = await document.getElementById("snare");
-      
-        if (snareSample) {
-          snare = context.createMediaElementSource(snareSample);
-          snare.connect(context.destination)
-          return snareSample
-
-        }
-      }
-    }
-    
-    snareSample = getSnareSample()
-  
-  }, [])
-
+  const snareSample = new Audio(snareFile)
+  const snare = context.createMediaElementSource(snareSample);
+  snare.connect(context.destination)
+  const kickSample = new Audio(kickFile)
+  const kick = context.createMediaElementSource(kickSample);
+  kick.connect(context.destination)
+          
   const setUpOscillator = (bpm) => {
     const oscillator = context.createOscillator()
     const gain = context.createGain()
@@ -124,8 +97,7 @@ function App() {
   gain7.gain.value = 0
   oscillator7.start(0);
 
-  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
-  const [nodes,             setNodes            ] = useState([
+  const demo = [
     {
       oscillator      : oscillator, 
       gain            : gain,
@@ -238,7 +210,10 @@ function App() {
       minNoteLength   : 0,
       maxNoteLength   : 100
     },
-  ])
+  ]
+
+  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
+  const [nodes,             setNodes            ] = useState(demo)
 
   const getRandomFrequency = (i) => {
 
@@ -262,16 +237,6 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const newNote = () => {
-    const liveNodes = Array.from(document.getElementsByClassName('node'))
-    console.log(liveNodes)
-    nodes.forEach((node, i) => {
-      const startTime = Date.now()
-      node.nextNoteAt = startTime
-      playNote(node, i)
-    })
-  }
-
   const playNote = (node, i) => {
     if (cycling)  {
 
@@ -290,6 +255,7 @@ function App() {
 
         const intervalBpmAdjuster = 4
         const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
+        node.nextNoteAt += intervalLength
 
         const minVolume   = +document.getElementById(`minVolume${i}`).value
         const maxVolume   = +document.getElementById(`maxVolume${i}`).value
@@ -321,7 +287,6 @@ function App() {
               const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
               const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
               node.gain.gain.value = level/nodes.length
-              node.nextNoteAt += intervalLength
               const noteLength = intervalLength / 100 * noteLengthPercentage
   
               if (noteLength < intervalLength) {
@@ -332,12 +297,13 @@ function App() {
             } catch (error) {
               console.log(error)
             }
-          } else { 
+          } else {
             try {
-              snareSample.play()
+              if (waveShape === 'kick'  ) {kickSample.  play()}
+              if (waveShape === 'snare' ) {snareSample. play()}
             } catch (error) {
               console.log(error.message)
-            }  
+            }
           }
         }
       }
@@ -353,7 +319,13 @@ function App() {
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
-    newNote()
+    const liveNodes = Array.from(document.getElementsByClassName('node'))
+    console.log(liveNodes)
+    nodes.forEach((node, i) => {
+      const startTime = Date.now()
+      node.nextNoteAt = startTime
+      playNote(node, i)
+    })
   }
 
   const stop = () => {
@@ -364,7 +336,6 @@ function App() {
   const handleStartStop = () => {
     cycling = !cycling
     cycling ? start() : stop()
-    
   }
 
   const handleDelete = (i, e) => {
@@ -376,7 +347,6 @@ function App() {
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return <>
-    <div id="snare" src="src/sounds/snare.wav"></div>
     <div>
       <Header 
         handleStartStop   = {handleStartStop}
@@ -385,6 +355,7 @@ function App() {
       />
 
       <br />
+      
       {nodes.map((node, i) => 
         <Node 
           node={node} 
