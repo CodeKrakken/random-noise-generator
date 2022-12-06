@@ -323,6 +323,7 @@ function App() {
             }
           } else {
             try {
+              node.oscillator.frequency.value = 0
               if (diceRoll >= chanceOfRest) {
                 if (waveShape === 'kick'  ) {kickSample.play()}
                 if (waveShape === 'snare' ) {snareSample.play()}
