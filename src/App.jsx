@@ -68,34 +68,40 @@ function App() {
   oscillator2.start(0);
   const oscillator3 = context.createOscillator()
   const gain3 = context.createGain()
-  oscillator3.connect(gain2);
+  oscillator3.connect(gain3);
   gain3.connect(context.destination);
   gain3.gain.value = 0
   oscillator3.start(0);
   const oscillator4 = context.createOscillator()
   const gain4 = context.createGain()
-  oscillator4.connect(gain2);
+  oscillator4.connect(gain4);
   gain4.connect(context.destination);
   gain4.gain.value = 0
   oscillator4.start(0);
   const oscillator5 = context.createOscillator()
   const gain5 = context.createGain()
-  oscillator5.connect(gain2);
+  oscillator5.connect(gain5);
   gain5.connect(context.destination);
   gain5.gain.value = 0
   oscillator5.start(0);
   const oscillator6 = context.createOscillator()
   const gain6 = context.createGain()
-  oscillator6.connect(gain2);
+  oscillator6.connect(gain6);
   gain6.connect(context.destination);
   gain6.gain.value = 0
   oscillator6.start(0);
   const oscillator7 = context.createOscillator()
   const gain7 = context.createGain()
-  oscillator7.connect(gain2);
+  oscillator7.connect(gain7);
   gain7.connect(context.destination);
   gain7.gain.value = 0
   oscillator7.start(0);
+  const oscillator8 = context.createOscillator()
+  const gain8 = context.createGain()
+  oscillator8.connect(gain8);
+  gain8.connect(context.destination);
+  gain8.gain.value = 0
+  oscillator8.start(0);
 
   const demo = [
     {
@@ -210,6 +216,22 @@ function App() {
       minNoteLength   : 0,
       maxNoteLength   : 100
     },
+    {
+      oscillator      : oscillator8, 
+      gain            : gain8,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 0,
+      maxVolume       : 100,
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+      activeScales    : [9],
+      activeWaveShapes: ['snare'],
+      rest            : 0,
+      activeIntervals : [1, 1/4],
+      minNoteLength   : 0,
+      maxNoteLength   : 100
+    },
   ]
 
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
@@ -270,7 +292,9 @@ function App() {
   
           const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
           const diceRoll = Math.random()
-          const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+
+          const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
+          node.gain.gain.value = level/nodes.length
   
           if (
             [
@@ -282,11 +306,11 @@ function App() {
             .includes(waveShape)
           ) {
             try {
+              const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+
               node.oscillator.frequency.value = frequency
   
-              const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
               const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-              node.gain.gain.value = level/nodes.length
               const noteLength = intervalLength / 100 * noteLengthPercentage
   
               if (noteLength < intervalLength) {
@@ -299,8 +323,10 @@ function App() {
             }
           } else {
             try {
-              if (waveShape === 'kick'  ) {kickSample.  play()}
-              if (waveShape === 'snare' ) {snareSample. play()}
+              if (diceRoll >= chanceOfRest) {
+                if (waveShape === 'kick'  ) {kickSample.  play()}
+                if (waveShape === 'snare' ) {snareSample. play()}
+              }
             } catch (error) {
               console.log(error.message)
             }
