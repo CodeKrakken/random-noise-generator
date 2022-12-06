@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import useSound from 'use-sound';
 
@@ -5,6 +6,15 @@ import './App.css';
 import { allFrequencies } from './data'
 import snare  from './sounds/snare.wav';
 import kick   from './sounds/kick.wav';
+=======
+import { useState, useEffect } from 'react';
+import './App.css';
+import { allFrequencies, waveShapes, intervals } from './content/data'
+import snareFile  from './sounds/snare.wav';
+import kickFile   from './sounds/kick.wav';
+import Node from './components/Node';
+import Header from './components/Header';
+>>>>>>> integrated
 
 // import SheetMusic from '@slnsw/react-sheet-music';
 
@@ -21,6 +31,7 @@ function App() {
     setNodes(newNodes)
   }
 
+<<<<<<< HEAD
   const drums = ['kick', 'snare']
 
   const waveShapes = [
@@ -32,8 +43,17 @@ function App() {
 
   const intervals = [1, 1/2, 1/4, 1/8, 1/16]
 
+=======
+>>>>>>> integrated
   const context = new AudioContext();
 
+  const snareSample = new Audio(snareFile)
+  const snare = context.createMediaElementSource(snareSample);
+  snare.connect(context.destination)
+  const kickSample = new Audio(kickFile)
+  const kick = context.createMediaElementSource(kickSample);
+  kick.connect(context.destination)
+          
   const setUpOscillator = (bpm) => {
     const oscillator = context.createOscillator()
     const gain = context.createGain()
@@ -76,38 +96,49 @@ function App() {
   oscillator2.start(0);
   const oscillator3 = context.createOscillator()
   const gain3 = context.createGain()
-  oscillator3.connect(gain2);
+  oscillator3.connect(gain3);
   gain3.connect(context.destination);
   gain3.gain.value = 0
   oscillator3.start(0);
   const oscillator4 = context.createOscillator()
   const gain4 = context.createGain()
-  oscillator4.connect(gain2);
+  oscillator4.connect(gain4);
   gain4.connect(context.destination);
   gain4.gain.value = 0
   oscillator4.start(0);
   const oscillator5 = context.createOscillator()
   const gain5 = context.createGain()
-  oscillator5.connect(gain2);
+  oscillator5.connect(gain5);
   gain5.connect(context.destination);
   gain5.gain.value = 0
   oscillator5.start(0);
   const oscillator6 = context.createOscillator()
   const gain6 = context.createGain()
-  oscillator6.connect(gain2);
+  oscillator6.connect(gain6);
   gain6.connect(context.destination);
   gain6.gain.value = 0
   oscillator6.start(0);
   const oscillator7 = context.createOscillator()
   const gain7 = context.createGain()
-  oscillator7.connect(gain2);
+  oscillator7.connect(gain7);
   gain7.connect(context.destination);
   gain7.gain.value = 0
   oscillator7.start(0);
+<<<<<<< HEAD
 
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
   const [nodes,             setNodes            ] = useState([
     
+=======
+  const oscillator8 = context.createOscillator()
+  const gain8 = context.createGain()
+  oscillator8.connect(gain8);
+  gain8.connect(context.destination);
+  gain8.gain.value = 0
+  oscillator8.start(0);
+
+  const demo = [
+>>>>>>> integrated
     {
       type            : 'oscillator',
       oscillator      : oscillator, 
@@ -221,12 +252,29 @@ function App() {
       maxVolume       : 100,
       activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
       activeScales    : [9],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 50,
-      activeIntervals : [1/8, 1/16],
+      activeWaveShapes: ['kick'],
+      rest            : 0,
+      activeIntervals : [1/4],
       minNoteLength   : 0,
       maxNoteLength   : 100
     },
+    {
+      oscillator      : oscillator8, 
+      gain            : gain8,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 0,
+      maxVolume       : 100,
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+      activeScales    : [9],
+      activeWaveShapes: ['snare'],
+      rest            : 0,
+      activeIntervals : [1, 1/4],
+      minNoteLength   : 0,
+      maxNoteLength   : 100
+    },
+<<<<<<< HEAD
     {
       type            : 'percussion',
       activeDrums     : ['kick', 'snare'],
@@ -237,6 +285,12 @@ function App() {
     },
     
   ])
+=======
+  ]
+
+  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
+  const [nodes,             setNodes            ] = useState(demo)
+>>>>>>> integrated
 
   const getRandomFrequency = (i) => {
 
@@ -260,6 +314,7 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
+<<<<<<< HEAD
   const newNote = () => {
     const liveNodes = Array.from(document.getElementsByClassName('node'))
     nodes.forEach((node, i) => {
@@ -312,6 +367,8 @@ function App() {
   }
 
 
+=======
+>>>>>>> integrated
   const playNote = (node, i) => {
     if (cycling)  {
 
@@ -330,6 +387,7 @@ function App() {
 
         const intervalBpmAdjuster = 4
         const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
+        node.nextNoteAt += intervalLength
 
         const minVolume   = +document.getElementById(`minVolume${i}`).value
         const maxVolume   = +document.getElementById(`maxVolume${i}`).value
@@ -338,29 +396,51 @@ function App() {
 
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
-        const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
-        node.oscillator.type   = waveShape
+        if (liveWaves) {
+          const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+          node.oscillator.type   = waveShape
+  
+          const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
+          const diceRoll = Math.random()
 
-        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-        const diceRoll = Math.random()
-        const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+          const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
+          node.gain.gain.value = level/nodes.length
+  
+          if (
+            [
+              'sine',
+              'triangle',
+              'sawtooth',
+              'square',
+            ]
+            .includes(waveShape)
+          ) {
+            try {
+              const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
 
-        try {
-          node.oscillator.frequency.value = frequency
-        } catch (error) {
-          console.log(error)
-        }
-        
-        const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
-        const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-        node.gain.gain.value = level/nodes.length
-        node.nextNoteAt += intervalLength
-        const noteLength = intervalLength / 100 * noteLengthPercentage
-
-        if (noteLength < intervalLength) {
-
-          setTimeout(() => {node.gain.gain.value = 0}, noteLength)
-          
+              node.oscillator.frequency.value = frequency
+  
+              const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+              const noteLength = intervalLength / 100 * noteLengthPercentage
+  
+              if (noteLength < intervalLength) {
+  
+                setTimeout(() => {node.gain.gain.value = 0}, noteLength)
+            
+              }
+            } catch (error) {
+              console.log(error)
+            }
+          } else {
+            try {
+              if (diceRoll >= chanceOfRest) {
+                if (waveShape === 'kick'  ) {kickSample.  play()}
+                if (waveShape === 'snare' ) {snareSample. play()}
+              }
+            } catch (error) {
+              console.log(error.message)
+            }
+          }
         }
       }
       setTimeout(() => {playNote(node, i)}, interval - latency)
@@ -374,7 +454,13 @@ function App() {
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
-    newNote()
+    const liveNodes = Array.from(document.getElementsByClassName('node'))
+    console.log(liveNodes)
+    nodes.forEach((node, i) => {
+      const startTime = Date.now()
+      node.nextNoteAt = startTime
+      playNote(node, i)
+    })
   }
 
   const stop = () => {
@@ -385,7 +471,6 @@ function App() {
   const handleStartStop = () => {
     cycling = !cycling
     cycling ? start() : stop()
-    
   }
 
   const handleDelete = (i, e) => {
@@ -398,17 +483,14 @@ function App() {
 
   return <>
     <div>
-      RANDOM NOISE GENERATOR{" "}
-      <button 
-        value="Start/Stop" 
-        onClick={handleStartStop}
-      >
-        {cycleButtonLabel}
-      </button>
-      {" "}
-      <button onClick={addOscillator}>Add Oscillator</button>
+      <Header 
+        handleStartStop   = {handleStartStop}
+        cycleButtonLabel  = {cycleButtonLabel}
+        addOscillator     = {addOscillator}
+      />
 
       <br />
+<<<<<<< HEAD
       {
         nodes.map((node, i) => {
           return node.type === 'oscillator' ? <div className="node">
@@ -666,6 +748,22 @@ function App() {
           </div>
         })
       }
+=======
+      
+      {nodes.map((node, i) => 
+        <Node 
+          node={node} 
+          i={i} 
+          setNodes    = {setNodes} 
+          nodes       = {nodes}
+          notes       = {notes}
+          scales      = {scales}
+          waveShapes  = {waveShapes}
+          intervals   = {intervals}
+          handleDelete= {handleDelete}
+        />
+      )}
+>>>>>>> integrated
     </div>
   </>
 }
