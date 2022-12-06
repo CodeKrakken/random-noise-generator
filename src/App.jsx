@@ -204,9 +204,9 @@ function App() {
       maxVolume       : 100,
       activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
       activeScales    : [9],
-      activeWaveShapes: ['kick', 'snare'],
-      rest            : 50,
-      activeIntervals : [1/8, 1/16],
+      activeWaveShapes: ['kick'],
+      rest            : 0,
+      activeIntervals : [1/4],
       minNoteLength   : 0,
       maxNoteLength   : 100
     },
