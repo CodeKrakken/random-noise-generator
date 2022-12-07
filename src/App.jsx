@@ -104,108 +104,108 @@ function App() {
   oscillator8.start(0);
 
   const demo = [
-    // {
-    //   oscillator      : oscillator, 
-    //   gain            : gain,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 75,
-    //   maxVolume       : 75,
-    //   activeNotes     : [1, 4, 6, 8, 11, 13],
-    //   activeScales    : [1,2],
-    //   activeWaveShapes: ['sawtooth'],
-    //   rest            : 25,
-    //   activeIntervals : [1/4, 1/8],
-    //   minNoteLength   : 0,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
-    // {
-    //   oscillator      : oscillator2, 
-    //   gain            : gain2,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 50,
-    //   maxVolume       : 50,
-    //   activeNotes     : [1, 4, 6, 8, 11, 13],
-    //   activeScales    : [3,4,5],
-    //   activeWaveShapes: ['sine', 'triangle'],
-    //   rest            : 0,
-    //   activeIntervals : [1],
-    //   minNoteLength   : 100,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
-    // {
-    //   oscillator      : oscillator3, 
-    //   gain            : gain3,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 50,
-    //   maxVolume       : 50,
-    //   activeNotes     : [1, 4, 6, 8, 11, 13],
-    //   activeScales    : [3,4,5],
-    //   activeWaveShapes: ['sine', 'triangle'],
-    //   rest            : 0,
-    //   activeIntervals : [1],
-    //   minNoteLength   : 100,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
-    // {
-    //   oscillator      : oscillator4, 
-    //   gain            : gain4,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 50,
-    //   maxVolume       : 50,
-    //   activeNotes     : [1, 4, 6, 8, 11, 13],
-    //   activeScales    : [3,4,5],
-    //   activeWaveShapes: ['sine', 'triangle'],
-    //   rest            : 0,
-    //   activeIntervals : [1],
-    //   minNoteLength   : 100,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
-    // {
-    //   oscillator      : oscillator5, 
-    //   gain            : gain5,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 50,
-    //   maxVolume       : 75,
-    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-    //   activeScales    : [6,7],
-    //   activeWaveShapes: ['triangle'],
-    //   rest            : 50,
-    //   activeIntervals : [1/2, 1/4],
-    //   minNoteLength   : 0,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
-    // {
-    //   oscillator      : oscillator6, 
-    //   gain            : gain6,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
-    //   bpm             : 120,
-    //   minVolume       : 75,
-    //   maxVolume       : 100,
-    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-    //   activeScales    : [7,8,9],
-    //   activeWaveShapes: ['sine'],
-    //   rest            : 50,
-    //   activeIntervals : [1/4, 1/8],
-    //   minNoteLength   : 0,
-    //   maxNoteLength   : 100,
-    //   offset          : 0
-    // },
+    {
+      oscillator      : oscillator, 
+      gain            : gain,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 75,
+      maxVolume       : 75,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [1,2],
+      activeWaveShapes: ['sawtooth'],
+      rest            : 25,
+      activeIntervals : [1/4, 1/8],
+      minNoteLength   : 0,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
+    {
+      oscillator      : oscillator2, 
+      gain            : gain2,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sine', 'triangle'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
+    {
+      oscillator      : oscillator3, 
+      gain            : gain3,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sine', 'triangle'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
+    {
+      oscillator      : oscillator4, 
+      gain            : gain4,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sine', 'triangle'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
+    {
+      oscillator      : oscillator5, 
+      gain            : gain5,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 75,
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+      activeScales    : [6,7],
+      activeWaveShapes: ['triangle'],
+      rest            : 50,
+      activeIntervals : [1/2, 1/4],
+      minNoteLength   : 0,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
+    {
+      oscillator      : oscillator6, 
+      gain            : gain6,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 75,
+      maxVolume       : 100,
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+      activeScales    : [7,8,9],
+      activeWaveShapes: ['sine'],
+      rest            : 50,
+      activeIntervals : [1/4, 1/8],
+      minNoteLength   : 0,
+      maxNoteLength   : 100,
+      offset          : 0
+    },
     {
       oscillator      : oscillator7, 
       gain            : gain7,
@@ -218,7 +218,7 @@ function App() {
       activeScales    : [9],
       activeWaveShapes: ['kick'],
       rest            : 0,
-      activeIntervals : [1/4],
+      activeIntervals : [1/4, 1/8],
       minNoteLength   : 0,
       maxNoteLength   : 100,
       offset          : 0
@@ -275,7 +275,6 @@ function App() {
       if (timeNow >= node.nextNoteAt) {
         playSound(node, i)
       } else {
-        console.log('early doors')
         setTimeout(() => {playSound(node, i)}, node.nextNoteAt - timeNow)
       }
     }
@@ -300,7 +299,7 @@ function App() {
     const intervalBpmAdjuster = 4
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
     timeNow = Date.now()
-    node.nextNoteAt = timeNow + intervalLength
+    node.nextNoteAt += intervalLength
 
     const minVolume   = +document.getElementById(`minVolume${i}`).value
     const maxVolume   = +document.getElementById(`maxVolume${i}`).value
