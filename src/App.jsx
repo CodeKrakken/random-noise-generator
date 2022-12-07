@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
@@ -262,7 +262,6 @@ function App() {
   }
 
   const getActiveFrequencies = (i) => {
-
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(scale => scale.checked).map(scale => { return +scale.value})
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(note  =>  note.checked).map(note => { return +note.value})
 
@@ -278,35 +277,24 @@ function App() {
   const playNote = (node, i) => {
     if (cycling)  {
 
-      const timeNow = Date.now()
-
-      if (timeNow >= node.nextNoteAt) {
+      if (Date.now() >= node.nextNoteAt) {
         playSound(node, i)
       } else {
-        setTimeout(() => {playSound(node, i)}, node.nextNoteAt - timeNow)
+        setTimeout(() => {playSound(node, i)}, node.nextNoteAt - Date.now())
       }
     }
   }
 
   const playSound = (node, i) => {
 
-    let interval
-    let latency
-
     const offset = +document.getElementById(`offset${i}`).value
-    console.log(offset)
-
-    let timeNow = Date.now()
     
-    latency = timeNow - node.nextNoteAt
-
     const bpm         = +document.getElementById(`bpm${i}`).value
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-    interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
 
     const intervalBpmAdjuster = 4
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-    timeNow = Date.now()
     node.nextNoteAt += intervalLength
 
     const minVolume   = +document.getElementById(`minVolume${i}`).value
@@ -356,10 +344,9 @@ function App() {
         } else {
           try {
             if (diceRoll >= chanceOfRest) {
-              node.gain.gain.value = 0
-              console.log(`Playing ${waveShape}`)
-              if (waveShape === 'kick'  ) {kickSample.  play()}
-              if (waveShape === 'snare' ) {snareSample. play()}
+              node.oscillator.frequency.value = 0
+              if (waveShape === 'kick'  ) {kickSample.play()}
+              if (waveShape === 'snare' ) {snareSample.play()}
             }
           } catch (error) {
             console.log(error.message)
@@ -368,18 +355,14 @@ function App() {
       }, offset / 100 * intervalLength)
     }
     
-    timeNow = Date.now()
-
-    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - timeNow)
+    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - Date.now())
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
-    const liveNodes = Array.from(document.getElementsByClassName('node'))
     nodes.forEach((node, i) => {
-      const startTime = Date.now()
-      node.nextNoteAt = startTime
+      node.nextNoteAt = Date.now()
       playNote(node, i)
     })
   }
