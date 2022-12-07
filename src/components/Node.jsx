@@ -23,7 +23,7 @@ export default function Node(props) {
         <div className="row inner-row">Min length</div>
         <div className="row inner-row">Max length</div>
         <div className="row inner-row">Rest %</div>
-        <div className="row inner-row">Offset</div>
+        <div className="row inner-row">Offset %</div>
       </div>
 
       <div className="column">

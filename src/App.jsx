@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
@@ -349,16 +349,17 @@ function App() {
 
               setTimeout(() => {node.gain.gain.value = 0}, noteLength)
           
-            } else {
-              try {
-                node.oscillator.frequency.value = 0
-                if (diceRoll >= chanceOfRest) {
-                  if (waveShape === 'kick'  ) {kickSample.play()}
-                  if (waveShape === 'snare' ) {snareSample.play()}
-                }
-              } catch (error) {
-                console.log(error.message)
-              }
+            }
+          } catch (error) {
+            console.log(error)
+          }
+        } else {
+          try {
+            if (diceRoll >= chanceOfRest) {
+              node.gain.gain.value = 0
+              console.log(`Playing ${waveShape}`)
+              if (waveShape === 'kick'  ) {kickSample.  play()}
+              if (waveShape === 'snare' ) {snareSample. play()}
             }
           } catch (error) {
             console.log(error.message)
