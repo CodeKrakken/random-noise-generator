@@ -105,6 +105,7 @@ function App() {
 
   const demo = [
     {
+      label           : 'Bass',
       oscillator      : oscillator, 
       gain            : gain,
       minFrequency    : 20,
@@ -122,6 +123,7 @@ function App() {
       offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator2, 
       gain            : gain2,
       minFrequency    : 20,
@@ -139,6 +141,7 @@ function App() {
       offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator3, 
       gain            : gain3,
       minFrequency    : 20,
@@ -156,6 +159,7 @@ function App() {
       offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator4, 
       gain            : gain4,
       minFrequency    : 20,
@@ -173,6 +177,7 @@ function App() {
       offset          : 0
     },
     {
+      label           : 'Middle',
       oscillator      : oscillator5, 
       gain            : gain5,
       minFrequency    : 20,
@@ -185,11 +190,12 @@ function App() {
       activeWaveShapes: ['triangle'],
       rest            : 50,
       activeIntervals : [1/2, 1/4],
-      minNoteLength   : 0,
+      minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0
     },
     {
+      label           : 'Lead',
       oscillator      : oscillator6, 
       gain            : gain6,
       minFrequency    : 20,
@@ -202,11 +208,12 @@ function App() {
       activeWaveShapes: ['sine'],
       rest            : 50,
       activeIntervals : [1/4, 1/8],
-      minNoteLength   : 0,
+      minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0
     },
     {
+      label           : 'Kick',
       oscillator      : oscillator7, 
       gain            : gain7,
       minFrequency    : 20,
@@ -219,11 +226,12 @@ function App() {
       activeWaveShapes: ['kick'],
       rest            : 0,
       activeIntervals : [1/4, 1/8],
-      minNoteLength   : 0,
+      minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0
     },
     {
+      label           : 'Snare',
       oscillator      : oscillator8, 
       gain            : gain8,
       minFrequency    : 20,
@@ -236,7 +244,7 @@ function App() {
       activeWaveShapes: ['snare'],
       rest            : 0,
       activeIntervals : [1/2],
-      minNoteLength   : 0,
+      minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 50
     },

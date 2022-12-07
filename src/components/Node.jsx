@@ -4,6 +4,18 @@ export default function Node(props) {
 
   return <div className="node">
     <div className="row">
+    <div className="column">
+      <input
+        className='textbox'  
+        title="Label"
+        id={`label${i}`}
+        type="text" 
+        value={node.label}
+        onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
+      />
+    </div>
+    <div className="column">
+      </div>
       <div className="column">
         <div className="row inner-row">BPM</div>
         <div className="row inner-row">Min level</div>
