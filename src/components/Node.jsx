@@ -4,6 +4,18 @@ export default function Node(props) {
 
   return <div className="node">
     <div className="row">
+    <div className="column">
+      <input
+        className='textbox'  
+        title="Label"
+        id={`label${i}`}
+        type="text" 
+        value={node.label}
+        onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
+      />
+    </div>
+    <div className="column">
+      </div>
       <div className="column">
         <div className="row inner-row">BPM</div>
         <div className="row inner-row">Min level</div>
@@ -11,6 +23,7 @@ export default function Node(props) {
         <div className="row inner-row">Min length</div>
         <div className="row inner-row">Max length</div>
         <div className="row inner-row">Rest %</div>
+        <div className="row inner-row">Offset</div>
       </div>
 
       <div className="column">
@@ -94,6 +107,21 @@ export default function Node(props) {
             maxlength={3}
           />
         </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'offset'}
+            id={`offset${i}`}
+            type="number" 
+            value={node.offset}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], offset: +e.target.value}, nodes.slice(i+1)].flat())}
+            min={-100}
+            max={100}
+            maxlength={4}
+          />
+        </div>
+
       </div>
 
       <div className="column">

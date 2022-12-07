@@ -105,6 +105,7 @@ function App() {
 
   const demo = [
     {
+      label           : 'Bass',
       oscillator      : oscillator, 
       gain            : gain,
       minFrequency    : 20,
@@ -118,9 +119,11 @@ function App() {
       rest            : 25,
       activeIntervals : [1/4, 1/8],
       minNoteLength   : 0,
-      maxNoteLength   : 100
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator2, 
       gain            : gain2,
       minFrequency    : 20,
@@ -134,9 +137,11 @@ function App() {
       rest            : 0,
       activeIntervals : [1],
       minNoteLength   : 100,
-      maxNoteLength   : 100
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator3, 
       gain            : gain3,
       minFrequency    : 20,
@@ -150,9 +155,11 @@ function App() {
       rest            : 0,
       activeIntervals : [1],
       minNoteLength   : 100,
-      maxNoteLength   : 100
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Chord',
       oscillator      : oscillator4, 
       gain            : gain4,
       minFrequency    : 20,
@@ -166,9 +173,11 @@ function App() {
       rest            : 0,
       activeIntervals : [1],
       minNoteLength   : 100,
-      maxNoteLength   : 100
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Middle',
       oscillator      : oscillator5, 
       gain            : gain5,
       minFrequency    : 20,
@@ -181,10 +190,12 @@ function App() {
       activeWaveShapes: ['triangle'],
       rest            : 50,
       activeIntervals : [1/2, 1/4],
-      minNoteLength   : 0,
-      maxNoteLength   : 100
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Lead',
       oscillator      : oscillator6, 
       gain            : gain6,
       minFrequency    : 20,
@@ -197,10 +208,12 @@ function App() {
       activeWaveShapes: ['sine'],
       rest            : 50,
       activeIntervals : [1/4, 1/8],
-      minNoteLength   : 0,
-      maxNoteLength   : 100
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Kick',
       oscillator      : oscillator7, 
       gain            : gain7,
       minFrequency    : 20,
@@ -212,11 +225,13 @@ function App() {
       activeScales    : [9],
       activeWaveShapes: ['kick'],
       rest            : 0,
-      activeIntervals : [1/4],
-      minNoteLength   : 0,
-      maxNoteLength   : 100
+      activeIntervals : [1/4, 1/8],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0
     },
     {
+      label           : 'Snare',
       oscillator      : oscillator8, 
       gain            : gain8,
       minFrequency    : 20,
@@ -228,9 +243,10 @@ function App() {
       activeScales    : [9],
       activeWaveShapes: ['snare'],
       rest            : 0,
-      activeIntervals : [1, 1/4],
-      minNoteLength   : 0,
-      maxNoteLength   : 100
+      activeIntervals : [1/2],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 50
     },
   ]
 
@@ -262,92 +278,104 @@ function App() {
   const playNote = (node, i) => {
     if (cycling)  {
 
-      let interval
-      let latency
-
       const timeNow = Date.now()
 
       if (timeNow >= node.nextNoteAt) {
+        playSound(node, i)
+      } else {
+        setTimeout(() => {playSound(node, i)}, node.nextNoteAt - timeNow)
+      }
+    }
+  }
 
-        latency = timeNow - node.nextNoteAt
+  const playSound = (node, i) => {
 
-        const bpm         = +document.getElementById(`bpm${i}`).value
-        const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-        interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+    let interval
+    let latency
 
-        const intervalBpmAdjuster = 4
-        const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-        node.nextNoteAt += intervalLength
+    const offset = +document.getElementById(`offset${i}`).value
+    console.log(offset)
 
-        const minVolume   = +document.getElementById(`minVolume${i}`).value
-        const maxVolume   = +document.getElementById(`maxVolume${i}`).value
-        const minLength   = +document.getElementById(`minLength${i}`).value
-        const maxLength   = +document.getElementById(`maxLength${i}`).value
+    let timeNow = Date.now()
+    
+    latency = timeNow - node.nextNoteAt
 
-        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+    const bpm         = +document.getElementById(`bpm${i}`).value
+    const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
+    interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
 
-        if (liveWaves) {
-          const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
-          node.oscillator.type   = waveShape
-  
-          const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-          const diceRoll = Math.random()
+    const intervalBpmAdjuster = 4
+    const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
+    timeNow = Date.now()
+    node.nextNoteAt += intervalLength
 
-          const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
-          node.gain.gain.value = level/nodes.length
-  
-          if (
-            [
-              'sine',
-              'triangle',
-              'sawtooth',
-              'square',
-            ]
-            .includes(waveShape)
-          ) {
-            try {
-              const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+    const minVolume   = +document.getElementById(`minVolume${i}`).value
+    const maxVolume   = +document.getElementById(`maxVolume${i}`).value
+    const minLength   = +document.getElementById(`minLength${i}`).value
+    const maxLength   = +document.getElementById(`maxLength${i}`).value
 
-              node.oscillator.frequency.value = frequency
-  
-              const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-              const noteLength = intervalLength / 100 * noteLengthPercentage
-  
-              if (noteLength < intervalLength) {
-  
-                setTimeout(() => {node.gain.gain.value = 0}, noteLength)
-            
+    const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+
+    if (liveWaves) {
+      setTimeout(() => {
+
+        const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+        node.oscillator.type   = waveShape
+
+        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
+        const diceRoll = Math.random()
+
+        const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
+        node.gain.gain.value = level/nodes.length
+
+        if (
+          [
+            'sine',
+            'triangle',
+            'sawtooth',
+            'square',
+          ]
+          .includes(waveShape)
+        ) {
+          try {
+            const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+
+            node.oscillator.frequency.value = frequency
+
+            const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+            const noteLength = intervalLength / 100 * noteLengthPercentage
+
+            if (noteLength < intervalLength) {
+
+              setTimeout(() => {node.gain.gain.value = 0}, noteLength)
+          
+            } else {
+              try {
+                node.oscillator.frequency.value = 0
+                if (diceRoll >= chanceOfRest) {
+                  if (waveShape === 'kick'  ) {kickSample.play()}
+                  if (waveShape === 'snare' ) {snareSample.play()}
+                }
+              } catch (error) {
+                console.log(error.message)
               }
-            } catch (error) {
-              console.log(error)
             }
-          } else {
-            try {
-              node.oscillator.frequency.value = 0
-              if (diceRoll >= chanceOfRest) {
-                if (waveShape === 'kick'  ) {kickSample.play()}
-                if (waveShape === 'snare' ) {snareSample.play()}
-              }
-            } catch (error) {
-              console.log(error.message)
-            }
+          } catch (error) {
+            console.log(error.message)
           }
         }
-      }
-
-      setTimeout(() => {playNote(node, i)}, interval - latency)
-
-    } else {
-      stop()
+      }, offset / 100 * intervalLength)
     }
+    
+    timeNow = Date.now()
 
+    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - timeNow)
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
     const liveNodes = Array.from(document.getElementsByClassName('node'))
-    console.log(liveNodes)
     nodes.forEach((node, i) => {
       const startTime = Date.now()
       node.nextNoteAt = startTime
