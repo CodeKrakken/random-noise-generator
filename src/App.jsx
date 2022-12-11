@@ -303,69 +303,69 @@ function App() {
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
     node.nextNoteAt += intervalLength
 
-    const minVolume   = +document.getElementById(`minVolume${i}`).value
-    const maxVolume   = +document.getElementById(`maxVolume${i}`).value
-    const minLength   = +document.getElementById(`minLength${i}`).value
-    const maxLength   = +document.getElementById(`maxLength${i}`).value
+    const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
+    const diceRoll = Math.random()
 
-    const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+    if (diceRoll >= chanceOfRest) {
+      console.log('note')
+      const minVolume   = +document.getElementById(`minVolume${i}`).value
+      const maxVolume   = +document.getElementById(`maxVolume${i}`).value
+      const minLength   = +document.getElementById(`minLength${i}`).value
+      const maxLength   = +document.getElementById(`maxLength${i}`).value
 
-    if (liveWaves) {
-      setTimeout(() => {
+      const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
-        const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
-        node.oscillator.type   = waveShape
+      if (liveWaves) {
+        setTimeout(() => {
 
-        const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
-        const diceRoll = Math.random()
-
-        const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-
+          const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+          node.oscillator.type   = waveShape
+          const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
         
-        node.gain.gain.setValueAtTime(0, context.currentTime)
-        const attack = +document.getElementById(`attack${i}`).value
+          node.gain.gain.setValueAtTime(0, context.currentTime)
+          const attack = +document.getElementById(`attack${i}`).value
+          node.gain.gain.linearRampToValueAtTime(level, context.currentTime + attack/1000)
 
-        node.gain.gain.linearRampToValueAtTime(level, context.currentTime + attack/1000)
+          if (
+            [
+              'sine',
+              'triangle',
+              'sawtooth',
+              'square',
+            ]
+            .includes(waveShape)
+          ) {
+            try {
+              const frequency   = getRandomFrequency(i)
 
-        if (
-          [
-            'sine',
-            'triangle',
-            'sawtooth',
-            'square',
-          ]
-          .includes(waveShape)
-        ) {
-          try {
-            const frequency   = diceRoll >= chanceOfRest ? getRandomFrequency(i) : 0;
+              node.oscillator.frequency.value = frequency
 
-            node.oscillator.frequency.value = frequency
+              const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+              const noteLength = intervalLength / 100 * noteLengthPercentage
 
-            const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-            const noteLength = intervalLength / 100 * noteLengthPercentage
+              if (noteLength < intervalLength) {
 
-            if (noteLength < intervalLength) {
-
-              setTimeout(() => {node.gain.gain.value = 0}, noteLength)
+                setTimeout(() => {node.gain.gain.value = 0}, noteLength)
           
+              }
+            } catch (error) {
+              console.log(error)
             }
-          } catch (error) {
-            console.log(error)
-          }
-        } else {
-          try {
-            if (diceRoll >= chanceOfRest) {
+          } else {
+            try {
               node.oscillator.frequency.value = 0
               if (waveShape === 'kick'  ) {kickSample.play()}
               if (waveShape === 'snare' ) {snareSample.play()}
+            } catch (error) {
+              console.log(error.message)
             }
-          } catch (error) {
-            console.log(error.message)
           }
-        }
-      }, offset / 100 * intervalLength)
+        }, offset / 100 * intervalLength)
+      }
+    } else {
+      console.log('rest')
+      node.gain.gain.setValueAtTime(0, context.currentTime)
     }
-    
     setTimeout(() => {playNote(node, i)}, node.nextNoteAt - Date.now())
   }
 
