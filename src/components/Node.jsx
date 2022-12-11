@@ -20,10 +20,11 @@ export default function Node(props) {
         <div className="row inner-row">BPM</div>
         <div className="row inner-row">Min level</div>
         <div className="row inner-row">Max level</div>
-        <div className="row inner-row">Min length</div>
-        <div className="row inner-row">Max length</div>
+        <div className="row inner-row">Min length %</div>
+        <div className="row inner-row">Max length %</div>
         <div className="row inner-row">Rest %</div>
         <div className="row inner-row">Offset %</div>
+        <div className="row inner-row">Attack ms</div>
       </div>
 
       <div className="column">
@@ -122,6 +123,18 @@ export default function Node(props) {
           />
         </div>
 
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'attack'}
+            id={`attack${i}`}
+            type="number" 
+            value={node.attack}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], attack: +e.target.value}, nodes.slice(i+1)].flat())}
+            maxlength={4}
+          />
+        </div>
+
       </div>
 
       <div className="column">
@@ -137,6 +150,7 @@ export default function Node(props) {
         <div>
           Intervals
         </div>
+
       </div>
       <div className="column">
         <div className="row inner-row">

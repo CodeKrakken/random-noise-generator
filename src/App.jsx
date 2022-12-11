@@ -120,7 +120,8 @@ function App() {
       activeIntervals : [1/4, 1/8],
       minNoteLength   : 50,
       maxNoteLength   : 75,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Chord',
@@ -138,7 +139,8 @@ function App() {
       activeIntervals : [1],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Chord',
@@ -156,7 +158,8 @@ function App() {
       activeIntervals : [1],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Chord',
@@ -174,7 +177,8 @@ function App() {
       activeIntervals : [1],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Middle',
@@ -192,7 +196,8 @@ function App() {
       activeIntervals : [1/2, 1/4],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Lead',
@@ -210,7 +215,8 @@ function App() {
       activeIntervals : [1/4, 1/8],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      attack          : 10
     },
     {
       label           : 'Kick',
@@ -314,8 +320,12 @@ function App() {
         const diceRoll = Math.random()
 
         const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+
+        
         node.gain.gain.setValueAtTime(0, context.currentTime)
-        node.gain.gain.linearRampToValueAtTime(level, context.currentTime + 1)
+        const attack = +document.getElementById(`attack${i}`).value
+
+        node.gain.gain.linearRampToValueAtTime(level, context.currentTime + attack/1000)
 
         if (
           [
