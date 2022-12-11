@@ -313,8 +313,9 @@ function App() {
         const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
         const diceRoll = Math.random()
 
-        const level       = (minVolume + Math.random() * (maxVolume - minVolume))/100
-        node.gain.gain.value = level/nodes.length
+        const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+        node.gain.gain.setValueAtTime(0, context.currentTime)
+        node.gain.gain.linearRampToValueAtTime(level, context.currentTime + 1)
 
         if (
           [
