@@ -32,7 +32,7 @@ function App() {
     const gain = context.createGain()
     oscillator.connect(gain);
     gain.connect(context.destination);
-    gain.gain.value = 0
+    gain.gain.setValueAtTime(0, context.currentTime)
     oscillator.start(0);
     const newBpm = nodes.length ? nodes[nodes.length-1].bpm : 120
     
@@ -58,7 +58,7 @@ function App() {
   const gain = context.createGain()
   oscillator.connect(gain);
   gain.connect(context.destination);
-  gain.gain.value = 0
+  gain.gain.setValueAtTime(0, context.currentTime)
   oscillator.start(0);
   const oscillator2 = context.createOscillator()
   const gain2 = context.createGain()
@@ -121,7 +121,8 @@ function App() {
       minNoteLength   : 50,
       maxNoteLength   : 75,
       offset          : 0,
-      attack          : 10
+      attack          : 100,
+      release         : 100
     },
     {
       label           : 'Chord',
@@ -140,7 +141,8 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 10
+      attack          : 1900,
+      release         : 100
     },
     {
       label           : 'Chord',
@@ -159,7 +161,8 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 10
+      attack          : 1900,
+      release         : 100
     },
     {
       label           : 'Chord',
@@ -178,7 +181,8 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 10
+      attack          : 1900,
+      release         : 100
     },
     {
       label           : 'Middle',
@@ -197,7 +201,8 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 10
+      attack          : 100,
+      release         : 100
     },
     {
       label           : 'Lead',
@@ -216,7 +221,8 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 10
+      attack          : 100,
+      release         : 100
     },
     {
       label           : 'Kick',
@@ -307,7 +313,6 @@ function App() {
     const diceRoll = Math.random()
 
     if (diceRoll >= chanceOfRest) {
-      console.log('note')
       const minVolume   = +document.getElementById(`minVolume${i}`).value
       const maxVolume   = +document.getElementById(`maxVolume${i}`).value
       const minLength   = +document.getElementById(`minLength${i}`).value
@@ -323,8 +328,13 @@ function App() {
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
         
           node.gain.gain.setValueAtTime(0, context.currentTime)
-          const attack = +document.getElementById(`attack${i}`).value
-          node.gain.gain.linearRampToValueAtTime(level, context.currentTime + attack/1000)
+          const attack  = +document.getElementById(`attack${i}`).value
+          const release = +document.getElementById(`release${i}`).value
+          const currentTime = context.currentTime
+          node.gain.gain.linearRampToValueAtTime(level, currentTime + attack/1000)
+          node.gain.gain.setValueAtTime(level, currentTime + attack/1000)
+          setTimeout(() => {
+          }) // node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
 
           if (
             [
@@ -345,7 +355,7 @@ function App() {
 
               if (noteLength < intervalLength) {
 
-                setTimeout(() => {node.gain.gain.value = 0}, noteLength)
+                setTimeout(() => {node.gain.gain.setValueAtTime(0, context.currentTime)}, noteLength)
           
               }
             } catch (error) {
@@ -380,7 +390,7 @@ function App() {
 
   const stop = () => {
     setCycleButtonLabel('Start')
-    nodes.forEach(node => {node.gain.gain.value = 0})
+    nodes.forEach(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
   }
 
   const handleStartStop = () => {
@@ -389,7 +399,7 @@ function App() {
   }
 
   const handleDelete = (i, e) => {
-    nodes[i].gain.gain.value = 0
+    nodes[i].gain.gain.setValueAtTime(0, context.currentTime)
     setNodes(nodes.filter((node, j) => i !== j))
   }
 

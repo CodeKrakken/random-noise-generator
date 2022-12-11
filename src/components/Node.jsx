@@ -25,6 +25,8 @@ export default function Node(props) {
         <div className="row inner-row">Rest %</div>
         <div className="row inner-row">Offset %</div>
         <div className="row inner-row">Attack ms</div>
+        <div className="row inner-row">Release ms</div>
+
       </div>
 
       <div className="column">
@@ -131,6 +133,18 @@ export default function Node(props) {
             type="number" 
             value={node.attack}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], attack: +e.target.value}, nodes.slice(i+1)].flat())}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'release'}
+            id={`release${i}`}
+            type="number" 
+            value={node.release}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], release: +e.target.value}, nodes.slice(i+1)].flat())}
             maxlength={4}
           />
         </div>
