@@ -121,7 +121,7 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 0,
+      attack          : 100,
       release         : 1000
     },
     // {
@@ -326,21 +326,22 @@ function App() {
           const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
           node.oscillator.type   = waveShape
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-        
-          node.gain.gain.setValueAtTime(0, context.currentTime)
+          console.log('playing a note')
+          const time = context.currentTime
+          node.gain.gain.setValueAtTime(0, time)
           const attack  = +document.getElementById(`attack${i}`).value
           const release = +document.getElementById(`release${i}`).value
 
-          node.gain.gain.linearRampToValueAtTime(level, attack/1000)
+          node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
 
-          const timeOfRelease = node.nextNoteAt - release/1000
-          const timeToWait = timeOfRelease - context.currentTime
+          // const timeOfRelease = node.nextNoteAt - release/1000
+          // const timeToWait = timeOfRelease - context.currentTime
 
-          setTimeout(() => {
-            const time = context.currentTime
-            node.gain.gain.setValueAtTime(level, time)
-            node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt - time)
-          }, timeToWait)
+          // setTimeout(() => {
+          //   const time = context.currentTime
+          //   node.gain.gain.setValueAtTime(level, time)
+          //   node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt - time)
+          // }, timeToWait)
           
           if (
             [
