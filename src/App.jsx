@@ -58,7 +58,7 @@ function App() {
   const gain = context.createGain()
   oscillator.connect(gain);
   gain.connect(context.destination);
-  gain.gain.setValueAtTime(0, context.currentTime)
+  gain.gain.value = 0
   oscillator.start(0);
   const oscillator2 = context.createOscillator()
   const gain2 = context.createGain()
@@ -110,156 +110,156 @@ function App() {
       gain            : gain,
       minFrequency    : 20,
       maxFrequency    : 20000,
-      bpm             : 120,
+      bpm             : 60,
       minVolume       : 100,
       maxVolume       : 100,
       activeNotes     : [1, 4, 6, 8, 12, 13],
       activeScales    : [1,2],
-      activeWaveShapes: ['square'],
-      rest            : 25,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 50,
-      maxNoteLength   : 75,
-      offset          : 0,
-      attack          : 100,
-      release         : 100
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator2, 
-      gain            : gain2,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
+      activeWaveShapes: ['sawtooth'],
       rest            : 0,
-      activeIntervals : [1],
+      activeIntervals : [1/4],
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      attack          : 1900,
-      release         : 100
+      attack          : 0,
+      release         : 1000
     },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator3, 
-      gain            : gain3,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 0,
-      attack          : 1900,
-      release         : 100
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator4, 
-      gain            : gain4,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 0,
-      attack          : 1900,
-      release         : 100
-    },
-    {
-      label           : 'Middle',
-      oscillator      : oscillator5, 
-      gain            : gain5,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 75,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [6,7],
-      activeWaveShapes: ['triangle'],
-      rest            : 50,
-      activeIntervals : [1/2, 1/4],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 0,
-      attack          : 100,
-      release         : 100
-    },
-    {
-      label           : 'Lead',
-      oscillator      : oscillator6, 
-      gain            : gain6,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 75,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [7,8,9],
-      activeWaveShapes: ['sine'],
-      rest            : 50,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 0,
-      attack          : 100,
-      release         : 100
-    },
-    {
-      label           : 'Kick',
-      oscillator      : oscillator7, 
-      gain            : gain7,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 0,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [9],
-      activeWaveShapes: ['kick'],
-      rest            : 0,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 0
-    },
-    {
-      label           : 'Snare',
-      oscillator      : oscillator8, 
-      gain            : gain8,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 0,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [9],
-      activeWaveShapes: ['snare'],
-      rest            : 0,
-      activeIntervals : [1/2],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      offset          : 50
-    },
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator2, 
+    //   gain            : gain2,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 12, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sine', 'triangle'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0,
+    //   attack          : 1900,
+    //   release         : 100
+    // },
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator3, 
+    //   gain            : gain3,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 12, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sine', 'triangle'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0,
+    //   attack          : 1900,
+    //   release         : 100
+    // },
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator4, 
+    //   gain            : gain4,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 12, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sine', 'triangle'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0,
+    //   attack          : 1900,
+    //   release         : 100
+    // },
+    // {
+    //   label           : 'Middle',
+    //   oscillator      : oscillator5, 
+    //   gain            : gain5,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 75,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+    //   activeScales    : [6,7],
+    //   activeWaveShapes: ['triangle'],
+    //   rest            : 50,
+    //   activeIntervals : [1/2, 1/4],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0,
+    //   attack          : 100,
+    //   release         : 100
+    // },
+    // {
+    //   label           : 'Lead',
+    //   oscillator      : oscillator6, 
+    //   gain            : gain6,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 75,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+    //   activeScales    : [7,8,9],
+    //   activeWaveShapes: ['sine'],
+    //   rest            : 50,
+    //   activeIntervals : [1/4, 1/8],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0,
+    //   attack          : 100,
+    //   release         : 100
+    // },
+    // {
+    //   label           : 'Kick',
+    //   oscillator      : oscillator7, 
+    //   gain            : gain7,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 0,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+    //   activeScales    : [9],
+    //   activeWaveShapes: ['kick'],
+    //   rest            : 0,
+    //   activeIntervals : [1/4, 1/8],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 0
+    // },
+    // {
+    //   label           : 'Snare',
+    //   oscillator      : oscillator8, 
+    //   gain            : gain8,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 0,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+    //   activeScales    : [9],
+    //   activeWaveShapes: ['snare'],
+    //   rest            : 0,
+    //   activeIntervals : [1/2],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   offset          : 50
+    // },
   ]
 
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
@@ -289,10 +289,10 @@ function App() {
   const playNote = (node, i) => {
     if (cycling)  {
 
-      if (Date.now() >= node.nextNoteAt) {
+      if (context.currentTIme >= node.nextNoteAt) {
         playSound(node, i)
       } else {
-        setTimeout(() => {playSound(node, i)}, node.nextNoteAt - Date.now())
+        setTimeout(() => {playSound(node, i)}, (node.nextNoteAt - context.currentTime)*1000)
       }
     }
   }
@@ -307,7 +307,7 @@ function App() {
 
     const intervalBpmAdjuster = 4
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-    node.nextNoteAt += intervalLength
+    node.nextNoteAt += intervalLength/1000
 
     const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
     const diceRoll = Math.random()
@@ -330,12 +330,18 @@ function App() {
           node.gain.gain.setValueAtTime(0, context.currentTime)
           const attack  = +document.getElementById(`attack${i}`).value
           const release = +document.getElementById(`release${i}`).value
-          const currentTime = context.currentTime
-          node.gain.gain.linearRampToValueAtTime(level, currentTime + attack/1000)
-          node.gain.gain.setValueAtTime(level, currentTime + attack/1000)
-          setTimeout(() => {
-          }) // node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
 
+          node.gain.gain.linearRampToValueAtTime(level, attack/1000)
+
+          const timeOfRelease = node.nextNoteAt - release/1000
+          const timeToWait = timeOfRelease - context.currentTime
+
+          setTimeout(() => {
+            const time = context.currentTime
+            node.gain.gain.setValueAtTime(level, time)
+            node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt - time)
+          }, timeToWait)
+          
           if (
             [
               'sine',
@@ -373,17 +379,16 @@ function App() {
         }, offset / 100 * intervalLength)
       }
     } else {
-      console.log('rest')
       node.gain.gain.setValueAtTime(0, context.currentTime)
     }
-    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - Date.now())
+    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - context.currentTime)
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
     nodes.forEach((node, i) => {
-      node.nextNoteAt = Date.now()
+      node.nextNoteAt = context.currentTime
       playNote(node, i)
     })
   }
