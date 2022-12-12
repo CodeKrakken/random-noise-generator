@@ -289,7 +289,7 @@ function App() {
   const playNote = (node, i) => {
     if (cycling)  {
 
-      if (context.currentTIme >= node.nextNoteAt) {
+      if (context.currentTime >= node.nextNoteAt) {
         playSound(node, i)
       } else {
         setTimeout(() => {playSound(node, i)}, (node.nextNoteAt - context.currentTime)*1000)
@@ -326,22 +326,39 @@ function App() {
           const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
           node.oscillator.type   = waveShape
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-          console.log('playing a note')
-          const time = context.currentTime
+          console.log(level)
+          let time = context.currentTime
+          console.log(time)
           node.gain.gain.setValueAtTime(0, time)
+          console.log(gain.gain.value)
           const attack  = +document.getElementById(`attack${i}`).value
+          console.log(attack)
           const release = +document.getElementById(`release${i}`).value
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
+          console.log(gain.gain.value)
+          console.log(release)
 
-          // const timeOfRelease = node.nextNoteAt - release/1000
-          // const timeToWait = timeOfRelease - context.currentTime
+          const timeOfRelease = node.nextNoteAt - release/1000
+          console.log(release)
+          console.log(timeOfRelease)
+          console.log(node.nextNoteAt)
 
-          // setTimeout(() => {
-          //   const time = context.currentTime
-          //   node.gain.gain.setValueAtTime(level, time)
-          //   node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt - time)
-          // }, timeToWait)
+          const timeToWait = (timeOfRelease - context.currentTime)*1000
+          console.log(timeToWait)
+
+
+          setTimeout(() => {
+            const time = context.currentTime
+            console.log(time)
+            node.gain.gain.setValueAtTime(level, time)
+            console.log(node.gain.gain.value)
+            node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
+            console.log(node.gain.gain.value)
+
+          }, timeToWait)
+
+
           
           if (
             [
@@ -380,7 +397,7 @@ function App() {
         }, offset / 100 * intervalLength)
       }
     } else {
-      node.gain.gain.setValueAtTime(0, context.currentTime)
+      node.gain.gain.value = 0
     }
     setTimeout(() => {playNote(node, i)}, node.nextNoteAt - context.currentTime)
   }
