@@ -24,6 +24,7 @@ export default function Node(props) {
         <div className="row inner-row">Max length %</div>
         <div className="row inner-row">Rest %</div>
         <div className="row inner-row">Offset %</div>
+        <div className="row inner-row">Sharpen %</div>
         <div className="row inner-row">Attack ms</div>
         <div className="row inner-row">Release ms</div>
 
@@ -119,6 +120,20 @@ export default function Node(props) {
             type="number" 
             value={node.offset}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], offset: +e.target.value}, nodes.slice(i+1)].flat())}
+            min={-100}
+            max={100}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'sharpen'}
+            id={`sharpen${i}`}
+            type="number" 
+            value={node.sharpen}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], sharpen: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
             maxlength={4}
