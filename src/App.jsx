@@ -56,7 +56,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 1000,
-      sharpen          : 25
+      detune          : 25
     }
   }
 
@@ -129,7 +129,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 1000,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -151,7 +151,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -173,7 +173,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -195,7 +195,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -217,7 +217,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 100,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -239,7 +239,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 100,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -259,7 +259,7 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      sharpen          : 25
+      detune          : 25
 
     },
     {
@@ -279,7 +279,7 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 50,
-      sharpen          : 25
+      detune          : 25
 
     },
   ]
@@ -319,12 +319,12 @@ function App() {
     }
   }
 
-  const sharpen = (frequency, i) => {
-    const sharpen = +document.getElementById(`sharpen${i}`).value
+  const detune = (frequency, i) => {
+    const detune = +document.getElementById(`detune${i}`).value
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
-    return frequency + hzDiff / 100 * sharpen
+    return frequency + hzDiff / 100 * detune
   }
 
   const playSound = (node, i) => {
@@ -356,35 +356,24 @@ function App() {
           const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
           node.oscillator.type   = waveShape
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-          console.log(level)
           let time = context.currentTime
-          console.log(time)
           node.gain.gain.setValueAtTime(0, time)
-          console.log(gain.gain.value)
           const attack  = +document.getElementById(`attack${i}`).value
-          console.log(attack)
           const release = +document.getElementById(`release${i}`).value
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
-          console.log(gain.gain.value)
-          console.log(release)
 
           const timeOfRelease = node.nextNoteAt - release/1000
-          console.log(release)
-          console.log(timeOfRelease)
-          console.log(node.nextNoteAt)
+
 
           const timeToWait = (timeOfRelease - context.currentTime)*1000
-          console.log(timeToWait)
+
 
 
           setTimeout(() => {
             const time = context.currentTime
-            console.log(time)
             node.gain.gain.setValueAtTime(level, time)
-            console.log(node.gain.gain.value)
             node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
-            console.log(node.gain.gain.value)
 
           }, timeToWait)
 
@@ -400,7 +389,7 @@ function App() {
             .includes(waveShape)
           ) {
             try {
-              const frequency   = sharpen(getRandomFrequency(i), i)
+              const frequency   = detune(getRandomFrequency(i), i)
 
               node.oscillator.frequency.value = frequency
 
@@ -413,7 +402,7 @@ function App() {
           
               }
             } catch (error) {
-              console.log(error)
+              console.log(error.messsage)
             }
           } else {
             try {
