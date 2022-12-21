@@ -3,10 +3,24 @@ import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
+import songFile from './songs/Somnambulist.mp3'
 import Node from './components/Node';
 import Header from './components/Header';
+import detect from 'bpm-detective'
 
-// import SheetMusic from '@slnsw/react-sheet-music';
+const context = new AudioContext()
+let buffer
+let data
+
+fetch(songFile).then(async function (response) {
+  buffer = await response.arrayBuffer()
+}).then(async () => {
+  data = await context.decodeAudioData(buffer)  
+
+}).then(() => {
+  const bpm = detect(data)
+  alert(`Detected BPM: ${bpm}`)
+}).catch(console.error)
 
 let cycling = false
 
@@ -18,7 +32,7 @@ function App() {
     setNodes(newNodes)
   }
 
-  const context = new AudioContext();
+  // const context = new AudioContext();
 
   const snareSample = new Audio(snareFile)
   const snare = context.createMediaElementSource(snareSample);
@@ -326,35 +340,22 @@ function App() {
           const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
           node.oscillator.type   = waveShape
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-          console.log(level)
           let time = context.currentTime
-          console.log(time)
           node.gain.gain.setValueAtTime(0, time)
-          console.log(gain.gain.value)
           const attack  = +document.getElementById(`attack${i}`).value
-          console.log(attack)
           const release = +document.getElementById(`release${i}`).value
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
-          console.log(gain.gain.value)
-          console.log(release)
 
           const timeOfRelease = node.nextNoteAt - release/1000
-          console.log(release)
-          console.log(timeOfRelease)
-          console.log(node.nextNoteAt)
 
           const timeToWait = (timeOfRelease - context.currentTime)*1000
-          console.log(timeToWait)
 
 
           setTimeout(() => {
             const time = context.currentTime
-            console.log(time)
             node.gain.gain.setValueAtTime(level, time)
-            console.log(node.gain.gain.value)
             node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
-            console.log(node.gain.gain.value)
 
           }, timeToWait)
 
