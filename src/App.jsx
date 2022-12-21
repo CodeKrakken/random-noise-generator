@@ -64,7 +64,13 @@ function App() {
       activeScales      : [0,1,2,3,4,5,6,7,8,9,10,11],
       activeWaveShapes  : waveShapes,
       rest              : 50,
-      activeIntervals : [1, 1/2, 1/4, 1/8, 1/16]
+      activeIntervals : [1, 1/2, 1/4, 1/8, 1/16],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      offset          : 0,
+      attack          : 100,
+      release         : 1000,
+      detune          : 25
     }
   }
 
@@ -136,7 +142,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 100,
-      release         : 1000
+      release         : 1000,
+      detune          : 25
+
     },
     {
       label           : 'Chord',
@@ -156,7 +164,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 1900,
-      release         : 100
+      release         : 100,
+      detune          : 25
+
     },
     {
       label           : 'Chord',
@@ -176,7 +186,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 1900,
-      release         : 100
+      release         : 100,
+      detune          : 25
+
     },
     {
       label           : 'Chord',
@@ -196,7 +208,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 1900,
-      release         : 100
+      release         : 100,
+      detune          : 25
+
     },
     {
       label           : 'Middle',
@@ -216,7 +230,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 100,
-      release         : 100
+      release         : 100,
+      detune          : 25
+
     },
     {
       label           : 'Lead',
@@ -236,7 +252,9 @@ function App() {
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 100,
-      release         : 100
+      release         : 100,
+      detune          : 25
+
     },
     {
       label           : 'Kick',
@@ -254,7 +272,9 @@ function App() {
       activeIntervals : [1/4, 1/8],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 0
+      offset          : 0,
+      detune          : 25
+
     },
     {
       label           : 'Snare',
@@ -272,7 +292,9 @@ function App() {
       activeIntervals : [1/2],
       minNoteLength   : 100,
       maxNoteLength   : 100,
-      offset          : 50
+      offset          : 50,
+      detune          : 25
+
     },
   ]
 
@@ -309,6 +331,14 @@ function App() {
         setTimeout(() => {playSound(node, i)}, (node.nextNoteAt - context.currentTime)*1000)
       }
     }
+  }
+
+  const detune = (frequency, i) => {
+    const detune = +document.getElementById(`detune${i}`).value
+    const ratio = 105.94637142137626184333
+    const semitoneUp = frequency / 100 * ratio
+    const hzDiff = semitoneUp - frequency
+    return frequency + hzDiff / 100 * detune
   }
 
   const playSound = (node, i) => {
@@ -371,7 +401,7 @@ function App() {
             .includes(waveShape)
           ) {
             try {
-              const frequency   = getRandomFrequency(i)
+              const frequency   = detune(getRandomFrequency(i), i)
 
               node.oscillator.frequency.value = frequency
 
@@ -384,7 +414,7 @@ function App() {
           
               }
             } catch (error) {
-              console.log(error)
+              console.log(error.messsage)
             }
           } else {
             try {
