@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useEffect, useState} from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
@@ -7,8 +7,10 @@ import songFile from './songs/Somnambulist.mp3'
 import Node from './components/Node';
 import Header from './components/Header';
 import detect from 'bpm-detective'
+import { createRealTimeBpmProcessor } from 'realtime-bpm-analyzer';
 
 const context = new AudioContext()
+
 let buffer
 let data
 
@@ -26,6 +28,32 @@ let cycling = false
 
 function App() {
 
+  useEffect(async () => {
+  
+    const realtimeAnalyzerNode = await createRealTimeBpmProcessor(context);
+  
+    // Set the source with the HTML Audio Node
+    const track = document.getElementById('track');
+    const source = context.createMediaElementSource(track);
+  
+    // Lowpass filter
+    const filter = context.createBiquadFilter();
+    filter.type = 'lowpass';
+  
+    // Connect stuff together
+    source.connect(filter).connect(realtimeAnalyzerNode);
+    source.connect(context.destination);
+  
+    realtimeAnalyzerNode.port.onmessage = (event) => {
+      if (event.data.message === 'BPM') {
+        console.log('BPM', event.data.result);
+      }
+      if (event.data.message === 'BPM_STABLE') {
+        console.log('BPM_STABLE', event.data.result);
+      }
+    };
+  }, [])
+
   const addOscillator = (bpm) => {
     const newOscillator = setUpOscillator(bpm)
     const newNodes = [nodes, newOscillator].flat()
@@ -35,6 +63,7 @@ function App() {
   // const context = new AudioContext();
 
   const snareSample = new Audio(snareFile)
+  console.log(snareSample)
   const snare = context.createMediaElementSource(snareSample);
   snare.connect(context.destination)
   const kickSample = new Audio(kickFile)
@@ -462,6 +491,7 @@ function App() {
 
   return <>
     <div>
+      <audio src={songFile} id="track"></audio>
       <Header 
         handleStartStop   = {handleStartStop}
         cycleButtonLabel  = {cycleButtonLabel}

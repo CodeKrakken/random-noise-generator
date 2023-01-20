@@ -1,6 +1,17 @@
-export default function Node(props) {
+export default function Node({ node, i, setNodes, nodes, scales, waveShapes, intervals, handleDelete, notes }) {
 
-  const { node, i, setNodes, nodes, scales, waveShapes, intervals, handleDelete, notes } = props
+  const inputLabels = [
+    'BPM', 
+    'Min level', 
+    'Max level', 
+    'Min length %', 
+    'Min length %', 
+    'Rest %', 
+    'Offset %', 
+    'Sharpen %', 
+    'Attack ms', 
+    'Release ms'
+  ]
 
   return <div className="node">
     <div className="row">
@@ -17,17 +28,9 @@ export default function Node(props) {
     <div className="column">
       </div>
       <div className="column">
-        <div className="row inner-row">BPM</div>
-        <div className="row inner-row">Min level</div>
-        <div className="row inner-row">Max level</div>
-        <div className="row inner-row">Min length %</div>
-        <div className="row inner-row">Max length %</div>
-        <div className="row inner-row">Rest %</div>
-        <div className="row inner-row">Offset %</div>
-        <div className="row inner-row">Sharpen %</div>
-        <div className="row inner-row">Attack ms</div>
-        <div className="row inner-row">Release ms</div>
-
+        {
+          inputLabels.map(label => <div className="row inner-row">{label}</div>)
+        }
       </div>
 
       <div className="column">
