@@ -1,58 +1,16 @@
-import { useEffect, useState} from 'react';
+import { useState} from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
-import songFile from './songs/Somnambulist.mp3'
 import Node from './components/Node';
 import Header from './components/Header';
-import detect from 'bpm-detective'
-import { createRealTimeBpmProcessor } from 'realtime-bpm-analyzer';
 
-const context = new AudioContext()
-
-let buffer
-let data
-
-fetch(songFile).then(async function (response) {
-  buffer = await response.arrayBuffer()
-}).then(async () => {
-  data = await context.decodeAudioData(buffer)  
-
-}).then(() => {
-  const bpm = detect(data)
-  alert(`Detected BPM: ${bpm}`)
-}).catch(console.error)
+// import SheetMusic from '@slnsw/react-sheet-music';
 
 let cycling = false
 
 function App() {
-
-  useEffect(async () => {
-  
-    const realtimeAnalyzerNode = await createRealTimeBpmProcessor(context);
-  
-    // Set the source with the HTML Audio Node
-    const track = document.getElementById('track');
-    const source = context.createMediaElementSource(track);
-  
-    // Lowpass filter
-    const filter = context.createBiquadFilter();
-    filter.type = 'lowpass';
-  
-    // Connect stuff together
-    source.connect(filter).connect(realtimeAnalyzerNode);
-    source.connect(context.destination);
-  
-    realtimeAnalyzerNode.port.onmessage = (event) => {
-      if (event.data.message === 'BPM') {
-        console.log('BPM', event.data.result);
-      }
-      if (event.data.message === 'BPM_STABLE') {
-        console.log('BPM_STABLE', event.data.result);
-      }
-    };
-  }, [])
 
   const addOscillator = (bpm) => {
     const newOscillator = setUpOscillator(bpm)
@@ -60,15 +18,24 @@ function App() {
     setNodes(newNodes)
   }
 
-  // const context = new AudioContext();
+  const context = new AudioContext();
 
-  const snareSample = new Audio(snareFile)
-  console.log(snareSample)
-  const snare = context.createMediaElementSource(snareSample);
-  snare.connect(context.destination)
-  const kickSample = new Audio(kickFile)
-  const kick = context.createMediaElementSource(kickSample);
-  kick.connect(context.destination)
+  // const snareSample = new Audio(snareFile)
+  // const snare = context.createMediaElementSource(snareSample);
+  // snare.connect(context.destination)
+  // const kickSample = new Audio(kickFile)
+  // const kick = context.createMediaElementSource(kickSample);
+  // kick.connect(context.destination)
+
+  const setUpSample = (file) => {
+    const sample = new Audio(file)
+    const sound = context.createMediaElementSource(sample);
+    sound.connect(context.destination)
+    return sample
+  }
+
+  const snareSample = setUpSample(snareFile)
+  const kickSample = setUpSample(kickFile)
           
   const setUpOscillator = (bpm) => {
     const oscillator = context.createOscillator()
@@ -99,7 +66,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 1000,
-      detune          : 25
+      sharpen          : 25
     }
   }
 
@@ -164,16 +131,15 @@ function App() {
       maxVolume       : 100,
       activeNotes     : [1, 4, 6, 8, 12, 13],
       activeScales    : [1,2],
-      activeWaveShapes: ['sawtooth'],
+      activeWaveShapes: ['square'],
       rest            : 0,
-      activeIntervals : [1/4],
+      activeIntervals : [1/4, 1/8],
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
       attack          : 100,
       release         : 1000,
-      detune          : 25
-
+      sharpen         : 0
     },
     {
       label           : 'Chord',
@@ -194,7 +160,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -216,7 +182,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -238,7 +204,7 @@ function App() {
       offset          : 0,
       attack          : 1900,
       release         : 100,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -260,7 +226,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 100,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -282,7 +248,7 @@ function App() {
       offset          : 0,
       attack          : 100,
       release         : 100,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -302,7 +268,7 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 0,
-      detune          : 25
+      sharpen          : 25
 
     },
     {
@@ -322,7 +288,7 @@ function App() {
       minNoteLength   : 100,
       maxNoteLength   : 100,
       offset          : 50,
-      detune          : 25
+      sharpen          : 25
 
     },
   ]
@@ -362,12 +328,12 @@ function App() {
     }
   }
 
-  const detune = (frequency, i) => {
-    const detune = +document.getElementById(`detune${i}`).value
+  const sharpen = (frequency, i) => {
+    const sharpen = +document.getElementById(`sharpen${i}`).value
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
-    return frequency + hzDiff / 100 * detune
+    return frequency + hzDiff / 100 * sharpen
   }
 
   const playSound = (node, i) => {
@@ -399,22 +365,35 @@ function App() {
           const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
           node.oscillator.type   = waveShape
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+          console.log(level)
           let time = context.currentTime
+          console.log(time)
           node.gain.gain.setValueAtTime(0, time)
+          console.log(gain.gain.value)
           const attack  = +document.getElementById(`attack${i}`).value
+          console.log(attack)
           const release = +document.getElementById(`release${i}`).value
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
+          console.log(gain.gain.value)
+          console.log(release)
 
           const timeOfRelease = node.nextNoteAt - release/1000
+          console.log(release)
+          console.log(timeOfRelease)
+          console.log(node.nextNoteAt)
 
           const timeToWait = (timeOfRelease - context.currentTime)*1000
+          console.log(timeToWait)
 
 
           setTimeout(() => {
             const time = context.currentTime
+            console.log(time)
             node.gain.gain.setValueAtTime(level, time)
+            console.log(node.gain.gain.value)
             node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
+            console.log(node.gain.gain.value)
 
           }, timeToWait)
 
@@ -430,7 +409,7 @@ function App() {
             .includes(waveShape)
           ) {
             try {
-              const frequency   = detune(getRandomFrequency(i), i)
+              const frequency   = sharpen(getRandomFrequency(i), i)
 
               node.oscillator.frequency.value = frequency
 
@@ -443,7 +422,7 @@ function App() {
           
               }
             } catch (error) {
-              console.log(error.messsage)
+              console.log(error)
             }
           } else {
             try {
@@ -491,7 +470,6 @@ function App() {
 
   return <>
     <div>
-      <audio src={songFile} id="track"></audio>
       <Header 
         handleStartStop   = {handleStartStop}
         cycleButtonLabel  = {cycleButtonLabel}
