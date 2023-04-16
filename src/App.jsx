@@ -122,11 +122,13 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
+      minDetune       : 0,
+      maxDetune       : 0,    
       minAttack       : 100,
       maxAttack       : 100,
-      release         : 1000,
-      minDetune       : 0,
-      maxDetune       : 0    
+      minRelease      : 1000,
+      maxRelease      : 1000,
+
     },
     {
       label           : 'Chord',
@@ -146,11 +148,12 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
+      minDetune       : 0,
+      maxDetune       : 0,
       minAttack       : 1900,
       maxAttack       : 1900,
-      release         : 100,
-      minDetune       : 0,
-      maxDetune       : 0
+      minRelease      : 1000,
+      maxRelease      : 1000,
     },
     {
       label           : 'Chord',
@@ -170,11 +173,13 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
+      minDetune       : 0,
+      maxDetune       : 0,
       minAttack       : 1900,
       maxAttack       : 1900,
-      release         : 100,
-      minDetune       : 0,
-      maxDetune       : 0
+      minRelease      : 1000,
+      maxRelease      : 1000,
+
     },
     {
       label           : 'Chord',
@@ -194,11 +199,13 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
+      minDetune       : 0,
+      maxDetune       : 0,
       minAttack       : 1900,
       maxAttack       : 1900,
-      release         : 100,
-      minDetune       : 0,
-      maxDetune       : 0
+      minRelease      : 1000,
+      maxRelease      : 1000,
+      
     },
     // {
     //   label           : 'Middle',
@@ -218,11 +225,12 @@ function App() {
     //   maxNoteLength   : 100,
     //   minOffset       : 0,  
     //   maxOffset       : 0,
+    //   minDetune       : 0,
+    //   maxDetune       : 0,
     //   minAttack       : 100,
     //   maxAttack       : 100,
-    //   release         : 100,
-    //   minDetune       : 0,
-    //   maxDetune       : 0
+      // minRelease      : 1000,
+      // maxRelease      : 1000,
     // },
     // {
     //   label           : 'Lead',
@@ -242,11 +250,12 @@ function App() {
     //   maxNoteLength   : 100,
     //   minOffset       : 0,  
     //   maxOffset       : 0,
+    //   minDetune       : 0,
+    //   maxDetune       : 0,
     //   minAttack       : 100,
     //   maxAttack       : 100,
-    //   release         : 100,
-    //   minDetune       : 0,
-    //   maxDetune       : 0
+      // minRelease      : 1000,
+      // maxRelease      : 1000,
     // },
   ]
 
@@ -288,11 +297,12 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
+      minDetune       : 0,
+      maxDetune       : 0,
       minAttack       : 100,
       maxAttack       : 100,
-      release         : 1000,
-      minDetune       : 0,
-      maxDetune       : 0
+      minRelease      : 1000,
+      maxRelease      : 1000,
     }
   }
 
@@ -385,14 +395,13 @@ function App() {
           let time = context.currentTime
           node.gain.gain.setValueAtTime(0, time)
           const attack  = getRangeValue('attack', i)
-          const release = +document.getElementById(`release${i}`).value
+          const release = getRangeValue('release', i)
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
 
           const timeOfRelease = node.nextNoteAt - release/1000
 
           const timeToWait = (timeOfRelease - context.currentTime)*1000
-
 
           setTimeout(() => {
             const time = context.currentTime

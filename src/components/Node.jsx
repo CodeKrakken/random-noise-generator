@@ -13,7 +13,8 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Max Detune %', 
     'Min Attack ms',
     'Max Attack ms',
-    'Release ms'
+    'Min Release ms',
+    'Max Release ms'
   ]
 
   return <div className="node">
@@ -201,11 +202,23 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'release'}
-            id={`release${i}`}
+            title={'min release'}
+            id={`min release${i}`}
             type="number" 
-            value={node.release}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], release: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.minRelease}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minRelease: +e.target.value}, nodes.slice(i+1)].flat())}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'max release'}
+            id={`max release${i}`}
+            type="number" 
+            value={node.maxRelease}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxRelease: +e.target.value}, nodes.slice(i+1)].flat())}
             maxlength={4}
           />
         </div>
