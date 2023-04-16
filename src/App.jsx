@@ -63,143 +63,6 @@ function App() {
 
   const demo = [
     {
-      label           : 'Bass',
-      oscillator      : oscillator, 
-      gain            : gain,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 60,
-      minVolume       : 100,
-      maxVolume       : 100,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [1,2],
-      activeWaveShapes: ['square'],
-      rest            : 0,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 100,
-      release         : 1000,
-      sharpen         : 0
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator2, 
-      gain            : gain2,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 1900,
-      release         : 100,
-      sharpen          : 25
-
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator3, 
-      gain            : gain3,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 1900,
-      release         : 100,
-      sharpen          : 25
-
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator4, 
-      gain            : gain4,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 12, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sine', 'triangle'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 1900,
-      release         : 100,
-      sharpen          : 25
-
-    },
-    {
-      label           : 'Middle',
-      oscillator      : oscillator5, 
-      gain            : gain5,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 75,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [6,7],
-      activeWaveShapes: ['triangle'],
-      rest            : 50,
-      activeIntervals : [1/2, 1/4],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 100,
-      release         : 100,
-      sharpen          : 25
-
-    },
-    {
-      label           : 'Lead',
-      oscillator      : oscillator6, 
-      gain            : gain6,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 75,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
-      activeScales    : [7,8,9],
-      activeWaveShapes: ['sine'],
-      rest            : 50,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      attack          : 100,
-      release         : 100,
-      sharpen          : 25
-
-    },
-    {
       label           : 'Kick',
       oscillator      : oscillator7, 
       gain            : gain7,
@@ -208,17 +71,16 @@ function App() {
       bpm             : 120,
       minVolume       : 0,
       maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
       activeScales    : [9],
       activeWaveShapes: ['kick'],
-      rest            : 0,
+      rest            : 25,
       activeIntervals : [1/4, 1/8],
       minNoteLength   : 100,
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      sharpen          : 25
-
+      detune         : 0
     },
     {
       label           : 'Snare',
@@ -229,7 +91,7 @@ function App() {
       bpm             : 120,
       minVolume       : 0,
       maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 12, 13],
+      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
       activeScales    : [9],
       activeWaveShapes: ['snare'],
       rest            : 0,
@@ -238,14 +100,144 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 50,  
       maxOffset       : 50,
-      sharpen          : 25
-
+      detune         : 0
     },
+    {
+      label           : 'Bass',
+      oscillator      : oscillator, 
+      gain            : gain,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 60,
+      minVolume       : 100,
+      maxVolume       : 100,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [1,2],
+      activeWaveShapes: ['square'],
+      rest            : 25,
+      activeIntervals : [1/4, 1/8],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      minOffset       : 0,  
+      maxOffset       : 0,
+      attack          : 100,
+      release         : 1000,
+      detune         : 0
+    },
+    {
+      label           : 'Chord',
+      oscillator      : oscillator2, 
+      gain            : gain2,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sawtooth'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      minOffset       : 0,  
+      maxOffset       : 0,
+      attack          : 1900,
+      release         : 100,
+      detune         : 0
+    },
+    {
+      label           : 'Chord',
+      oscillator      : oscillator3, 
+      gain            : gain3,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sawtooth'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      minOffset       : 0,  
+      maxOffset       : 0,
+      attack          : 1900,
+      release         : 100,
+      detune         : 0
+    },
+    {
+      label           : 'Chord',
+      oscillator      : oscillator4, 
+      gain            : gain4,
+      minFrequency    : 20,
+      maxFrequency    : 20000,
+      bpm             : 120,
+      minVolume       : 50,
+      maxVolume       : 50,
+      activeNotes     : [1, 4, 6, 8, 11, 13],
+      activeScales    : [3,4,5],
+      activeWaveShapes: ['sawtooth'],
+      rest            : 0,
+      activeIntervals : [1],
+      minNoteLength   : 100,
+      maxNoteLength   : 100,
+      minOffset       : 0,  
+      maxOffset       : 0,
+      attack          : 1900,
+      release         : 100,
+      detune         : 0
+    },
+    // {
+    //   label           : 'Middle',
+    //   oscillator      : oscillator5, 
+    //   gain            : gain5,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 75,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    //   activeScales    : [6,7],
+    //   activeWaveShapes: ['triangle'],
+    //   rest            : 50,
+    //   activeIntervals : [1/2, 1/4],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   attack          : 100,
+    //   release         : 100,
+    //   detune         : 0
+    // },
+    // {
+    //   label           : 'Lead',
+    //   oscillator      : oscillator6, 
+    //   gain            : gain6,
+    //   minFrequency    : 20,
+    //   maxFrequency    : 20000,
+    //   bpm             : 120,
+    //   minVolume       : 75,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    //   activeScales    : [7,8,9],
+    //   activeWaveShapes: ['sine'],
+    //   rest            : 50,
+    //   activeIntervals : [1/4, 1/8],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   attack          : 100,
+    //   release         : 100,
+    //   detune         : 0
+    // },
   ]
 
   const [nodes,             setNodes            ] = useState(demo)
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
-
 
   const addOscillator = () => {
 
@@ -284,7 +276,7 @@ function App() {
       maxOffset       : 0,
       attack          : 100,
       release         : 1000,
-      sharpen         : 0
+      detune         : 0
     }
   }
 
@@ -330,12 +322,12 @@ function App() {
     }
   }
 
-  const sharpen = (frequency, i) => {
-    const sharpen = +document.getElementById(`sharpen${i}`).value
+  const detune = (frequency, i) => {
+    const detune = +document.getElementById(`detune${i}`).value
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
-    return frequency + hzDiff / 100 * sharpen
+    return frequency + hzDiff / 100 * detune
   }
 
   const playSound = (node, i) => {
@@ -397,7 +389,7 @@ function App() {
             .includes(waveShape)
           ) {
             try {
-              const frequency   = sharpen(getRandomFrequency(i), i)
+              const frequency   = detune(getRandomFrequency(i), i)
 
               node.oscillator.frequency.value = frequency
 

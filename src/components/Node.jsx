@@ -6,10 +6,10 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Max level', 
     'Min length %', 
     'Min length %', 
-    'Rest %', 
+    'Rest Chance %', 
     'Min Offset %', 
     'Max Offset %',
-    'Sharpen %', 
+    'Detune %', 
     'Attack ms', 
     'Release ms'
   ]
@@ -147,11 +147,11 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'sharpen'}
-            id={`sharpen${i}`}
+            title={'detune'}
+            id={`detune${i}`}
             type="number" 
-            value={node.sharpen}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], sharpen: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.detune}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], detune: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
             maxlength={4}
