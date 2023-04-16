@@ -7,7 +7,8 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Min length %', 
     'Min length %', 
     'Rest %', 
-    'Offset %', 
+    'Min Offset %', 
+    'Max Offset %',
     'Sharpen %', 
     'Attack ms', 
     'Release ms'
@@ -118,11 +119,25 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'offset'}
-            id={`offset${i}`}
+            title={'min offset'}
+            id={`min offset${i}`}
             type="number" 
-            value={node.offset}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], offset: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.minOffset}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat())}
+            min={-100}
+            max={100}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'max offset'}
+            id={`max offset${i}`}
+            type="number" 
+            value={node.maxOffset}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
             maxlength={4}
