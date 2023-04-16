@@ -80,7 +80,8 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      detune         : 0
+      minDetune          : 0,
+      maxDetune          : 0
     },
     {
       label           : 'Snare',
@@ -100,7 +101,8 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 50,  
       maxOffset       : 50,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0    
     },
     {
       label           : 'Bass',
@@ -120,9 +122,11 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      attack          : 100,
+      minAttack       : 100,
+      maxAttack       : 100,
       release         : 1000,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0    
     },
     {
       label           : 'Chord',
@@ -142,9 +146,11 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      attack          : 1900,
+      minAttack       : 1900,
+      maxAttack       : 1900,
       release         : 100,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0
     },
     {
       label           : 'Chord',
@@ -164,9 +170,11 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      attack          : 1900,
+      minAttack       : 1900,
+      maxAttack       : 1900,
       release         : 100,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0
     },
     {
       label           : 'Chord',
@@ -186,9 +194,11 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      attack          : 1900,
+      minAttack       : 1900,
+      maxAttack       : 1900,
       release         : 100,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0
     },
     // {
     //   label           : 'Middle',
@@ -208,9 +218,11 @@ function App() {
     //   maxNoteLength   : 100,
     //   minOffset       : 0,  
     //   maxOffset       : 0,
-    //   attack          : 100,
+    //   minAttack       : 100,
+    //   maxAttack       : 100,
     //   release         : 100,
-    //   detune         : 0
+    //   minDetune       : 0,
+    //   maxDetune       : 0
     // },
     // {
     //   label           : 'Lead',
@@ -230,9 +242,11 @@ function App() {
     //   maxNoteLength   : 100,
     //   minOffset       : 0,  
     //   maxOffset       : 0,
-    //   attack          : 100,
+    //   minAttack       : 100,
+    //   maxAttack       : 100,
     //   release         : 100,
-    //   detune         : 0
+    //   minDetune       : 0,
+    //   maxDetune       : 0
     // },
   ]
 
@@ -274,9 +288,11 @@ function App() {
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
-      attack          : 100,
+      minAttack       : 100,
+      maxAttack       : 100,
       release         : 1000,
-      detune         : 0
+      minDetune       : 0,
+      maxDetune       : 0
     }
   }
 
@@ -322,8 +338,15 @@ function App() {
     }
   }
 
+  const getRangeValue = (key, i) => {
+    const minValue = +document.getElementById(`min ${key}${i}`).value    
+    const maxValue = +document.getElementById(`max ${key}${i}`).value    
+    return minValue + (Math.random() * (maxValue - minValue))
+
+  }
+
   const detune = (frequency, i) => {
-    const detune = +document.getElementById(`detune${i}`).value
+    const detune = getRangeValue('detune', i)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
@@ -332,9 +355,7 @@ function App() {
 
   const playSound = (node, i) => {
 
-    const minOffset = +document.getElementById(`min offset${i}`).value
-    const maxOffset = +document.getElementById(`max offset${i}`).value
-    const offset = minOffset + (Math.random() * (maxOffset - minOffset))
+    const offset = getRangeValue('offset', i)
     
     const bpm         = +document.getElementById(`bpm${i}`).value
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
@@ -363,7 +384,7 @@ function App() {
           const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
           let time = context.currentTime
           node.gain.gain.setValueAtTime(0, time)
-          const attack  = +document.getElementById(`attack${i}`).value
+          const attack  = getRangeValue('attack', i)
           const release = +document.getElementById(`release${i}`).value
 
           node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)

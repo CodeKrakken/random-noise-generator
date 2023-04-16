@@ -9,8 +9,10 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Rest Chance %', 
     'Min Offset %', 
     'Max Offset %',
-    'Detune %', 
-    'Attack ms', 
+    'Min Detune %', 
+    'Max Detune %', 
+    'Min Attack ms',
+    'Max Attack ms',
     'Release ms'
   ]
 
@@ -148,10 +150,10 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
           <input
             className='textbox'
             title={'detune'}
-            id={`detune${i}`}
+            id={`min detune${i}`}
             type="number" 
-            value={node.detune}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], detune: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.minDetune}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
             maxlength={4}
@@ -161,11 +163,37 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'attack'}
-            id={`attack${i}`}
+            title={'detune'}
+            id={`max detune${i}`}
             type="number" 
-            value={node.attack}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], attack: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.maxDetune}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat())}
+            min={-100}
+            max={100}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'min attack'}
+            id={`min attack${i}`}
+            type="number" 
+            value={node.minAttack}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minAttack: +e.target.value}, nodes.slice(i+1)].flat())}
+            maxlength={4}
+          />
+        </div>
+
+        <div className="row inner-row">
+          <input
+            className='textbox'
+            title={'max attack'}
+            id={`max attack${i}`}
+            type="number" 
+            value={node.maxAttack}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxAttack: +e.target.value}, nodes.slice(i+1)].flat())}
             maxlength={4}
           />
         </div>
