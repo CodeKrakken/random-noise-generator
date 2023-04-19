@@ -62,62 +62,56 @@ function App() {
   oscillator8.start(0);
 
   const demo = [
-    {
-      label           : 'Kick',
-      oscillator      : oscillator7, 
-      gain            : gain7,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 0,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-      activeScales    : [9],
-      activeWaveShapes: ['kick'],
-      rest            : 25,
-      activeIntervals : [1/4, 1/8],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      minDetune          : 0,
-      maxDetune          : 0
-    },
-    {
-      label           : 'Snare',
-      oscillator      : oscillator8, 
-      gain            : gain8,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 0,
-      maxVolume       : 100,
-      activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
-      activeScales    : [9],
-      activeWaveShapes: ['snare'],
-      rest            : 0,
-      activeIntervals : [1/2],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 50,  
-      maxOffset       : 50,
-      minDetune       : 0,
-      maxDetune       : 0    
-    },
+    // {
+    //   label           : 'Kick',
+    //   oscillator      : oscillator7, 
+    //   gain            : gain7,
+    //   bpm             : 120,
+    //   minVolume       : 0,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    //   activeScales    : [9],
+    //   activeWaveShapes: ['kick'],
+    //   rest            : 25,
+    //   activeIntervals : [1/4, 1/8],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   minDetune          : 0,
+    //   maxDetune          : 0
+    // },
+    // {
+    //   label           : 'Snare',
+    //   oscillator      : oscillator8, 
+    //   gain            : gain8,
+    //   bpm             : 120,
+    //   minVolume       : 0,
+    //   maxVolume       : 100,
+    //   activeNotes     : [1, 3, 4, 6, 8, 9, 11, 13],
+    //   activeScales    : [9],
+    //   activeWaveShapes: ['snare'],
+    //   rest            : 0,
+    //   activeIntervals : [1/2],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 50,  
+    //   maxOffset       : 50,
+    //   minDetune       : 0,
+    //   maxDetune       : 0    
+    // },
     {
       label           : 'Bass',
       oscillator      : oscillator, 
       gain            : gain,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
       bpm             : 60,
       minVolume       : 100,
       maxVolume       : 100,
       activeNotes     : [1, 4, 6, 8, 11, 13],
       activeScales    : [1,2],
       activeWaveShapes: ['square'],
-      rest            : 25,
-      activeIntervals : [1/4, 1/8],
+      rest            : 0,
+      activeIntervals : [1/4],
       minNoteLength   : 100,
       maxNoteLength   : 100,
       minOffset       : 0,  
@@ -126,93 +120,85 @@ function App() {
       maxDetune       : 0,    
       minAttack       : 100,
       maxAttack       : 100,
-      minRelease      : 1000,
-      maxRelease      : 1000,
+      minRelease      : 0,
+      maxRelease      : 0,
 
     },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator2, 
-      gain            : gain2,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 11, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sawtooth'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      minDetune       : 0,
-      maxDetune       : 0,
-      minAttack       : 1900,
-      maxAttack       : 1900,
-      minRelease      : 1000,
-      maxRelease      : 1000,
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator3, 
-      gain            : gain3,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 11, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sawtooth'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      minDetune       : 0,
-      maxDetune       : 0,
-      minAttack       : 1900,
-      maxAttack       : 1900,
-      minRelease      : 1000,
-      maxRelease      : 1000,
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator2, 
+    //   gain            : gain2,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 11, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sawtooth'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   minDetune       : 0,
+    //   maxDetune       : 0,
+    //   minAttack       : 1900,
+    //   maxAttack       : 1900,
+    //   minRelease      : 1000,
+    //   maxRelease      : 1000,
+    // },
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator3, 
+    //   gain            : gain3,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 11, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sawtooth'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   minDetune       : 0,
+    //   maxDetune       : 0,
+    //   minAttack       : 1900,
+    //   maxAttack       : 1900,
+    //   minRelease      : 1000,
+    //   maxRelease      : 1000,
 
-    },
-    {
-      label           : 'Chord',
-      oscillator      : oscillator4, 
-      gain            : gain4,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
-      bpm             : 120,
-      minVolume       : 50,
-      maxVolume       : 50,
-      activeNotes     : [1, 4, 6, 8, 11, 13],
-      activeScales    : [3,4,5],
-      activeWaveShapes: ['sawtooth'],
-      rest            : 0,
-      activeIntervals : [1],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      minDetune       : 0,
-      maxDetune       : 0,
-      minAttack       : 1900,
-      maxAttack       : 1900,
-      minRelease      : 1000,
-      maxRelease      : 1000,
+    // },
+    // {
+    //   label           : 'Chord',
+    //   oscillator      : oscillator4, 
+    //   gain            : gain4,
+    //   bpm             : 120,
+    //   minVolume       : 50,
+    //   maxVolume       : 50,
+    //   activeNotes     : [1, 4, 6, 8, 11, 13],
+    //   activeScales    : [3,4,5],
+    //   activeWaveShapes: ['sawtooth'],
+    //   rest            : 0,
+    //   activeIntervals : [1],
+    //   minNoteLength   : 100,
+    //   maxNoteLength   : 100,
+    //   minOffset       : 0,  
+    //   maxOffset       : 0,
+    //   minDetune       : 0,
+    //   maxDetune       : 0,
+    //   minAttack       : 1900,
+    //   maxAttack       : 1900,
+    //   minRelease      : 1000,
+    //   maxRelease      : 1000,
       
-    },
+    // },
     // {
     //   label           : 'Middle',
     //   oscillator      : oscillator5, 
     //   gain            : gain5,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
     //   bpm             : 120,
     //   minVolume       : 50,
     //   maxVolume       : 75,
@@ -236,8 +222,6 @@ function App() {
     //   label           : 'Lead',
     //   oscillator      : oscillator6, 
     //   gain            : gain6,
-    //   minFrequency    : 20,
-    //   maxFrequency    : 20000,
     //   bpm             : 120,
     //   minVolume       : 75,
     //   maxVolume       : 100,
@@ -267,7 +251,6 @@ function App() {
     const newOscillator = setUpOscillator()
     const newNodes = [nodes, newOscillator].flat()
     setNodes(newNodes)
-    console.log(newNodes)
   }
 
   const setUpOscillator = () => {
@@ -283,8 +266,6 @@ function App() {
       label           : 'New Oscillator',
       oscillator      : oscillator, 
       gain            : gain,
-      minFrequency    : 20,
-      maxFrequency    : 20000,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
@@ -337,13 +318,13 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const playNote = (node, i) => {
+  const newInterval = (i) => {
     if (cycling)  {
 
-      if (context.currentTime >= node.nextNoteAt) {
-        playSound(node, i)
+      if (context.currentTime >= node.intervalEnd) {
+        runInterval(i)
       } else {
-        setTimeout(() => {playSound(node, i)}, (node.nextNoteAt - context.currentTime)*1000)
+        setTimeout(() => {runInterval(i)}, (nodes[i].intervalEnd - context.currentTime)*1000)
       }
     }
   }
@@ -363,106 +344,122 @@ function App() {
     return frequency + hzDiff / 100 * detune
   }
 
-  const playSound = (node, i) => {
-
-    const offset = getRangeValue('offset', i)
-    
-    const bpm         = +document.getElementById(`bpm${i}`).value
+  const getIntervalLength = (i) => {
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
     const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
-
     const intervalBpmAdjuster = 4
+    const bpm             = +document.getElementById(`bpm${i}`).value
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-    node.nextNoteAt += intervalLength/1000
+    return intervalLength/1000
+  }
 
+  const isRest = (i) => {
     const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
     const diceRoll = Math.random()
+    return diceRoll < chanceOfRest
+  }
 
-    if (diceRoll >= chanceOfRest) {
+  const runInterval = (i) => {
+
+    const intervalLength = getIntervalLength(i)
+    
+    nodes[i].intervalEnd += intervalLength
+    const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+
+    if (isRest(i) || !liveWaves) {
+
+      nodes[i].gain.gain.value = 0
+
+    } else {
+      
       const minVolume   = +document.getElementById(`minVolume${i}`).value
       const maxVolume   = +document.getElementById(`maxVolume${i}`).value
       const minLength   = +document.getElementById(`minLength${i}`).value
       const maxLength   = +document.getElementById(`maxLength${i}`).value
 
-      const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+      const offset = getRangeValue('offset', i)
 
-      if (liveWaves) {
-        setTimeout(() => {
+      setTimeout(async () => {
 
-          const waveShape   = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
-          node.oscillator.type   = waveShape
-          const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-          let time = context.currentTime
-          node.gain.gain.setValueAtTime(0, time)
-          const attack  = getRangeValue('attack', i)
-          const release = getRangeValue('release', i)
+        const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+        nodes[i].oscillator.type  = waveShape
 
-          node.gain.gain.linearRampToValueAtTime(level, time + attack/1000)
+        if (
+          [
+            'sine',
+            'triangle',
+            'sawtooth',
+            'square',
+          ]
+          .includes(waveShape)
+        ) {
+          try {
+            const frequency   = detune(getRandomFrequency(i), i)
 
-          const timeOfRelease = node.nextNoteAt - release/1000
+            nodes[i].oscillator.frequency.value = frequency
 
-          const timeToWait = (timeOfRelease - context.currentTime)*1000
+            const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+            const noteLength = intervalLength / 100 * noteLengthPercentage
 
-          setTimeout(() => {
-            const time = context.currentTime
-            node.gain.gain.setValueAtTime(level, time)
-            node.gain.gain.linearRampToValueAtTime(0, node.nextNoteAt)
-          }, timeToWait)
-          
-          if (
-            [
-              'sine',
-              'triangle',
-              'sawtooth',
-              'square',
-            ]
-            .includes(waveShape)
-          ) {
-            try {
-              const frequency   = detune(getRandomFrequency(i), i)
+            if (noteLength < intervalLength) {
 
-              node.oscillator.frequency.value = frequency
-
-              const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-              const noteLength = intervalLength / 100 * noteLengthPercentage
-
-              if (noteLength < intervalLength) {
-
-                setTimeout(() => {node.gain.gain.setValueAtTime(0, context.currentTime)}, noteLength)
-          
-              }
-            } catch (error) {
-              console.log(error)
+              setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength)
+        
             }
-          } else {
-            try {
-              node.oscillator.frequency.value = 0
-              if (waveShape === 'kick'  ) {kickSample.play()}
-              if (waveShape === 'snare' ) {snareSample.play()}
-            } catch (error) {
-              console.log(error.message)
-            }
+
+            const attackPercentage  = 100 // getRangeValue('attack', i)
+            // const release = getRangeValue('release', i)
+
+            const endOfAttack = intervalLength / 100 * attackPercentage
+            const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+            let timeSinceStart = context.currentTime
+
+            await nodes[i].gain.gain.setValueAtTime(0, context.currentTime)
+            console.log('node value')
+            console.log(nodes[i].gain.gain.value)
+            console.log('Current time')
+            console.log(context.currentTime)
+
+            nodes[i].gain.gain.linearRampToValueAtTime(level, context.currentTime + endOfAttack)
+
+            // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
+            // const timeToWait = (timeOfRelease - context.currentTime)*1000
+
+            // setTimeout(() => {
+            //   const timeSinceStart = context.currentTime
+            //   nodes[i].gain.gain.setValueAtTime(level, timeSinceStart)
+            //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].intervalEnd)
+            // }, timeToWait)
+          } catch (error) {
+            console.log(error)
           }
-        }, offset / 100 * intervalLength)
-      }
-    } else {
-      node.gain.gain.value = 0
+        } else {
+          try {
+            nodes[i].oscillator.frequency.value = 0
+            if (waveShape === 'kick'  ) {kickSample.play()}
+            if (waveShape === 'snare' ) {snareSample.play()}
+          } catch (error) {
+            console.log(error.message)
+          }
+        }
+        
+      }, offset / 100 * intervalLength)
     }
-    setTimeout(() => {playNote(node, i)}, node.nextNoteAt - context.currentTime)
+    setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
     context.resume()
     nodes.forEach((node, i) => {
-      node.nextNoteAt = context.currentTime
-      playNote(node, i)
+      node.intervalEnd = context.currentTime
+      newInterval(i)
     })
   }
 
   const stop = () => {
     setCycleButtonLabel('Start')
-    nodes.forEach(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
   }
 
   const handleStartStop = () => {
