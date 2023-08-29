@@ -321,7 +321,7 @@ function App() {
   const newInterval = (i) => {
     if (cycling)  {
 
-      if (context.currentTime >= node.intervalEnd) {
+      if (context.currentTime >= nodes[i].intervalEnd) {
         runInterval(i)
       } else {
         setTimeout(() => {runInterval(i)}, (nodes[i].intervalEnd - context.currentTime)*1000)
