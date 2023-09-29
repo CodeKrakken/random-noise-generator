@@ -1,10 +1,10 @@
 export default function Header(props) {
 
-  const { handleStartStop, cycleButtonLabel, addOscillator, showStart } = props
+  const { handleStartStop, cycleButtonLabel, addNode, showStart } = props
   return <div>
     octopus{" "}
     
-    <button onClick={addOscillator}>Add Oscillator</button>
+    <button onClick={addNode}>Add Node</button>
 
     {
       showStart &&

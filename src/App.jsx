@@ -16,11 +16,11 @@ function App() {
   const [nodes,             setNodes            ] = useState([])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
 
-  const addOscillator = () => {
-    setNodes([nodes, setUpOscillator()].flat())
+  const addNode = () => {
+    setNodes([nodes, setUpNode()].flat())
   }
 
-  const setUpOscillator = () => {
+  const setUpNode = () => {
     const oscillator = context.createOscillator()
     const gain = context.createGain()
     oscillator.connect(gain);
@@ -246,7 +246,7 @@ function App() {
       <Header 
         handleStartStop   = {handleStartStop}
         cycleButtonLabel  = {cycleButtonLabel}
-        addOscillator     = {addOscillator}
+        addNode     = {addNode}
         showStart         = {Boolean(nodes.length)}
       />
 
