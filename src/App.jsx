@@ -24,32 +24,32 @@ function App() {
     const gain = context.createGain()
     oscillator.connect(gain);
     gain.connect(context.destination);
-    gain.gain.setValueAtTime(0, context.currentTime)
+    gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
     const bpm = nodes.length ? nodes[nodes.length-1].bpm : 120
     
     return {
-      label           : `Oscillator ${nodes.length+1}`,
+      label           : nodes.length+1,
       oscillator      : oscillator, 
       gain            : gain,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
       activeNotes     : [1, 4, 6, 8, 11, 13],
-      activeScales    : [0,1,2,3,4,5,6,7,8,9,10],
-      activeWaveShapes: ['triangle', 'sine', 'sawtooth', 'square'],
-      rest            : 0,
-      activeIntervals : [1/2, 1/4, 1/8, 1/16],
+      activeScales    : [1,2],
+      activeWaveShapes: ['sawtooth'],
+      rest            : 25,
+      activeIntervals : [1/2, 1/4, 1/8],
       minNoteLength   : 0,
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
       minDetune       : 0,
       maxDetune       : 0,
-      minAttack       : 100,
-      maxAttack       : 100,
-      minRelease      : 1000,
-      maxRelease      : 1000,
+      minAttack       : 0,
+      maxAttack       : 0,
+      minRelease      : 0,
+      maxRelease      : 0,
     }
   }
 
