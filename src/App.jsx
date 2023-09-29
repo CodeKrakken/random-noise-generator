@@ -16,10 +16,7 @@ function App() {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
 
   const addOscillator = () => {
-
-    const newOscillator = setUpOscillator()
-    const newNodes = [nodes, newOscillator].flat()
-    setNodes(newNodes)
+    setNodes([nodes, setUpOscillator()].flat())
   }
 
   const setUpOscillator = () => {
