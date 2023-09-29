@@ -11,6 +11,7 @@ let cycling = false
 function App() {
 
   const context = new AudioContext();
+  context.resume()
 
   const [nodes,             setNodes            ] = useState([])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
@@ -47,7 +48,7 @@ function App() {
       minDetune       : 0,
       maxDetune       : 0,
       minAttack       : 0,
-      maxAttack       : 0,
+      maxAttack       : 100,
       minRelease      : 0,
       maxRelease      : 0,
     }
@@ -178,12 +179,11 @@ function App() {
 
             const endOfAttack = intervalLength / 100 * attackPercentage
             const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-            let timeSinceStart = context.currentTime
 
             console.log(nodes[i].gain.gain.setValueAtTime)
             await nodes[i].gain.gain.setValueAtTime(0, 0)
             console.log(nodes[i].gain.gain.value)
-            nodes[i].gain.gain.linearRampToValueAtTime(level, context.currentTime + endOfAttack)
+            nodes[i].gain.gain.setValueAtTime(level, context.currentTime + endOfAttack)
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
             // const timeToWait = (timeOfRelease - context.currentTime)*1000
@@ -209,20 +209,23 @@ function App() {
       }, offset / 100 * intervalLength)
     }
     setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
+    // setTimeout(() => {stop()}, nodes[i].intervalEnd - context.currentTime)
   }
 
   const start = () => {
     setCycleButtonLabel('Stop')
-    context.resume()
     nodes.forEach((node, i) => {
       node.intervalEnd = context.currentTime
       newInterval(i)
     })
   }
 
-  const stop = () => {
+  const stop = async () => {
     setCycleButtonLabel('Start')
-    nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    console.log('stopped')
+    console.log(nodes)
+    return
   }
 
   const handleStartStop = () => {
