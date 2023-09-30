@@ -36,19 +36,19 @@ function App() {
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
-      activeNotes     : [1, 4, 6, 8, 11, 13],
-      activeScales    : [1,2],
-      activeWaveShapes: ['sawtooth'],
-      rest            : 25,
-      activeIntervals : [1/2, 1/4, 1/8],
-      minNoteLength   : 0,
+      activeNotes     : [1,2,3,4,5,6,7,8,9,10,11,12,13],
+      activeScales    : [4],
+      activeWaveShapes: ['sine'],
+      rest            : 0,
+      activeIntervals : [1/4],
+      minNoteLength   : 100,
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
       minDetune       : 0,
       maxDetune       : 0,
       minAttack       : 0,
-      maxAttack       : 100,
+      maxAttack       : 0,
       minRelease      : 0,
       maxRelease      : 0,
     }
@@ -80,9 +80,6 @@ function App() {
   const stop = async () => {
     setCycleButtonLabel('Start')
     await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
-    console.log('stopped')
-    console.log(nodes)
-    return
   }
 
   const newInterval = (i) => {
@@ -150,9 +147,7 @@ function App() {
             const endOfAttack = intervalLength / 100 * attackPercentage
             const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
 
-            console.log(nodes[i].gain.gain.setValueAtTime)
             await nodes[i].gain.gain.setValueAtTime(0, 0)
-            console.log(nodes[i].gain.gain.value)
             nodes[i].gain.gain.setValueAtTime(level, context.currentTime + endOfAttack)
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
@@ -164,7 +159,7 @@ function App() {
             //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].intervalEnd)
             // }, timeToWait)
           } catch (error) {
-            console.log(error)
+            console.log(error.message)
           }
         } else {
           try {
@@ -179,7 +174,6 @@ function App() {
       }, offset / 100 * intervalLength)
     }
     setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
-    // setTimeout(() => {stop()}, nodes[i].intervalEnd - context.currentTime)
   }
 
   const getIntervalLength = (i) => {
