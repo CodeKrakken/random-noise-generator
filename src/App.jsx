@@ -40,17 +40,17 @@ function App() {
       activeScales    : [4],
       activeWaveShapes: ['sine'],
       rest            : 0,
-      activeIntervals : [1/4],
+      activeIntervals : [1/2],
       minNoteLength   : 100,
       maxNoteLength   : 100,
       minOffset       : 0,  
       maxOffset       : 0,
       minDetune       : 0,
       maxDetune       : 0,
-      minAttack       : 0,
-      maxAttack       : 0,
-      minRelease      : 0,
-      maxRelease      : 0,
+      // minAttack       : 0,
+      // maxAttack       : 0,
+      // minRelease      : 0,
+      // maxRelease      : 0,
     }
   }
 
@@ -80,6 +80,7 @@ function App() {
   const stop = async () => {
     setCycleButtonLabel('Start')
     await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    console.log(`stopped at ${context.currentTime}`)
   }
 
   const newInterval = (i) => {
@@ -141,14 +142,16 @@ function App() {
         
             }
 
-            const attackPercentage  = 100 // getRangeValue('attack', i)
+            // const attackPercentage  = 100 // getRangeValue('attack', i)
             // const release = getRangeValue('release', i)
 
-            const endOfAttack = intervalLength / 100 * attackPercentage
+            // const endOfAttack = intervalLength / 100 * attackPercentage
             const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
 
-            await nodes[i].gain.gain.setValueAtTime(0, 0)
-            nodes[i].gain.gain.setValueAtTime(level, context.currentTime + endOfAttack)
+            // await nodes[i].gain.gain.setValueAtTime(0, 0)
+            console.log(`new note at ${context.currentTime}`)
+
+            nodes[i].gain.gain.setValueAtTime(level, 0)
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
             // const timeToWait = (timeOfRelease - context.currentTime)*1000
