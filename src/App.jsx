@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
@@ -20,6 +20,13 @@ function App() {
     setNodes((nodes) => [nodes, setUpNode()].flat())
   }
 
+  useEffect(() => {
+    if (!nodes.length) {
+      cycling = false
+      setCycleButtonLabel(false)
+    }
+  }, [nodes])
+
   const setUpNode = () => {
     const oscillator = context.createOscillator()
     const gain = context.createGain()
@@ -33,6 +40,7 @@ function App() {
       label           : nodes.length+1,
       oscillator      : oscillator, 
       gain            : gain,
+      intervalEnd     : 0,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
@@ -70,7 +78,7 @@ function App() {
   }
 
   const start = () => {
-    setCycleButtonLabel((cycleButtonLabel) => !cycleButtonLabel)
+    setCycleButtonLabel(true)
     nodes.forEach((node, i) => {
       node.intervalEnd = context.currentTime
       newInterval(i)
@@ -78,9 +86,9 @@ function App() {
   }
 
   const stop = async () => {
-    setCycleButtonLabel((cycleButtonLabel) => !cycleButtonLabel)
+    setCycleButtonLabel(false)
+
     await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
-    console.log(`stopped at ${context.currentTime}`)
   }
 
   const newInterval = (i) => {
@@ -149,7 +157,6 @@ function App() {
             const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
 
             // await nodes[i].gain.gain.setValueAtTime(0, 0)
-            console.log(`new note at ${context.currentTime}`)
 
             if (cycling) nodes[i].gain.gain.setValueAtTime(level, 0)
 
@@ -233,7 +240,8 @@ function App() {
   const handleDelete = (i, e) => {
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
-    setNodes(nodes.filter((node, j) => i !== j))
+
+    setNodes((nodes) => nodes.filter((node, j) => i !== j))
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
