@@ -151,7 +151,7 @@ function App() {
             // await nodes[i].gain.gain.setValueAtTime(0, 0)
             console.log(`new note at ${context.currentTime}`)
 
-            nodes[i].gain.gain.setValueAtTime(level, 0)
+            if (cycling) nodes[i].gain.gain.setValueAtTime(level, 0)
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
             // const timeToWait = (timeOfRelease - context.currentTime)*1000
