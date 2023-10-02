@@ -12,7 +12,7 @@ export default function Header(props) {
         value="Start/Stop" 
         onClick={handleStartStop}
       >
-        {cycleButtonLabel}
+        {cycleButtonLabel ? 'Stop' : 'Start'}
       </button>
     }
   </div>

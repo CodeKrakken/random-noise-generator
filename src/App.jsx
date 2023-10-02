@@ -14,10 +14,10 @@ function App() {
   context.resume()
 
   const [nodes,             setNodes            ] = useState([])
-  const [cycleButtonLabel,  setCycleButtonLabel ] = useState('Start')
+  const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
-    setNodes([nodes, setUpNode()].flat())
+    setNodes((nodes) => [nodes, setUpNode()].flat())
   }
 
   const setUpNode = () => {
@@ -70,7 +70,7 @@ function App() {
   }
 
   const start = () => {
-    setCycleButtonLabel('Stop')
+    setCycleButtonLabel((cycleButtonLabel) => !cycleButtonLabel)
     nodes.forEach((node, i) => {
       node.intervalEnd = context.currentTime
       newInterval(i)
@@ -78,7 +78,7 @@ function App() {
   }
 
   const stop = async () => {
-    setCycleButtonLabel('Start')
+    setCycleButtonLabel((cycleButtonLabel) => !cycleButtonLabel)
     await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
     console.log(`stopped at ${context.currentTime}`)
   }
@@ -231,7 +231,8 @@ function App() {
   }
 
   const handleDelete = (i, e) => {
-    nodes[i].gain.gain.setValueAtTime(0, context.currentTime)
+    nodes[i].gain.gain.setValueAtTime(0, 0)
+    nodes[i].oscillator.stop()
     setNodes(nodes.filter((node, j) => i !== j))
   }
 
@@ -243,7 +244,7 @@ function App() {
       <Header 
         handleStartStop   = {handleStartStop}
         cycleButtonLabel  = {cycleButtonLabel}
-        addNode     = {addNode}
+        addNode           = {addNode}
         showStart         = {Boolean(nodes.length)}
       />
 
