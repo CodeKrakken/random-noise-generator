@@ -21,18 +21,13 @@ function App() {
   }
 
   const setUpNode = () => {
-    const oscillator = context.createOscillator()
-    const gain = context.createGain()
-    oscillator.connect(gain);
-    gain.connect(context.destination);
-    gain.gain.setValueAtTime(0, 0)
-    oscillator.start(0);
+    
     const bpm = nodes.length ? nodes[nodes.length-1].bpm : 120
     
     return {
       label           : nodes.length+1,
-      oscillator      : oscillator, 
-      gain            : gain,
+      // oscillator      : oscillator, 
+      // gain            : gain,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
@@ -79,7 +74,7 @@ function App() {
 
   const stop = async () => {
     setCycleButtonLabel('Start')
-    await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    await nodes.map(node => {node.oscillator.stop()})
     console.log(`stopped at ${context.currentTime}`)
   }
 
@@ -103,7 +98,7 @@ function App() {
 
     if (isRest(i) || !liveWaves) {
 
-      nodes[i].gain.gain.value = 0
+      nodes[i].oscillator.stop()
 
     } else {
       
@@ -117,6 +112,18 @@ function App() {
       setTimeout(async () => {
 
         const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
+
+        if (nodes[i].oscillator) nodes[i].oscillator.stop()
+
+        const oscillator = context.createOscillator()
+        const gain = context.createGain()
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        gain.gain.setValueAtTime(0, 0)
+        oscillator.start(0);
+
+        nodes[i].oscillator = oscillator
+        nodes[i].gain = gain
         nodes[i].oscillator.type  = waveShape
 
         if (
@@ -138,7 +145,7 @@ function App() {
 
             if (noteLength < intervalLength) {
 
-              setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength)
+              setTimeout(() => {nodes[i].oscillator.stop()}, noteLength)
         
             }
 
@@ -151,7 +158,7 @@ function App() {
             // await nodes[i].gain.gain.setValueAtTime(0, 0)
             console.log(`new note at ${context.currentTime}`)
 
-            nodes[i].gain.gain.setValueAtTime(level, 0)
+            if (cycling) nodes[i].gain.gain.setValueAtTime(level, 0)
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
             // const timeToWait = (timeOfRelease - context.currentTime)*1000
@@ -231,7 +238,7 @@ function App() {
   }
 
   const handleDelete = (i, e) => {
-    nodes[i].gain.gain.setValueAtTime(0, context.currentTime)
+    nodes[i].oscillator.stop()
     setNodes(nodes.filter((node, j) => i !== j))
   }
 
