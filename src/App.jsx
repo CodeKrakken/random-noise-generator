@@ -44,7 +44,7 @@ function App() {
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
-      activeNotes     : [1,2,3,4,5,6,7,8,9,10,11,12,13],
+      activeNotes     : [1,3,5,6,8,10,12,13],
       activeScales    : [4],
       activeWaveShapes: ['sine'],
       rest            : 0,
@@ -92,8 +92,7 @@ function App() {
   }
 
   const newInterval = (i) => {
-    if (cycling)  {
-
+    if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= nodes[i].intervalEnd) {
         runInterval(i)
       } else {
@@ -115,16 +114,17 @@ function App() {
 
     } else {
       
-      const minVolume   = +document.getElementById(`minVolume${i}`).value
-      const maxVolume   = +document.getElementById(`maxVolume${i}`).value
-      const minLength   = +document.getElementById(`minLength${i}`).value
-      const maxLength   = +document.getElementById(`maxLength${i}`).value
+      const minVolume   = +document.getElementById(`minVolume${i}`)?.value
+      const maxVolume   = +document.getElementById(`maxVolume${i}`)?.value
+      const minLength   = +document.getElementById(`minLength${i}`)?.value
+      const maxLength   = +document.getElementById(`maxLength${i}`)?.value
 
       const offset = getRangeValue('offset', i)
 
       setTimeout(async () => {
+        const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)]?.value
+        console.log('here')
 
-        const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)].value
         nodes[i].oscillator.type  = waveShape
 
         if (
@@ -158,7 +158,10 @@ function App() {
 
             // await nodes[i].gain.gain.setValueAtTime(0, 0)
 
-            if (cycling) nodes[i].gain.gain.setValueAtTime(level, 0)
+            if (cycling) {
+              nodes[i].gain.gain.setValueAtTime(0, 0)
+              nodes[i].gain.gain.linearRampToValueAtTime(level, 1)
+            }
 
             // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
             // const timeToWait = (timeOfRelease - context.currentTime)*1000
@@ -183,27 +186,30 @@ function App() {
         
       }, offset / 100 * intervalLength)
     }
-    setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
+
+    if (document.getElementById(`node${i}`)) {
+      setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
+    }
   }
 
   const getIntervalLength = (i) => {
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
-    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)].value
+    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value
     const intervalBpmAdjuster = 4
-    const bpm             = +document.getElementById(`bpm${i}`).value
+    const bpm             = +document.getElementById(`bpm${i}`)?.value
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
     return intervalLength/1000
   }
        
   const isRest = (i) => {
-    const chanceOfRest        = +document.getElementById(`rest${i}`).value/100
+    const chanceOfRest        = +document.getElementById(`rest${i}`)?.value/100
     const diceRoll = Math.random()
     return diceRoll < chanceOfRest
   }
 
   const getRangeValue = (key, i) => {
-    const minValue = +document.getElementById(`min ${key}${i}`).value    
-    const maxValue = +document.getElementById(`max ${key}${i}`).value    
+    const minValue = +document.getElementById(`min ${key}${i}`)?.value    
+    const maxValue = +document.getElementById(`max ${key}${i}`)?.value    
     return minValue + (Math.random() * (maxValue - minValue))
 
   }
@@ -260,8 +266,8 @@ function App() {
       
       {nodes.map((node, i) => 
         <Node 
-          node={node} 
-          i={i} 
+          node        = {node} 
+          i           = {i} 
           setNodes    = {setNodes} 
           nodes       = {nodes}
           notes       = {notes}

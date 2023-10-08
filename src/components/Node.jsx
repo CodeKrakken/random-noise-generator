@@ -17,7 +17,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Max Release ms'
   ]
 
-  return <div className="node">
+  return <div className="node" id={`node${i}`}>
     <div className="row">
     <div className="column">
       <input
