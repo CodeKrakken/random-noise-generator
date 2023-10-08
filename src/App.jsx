@@ -10,6 +10,8 @@ let cycling = false
 
 function App() {
 
+  console.log('App Starting')
+
   const context = new AudioContext();
   context.resume()
 
@@ -17,10 +19,12 @@ function App() {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
+    console.log('Adding Node')
     setNodes((nodes) => [nodes, setUpNode()].flat())
   }
 
   useEffect(() => {
+    console.log('Using Effect')
     if (!nodes.length) {
       cycling = false
       setCycleButtonLabel(false)
@@ -28,6 +32,7 @@ function App() {
   }, [nodes])
 
   const setUpNode = () => {
+    console.log('Setting Up Node')
     const oscillator = context.createOscillator()
     const gain = context.createGain()
     oscillator.connect(gain);
@@ -40,7 +45,7 @@ function App() {
       label           : nodes.length+1,
       oscillator      : oscillator, 
       gain            : gain,
-      intervalEnd     : 0,
+      intervalAt     : 0,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
@@ -63,6 +68,7 @@ function App() {
   }
 
   const setUpSample = (file) => {
+    console.log('Setting Up Sample')
     const sample = new Audio(file)
     const sound = context.createMediaElementSource(sample);
     sound.connect(context.destination)
@@ -73,126 +79,126 @@ function App() {
   const kickSample  = setUpSample(kickFile)
 
   const handleStartStop = () => {
+    console.log('Handling Start Stop')
     cycling = !cycling
     cycling ? start() : stop()
   }
 
   const start = () => {
+    console.log('Starting')
     setCycleButtonLabel(true)
     nodes.forEach((node, i) => {
-      node.intervalEnd = context.currentTime
+      node.intervalAt = context.currentTime
       newInterval(i)
     })
   }
 
   const stop = async () => {
+    console.log('Stopping')
     setCycleButtonLabel(false)
 
     await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
   }
 
   const newInterval = (i) => {
+
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
-      if (context.currentTime >= nodes[i].intervalEnd) {
-        runInterval(i)
+      if (context.currentTime >= nodes[i].intervalAt) {
+        console.log('Running Interval')
+        const intervalLength = getIntervalLength(i)
+        
+        nodes[i].intervalAt += intervalLength
+        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+
+        if (isRest(i) || !liveWaves) {
+
+          nodes[i].gain.gain.value = 0
+
+        } else {
+          
+          const minVolume   = +document.getElementById(`minVolume${i}`)?.value
+          const maxVolume   = +document.getElementById(`maxVolume${i}`)?.value
+          const minLength   = +document.getElementById(`minLength${i}`)?.value
+          const maxLength   = +document.getElementById(`maxLength${i}`)?.value
+
+          const offset = getRangeValue('offset', i)
+          let noteLength = intervalLength
+
+          setTimeout(async () => {
+            const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)]?.value
+
+            nodes[i].oscillator.type  = waveShape
+
+            if (
+              [
+                'sine',
+                'triangle',
+                'sawtooth',
+                'square',
+              ]
+              .includes(waveShape)
+            ) {
+              try {
+                const frequency   = detune(getRandomFrequency(i), i)
+
+                nodes[i].oscillator.frequency.value = frequency
+
+                const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+                noteLength = intervalLength / 100 * noteLengthPercentage
+
+                // const attackPercentage  = 100 // getRangeValue('attack', i)
+                // const release = getRangeValue('release', i)
+
+                // const endOfAttack = intervalLength / 100 * attackPercentage
+                const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+                
+                if (noteLength < intervalLength) {
+                  setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+                }
+
+                // await nodes[i].gain.gain.setValueAtTime(0, 0)
+
+                if (cycling) {
+                  nodes[i].gain.gain.setValueAtTime(0, 0)
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, 1)
+                }
+
+                // const timeOfRelease = nodes[i].intervalAt - intervalLength/1000/100*release
+                // const timeToWait = (timeOfRelease - context.currentTime)*1000
+
+                // setTimeout(() => {
+                //   const timeSinceStart = context.currentTime
+                //   nodes[i].gain.gain.setValueAtTime(level, timeSinceStart)
+                //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].intervalAt)
+                // }, timeToWait)
+              } catch (error) {
+                console.log(error.message)
+              }
+            } else {
+              try {
+                nodes[i].oscillator.frequency.value = 0
+                if (waveShape === 'kick'  ) {kickSample.play()}
+                if (waveShape === 'snare' ) {snareSample.play()}
+              } catch (error) {
+                console.log(error.message)
+              }
+            }
+            
+          }, offset / 100 * intervalLength)
+
+        }
+
+        if (document.getElementById(`node${i}`)) {
+          setTimeout(() => {newInterval(i)}, nodes[i].intervalAt - context.currentTime)
+        }
       } else {
-        setTimeout(() => {runInterval(i)}, (nodes[i].intervalEnd - context.currentTime)*1000)
+        setTimeout(() => {newInterval(i)}, (nodes[i].intervalAt - context.currentTime)*1000)
       }
     }
   }
 
-  const runInterval = (i) => {
-
-    const intervalLength = getIntervalLength(i)
-    
-    nodes[i].intervalEnd += intervalLength
-    const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
-
-    if (isRest(i) || !liveWaves) {
-
-      nodes[i].gain.gain.value = 0
-
-    } else {
-      
-      const minVolume   = +document.getElementById(`minVolume${i}`)?.value
-      const maxVolume   = +document.getElementById(`maxVolume${i}`)?.value
-      const minLength   = +document.getElementById(`minLength${i}`)?.value
-      const maxLength   = +document.getElementById(`maxLength${i}`)?.value
-
-      const offset = getRangeValue('offset', i)
-
-      setTimeout(async () => {
-        const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)]?.value
-        console.log('here')
-
-        nodes[i].oscillator.type  = waveShape
-
-        if (
-          [
-            'sine',
-            'triangle',
-            'sawtooth',
-            'square',
-          ]
-          .includes(waveShape)
-        ) {
-          try {
-            const frequency   = detune(getRandomFrequency(i), i)
-
-            nodes[i].oscillator.frequency.value = frequency
-
-            const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-            const noteLength = intervalLength / 100 * noteLengthPercentage
-
-            if (noteLength < intervalLength) {
-
-              setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength)
-        
-            }
-
-            // const attackPercentage  = 100 // getRangeValue('attack', i)
-            // const release = getRangeValue('release', i)
-
-            // const endOfAttack = intervalLength / 100 * attackPercentage
-            const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
-
-            // await nodes[i].gain.gain.setValueAtTime(0, 0)
-
-            if (cycling) {
-              nodes[i].gain.gain.setValueAtTime(0, 0)
-              nodes[i].gain.gain.linearRampToValueAtTime(level, 1)
-            }
-
-            // const timeOfRelease = nodes[i].intervalEnd - intervalLength/1000/100*release
-            // const timeToWait = (timeOfRelease - context.currentTime)*1000
-
-            // setTimeout(() => {
-            //   const timeSinceStart = context.currentTime
-            //   nodes[i].gain.gain.setValueAtTime(level, timeSinceStart)
-            //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].intervalEnd)
-            // }, timeToWait)
-          } catch (error) {
-            console.log(error.message)
-          }
-        } else {
-          try {
-            nodes[i].oscillator.frequency.value = 0
-            if (waveShape === 'kick'  ) {kickSample.play()}
-            if (waveShape === 'snare' ) {snareSample.play()}
-          } catch (error) {
-            console.log(error.message)
-          }
-        }
-        
-      }, offset / 100 * intervalLength)
-    }
-
-    if (document.getElementById(`node${i}`)) {
-      setTimeout(() => {newInterval(i)}, nodes[i].intervalEnd - context.currentTime)
-    }
-  }
-
   const getIntervalLength = (i) => {
+    console.log('Getting interval length')
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
     const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value
     const intervalBpmAdjuster = 4
@@ -202,12 +208,14 @@ function App() {
   }
        
   const isRest = (i) => {
+    console.log('Determining Rest')
     const chanceOfRest        = +document.getElementById(`rest${i}`)?.value/100
     const diceRoll = Math.random()
     return diceRoll < chanceOfRest
   }
 
   const getRangeValue = (key, i) => {
+    console.log('Getting Range Value')
     const minValue = +document.getElementById(`min ${key}${i}`)?.value    
     const maxValue = +document.getElementById(`max ${key}${i}`)?.value    
     return minValue + (Math.random() * (maxValue - minValue))
@@ -215,6 +223,7 @@ function App() {
   }
 
   const detune = (frequency, i) => {
+    console.log('Getting Detune Value')
     const detune = getRangeValue('detune', i)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
@@ -223,7 +232,7 @@ function App() {
   }
 
   const getRandomFrequency = (i) => {
-
+    console.log('Getting Random Frequency')
     let activeFrequencies = getActiveFrequencies(i) 
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
@@ -231,6 +240,7 @@ function App() {
   }
 
   const getActiveFrequencies = (i) => {
+    console.log('Getting Active Frequencies')
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(scale => scale.checked).map(scale => { return +scale.value})
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(note  =>  note.checked).map(note => { return +note.value})
 
@@ -244,6 +254,7 @@ function App() {
   }
 
   const handleDelete = (i, e) => {
+    console.log('Deleting Node')
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
 
