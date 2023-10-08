@@ -15,17 +15,25 @@ function App() {
   const context = new AudioContext();
   context.resume()
 
-  const [nodes,             setNodes            ] = useState([])
+  const [nodes,             setNodes            ] = useState({})
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
     console.log('Adding Node')
-    setNodes((nodes) => [nodes, setUpNode()].flat())
+    const index = getIndex()
+    nodes[index] = setUpNode()
+    console.log(nodes)
+    // setNodes((nodes) => [nodes, setUpNode()].flat())
+  }
+
+  const getIndex = () => {
+    const nodeIndexArray = Object.keys(nodes).map(node => +node)
+    return Math.max(nodeIndexArray)+1
   }
 
   useEffect(() => {
     console.log('Using Effect')
-    if (!nodes.length) {
+    if (!Object.keys(nodes).length) {
       cycling = false
       setCycleButtonLabel(false)
     }
@@ -275,10 +283,10 @@ function App() {
 
       <br />
       
-      {nodes.map((node, i) => 
+      {Object.keys(nodes).map((node) => 
         <Node 
-          node        = {node} 
-          i           = {i} 
+          node        = {nodes[node]} 
+          i           = {+node} 
           setNodes    = {setNodes} 
           nodes       = {nodes}
           notes       = {notes}
