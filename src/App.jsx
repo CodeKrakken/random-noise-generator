@@ -86,6 +86,7 @@ function App() {
   const handleStartStop = () => {
     console.log('Handling Start Stop')
     cycling = !cycling
+    console.log(cycling)
     cycling ? start() : stop()
   }
 
@@ -94,16 +95,19 @@ function App() {
     setCycleButtonLabel(true)
     console.log(nodes)
     nodes.forEach((node, i) => {
-      node.intervalAt = context.currentTime
-      newInterval(i)
+      if (node !== 'deleted') {
+        node.intervalAt = context.currentTime
+        newInterval(i)
+      }
     })
   }
 
   const stop = async () => {
     console.log('Stopping')
     setCycleButtonLabel(false)
+    await active(nodes).map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    // setNodes((nodes) => nodes.filter(node => node !== 'deleted'))
 
-    await nodes.map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
   }
 
   const newInterval = (i) => {
@@ -259,12 +263,12 @@ function App() {
     return filteredFrequencies.flat(Infinity)
   }
 
-  const handleDelete = (i, e) => {
+  const handleDelete = (i) => {
     console.log('Deleting Node')
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
 
-    setNodes((nodes) => nodes.map((node, j) => i !== j ? node : 'deleted'))
+    setNodes(nodes.map((node, j) => i !== j ? node : 'deleted'))
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
