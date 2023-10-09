@@ -131,6 +131,7 @@ function App() {
           const maxLength   = +document.getElementById(`maxLength${i}`)?.value
 
           const offset = getRangeValue('offset', i)
+          console.log(offset * 10 * intervalLength)
           let noteLength = intervalLength
 
           setTimeout(async () => {
@@ -193,7 +194,7 @@ function App() {
               }
             }
             
-          }, offset / 100 * intervalLength)
+          }, offset * 10 * intervalLength)
 
         }
 
