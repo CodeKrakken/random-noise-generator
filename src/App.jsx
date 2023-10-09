@@ -86,7 +86,6 @@ function App() {
   const handleStartStop = () => {
     console.log('Handling Start Stop')
     cycling = !cycling
-    console.log(cycling)
     cycling ? start() : stop()
   }
 
@@ -121,8 +120,8 @@ function App() {
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
         if (isRest(i) || !liveWaves) {
-
-          nodes[i].gain.gain.value = 0
+          nodes[i].gain.gain.setValueAtTime(0,0)
+          console.log(nodes[i])
 
         } else {
           
