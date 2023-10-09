@@ -54,11 +54,11 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'Min volume'}
-            id={`minVolume${i}`}
+            title={'Min level'}
+            id={`minLevel${i}`}
             type="number" 
-            value={node.minVolume}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minVolume: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.minLevel}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat())}
             min={0}
             max={100}
             maxlength={3}
@@ -67,11 +67,11 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'Max volume'}
-            id={`maxVolume${i}`}
+            title={'Max level'}
+            id={`maxLevel${i}`}
             type="number" 
-            value={node.maxVolume}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxVolume: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.maxLevel}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat())}
             min={0}
             max={100}
             maxlength={3}

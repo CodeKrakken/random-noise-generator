@@ -39,32 +39,33 @@ function App() {
     console.log('Setting Up Node')
     const oscillator = context.createOscillator()
     const gain = context.createGain()
+    
     oscillator.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
-    const bpm = active(nodes).length ? active(nodes).reverse()[0].bpm : 120
-    const label = active(nodes).reverse()[0]?.label+1 || 1
-    
+
+    const clonedNode = active(nodes).reverse()[0]
+
     return {
-      label           : label,
+      label           : clonedNode?.label+1 || 1,
       oscillator      : oscillator, 
       gain            : gain,
       intervalAt      : 0,
-      bpm             : bpm,
-      minVolume       : 100,
-      maxVolume       : 100,
-      activeNotes     : [1,3,5,6,8,10,12,13],
-      activeScales    : [4],
-      activeWaveShapes: ['sine'],
-      rest            : 0,
-      activeIntervals : [1/2],
-      minNoteLength   : 100,
-      maxNoteLength   : 100,
-      minOffset       : 0,  
-      maxOffset       : 0,
-      minDetune       : 0,
-      maxDetune       : 0,
+      bpm             : clonedNode?.bpm               ??  120,
+      minLevel        : clonedNode?.minLevel          ??  100,
+      maxLevel        : clonedNode?.maxLevel          ??  100,
+      activeNotes     : clonedNode?.activeNotes       ??  [1,3,5,6,8,10,12,13],
+      activeScales    : clonedNode?.activeScales      ??  [4],
+      activeWaveShapes: clonedNode?.activeWaveShapes  ??  ['sine'],
+      rest            : clonedNode?.rest              ??  0,
+      activeIntervals : clonedNode?.activeIntervals   ??  [1/2],
+      minNoteLength   : clonedNode?.minNoteLength     ??  100,
+      maxNoteLength   : clonedNode?.maxNoteLength     ??  100,
+      minOffset       : clonedNode?.minOffset         ??  0,  
+      maxOffset       : clonedNode?.maxOffset         ??  0,
+      minDetune       : clonedNode?.minDetune         ??  0,
+      maxDetune       : clonedNode?.maxDetune         ??  0,
       // minAttack       : 0,
       // maxAttack       : 0,
       // minRelease      : 0,
@@ -125,8 +126,8 @@ function App() {
 
         } else {
           
-          const minVolume   = +document.getElementById(`minVolume${i}`)?.value
-          const maxVolume   = +document.getElementById(`maxVolume${i}`)?.value
+          const minLevel   = +document.getElementById(`minLevel${i}`)?.value
+          const maxLevel   = +document.getElementById(`maxLevel${i}`)?.value
           const minLength   = +document.getElementById(`minLength${i}`)?.value
           const maxLength   = +document.getElementById(`maxLength${i}`)?.value
 
@@ -159,7 +160,7 @@ function App() {
                 // const release = getRangeValue('release', i)
 
                 // const endOfAttack = intervalLength / 100 * attackPercentage
-                const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.filter(node => node.intervalAt).length
+                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.intervalAt).length
                 
                 if (noteLength < intervalLength) {
                   setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
