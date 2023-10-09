@@ -25,11 +25,15 @@ function App() {
 
   useEffect(() => {
     console.log('Using Effect')
-    if (!nodes.length) {
+    if (!active(nodes).length) {
       cycling = false
       setCycleButtonLabel(false)
     }
   }, [nodes])
+
+  const active = (array) => {
+    return array.filter(item => item !== 'deleted')
+  }
 
   const setUpNode = () => {
     console.log('Setting Up Node')
@@ -39,13 +43,14 @@ function App() {
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
-    const bpm = nodes.length ? nodes[nodes.length-1].bpm : 120
+    const bpm = active(nodes).length ? active(nodes).reverse()[0].bpm : 120
+    const label = active(nodes).reverse()[0]?.label+1 || 1
     
     return {
-      label           : nodes.length+1,
+      label           : label,
       oscillator      : oscillator, 
       gain            : gain,
-      intervalAt     : 0,
+      intervalAt      : 0,
       bpm             : bpm,
       minVolume       : 100,
       maxVolume       : 100,
@@ -87,6 +92,7 @@ function App() {
   const start = () => {
     console.log('Starting')
     setCycleButtonLabel(true)
+    console.log(nodes)
     nodes.forEach((node, i) => {
       node.intervalAt = context.currentTime
       newInterval(i)
@@ -150,7 +156,7 @@ function App() {
                 // const release = getRangeValue('release', i)
 
                 // const endOfAttack = intervalLength / 100 * attackPercentage
-                const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.length
+                const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/active(nodes).length
                 
                 if (noteLength < intervalLength) {
                   setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
@@ -270,7 +276,7 @@ function App() {
         handleStartStop   = {handleStartStop}
         cycleButtonLabel  = {cycleButtonLabel}
         addNode           = {addNode}
-        showStart         = {Boolean(nodes.length)}
+        showStart         = {Boolean(active(nodes).length)}
       />
 
       <br />
