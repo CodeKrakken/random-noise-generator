@@ -258,7 +258,7 @@ function App() {
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
 
-    setNodes((nodes) => nodes.filter((node, j) => i !== j))
+    setNodes((nodes) => nodes.map((node, j) => i !== j ? node : 'deleted'))
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -276,6 +276,7 @@ function App() {
       <br />
       
       {nodes.map((node, i) => 
+        node !== 'deleted' &&
         <Node 
           node        = {node} 
           i           = {i} 
