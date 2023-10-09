@@ -160,7 +160,6 @@ function App() {
                 // const release = getRangeValue('release', i)
 
                 // const endOfAttack = intervalLength / 100 * attackPercentage
-                console.log(nodes.filter(node => node.intervalAt))
                 const level       = ((minVolume + Math.random() * (maxVolume - minVolume))/100)/nodes.filter(node => node.intervalAt).length
                 
                 if (noteLength < intervalLength) {
