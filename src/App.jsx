@@ -200,7 +200,7 @@ function App() {
         }
 
         if (document.getElementById(`node${i}`)) {
-          setTimeout(() => {newInterval(i)}, nodes[i].intervalAt - context.currentTime)
+          setTimeout(() => {newInterval(i)}, (nodes[i].intervalAt - context.currentTime)*1000)
         }
       } else {
         setTimeout(() => {newInterval(i)}, (nodes[i].intervalAt - context.currentTime)*1000)
