@@ -11,8 +11,8 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
     'Max Offset %',
     'Min Detune %', 
     'Max Detune %', 
-    'Min Attack ms',
-    'Max Attack ms',
+    'Min Fade In %',
+    'Max Fade In %',
     'Min Release ms',
     'Max Release ms'
   ]
@@ -178,11 +178,11 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'min attack'}
-            id={`min attack${i}`}
+            title={'min fade in'}
+            id={`min fade in${i}`}
             type="number" 
-            value={node.minAttack}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minAttack: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.minFadeIn}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
             maxlength={4}
           />
         </div>
@@ -190,11 +190,11 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'max attack'}
-            id={`max attack${i}`}
+            title={'max fade in'}
+            id={`max fade in${i}`}
             type="number" 
-            value={node.maxAttack}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxAttack: +e.target.value}, nodes.slice(i+1)].flat())}
+            value={node.maxFadeIn}
+            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
             maxlength={4}
           />
         </div>

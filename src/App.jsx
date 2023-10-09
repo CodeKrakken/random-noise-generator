@@ -10,7 +10,7 @@ let cycling = false
 
 function App() {
 
-  console.log('App Starting')
+  // console.log('App Starting')
 
   const context = new AudioContext();
   context.resume()
@@ -19,12 +19,12 @@ function App() {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
-    console.log('Adding Node')
+    // console.log('Adding Node')
     setNodes((nodes) => [nodes, setUpNode()].flat())
   }
 
   useEffect(() => {
-    console.log('Using Effect')
+    // console.log('Using Effect')
     if (!active(nodes).length) {
       cycling = false
       setCycleButtonLabel(false)
@@ -36,7 +36,7 @@ function App() {
   }
 
   const setUpNode = () => {
-    console.log('Setting Up Node')
+    // console.log('Setting Up Node')
     const oscillator = context.createOscillator()
     const gain = context.createGain()
     
@@ -66,15 +66,15 @@ function App() {
       maxOffset       : clonedNode?.maxOffset         ??  0,
       minDetune       : clonedNode?.minDetune         ??  0,
       maxDetune       : clonedNode?.maxDetune         ??  0,
-      // minAttack       : 0,
-      // maxAttack       : 0,
+      minFadeIn       : clonedNode?.minFadeIn         ??  100,
+      maxFadeIn       : clonedNode?.maxFadeIn         ??  100,
       // minRelease      : 0,
       // maxRelease      : 0,
     }
   }
 
   const setUpSample = (file) => {
-    console.log('Setting Up Sample')
+    // console.log('Setting Up Sample')
     const sample = new Audio(file)
     const sound = context.createMediaElementSource(sample);
     sound.connect(context.destination)
@@ -85,15 +85,15 @@ function App() {
   const kickSample  = setUpSample(kickFile)
 
   const handleStartStop = () => {
-    console.log('Handling Start Stop')
+    // console.log('Handling Start Stop')
     cycling = !cycling
     cycling ? start() : stop()
   }
 
   const start = () => {
-    console.log('Starting')
+    // console.log('Starting')
     setCycleButtonLabel(true)
-    console.log(nodes)
+    // console.log(nodes)
     nodes.forEach((node, i) => {
       if (node !== 'deleted') {
         node.intervalAt = context.currentTime
@@ -103,7 +103,7 @@ function App() {
   }
 
   const stop = async () => {
-    console.log('Stopping')
+    // console.log('Stopping')
     setCycleButtonLabel(false)
     await active(nodes).map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
     // setNodes((nodes) => nodes.filter(node => node !== 'deleted'))
@@ -114,7 +114,7 @@ function App() {
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= nodes[i].intervalAt) {
-        console.log('Running Interval')
+        // console.log('Running Interval')
         const intervalLength = getIntervalLength(i)
         
         nodes[i].intervalAt += intervalLength
@@ -122,7 +122,7 @@ function App() {
 
         if (isRest(i) || !liveWaves) {
           nodes[i].gain.gain.setValueAtTime(0,0)
-          console.log(nodes[i])
+          // console.log(nodes[i])
 
         } else {
           
@@ -132,7 +132,7 @@ function App() {
           const maxLength   = +document.getElementById(`maxLength${i}`)?.value
 
           const offset = getRangeValue('offset', i)
-          console.log(offset * 10 * intervalLength)
+          // console.log(offset * 10 * intervalLength)
           let noteLength = intervalLength
 
           setTimeout(async () => {
@@ -157,10 +157,10 @@ function App() {
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
 
-                // const attackPercentage  = 100 // getRangeValue('attack', i)
+                const fadeInPercentage  = getRangeValue('fade in', i)
                 // const release = getRangeValue('release', i)
 
-                // const endOfAttack = intervalLength / 100 * attackPercentage
+                // const endOfFadeIn = intervalLength / 100 * fadeInPercentage
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.intervalAt).length
                 
                 if (noteLength < intervalLength) {
@@ -168,10 +168,12 @@ function App() {
                 }
 
                 // await nodes[i].gain.gain.setValueAtTime(0, 0)
-
                 if (cycling) {
+                  console.log(noteLength)
+                  console.log(fadeInPercentage)
+                  console.log(noteLength / 100 * fadeInPercentage)
                   nodes[i].gain.gain.setValueAtTime(0, 0)
-                  nodes[i].gain.gain.linearRampToValueAtTime(level, 1)
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, noteLength / 100 * fadeInPercentage)
                 }
 
                 // const timeOfRelease = nodes[i].intervalAt - intervalLength/1000/100*release
@@ -209,7 +211,7 @@ function App() {
   }
 
   const getIntervalLength = (i) => {
-    console.log('Getting interval length')
+    // console.log('Getting interval length')
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(interval => interval.checked)
     const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value
     const intervalBpmAdjuster = 4
@@ -219,22 +221,24 @@ function App() {
   }
        
   const isRest = (i) => {
-    console.log('Determining Rest')
+    // console.log('Determining Rest')
     const chanceOfRest        = +document.getElementById(`rest${i}`)?.value/100
     const diceRoll = Math.random()
     return diceRoll < chanceOfRest
   }
 
   const getRangeValue = (key, i) => {
-    console.log('Getting Range Value')
+    // console.log('Getting Range Value')
+    // console.log(`min ${key}${i}`)
+    // console.log(document.getElementById(`min ${key}${i}`))
     const minValue = +document.getElementById(`min ${key}${i}`)?.value    
     const maxValue = +document.getElementById(`max ${key}${i}`)?.value    
+    console.log(minValue)
     return minValue + (Math.random() * (maxValue - minValue))
-
   }
 
   const detune = (frequency, i) => {
-    console.log('Getting Detune Value')
+    // console.log('Getting Detune Value')
     const detune = getRangeValue('detune', i)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
@@ -243,7 +247,7 @@ function App() {
   }
 
   const getRandomFrequency = (i) => {
-    console.log('Getting Random Frequency')
+    // console.log('Getting Random Frequency')
     let activeFrequencies = getActiveFrequencies(i) 
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
@@ -251,7 +255,7 @@ function App() {
   }
 
   const getActiveFrequencies = (i) => {
-    console.log('Getting Active Frequencies')
+    // console.log('Getting Active Frequencies')
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(scale => scale.checked).map(scale => { return +scale.value})
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(note  =>  note.checked).map(note => { return +note.value})
 
@@ -265,7 +269,7 @@ function App() {
   }
 
   const handleDelete = (i) => {
-    console.log('Deleting Node')
+    // console.log('Deleting Node')
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
 
