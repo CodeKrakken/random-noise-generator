@@ -171,9 +171,10 @@ function App() {
                 if (cycling) {
                   console.log(noteLength)
                   console.log(fadeInPercentage)
-                  console.log(noteLength / 100 * fadeInPercentage)
+                  const fadeInDuration = noteLength / 100 * fadeInPercentage
+                  console.log(fadeInDuration)
                   nodes[i].gain.gain.setValueAtTime(0, 0)
-                  nodes[i].gain.gain.linearRampToValueAtTime(level, noteLength / 100 * fadeInPercentage)
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, context.currentTime + fadeInDuration)
                 }
 
                 // const timeOfRelease = nodes[i].intervalAt - intervalLength/1000/100*release
@@ -233,7 +234,6 @@ function App() {
     // console.log(document.getElementById(`min ${key}${i}`))
     const minValue = +document.getElementById(`min ${key}${i}`)?.value    
     const maxValue = +document.getElementById(`max ${key}${i}`)?.value    
-    console.log(minValue)
     return minValue + (Math.random() * (maxValue - minValue))
   }
 
