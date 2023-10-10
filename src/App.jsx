@@ -20,7 +20,10 @@ function App() {
 
   const addNode = () => {
     console.log('Adding Node')
+    const i = nodes.length
+    console.log(i)
     setNodes((nodes) => [nodes, setUpNode()].flat())
+    if (cycling) { newInterval(i) }
   }
 
   useEffect(() => {
@@ -51,7 +54,7 @@ function App() {
       label           : clonedNode?.label+1 || 1,
       oscillator      : oscillator, 
       gain            : gain,
-      intervalAt      : 0,
+      intervalAt      : clonedNode?.intervalAt        ??  0,
       bpm             : clonedNode?.bpm               ??  120,
       minLevel        : clonedNode?.minLevel          ??  100,
       maxLevel        : clonedNode?.maxLevel          ??  100,
