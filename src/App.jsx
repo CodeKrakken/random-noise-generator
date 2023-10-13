@@ -51,7 +51,7 @@ function App() {
       label           : clonedNode?.label+1 || 1,
       oscillator      : oscillator, 
       gain            : gain,
-      intervalAt      : 0,
+      nextInterval      : 0,
       bpm             : clonedNode?.bpm               ??  120,
       minLevel        : clonedNode?.minLevel          ??  100,
       maxLevel        : clonedNode?.maxLevel          ??  100,
@@ -96,7 +96,7 @@ function App() {
     // console.log(nodes)
     nodes.forEach((node, i) => {
       if (node !== 'deleted') {
-        node.intervalAt = context.currentTime
+        node.nextInterval = context.currentTime
         newInterval(i)
       }
     })
@@ -113,11 +113,12 @@ function App() {
   const newInterval = (i) => {
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
-      if (context.currentTime >= nodes[i].intervalAt) {
+      if (context.currentTime >= nodes[i].nextInterval) {
         // console.log('Running Interval')
         const intervalLength = getIntervalLength(i)
-        
-        nodes[i].intervalAt += intervalLength
+
+        nodes[i].thisInterval = nodes[i].nextInterval
+        nodes[i].nextInterval += intervalLength
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
         if (isRest(i) || !liveWaves) {
@@ -161,7 +162,7 @@ function App() {
                 // const release = getRangeValue('release', i)
 
                 // const endOfFadeIn = intervalLength / 100 * fadeInPercentage
-                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.intervalAt).length
+                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
                 if (noteLength < intervalLength) {
                   setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
@@ -174,16 +175,16 @@ function App() {
                   const fadeInDuration = noteLength / 100 * fadeInPercentage
                   console.log(fadeInDuration)
                   nodes[i].gain.gain.setValueAtTime(0, 0)
-                  nodes[i].gain.gain.linearRampToValueAtTime(level, context.currentTime + fadeInDuration)
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
                 }
 
-                // const timeOfRelease = nodes[i].intervalAt - intervalLength/1000/100*release
+                // const timeOfRelease = nodes[i].nextInterval - intervalLength/1000/100*release
                 // const timeToWait = (timeOfRelease - context.currentTime)*1000
 
                 // setTimeout(() => {
                 //   const timeSinceStart = context.currentTime
                 //   nodes[i].gain.gain.setValueAtTime(level, timeSinceStart)
-                //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].intervalAt)
+                //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
                 // }, timeToWait)
               } catch (error) {
                 console.log(error.message)
@@ -203,10 +204,10 @@ function App() {
         }
 
         if (document.getElementById(`node${i}`)) {
-          setTimeout(() => {newInterval(i)}, (nodes[i].intervalAt - context.currentTime)*1000)
+          setTimeout(() => {newInterval(i)}, (nodes[i].nextInterval - context.currentTime)*1000)
         }
       } else {
-        setTimeout(() => {newInterval(i)}, (nodes[i].intervalAt - context.currentTime)*1000)
+        setTimeout(() => {newInterval(i)}, (nodes[i].nextInterval - context.currentTime)*1000)
       }
     }
   }
