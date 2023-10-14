@@ -37,20 +37,11 @@ function App() {
 
   const setUpNode = () => {
     // console.log('Setting Up Node')
-    const oscillator = context.createOscillator()
-    const gain = context.createGain()
     
-    oscillator.connect(gain);
-    gain.connect(context.destination);
-    gain.gain.setValueAtTime(0, 0)
-    oscillator.start(0);
-
     const clonedNode = active(nodes).reverse()[0]
 
     return {
       label           : clonedNode?.label+1 || 1,
-      oscillator      : oscillator, 
-      gain            : gain,
       nextInterval    : 0,
       bpm             : clonedNode?.bpm               ??  120,
       minLevel        : clonedNode?.minLevel          ??  100,
