@@ -105,7 +105,10 @@ function App() {
   const stop = async () => {
     // console.log('Stopping')
     setCycleButtonLabel(false)
-    await active(nodes).map(node => {node.gain.gain.setValueAtTime(0, context.currentTime)})
+    await active(nodes).map(node => {
+      node.gain.gain.setValueAtTime(0, context.currentTime)
+      node.oscillator.stop()
+    })
     // setNodes((nodes) => nodes.filter(node => node !== 'deleted'))
 
   }
@@ -170,10 +173,7 @@ function App() {
 
                 // await nodes[i].gain.gain.setValueAtTime(0, 0)
                 if (cycling) {
-                  console.log(noteLength)
-                  console.log(fadeInPercentage)
                   const fadeInDuration = noteLength / 100 * fadeInPercentage
-                  console.log(fadeInDuration)
                   nodes[i].gain.gain.setValueAtTime(0, 0)
                   nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
                 }
