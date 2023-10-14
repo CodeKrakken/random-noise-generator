@@ -57,8 +57,8 @@ function App() {
       maxOffset       : clonedNode?.maxOffset         ??  0,
       minDetune       : clonedNode?.minDetune         ??  0,
       maxDetune       : clonedNode?.maxDetune         ??  0,
-      minFadeIn       : clonedNode?.minFadeIn         ??  100,
-      maxFadeIn       : clonedNode?.maxFadeIn         ??  100,
+      minFadeIn       : clonedNode?.minFadeIn         ??  0,
+      maxFadeIn       : clonedNode?.maxFadeIn         ??  0,
       // minRelease      : 0,
       // maxRelease      : 0,
     }
