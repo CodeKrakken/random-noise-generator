@@ -57,7 +57,7 @@ function App() {
       maxOffset       : clonedNode?.maxOffset         ??  0,
       minDetune       : clonedNode?.minDetune         ??  0,
       maxDetune       : clonedNode?.maxDetune         ??  0,
-      minFadeIn       : clonedNode?.minFadeIn         ??  100,
+      minFadeIn       : clonedNode?.minFadeIn         ??  0,
       maxFadeIn       : clonedNode?.maxFadeIn         ??  100,
       // minRelease      : 0,
       // maxRelease      : 0,
@@ -109,7 +109,7 @@ function App() {
     // console.log('Stopping')
     setCycleButtonLabel(false)
     await active(nodes).map(node => {
-      node.gain.gain.setValueAtTime(0, context.currentTime)
+      node.gain.gain.linearRampToValueAtTime(0, context.currentTime+0.001)
       node.oscillator.stop()
     })
     // setNodes((nodes) => nodes.filter(node => node !== 'deleted'))
@@ -128,7 +128,7 @@ function App() {
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
 
         if (isRest(i) || !liveWaves) {
-          nodes[i].gain.gain.setValueAtTime(0,0)
+          nodes[i].gain.gain.linearRampToValueAtTime(0,context.currentTime+0.001)
           // console.log(nodes[i])
 
         } else {
@@ -171,13 +171,13 @@ function App() {
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
                 if (noteLength < intervalLength) {
-                  setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+                  setTimeout(() => {nodes[i].gain.gain.linearRampToValueAtTime(0, context.currentTime+0.001)}, (noteLength*1000)-1)
                 }
 
                 // await nodes[i].gain.gain.setValueAtTime(0, 0)
                 if (cycling) {
                   const fadeInDuration = noteLength / 100 * fadeInPercentage
-                  nodes[i].gain.gain.setValueAtTime(0, 0)
+                  nodes[i].gain.gain.linearRampToValueAtTime(0, context.currentTime+0.001)
                   nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
                 }
 
@@ -274,7 +274,7 @@ function App() {
 
   const handleDelete = (i) => {
     // console.log('Deleting Node')
-    nodes[i].gain.gain.setValueAtTime(0, 0)
+    nodes[i].gain.gain.linearRampToValueAtTime(0, context.currentTime+0.001)
     nodes[i].oscillator.stop()
 
     setNodes(nodes.map((node, j) => i !== j ? node : 'deleted'))
