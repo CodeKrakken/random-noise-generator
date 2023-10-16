@@ -57,10 +57,10 @@ function App() {
       maxOffset       : clonedNode?.maxOffset         ??  0,
       minDetune       : clonedNode?.minDetune         ??  0,
       maxDetune       : clonedNode?.maxDetune         ??  0,
-      minFadeIn       : clonedNode?.minFadeIn         ??  0,
-      maxFadeIn       : clonedNode?.maxFadeIn         ??  0,
-      minFadeOut      : clonedNode?.minFadeOut        ??  0,
-      maxFadeOut      : clonedNode?.maxFadeOut        ??  0,
+      minFadeIn       : clonedNode?.minFadeIn         ??  100,
+      maxFadeIn       : clonedNode?.maxFadeIn         ??  100,
+      minFadeOut      : clonedNode?.minFadeOut        ??  100,
+      maxFadeOut      : clonedNode?.maxFadeOut        ??  100,
     }
   }
 
@@ -84,7 +84,6 @@ function App() {
   const start = () => {
     // console.log('Starting')
     setCycleButtonLabel(true)
-    // console.log(nodes)
     nodes.forEach((node, i) => {
       if (node !== 'deleted') {
 
@@ -120,7 +119,7 @@ function App() {
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= nodes[i].nextInterval) {
-        // console.log('Running Interval')
+        console.log('Running Interval')
         const intervalLength = getIntervalLength(i)
 
         nodes[i].thisInterval = nodes[i].nextInterval
@@ -129,7 +128,6 @@ function App() {
 
         if (isRest(i) || !liveWaves) {
           nodes[i].gain.gain.setValueAtTime(0,0)
-          // console.log(nodes[i])
 
         } else {
           
@@ -139,7 +137,6 @@ function App() {
           const maxLength   = +document.getElementById(`maxLength${i}`)?.value
 
           const offset = getRangeValue('offset', i)
-          // console.log(offset * 10 * intervalLength)
           let noteLength = intervalLength
 
           setTimeout(async () => {
@@ -166,6 +163,11 @@ function App() {
 
                 const fadeInPercentage  = getRangeValue('fade in' , i)
                 const fadeOutPercentage = getRangeValue('fade out', i)
+                const peakPoint = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
+
+                console.log(fadeInPercentage)
+                console.log(fadeOutPercentage)
+                console.log(peakPoint)
 
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
@@ -178,8 +180,9 @@ function App() {
                   const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
 
                   nodes[i].gain.gain.setValueAtTime(0, 0)
-                  nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
                   nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].thisInterval + fadeOutDuration)
+
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
                 }
 
               } catch (error) {
@@ -227,8 +230,6 @@ function App() {
 
   const getRangeValue = (key, i) => {
     // console.log('Getting Range Value')
-    // console.log(`min ${key}${i}`)
-    // console.log(document.getElementById(`min ${key}${i}`))
     const minValue = +document.getElementById(`min ${key}${i}`)?.value    
     const maxValue = +document.getElementById(`max ${key}${i}`)?.value    
     return minValue + (Math.random() * (maxValue - minValue))
