@@ -59,8 +59,8 @@ function App() {
       maxDetune       : clonedNode?.maxDetune         ??  0,
       minFadeIn       : clonedNode?.minFadeIn         ??  0,
       maxFadeIn       : clonedNode?.maxFadeIn         ??  0,
-      // minRelease      : 0,
-      // maxRelease      : 0,
+      minFadeOut      : clonedNode?.minFadeOut        ??  0,
+      maxFadeOut      : clonedNode?.maxFadeOut        ??  0,
     }
   }
 
@@ -164,31 +164,24 @@ function App() {
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
 
-                const fadeInPercentage  = getRangeValue('fade in', i)
-                // const release = getRangeValue('release', i)
+                const fadeInPercentage  = getRangeValue('fade in' , i)
+                const fadeOutPercentage = getRangeValue('fade out', i)
 
-                // const endOfFadeIn = intervalLength / 100 * fadeInPercentage
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
                 if (noteLength < intervalLength) {
                   setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                 }
 
-                // await nodes[i].gain.gain.setValueAtTime(0, 0)
                 if (cycling) {
-                  const fadeInDuration = noteLength / 100 * fadeInPercentage
+                  const fadeInDuration  = noteLength  / 100 * fadeInPercentage
+                  const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
+
                   nodes[i].gain.gain.setValueAtTime(0, 0)
                   nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
+                  nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].thisInterval + fadeOutDuration)
                 }
 
-                // const timeOfRelease = nodes[i].nextInterval - intervalLength/1000/100*release
-                // const timeToWait = (timeOfRelease - context.currentTime)*1000
-
-                // setTimeout(() => {
-                //   const timeSinceStart = context.currentTime
-                //   nodes[i].gain.gain.setValueAtTime(level, timeSinceStart)
-                //   nodes[i].gain.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
-                // }, timeToWait)
               } catch (error) {
                 console.log(error.message)
               }
