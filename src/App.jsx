@@ -179,10 +179,14 @@ function App() {
                   const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                   const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
 
-                  nodes[i].gain.gain.setValueAtTime(0, 0)
-                  nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].thisInterval + fadeOutDuration)
+                  const endOfFadeIn     = nodes[i].thisInterval + fadeInDuration
+                  const startOfFadeOut  = nodes[i].nextInterval - fadeOutDuration 
 
-                  nodes[i].gain.gain.linearRampToValueAtTime(level, nodes[i].thisInterval + fadeInDuration)
+                  nodes[i].gain.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
+                  nodes[i].gain.gain.linearRampToValueAtTime(level, endOfFadeIn)
+                  nodes[i].gain.gain.setValueAtTime(level, startOfFadeOut)
+                  nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].nextInterval)
+
                 }
 
               } catch (error) {
