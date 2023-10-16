@@ -163,11 +163,7 @@ function App() {
 
                 const fadeInPercentage  = getRangeValue('fade in' , i)
                 const fadeOutPercentage = getRangeValue('fade out', i)
-                const peakPercentage = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
-
-                console.log(fadeInPercentage)
-                console.log(fadeOutPercentage)
-                console.log(peakPercentage)
+                const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
 
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
@@ -181,17 +177,18 @@ function App() {
 
                   const endOfFadeIn     = nodes[i].thisInterval + fadeInDuration
                   const startOfFadeOut  = nodes[i].nextInterval - fadeOutDuration
-                  const peakPoint = nodes[i].thisInterval + noteLength * peakPercentage
-                  console.log(peakPoint)
+                  const peakPoint       = nodes[i].thisInterval + noteLength * peakPercentage / 100
 
-                  if (endOfFadeIn > startOfFadeOut) {
+                  if (endOfFadeIn <= startOfFadeOut) {
                     nodes[i].gain.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
                     nodes[i].gain.gain.linearRampToValueAtTime(level, endOfFadeIn)
                     nodes[i].gain.gain.setValueAtTime(level, startOfFadeOut)
                     nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].nextInterval)
                   } else {
                     nodes[i].gain.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
-                    
+                    nodes[i].gain.gain.linearRampToValueAtTime(level, peakPoint)
+                    nodes[i].gain.gain.setValueAtTime(level, peakPoint)
+                    nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].nextInterval)
                   }
 
                 }
