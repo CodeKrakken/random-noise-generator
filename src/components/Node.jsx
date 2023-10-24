@@ -1,3 +1,5 @@
+import RangeSliderComponent from "./Slider"
+
 export default function Node({ node, i, setNodes, nodes, scales, waveShapes, intervals, handleDelete, notes }) {
 
   const inputLabels = [
@@ -51,8 +53,10 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             max={60000}
           />
         </div>
+
         <div className="row inner-row">
-          <input
+          <RangeSliderComponent />
+          {/* <input
             className='textbox'
             title={'Min level'}
             id={`minLevel${i}`}
@@ -62,9 +66,10 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             min={0}
             max={100}
             maxlength={3}
-          />
+          /> */}
         </div>
-        <div className="row inner-row">
+
+        {/* <div className="row inner-row">
           <input
             className='textbox'
             title={'Max level'}
@@ -76,7 +81,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             max={100}
             maxlength={3}
           />
-        </div>
+        </div> */}
         <div className="row inner-row">
           <input
             className='textbox'  
