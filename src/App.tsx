@@ -9,6 +9,19 @@ import { node } from './types/node'
 
 let cycling = false
 
+type OscillatorSource = {
+  kind: "oscillator"
+  wave: OscillatorType
+}
+
+type SampleSource = {
+  kind: "sample"
+  name: "kick" | "snare"
+  buffer: AudioBuffer
+}
+
+export type SoundSource = OscillatorSource | SampleSource
+
 function App() {
 
   // console.log('App Starting')
@@ -110,13 +123,13 @@ function App() {
     // console.log('Stopping')
     setCycleButtonLabel(false)
     await active(nodes).map(node => {
-      node.gain.gain.setValueAtTime(0, context.currentTime)
-      node.oscillator.stop()
+      node.gain?.gain.setValueAtTime(0, context.currentTime)
+      node.oscillator?.stop()
     })
 
   }
 
-  const newInterval = (i) => {
+  const newInterval = (i: number) => {
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= nodes[i].nextInterval) {
@@ -125,25 +138,30 @@ function App() {
 
         nodes[i].thisInterval = nodes[i].nextInterval
         nodes[i].nextInterval += intervalLength
-        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(wave => wave.checked)
+
+        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(
+          (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
+        )
 
         if (isRest(i) || !liveWaves) {
-          nodes[i].gain.gain.setValueAtTime(0,0)
+          nodes[i].gain?.gain.setValueAtTime(0,0)
 
-        } else {
-          
-          const minLevel   = +document.getElementById(`minLevel${i}`)?.value
-          const maxLevel   = +document.getElementById(`maxLevel${i}`)?.value
-          const minLength   = +document.getElementById(`minLength${i}`)?.value
-          const maxLength   = +document.getElementById(`maxLength${i}`)?.value
+        } else {          
+
+          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`) ?.value!
+          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`) ?.value!
+          const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value!
+          const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value!
 
           const offset = getRangeValue('offset', i)
           let noteLength = intervalLength
 
           setTimeout(async () => {
-            const waveShape       = liveWaves[Math.floor(Math.random() * liveWaves.length)]?.value
+            const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
 
-            nodes[i].oscillator.type  = waveShape
+            const waveShape = randomWave.value
+
+            if (nodes[i].oscillator) nodes[i].oscillator.type = waveShape as OscillatorType
 
             if (
               [
@@ -157,7 +175,7 @@ function App() {
               try {
                 const frequency   = detune(getRandomFrequency(i), i)
 
-                nodes[i].oscillator.frequency.value = frequency
+                if (nodes[i].oscillator) nodes[i].oscillator.frequency.value = frequency
 
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
@@ -169,37 +187,43 @@ function App() {
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
                 
                 if (noteLength < intervalLength) {
-                  setTimeout(() => {nodes[i].gain.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+                  setTimeout(() => {nodes[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                 }
 
                 if (cycling) {
                   const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                   const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-
-                  const endOfFadeIn     = nodes[i].thisInterval + fadeInDuration
                   const startOfFadeOut  = nodes[i].nextInterval - fadeOutDuration
-                  const peakPoint       = nodes[i].thisInterval + noteLength * peakPercentage / 100
+                  const endOfFadeIn     = nodes[i].thisInterval ? nodes[i].thisInterval + fadeInDuration : fadeInDuration
+
+                  const peakPoint       = nodes[i].thisInterval ? 
+                                          nodes[i].thisInterval + noteLength * peakPercentage / 100 : 
+                                          noteLength * peakPercentage / 100
 
                   if (endOfFadeIn <= startOfFadeOut) {
-                    nodes[i].gain.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
-                    nodes[i].gain.gain.linearRampToValueAtTime(level, endOfFadeIn)
-                    nodes[i].gain.gain.setValueAtTime(level, startOfFadeOut)
-                    nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].nextInterval)
+
+                    nodes[i].gain?.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
+                    nodes[i].gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+                    nodes[i].gain?.gain.setValueAtTime(level, startOfFadeOut)
+                    nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
+
                   } else {
-                    nodes[i].gain.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
-                    nodes[i].gain.gain.linearRampToValueAtTime(level, peakPoint)
-                    nodes[i].gain.gain.setValueAtTime(level, peakPoint)
-                    nodes[i].gain.gain.linearRampToValueAtTime(0,     nodes[i].nextInterval)
+
+                    nodes[i].gain?.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
+                    nodes[i].gain?.gain.linearRampToValueAtTime(level, peakPoint)
+                    nodes[i].gain?.gain.setValueAtTime(level, peakPoint)
+                    nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
+
                   }
-
                 }
+              } catch (error: unknown) {
 
-              } catch (error) {
-                console.log(error.message)
+                console.error(error instanceof Error ? error.message : "Unknown error", error)
+                
               }
             } else {
               try {
-                nodes[i].oscillator.frequency.value = 0
+                if (nodes[i].oscillator) nodes[i].oscillator.frequency.value = 0
                 if (waveShape === 'kick'  ) {kickSample.play()}
                 if (waveShape === 'snare' ) {snareSample.play()}
               } catch (error) {
