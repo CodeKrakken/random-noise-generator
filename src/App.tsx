@@ -7,7 +7,6 @@ import Node from './components/Node';
 import Header from './components/Header';
 import { node } from './types/node'
 
-
 let cycling = false
 
 function App() {
@@ -33,8 +32,8 @@ function App() {
     }
   }, [nodes])
 
-  const active = (array: node[]) => {
-    return array.filter(item => item !== 'deleted')
+  const active = (nodes: node[]) => {
+    return nodes.filter(node => node.isActive)
   }
 
   const setUpNode = () => {
@@ -43,6 +42,7 @@ function App() {
     const clonedNode = active(nodes).reverse()[0]
 
     return {
+      isActive          : true,
       label           : clonedNode?.label+1           || 1,
       nextInterval    : 0,
       bpm             : clonedNode?.bpm               ??  120,
@@ -66,7 +66,7 @@ function App() {
     }
   }
 
-  const setUpSample = (file) => {
+  const setUpSample = (file: string) => {
     // console.log('Setting Up Sample')
     const sample = new Audio(file)
     const sound = context.createMediaElementSource(sample);
@@ -87,7 +87,7 @@ function App() {
     // console.log('Starting')
     setCycleButtonLabel(true)
     nodes.forEach((node, i) => {
-      if (node !== 'deleted') {
+      if (node.isActive) {
 
         const oscillator  = context.createOscillator()
         const gain        = context.createGain()
@@ -113,7 +113,6 @@ function App() {
       node.gain.gain.setValueAtTime(0, context.currentTime)
       node.oscillator.stop()
     })
-    // setNodes((nodes) => nodes.filter(node => node !== 'deleted'))
 
   }
 
@@ -281,7 +280,7 @@ function App() {
     nodes[i].gain.gain.setValueAtTime(0, 0)
     nodes[i].oscillator.stop()
 
-    setNodes(nodes.map((node, j) => i !== j ? node : 'deleted'))
+    setNodes(nodes.map((node, j) => i !== j ? node : {deleted: true}))
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -299,7 +298,7 @@ function App() {
       <br />
       
       {nodes.map((node, i) => 
-        node !== 'deleted' &&
+        node.isActive &&
         <Node 
           node        = {node} 
           i           = {i} 
