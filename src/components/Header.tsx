@@ -1,13 +1,19 @@
 type props = {
   addNode         : React.MouseEventHandler<HTMLButtonElement>
   handleStartStop : React.MouseEventHandler<HTMLButtonElement>
-  cycleButtonLabel: Boolean
   showStart       : Boolean
+  cycleButtonLabel: Boolean
 }
 
 export default function Header(props: props) {
 
-  const { handleStartStop, cycleButtonLabel, addNode, showStart } = props
+  const { 
+    addNode,
+    handleStartStop,
+    showStart,
+    cycleButtonLabel
+  } = props
+
   return <>
     octopus{" "}
     

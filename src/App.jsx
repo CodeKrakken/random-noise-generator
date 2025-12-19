@@ -41,7 +41,7 @@ function App() {
     const clonedNode = active(nodes).reverse()[0]
 
     return {
-      label           : clonedNode?.label+1 || 1,
+      label           : clonedNode?.label+1           || 1,
       nextInterval    : 0,
       bpm             : clonedNode?.bpm               ??  120,
       minLevel        : clonedNode?.minLevel          ??  100,

@@ -1,4 +1,51 @@
-export default function Node({ node, i, setNodes, nodes, scales, waveShapes, intervals, handleDelete, notes }) {
+type node = {
+  label           : number,
+  nextInterval    : number,
+  bpm             : number,
+  minLevel        : number,
+  maxLevel        : number,
+  activeNotes     : number[],
+  activeScales    : number[],
+  activeWaveShapes: string[],
+  rest            : number,
+  activeIntervals : number[],
+  minNoteLength   : number,
+  maxNoteLength   : number,
+  minOffset       : number,
+  maxOffset       : number,
+  minDetune       : number,
+  maxDetune       : number,
+  minFadeIn       : number,
+  maxFadeIn       : number,
+  minFadeOut      : number,
+  maxFadeOut      : number
+}
+
+type props = {
+  node        : node, 
+  i           : number, 
+  setNodes    : Function, 
+  nodes       : node[], 
+  scales      : number[], 
+  waveShapes  : string[], 
+  intervals   : number[], 
+  handleDelete: Function, 
+  notes       : number[]
+}
+
+export default function Node(props: props) {
+
+  const {
+    node, 
+    i, 
+    setNodes, 
+    nodes, 
+    scales, 
+    waveShapes, 
+    intervals, 
+    handleDelete, 
+    notes
+  } = props
 
   const inputLabels = [
     'BPM', 
@@ -46,7 +93,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number" 
             value={node.bpm}
             onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxlength={5}
+            maxLength={5}
             min={0}
             max={60000}
           />
@@ -61,7 +108,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat())}
             min={0}
             max={100}
-            maxlength={3}
+            maxLength={3}
           />
         </div>
         <div className="row inner-row">
@@ -74,7 +121,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat())}
             min={0}
             max={100}
-            maxlength={3}
+            maxLength={3}
           />
         </div>
         <div className="row inner-row">
@@ -85,7 +132,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number"
             min={0}                     
             max={100} 
-            maxlength={3}
+            maxLength={3}
             value={node.minNoteLength}
             onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
           />
@@ -99,7 +146,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number"
             min={0} 
             max={100} 
-            maxlength={3}
+            maxLength={3}
             value={node.maxNoteLength}
             onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
           />
@@ -115,7 +162,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat())}
             min={0}
             max={100}
-            maxlength={3}
+            maxLength={3}
           />
         </div>
 
@@ -129,7 +176,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -143,7 +190,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -157,7 +204,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -171,7 +218,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat())}
             min={-100}
             max={100}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -183,7 +230,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number" 
             value={node.minFadeIn}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -195,7 +242,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number" 
             value={node.maxFadeIn}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -207,7 +254,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number" 
             value={node.minFadeOut}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -219,7 +266,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
             type="number" 
             value={node.maxFadeOut}
             onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxlength={4}
+            maxLength={4}
           />
         </div>
 
@@ -247,7 +294,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
               <>
                 <input
                   className={`note${i}`}
-                  title={note}
+                  title={note.toString()}
                   type="checkbox"
                   value={note}
                   checked={node.activeNotes?.includes(note)}
@@ -263,7 +310,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
               <>
                 <input
                   className={`scale${i}`}
-                  title={scale}
+                  title={scale.toString()}
                   type="checkbox"
                   value={scale}
                   checked={node.activeScales.includes(scale)}
@@ -295,7 +342,7 @@ export default function Node({ node, i, setNodes, nodes, scales, waveShapes, int
               return <>
                 <input
                   className={`interval${i}`}
-                  title={interval}
+                  title={interval.toString()}
                   type="checkbox"
                   value={interval}
                   checked={node.activeIntervals.includes(interval)}
