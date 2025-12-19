@@ -1,7 +1,14 @@
-export default function Header(props) {
+type props = {
+  addNode         : React.MouseEventHandler<HTMLButtonElement>
+  handleStartStop : React.MouseEventHandler<HTMLButtonElement>
+  cycleButtonLabel: Boolean
+  showStart       : Boolean
+}
+
+export default function Header(props: props) {
 
   const { handleStartStop, cycleButtonLabel, addNode, showStart } = props
-  return <div>
+  return <>
     octopus{" "}
     
     <button onClick={addNode}>Add Node</button>
@@ -15,5 +22,5 @@ export default function Header(props) {
         {cycleButtonLabel ? 'Stop' : 'Start'}
       </button>
     }
-  </div>
+  </>
 }
