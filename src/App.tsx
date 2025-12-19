@@ -5,6 +5,8 @@ import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Node from './components/Node';
 import Header from './components/Header';
+import { node } from './types/node'
+
 
 let cycling = false
 
@@ -15,7 +17,7 @@ function App() {
   const context = new AudioContext();
   context.resume()
 
-  const [nodes,             setNodes            ] = useState([])
+  const [nodes,             setNodes            ] = useState<node[]>([])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
@@ -31,7 +33,7 @@ function App() {
     }
   }, [nodes])
 
-  const active = (array) => {
+  const active = (array: node[]) => {
     return array.filter(item => item !== 'deleted')
   }
 
