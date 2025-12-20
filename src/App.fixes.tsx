@@ -267,12 +267,11 @@ function App() {
     return diceRoll < chanceOfRest
   }
 
-  const getRangeValue = (key: string, i:number) => {
+  const getRangeValue = (key: string, i: number) => {
     // console.log('Getting Range Value')
-    const minEl = document.getElementById(`min ${key}${i}`)
-    const maxEl = document.getElementById(`max ${key}${i}`)
-    const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
-    const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
+    const minValue  = +document.querySelector<HTMLInputElement>(`#min ${key}${i}`)?.value!
+    const maxValue  = +document.querySelector<HTMLInputElement>(`#max ${key}${i}`)?.value!    
+
     return minValue + (Math.random() * (maxValue - minValue))
   }
 
@@ -295,11 +294,9 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     // console.log('Getting Active Frequencies')
-    
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(
-      (scale): scale is HTMLInputElement => scale instanceof HTMLInputElement && scale.checked    
+      (scale): scale is HTMLInputElement => scale instanceof HTMLInputElement && scale.checked
     ).map(scale => { return +scale.value})
-    
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
