@@ -1,4 +1,6 @@
+/** @type {import('jest').Config} */
 module.exports = {
+  preset: "ts-jest",
   testEnvironment: "jsdom",
 
   collectCoverageFrom: [
@@ -8,12 +10,12 @@ module.exports = {
     "!src/index.tsx"
   ],
 
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/dist/"
   ],
-
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
 
   coverageThreshold: {
     global: {
