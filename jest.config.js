@@ -24,6 +24,11 @@ module.exports = {
         lines: 80,
         statements: 80
     }
+  },
+
+  moduleNameMapper: {
+    "\\.(wav|mp3)$": "<rootDir>/src/mocks/fileMock.ts",
+    "\\.(css)$": "identity-obj-proxy"
   }
 
 };
