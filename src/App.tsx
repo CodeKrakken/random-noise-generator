@@ -157,11 +157,12 @@ function App() {
           let noteLength = intervalLength
 
           setTimeout(async () => {
+
             const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
-
             const waveShape = randomWave.value
+            const oscillator = nodes[i].oscillator
 
-            if (nodes[i].oscillator) nodes[i].oscillator.type = waveShape as OscillatorType
+            if (oscillator) oscillator.type = waveShape as OscillatorType
 
             if (
               [
@@ -175,8 +176,8 @@ function App() {
               try {
                 const randomFrequency = getRandomFrequency(i)
                 const frequency   = detune(randomFrequency as number, i)
-
-                if (nodes[i].oscillator) nodes[i].oscillator.frequency.value = frequency
+                const oscillator = nodes[i].oscillator
+                if (oscillator) oscillator.frequency.value = frequency
 
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
@@ -195,22 +196,24 @@ function App() {
                   const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                   const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
                   const startOfFadeOut  = nodes[i].nextInterval - fadeOutDuration
-                  const endOfFadeIn     = nodes[i].thisInterval ? nodes[i].thisInterval + fadeInDuration : fadeInDuration
+                  const thisInterval    = nodes[i].thisInterval
+                  const endOfFadeIn     = thisInterval ? thisInterval + fadeInDuration : fadeInDuration
 
-                  const peakPoint       = nodes[i].thisInterval ? 
-                                          nodes[i].thisInterval + noteLength * peakPercentage / 100 : 
+                  const peakPoint       = thisInterval ? 
+                                          thisInterval + noteLength * peakPercentage / 100 : 
                                           noteLength * peakPercentage / 100
+                  
+                  const gain = nodes[i].gain
+                  if (gain) nodes[i].gain?.gain.setValueAtTime(gain.gain.value, 0)
 
                   if (endOfFadeIn <= startOfFadeOut) {
 
-                    nodes[i].gain?.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
                     nodes[i].gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
                     nodes[i].gain?.gain.setValueAtTime(level, startOfFadeOut)
                     nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
 
                   } else {
 
-                    nodes[i].gain?.gain.setValueAtTime(nodes[i].gain.gain.value, 0)
                     nodes[i].gain?.gain.linearRampToValueAtTime(level, peakPoint)
                     nodes[i].gain?.gain.setValueAtTime(level, peakPoint)
                     nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
@@ -225,7 +228,9 @@ function App() {
             } else {
               try {
 
-                if (nodes[i].oscillator) nodes[i].oscillator.frequency.value = 0
+                const oscillator = nodes[i].oscillator
+
+                if (oscillator) oscillator.frequency.value = 0
                 if (waveShape === 'kick'  ) {kickSample.play()}
                 if (waveShape === 'snare' ) {snareSample.play()}
 
