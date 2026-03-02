@@ -12,6 +12,8 @@ Any level of order can be achieved, between a single defined note playing contin
 
 Work in progress. Future features and fixes tracked [here](https://github.com/CodeKrakken/random-noise-generator/issues). This list too is a work in progress.
 
+Deployed with usable settings [here](https://oktopus.netlify.app/) by Netlify.
+
 
 To install
 ----------
