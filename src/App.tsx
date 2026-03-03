@@ -121,8 +121,8 @@ function App() {
 
   const stop = async () => {
     // console.log('Stopping')
-    setCycleButtonLabel(false)
-    await active(nodes).map(node => {
+    setCycleButtonLabel(false) 
+    await active(nodes).forEach(node => {
       node.gain?.gain.setValueAtTime(0, context.currentTime)
       node.oscillator?.stop()
     })
@@ -148,8 +148,8 @@ function App() {
 
         } else {          
 
-          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`) ?.value!
-          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`) ?.value!
+          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`)?.value!
+          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`)?.value!
           const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value!
           const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value!
 
@@ -254,14 +254,14 @@ function App() {
     )
     const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value
     const intervalBpmAdjuster = 4
-    const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`) ?.value!
+    const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
     return intervalLength/1000
   }
        
   const isRest = (i: number) => {
     // console.log('Determining Rest')
-    const chanceOfRest  = +document.querySelector<HTMLInputElement>(`#rest${i}`) ?.value!/100
+    const chanceOfRest  = +document.querySelector<HTMLInputElement>(`#rest${i}`)?.value!/100
 
     const diceRoll = Math.random()
     return diceRoll < chanceOfRest
