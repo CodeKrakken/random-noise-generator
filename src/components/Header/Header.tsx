@@ -1,9 +1,5 @@
-type props = {
-  addNode         : React.MouseEventHandler<HTMLButtonElement>
-  handleStartStop : React.MouseEventHandler<HTMLButtonElement>
-  showStart       : Boolean
-  cycleButtonLabel: Boolean
-}
+import { props } from './types'
+import { title } from './data'
 
 export default function Header(props: props) {
 
@@ -15,7 +11,7 @@ export default function Header(props: props) {
   } = props
 
   return <>
-    octopus{" "}
+    {title}{" "}
     
     <button onClick={addNode}>Add Node</button>
 

@@ -1,16 +1,5 @@
-import { node } from '../types/node'
-
-type props = {
-  node        : node, 
-  i           : number, 
-  setNodes    : Function, 
-  nodes       : node[], 
-  scales      : number[], 
-  waveShapes  : string[], 
-  intervals   : number[], 
-  handleDelete: Function, 
-  notes       : number[]
-}
+import type { props } from './types'
+import { inputLabels } from './data'
 
 export default function Node(props: props) {
 
@@ -25,23 +14,6 @@ export default function Node(props: props) {
     handleDelete, 
     notes
   } = props
-
-  const inputLabels = [
-    'BPM', 
-    'Min level', 
-    'Max level', 
-    'Min length %', 
-    'Min length %', 
-    'Rest Chance %', 
-    'Min Offset %', 
-    'Max Offset %',
-    'Min Detune %', 
-    'Max Detune %', 
-    'Min Fade In %',
-    'Max Fade In %',
-    'Min Fade Out %',
-    'Max Fade Out %'
-  ]
 
   return <div className="node" id={`node${i}`}>
     <div className="row">
