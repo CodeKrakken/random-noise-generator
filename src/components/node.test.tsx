@@ -1,27 +1,42 @@
 import { render, fireEvent } from '@testing-library/react'
 import Node from './Node'
+import { node } from '../types/node'
 
-const baseNode = {
+const baseNode: node = {
   isActive: true,
   label: 1,
+  nextInterval: 0,
+  thisInterval: 0,
+
   bpm: 120,
   minLevel: 10,
   maxLevel: 50,
+
   minNoteLength: 10,
   maxNoteLength: 50,
+
   rest: 0,
+
   minOffset: 0,
   maxOffset: 0,
+
   minDetune: 0,
   maxDetune: 0,
+
   minFadeIn: 0,
   maxFadeIn: 0,
+
   minFadeOut: 0,
   maxFadeOut: 0,
+
   activeNotes: [1],
   activeScales: [0],
   activeWaveShapes: ['sine'],
   activeIntervals: [1],
+
+  // 👇 add these
+  oscillator: undefined,
+  gain: undefined,
 }
 
 describe('header', () => {

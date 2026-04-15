@@ -61,4 +61,16 @@ describe('header', () => {
 
     expect((inputs[1] as HTMLInputElement).value).toBe('200')
   })
+
+  test('schedules interval loop', () => {
+    jest.useFakeTimers()
+    jest.spyOn(globalThis, 'setTimeout')
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Start'))
+
+    expect(globalThis.setTimeout).toHaveBeenCalled()
+  })
 })
