@@ -24,9 +24,8 @@ export type SoundSource = OscillatorSource | SampleSource
 
 function App() {
 
-  // console.log('App Starting')
+  const [context] = useState(() => new AudioContext())
 
-  const context = new AudioContext();
   context.resume()
 
   const [nodes,             setNodes            ] = useState<node[]>([])
