@@ -45,17 +45,17 @@ export default function Node(props: props) {
 
   return <div className="node" id={`node${i}`}>
     <div className="row">
-    <div className="column">
-      <input
-        className='textbox'  
-        title="Label"
-        id={`label${i}`}
-        type="text" 
-        value={node.label}
-        onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
-      />
-    </div>
-    <div className="column">
+      <div className="column">
+        <input
+          className='textbox'  
+          title="Label"
+          id={`label${i}`}
+          type="text" 
+          value={node.label}
+          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
+        />
+      </div>
+      <div className="column">
       </div>
       <div className="column">
         {
@@ -103,6 +103,7 @@ export default function Node(props: props) {
             maxLength={3}
           />
         </div>
+        
         <div className="row inner-row">
           <input
             className='textbox'  
@@ -248,7 +249,6 @@ export default function Node(props: props) {
             maxLength={4}
           />
         </div>
-
       </div>
 
       <div className="column">
@@ -264,7 +264,6 @@ export default function Node(props: props) {
         <div>
           Intervals
         </div>
-
       </div>
       <div className="column">
         <div className="row inner-row">

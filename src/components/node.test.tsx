@@ -75,7 +75,7 @@ describe('header', () => {
   test('toggles note checkbox', () => {
     const setNodes = jest.fn()
 
-    const { getByTitle } = render(
+    const { container } = render(
       <Node
         node={baseNode}
         i={0}
@@ -89,7 +89,9 @@ describe('header', () => {
       />
     )
 
-    fireEvent.click(getByTitle('1'))
+    const noteCheckbox = container.querySelector('.note0') as HTMLInputElement
+
+    fireEvent.click(noteCheckbox)
 
     expect(setNodes).toHaveBeenCalled()
   })
