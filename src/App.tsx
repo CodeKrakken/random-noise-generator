@@ -3,8 +3,8 @@ import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
-import Node from './components/Node';
-import Header from './components/Header';
+import Node from './components/node/Node';
+import Header from './components/header/Header';
 import { node } from './types/node'
 
 let cycling = false

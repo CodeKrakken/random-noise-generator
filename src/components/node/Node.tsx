@@ -1,4 +1,4 @@
-import { node } from '../types/node'
+import { node } from '../../types/node'
 
 type props = {
   node        : node, 

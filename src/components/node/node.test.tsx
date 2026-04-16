@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react'
 import Node from './Node'
-import { node } from '../types/node'
+import { node } from '../../types/node'
 
 const baseNode: node = {
   isActive: true,
