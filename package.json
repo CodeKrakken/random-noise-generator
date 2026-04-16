@@ -45,5 +45,16 @@
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
     "ts-jest": "^29.4.9"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(wav|mp3|m4a|aac|ogg)$": "<rootDir>/src/__mocks__/fileMock.js"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
+    ]
   }
 }
