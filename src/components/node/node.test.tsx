@@ -213,6 +213,62 @@ describe('header', () => {
     expect(updated[0].activeWaveShapes).not.toContain('sine')
   })
 
+  test('adds interval when checkbox is checked', () => {
+    const setNodes = jest.fn()
+
+    baseNode.activeIntervals = []
+
+    const { container } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[0]}
+        notes={[1]}
+        waveShapes={['sine']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    const intervalCheckbox = container.querySelector('.interval0') as HTMLInputElement
+
+    fireEvent.click(intervalCheckbox)
+
+    const updated = setNodes.mock.calls[0][0]
+
+    expect(updated[0].activeIntervals).toContain(1)
+  })
+
+  test('removes interval when checkbox is unchecked', () => {
+    const setNodes = jest.fn()
+
+    baseNode.activeIntervals = [1]
+
+    const { container } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[0]}
+        notes={[1]}
+        waveShapes={['sine']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    const intervalCheckbox = container.querySelector('.interval0') as HTMLInputElement
+
+    fireEvent.click(intervalCheckbox)
+
+    const updated = setNodes.mock.calls[0][0]
+
+    expect(updated[0].activeIntervals).not.toContain(1)
+  })
+
   test('toggles note checkbox', () => {
     const setNodes = jest.fn()
 
