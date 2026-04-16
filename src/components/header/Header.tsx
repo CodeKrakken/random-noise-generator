@@ -17,8 +17,13 @@ export default function Header(props: props) {
   return <>
     octopus{" "}
     
-    <button onClick={addNode}>Add Node</button>
-
+    <button 
+      value="Add Node"
+      onClick={addNode}
+    >
+      Add Node
+    </button>
+    
     {
       showStart &&
       <button 

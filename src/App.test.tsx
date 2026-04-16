@@ -73,4 +73,15 @@ describe('header', () => {
 
     expect(globalThis.setTimeout).toHaveBeenCalled()
   })
+
+  test('sets gain to 0 during rest', () => {
+    render(<App />)
+
+    const setValueAtTime = jest.fn();
+
+    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.change(screen.getByTitle('Rest Chance %'), { target: { value: '100' } })
+    fireEvent.click(screen.getByText('Start'))
+    expect(setValueAtTime).toHaveBeenCalledWith(0, 0);
+  })
 })
