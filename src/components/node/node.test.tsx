@@ -72,6 +72,62 @@ describe('header', () => {
     expect(setNodes).toHaveBeenCalled()
   })
 
+  test('updates label when input changes', () => {
+    const setNodes = jest.fn()
+
+    const { getByTitle } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[0]}
+        notes={[1]}
+        waveShapes={['sine']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    fireEvent.change(getByTitle('Label'), {
+      target: { value: '42' }
+    })
+
+    expect(setNodes).toHaveBeenCalledWith([
+      expect.objectContaining({
+        label: 42
+      })
+    ])
+  })
+
+  test('adds scale when checkbox is checked', () => {
+    const setNodes = jest.fn()
+
+    baseNode.activeScales = []
+
+    const { container } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[1]}
+        notes={[1]}
+        waveShapes={['sine']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    const scaleCheckbox = container.querySelector('.scale0') as HTMLInputElement
+
+    fireEvent.click(scaleCheckbox)
+
+    const updated = setNodes.mock.calls[0][0]
+
+    expect(updated[0].activeScales).toContain(1)
+  })
+
   test('toggles note checkbox', () => {
     const setNodes = jest.fn()
 
