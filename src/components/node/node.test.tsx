@@ -156,6 +156,63 @@ describe('header', () => {
     expect(updated[0].activeScales).not.toContain(1)
   })
 
+  test('adds wave shape when checkbox is checked', () => {
+    const setNodes = jest.fn()
+
+    baseNode.activeWaveShapes = []
+    
+    const { container } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[0]}
+        notes={[1]}
+        waveShapes={['sine', 'square']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    const waveCheckbox = container.querySelector('.wave0') as HTMLInputElement
+
+    fireEvent.click(waveCheckbox)
+
+    const updated = setNodes.mock.calls[0][0]
+
+    expect(updated[0].activeWaveShapes.length).toBe(1)
+    expect(updated[0].activeWaveShapes).toContain('sine')
+  })
+
+  test('removes wave shape when checkbox is unchecked', () => {
+    const setNodes = jest.fn()
+
+    baseNode.activeWaveShapes = ['sine']
+
+    const { container } = render(
+      <Node
+        node={baseNode}
+        i={0}
+        setNodes={setNodes}
+        nodes={[baseNode]}
+        scales={[0]}
+        notes={[1]}
+        waveShapes={['sine', 'square']}
+        intervals={[1]}
+        handleDelete={jest.fn()}
+      />
+    )
+
+    const waveCheckbox = container.querySelector('.wave0') as HTMLInputElement
+
+    fireEvent.click(waveCheckbox)
+
+    const updated = setNodes.mock.calls[0][0]
+
+    expect(updated[0].activeWaveShapes).not.toContain('sine')
+  })
+
   test('toggles note checkbox', () => {
     const setNodes = jest.fn()
 
