@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import App from './App'
+import Node from './components/node/Node'
 
 describe('header', () => {
 
@@ -285,5 +286,15 @@ describe('header', () => {
 
     expect(playMock).toHaveBeenCalled()
     expect(errorSpy).toHaveBeenCalled()
+  })
+
+  test('handleDelete sets node inactive via state update', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('X'))
+
+    // node should no longer be active in render tree
+    expect(screen.queryByText('X')).not.toBeInTheDocument()
   })
 })
