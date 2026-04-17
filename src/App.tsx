@@ -106,7 +106,6 @@ function App() {
         oscillator.connect(gain);
         gain.connect(context.destination);
         gain.gain.setValueAtTime(0, 0)
-        console.log('Set')
         oscillator.start(0);
 
         node.oscillator = oscillator
@@ -133,7 +132,6 @@ function App() {
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= nodes[i].nextInterval) {
-        console.log('Running Interval')
         const intervalLength = getIntervalLength(i)
 
         nodes[i].thisInterval = nodes[i].nextInterval

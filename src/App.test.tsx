@@ -168,4 +168,122 @@ describe('header', () => {
 
     expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
   })
+
+  test('handles oscillator error and logs it', () => {
+    jest.useFakeTimers()
+
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    // force frequency assignment to throw
+    const mockOscillator = {
+      connect: jest.fn(),
+      start: jest.fn(),
+      stop: jest.fn(),
+      type: 'sine',
+      frequency: {}
+    }
+
+    Object.defineProperty(mockOscillator.frequency, 'value', {
+      set: () => {
+        throw new Error('frequency error')
+      }
+    })
+
+    const mockGain = {
+      gain: {
+        setValueAtTime: jest.fn(),
+        linearRampToValueAtTime: jest.fn()
+      },
+      connect: jest.fn()
+    }
+
+    global.AudioContext = jest.fn(() => ({
+      createGain: () => mockGain,
+      createOscillator: () => mockOscillator,
+      createMediaElementSource: () => ({ connect: jest.fn() }),
+      destination: {},
+      currentTime: 0,
+      resume: jest.fn()
+    })) as any
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+
+    // ensure it doesn't rest
+    fireEvent.change(screen.getByTitle('Rest %'), {
+      target: { value: '0' }
+    })
+
+    fireEvent.click(screen.getByText('Start'))
+
+    jest.advanceTimersByTime(200)
+
+    expect(errorSpy).toHaveBeenCalled()
+  })
+
+  test('handles sample playback error and logs it', () => {
+    jest.useFakeTimers()
+
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    // mock Audio to throw
+    const playMock = jest.fn(() => {
+      throw new Error('play failed')
+    })
+
+    global.Audio = jest.fn(() => ({
+      play: playMock
+    })) as any
+
+    global.AudioContext = jest.fn(() => ({
+      createGain: () => ({
+        gain: {
+          setValueAtTime: jest.fn(),
+          linearRampToValueAtTime: jest.fn()
+        },
+        connect: jest.fn()
+      }),
+      createOscillator: () => ({
+        connect: jest.fn(),
+        start: jest.fn(),
+        stop: jest.fn(),
+        frequency: { value: 0 },
+        type: 'sine'
+      }),
+      createMediaElementSource: () => ({ connect: jest.fn() }),
+      destination: {},
+      currentTime: 0,
+      resume: jest.fn()
+    })) as any
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+
+    fireEvent.change(screen.getByTitle('Rest %'), {
+      target: { value: '0' }
+    })
+
+    // find the 'kick' checkbox specifically
+    const kickCheckbox = [...document.querySelectorAll('.wave0')]
+      .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
+
+    // uncheck others first (important)
+    const allWaveCheckboxes = document.querySelectorAll('.wave0')
+    allWaveCheckboxes.forEach(el => {
+      if ((el as HTMLInputElement).checked) {
+        fireEvent.click(el)
+      }
+    })
+
+    fireEvent.click(kickCheckbox)
+
+    fireEvent.click(screen.getByText('Start'))
+
+    jest.advanceTimersByTime(200)
+
+    expect(playMock).toHaveBeenCalled()
+    expect(errorSpy).toHaveBeenCalled()
+  })
 })
