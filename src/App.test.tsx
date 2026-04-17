@@ -1,6 +1,12 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import App from './App'
-import Node from './components/node/Node'
+
+const addNodeAndStart = () => {
+  render(<App />)
+
+  fireEvent.click(screen.getByText('Add Node'))
+  fireEvent.click(screen.getByText('Start'))
+}
 
 describe('header', () => {
 
@@ -34,16 +40,17 @@ describe('header', () => {
 
     // expose for assertions
     ;(global as any).__setValueAtTime = setValueAtTime
-  })
 
-  beforeEach(() => {
-    jest.spyOn(Math, 'random').mockReturnValue(0.01)
+    jest.spyOn(global.Math, 'random').mockReturnValue(0.5)    
     jest.useFakeTimers()
+
+
   })
 
   afterEach(() => {
     jest.restoreAllMocks()
     jest.useRealTimers()
+    jest.clearAllTimers()
   })
 
   test('adds a node', () => {
