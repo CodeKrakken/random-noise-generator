@@ -43,13 +43,18 @@ export default function Node(props: props) {
     'Max Fade Out %'
   ]
 
-  return <div className="node" id={`node${i}`}>
+  return <div 
+    className="node" 
+    id={`node${i}`}
+    data-testid={`node-${i}`}
+  >
     <div className="row">
       <div className="column">
         <input
           className='textbox'  
           title="Label"
           id={`label${i}`}
+          data-testid={`node-label-${i}`}
           type="text" 
           value={node.label}
           onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
@@ -335,6 +340,7 @@ export default function Node(props: props) {
         <button 
           id={`delete-node${i}`} 
           onClick={(e) => handleDelete(i, e)}
+          data-testid={`delete-node-${i}`}
         >X</button>
       </div>
     </div>
