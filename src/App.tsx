@@ -13,8 +13,6 @@ function App() {
 
   const [context] = useState(() => new AudioContext())
 
-  context.resume()
-
   const [nodes,             setNodes            ] = useState<node[]>([])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
