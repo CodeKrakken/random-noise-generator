@@ -96,7 +96,6 @@ function App() {
   }
 
   const start = () => {
-    // console.log('Starting')
     setCycleButtonLabel(true)
     nodes.forEach((node, i) => {
       if (node.isActive) {
@@ -107,6 +106,7 @@ function App() {
         oscillator.connect(gain);
         gain.connect(context.destination);
         gain.gain.setValueAtTime(0, 0)
+        console.log('Set')
         oscillator.start(0);
 
         node.oscillator = oscillator

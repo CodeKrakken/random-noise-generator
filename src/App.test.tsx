@@ -4,6 +4,38 @@ import App from './App'
 describe('header', () => {
 
   beforeEach(() => {
+    const setValueAtTime = jest.fn()
+
+    const mockGain = {
+      gain: {
+        setValueAtTime,
+        linearRampToValueAtTime: jest.fn()
+      },
+      connect: jest.fn()
+    }
+
+    const mockOscillator = {
+      connect: jest.fn(),
+      start: jest.fn(),
+      stop: jest.fn(),
+      frequency: { value: 0 },
+      type: 'sine'
+    }
+
+    global.AudioContext = jest.fn(() => ({
+      createGain: () => mockGain,
+      createOscillator: () => mockOscillator,
+      createMediaElementSource: () => ({ connect: jest.fn() }),
+      destination: {},
+      currentTime: 0,
+      resume: jest.fn()
+    })) as any
+
+    // expose for assertions
+    ;(global as any).__setValueAtTime = setValueAtTime
+  })
+
+  beforeEach(() => {
     jest.spyOn(Math, 'random').mockReturnValue(0.01)
     jest.useFakeTimers()
   })
@@ -77,11 +109,14 @@ describe('header', () => {
   test('sets gain to 0 during rest', () => {
     render(<App />)
 
-    const setValueAtTime = jest.fn();
-
     fireEvent.click(screen.getByText('Add Node'))
-    fireEvent.change(screen.getByTitle('Rest Chance %'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('Rest %'), {
+      target: { value: '100' }
+    })
     fireEvent.click(screen.getByText('Start'))
-    expect(setValueAtTime).toHaveBeenCalledWith(0, 0);
+
+    const setValueAtTime = (global as any).__setValueAtTime
+
+    expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
   })
 })
