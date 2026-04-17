@@ -1,4 +1,4 @@
-import { SoundSource } from '../App'
+import { SoundSource } from '../types'
 
 export type node = {
     isActive        : Boolean

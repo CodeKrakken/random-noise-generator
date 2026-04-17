@@ -9,19 +9,6 @@ import { node } from './types/node'
 
 let cycling = false
 
-type OscillatorSource = {
-  kind: "oscillator"
-  wave: OscillatorType
-}
-
-type SampleSource = {
-  kind: "sample"
-  name: "kick" | "snare"
-  buffer: AudioBuffer
-}
-
-export type SoundSource = OscillatorSource | SampleSource
-
 function App() {
 
   const [context] = useState(() => new AudioContext())
