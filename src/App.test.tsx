@@ -140,4 +140,32 @@ describe('header', () => {
 
     expect(setTimeoutSpy).toHaveBeenCalled()
   })
+
+  test('sets gain to 0 after noteLength timeout', () => {
+    jest.useFakeTimers()
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+
+    fireEvent.change(screen.getByTitle('Rest %'), {
+      target: { value: '0' }
+    })
+
+    fireEvent.change(screen.getByTitle('min length'), {
+      target: { value: '10' }
+    })
+    fireEvent.change(screen.getByTitle('max length'), {
+      target: { value: '10' }
+    })
+
+    fireEvent.click(screen.getByText('Start'))
+
+    // advance just enough time to trigger the inner timeout
+    jest.advanceTimersByTime(200)
+
+    const setValueAtTime = (global as any).__setValueAtTime
+
+    expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
+  })
 })
