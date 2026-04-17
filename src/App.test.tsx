@@ -265,9 +265,9 @@ describe('header', () => {
       target: { value: '0' }
     })
 
-    // find the 'kick' checkbox specifically
-    const kickCheckbox = [...document.querySelectorAll('.wave0')]
-      .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
+    // find the 'snare' checkbox specifically
+    const snareCheckbox = [...document.querySelectorAll('.wave0')]
+      .find(el => (el as HTMLInputElement).value === 'snare') as HTMLInputElement
 
     // uncheck others first (important)
     const allWaveCheckboxes = document.querySelectorAll('.wave0')
@@ -277,7 +277,7 @@ describe('header', () => {
       }
     })
 
-    fireEvent.click(kickCheckbox)
+    fireEvent.click(snareCheckbox)
 
     fireEvent.click(screen.getByText('Start'))
 
