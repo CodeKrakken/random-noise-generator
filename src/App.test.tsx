@@ -119,4 +119,25 @@ describe('header', () => {
 
     expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
   })
+
+  test('covers recursive setTimeout scheduling branch', () => {
+    jest.useFakeTimers()
+
+    const setTimeoutSpy = jest.spyOn(global, 'setTimeout')
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Node'))
+
+    // force a future nextInterval so we hit the ELSE branch
+    const bpmInput = screen.getByTitle('BPM')
+    fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
+
+    fireEvent.click(screen.getByText('Start'))
+
+    // force timers to execute
+    jest.runOnlyPendingTimers()
+
+    expect(setTimeoutSpy).toHaveBeenCalled()
+  })
 })
