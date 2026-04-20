@@ -124,6 +124,28 @@ export default function Node(props: props) {
       max:100,
       maxLength:3
     },
+    minDetune: {
+      className: 'textbox',
+      title: 'detune',
+      id: `min detune${i}`,
+      type: "number",
+      value: node.minDetune,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:-100,
+      max:100,
+      maxLength:4
+    },
+    maxDetune: {
+      className: 'textbox',
+      title: 'detune',
+      id: `detune${i}`,
+      type: "number",
+      value: node.maxDetune,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:-100,
+      max:100,
+      maxLength:4
+    },
   }
 
   return <div 
@@ -162,47 +184,6 @@ export default function Node(props: props) {
       </div>
  
       <div className="column">
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'min offset'}
-            id={`min offset${i}`}
-            type="number" 
-            value={node.minOffset}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={-100}
-            max={100}
-            maxLength={4}
-          />
-        </div>
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'detune'}
-            id={`min detune${i}`}
-            type="number" 
-            value={node.minDetune}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={-100}
-            max={100}
-            maxLength={4}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'detune'}
-            id={`max detune${i}`}
-            type="number" 
-            value={node.maxDetune}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={-100}
-            max={100}
-            maxLength={4}
-          />
-        </div>
-
         <div className="row inner-row">
           <input
             className='textbox'
