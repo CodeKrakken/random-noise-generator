@@ -46,6 +46,17 @@ export default function Node(props: props) {
       maxLength: 5,
       min: 0,
       max: 60000
+    },
+    minLevel: {
+      className: 'textbox',
+      title: 'Min level',
+      id: `minLevel${i}`,
+      type: "number",
+      value: node.minLevel,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
     }
   }
 
@@ -61,7 +72,7 @@ export default function Node(props: props) {
           Object.keys(inputs).map(input =>
             <>
               <div className="row inner-row">
-                <div className="textbox">
+                <div className="label">
                   {inputs[input].title}
                 </div>
                 <div className="textbox">
@@ -85,19 +96,6 @@ export default function Node(props: props) {
       </div>
  
       <div className="column">
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'Min level'}
-            id={`minLevel${i}`}
-            type="number" 
-            value={node.minLevel}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={0}
-            max={100}
-            maxLength={3}
-          />
-        </div>
         <div className="row inner-row">
           <input
             className='textbox'
