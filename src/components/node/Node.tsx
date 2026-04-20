@@ -47,6 +47,7 @@ export default function Node(props: props) {
     className="node" 
     id={`node${i}`}
     data-testid={`node-${i}`}
+    key={`node-${i}`}
   >
     <div className="row">
       <div className="column">
@@ -64,7 +65,7 @@ export default function Node(props: props) {
       </div>
       <div className="column">
         {
-          inputLabels.map(label => <div className="row inner-row">{label}</div>)
+          inputLabels.map((label, i) => <div key={`input-label-${i}`} className="row inner-row">{label}</div>)
         }
       </div>
 
@@ -273,8 +274,8 @@ export default function Node(props: props) {
       <div className="column">
         <div className="row inner-row">
           {
-            notes.map(note => 
-              <>
+            notes.map((note, i) => 
+              <div key={`note-${i}`}>
                 <input
                   className={`note${i}`}
                   title={note.toString()}
@@ -283,14 +284,14 @@ export default function Node(props: props) {
                   checked={node.activeNotes?.includes(note)}
                   onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.filter(note => note !== +e.target.value) : [node.activeNotes, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                 />
-              </>
+              </div>
             )
           }
         </div>
         <div className="row inner-row">
           {
-            scales.map(scale =>
-              <>
+            scales.map((scale, i) =>
+              <div key={`scale-${i}`}>
                 <input
                   className={`scale${i}`}
                   title={scale.toString()}
@@ -299,14 +300,14 @@ export default function Node(props: props) {
                   checked={node.activeScales.includes(scale)}
                   onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeScales: node.activeScales.includes(+e.target.value) ? node.activeScales.filter(note => note !== +e.target.value) : [node.activeScales, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                 />
-              </>
+              </div>
             )
           }
         </div>
         <div className="row inner-row">
           { 
-            waveShapes.map(waveShape => {
-              return <>
+            waveShapes.map((waveShape, i) => {
+              return <div>
                 <input
                   title={waveShape}
                   className={`wave${i}`}
@@ -315,14 +316,14 @@ export default function Node(props: props) {
                   checked={node.activeWaveShapes.includes(waveShape)}
                   onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeWaveShapes: node.activeWaveShapes.includes(e.target.value) ? node.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [node.activeWaveShapes, e.target.value].flat()}, nodes.slice(i+1)].flat())}
                 />
-              </>
+              </div>
             })
           }
         </div>
         <div className="row inner-row">
           { 
-            intervals.map(interval => {
-              return <>
+            intervals.map((interval, i) => {
+              return <div key={`interval-${i}`}>
                 <input
                   className={`interval${i}`}
                   title={interval.toString()}
@@ -331,7 +332,7 @@ export default function Node(props: props) {
                   checked={node.activeIntervals.includes(interval)}
                   onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
                 />
-              </>
+              </div>
             })
           }
         </div>

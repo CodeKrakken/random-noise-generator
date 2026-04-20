@@ -223,6 +223,9 @@ describe('header', () => {
     expect(errorSpy).toHaveBeenCalled()
   })
 
+
+
+
   test('handles sample playback error and logs it', () => {
     jest.useFakeTimers()
 
@@ -267,11 +270,11 @@ describe('header', () => {
     })
 
     // find the 'snare' checkbox specifically
-    const snareCheckbox = [...document.querySelectorAll('.wave0')]
+    const snareCheckbox = [...document.querySelectorAll('.wave')]
       .find(el => (el as HTMLInputElement).value === 'snare') as HTMLInputElement
 
     // uncheck others first (important)
-    const allWaveCheckboxes = document.querySelectorAll('.wave0')
+    const allWaveCheckboxes = document.querySelectorAll('.wave')
     allWaveCheckboxes.forEach(el => {
       if ((el as HTMLInputElement).checked) {
         fireEvent.click(el)
@@ -287,6 +290,9 @@ describe('header', () => {
     expect(playMock).toHaveBeenCalled()
     expect(errorSpy).toHaveBeenCalled()
   })
+
+
+
 
   test('handleDelete sets node inactive via state update', () => {
     render(<App />)
@@ -349,7 +355,7 @@ describe('header', () => {
     fireEvent.change(screen.getByTitle('Rest %'), { target: { value: '0' } })
 
     // find the 'kick' checkbox
-    const kickCheckbox = [...document.querySelectorAll('.wave0')]
+    const kickCheckbox = [...document.getElementById('kick')]
       .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
 
     // uncheck others

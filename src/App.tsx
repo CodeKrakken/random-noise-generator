@@ -330,6 +330,7 @@ function App() {
           waveShapes  = {waveShapes}
           intervals   = {intervals}
           handleDelete= {handleDelete}
+          key         = {i}
         />
       )}
     </div>
