@@ -69,6 +69,28 @@ export default function Node(props: props) {
       max:100,
       maxLength:3
     },
+    minLength: {
+      className: 'textbox',
+      title: 'Min length',
+      id: `minLength${i}`,
+      type: "number",
+      value: node.minNoteLength,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
+    maxLength: {
+      className: 'textbox',
+      title: 'Max length',
+      id: `maxLength${i}`,
+      type: "number",
+      value: node.maxNoteLength,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
   }
 
   return <div 
@@ -107,36 +129,6 @@ export default function Node(props: props) {
       </div>
  
       <div className="column">
-        
-        
-        <div className="row inner-row">
-          <input
-            className='textbox'  
-            title={'min length'}
-            id={`minLength${i}`}
-            type="number"
-            min={0}                     
-            max={100} 
-            maxLength={3}
-            value={node.minNoteLength}
-            onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'max length'}
-            id={`maxLength${i}`}
-            type="number"
-            min={0} 
-            max={100} 
-            maxLength={3}
-            value={node.maxNoteLength}
-            onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat())}
-          />
-        </div>
-
         <div className="row inner-row">
           <input
             className='textbox'
