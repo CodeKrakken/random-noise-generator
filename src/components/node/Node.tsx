@@ -35,8 +35,18 @@ export default function Node(props: props) {
       type: "text",
       value: node.label,
       onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target!.value}, nodes.slice(i+1)].flat())
+    },
+    bpm: {
+      className: 'textbox',
+      title: "BPM",
+      id: `bpm${i}`,
+      type: "number",
+      value: node.bpm,
+      onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat()),
+      maxLength: 5,
+      min: 0,
+      max: 60000
     }
-
   }
 
   return <div 
@@ -50,35 +60,27 @@ export default function Node(props: props) {
         {
           Object.keys(inputs).map(input =>
             <>
-              {inputs[input].title}{" "}
-              <input 
-                className={inputs[input].className}
-                title={inputs[input].title}
-                id={inputs[input].id}
-                data-testid={inputs[input]['data-testid']}
-                type={inputs[input].type} 
-                value={inputs[input].value}
-                onChange={inputs[input].onChange}
-              />
+              <div className="row inner-row">
+                {inputs[input].title}{" "}
+                <input 
+                  className={inputs[input].className}
+                  title={inputs[input].title}
+                  id={inputs[input].id}
+                  data-testid={inputs[input]['data-testid']}
+                  type={inputs[input].type} 
+                  value={inputs[input].value}
+                  onChange={inputs[input].onChange}
+                  maxLength={inputs[input].maxLength}
+                  min={inputs[input].min}
+                  max={inputs[input].max}
+                />
+              </div>
             </>
           )
         }
       </div>
  
       <div className="column">
-        <div className="row inner-row">
-          <input
-            className='textbox'  
-            title="BPM"
-            id={`bpm${i}`}
-            type="number" 
-            value={node.bpm}
-            onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxLength={5}
-            min={0}
-            max={60000}
-          />
-        </div>
         <div className="row inner-row">
           <input
             className='textbox'
