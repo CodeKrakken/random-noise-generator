@@ -307,7 +307,7 @@ export default function Node(props: props) {
         <div className="row inner-row">
           { 
             waveShapes.map((waveShape, i) => {
-              return <div>
+              return <div key={`waveShape-${i}`}>
                 <input
                   title={waveShape}
                   className={`wave${i}`}

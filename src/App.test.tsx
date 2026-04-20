@@ -355,7 +355,7 @@ describe('header', () => {
     fireEvent.change(screen.getByTitle('Rest %'), { target: { value: '0' } })
 
     // find the 'kick' checkbox
-    const kickCheckbox = [...document.getElementById('kick')]
+    const kickCheckbox = [...document.getElementsByClassName('wave0')]
       .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
 
     // uncheck others
