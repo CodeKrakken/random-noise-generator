@@ -26,23 +26,6 @@ export default function Node(props: props) {
     notes
   } = props
 
-  const inputLabels = [
-    'BPM', 
-    'Min level', 
-    'Max level', 
-    'Min length %', 
-    'Min length %', 
-    'Rest Chance %', 
-    'Min Offset %', 
-    'Max Offset %',
-    'Min Detune %', 
-    'Max Detune %', 
-    'Min Fade In %',
-    'Max Fade In %',
-    'Min Fade Out %',
-    'Max Fade Out %'
-  ]
-
   return <div 
     className="node" 
     id={`node${i}`}
@@ -60,13 +43,6 @@ export default function Node(props: props) {
           value={node.label}
           onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
         />
-      </div>
-      <div className="column">
-      </div>
-      <div className="column">
-        {
-          inputLabels.map((label, i) => <div key={`input-label-${i}`} className="row inner-row">{label}</div>)
-        }
       </div>
 
       <div className="column">
