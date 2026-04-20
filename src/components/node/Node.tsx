@@ -91,6 +91,39 @@ export default function Node(props: props) {
       max:100,
       maxLength:3
     },
+    restChance: {
+      className: 'textbox',
+      title: 'Rest %',
+      id: `restChance${i}`,
+      type: "number",
+      value: node.rest,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
+    minOffset: {
+      className: 'textbox',
+      title: 'Min offset',
+      id: `minOffset${i}`,
+      type: "number",
+      value: node.minOffset,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
+    maxOffset: {
+      className: 'textbox',
+      title: 'Max offset',
+      id: `maxOffset${i}`,
+      type: "number",
+      value: node.maxOffset,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
   }
 
   return <div 
@@ -132,20 +165,6 @@ export default function Node(props: props) {
         <div className="row inner-row">
           <input
             className='textbox'
-            title={'Rest %'}
-            id={`rest${i}`}
-            type="number" 
-            value={node.rest}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={0}
-            max={100}
-            maxLength={3}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
             title={'min offset'}
             id={`min offset${i}`}
             type="number" 
@@ -156,21 +175,6 @@ export default function Node(props: props) {
             maxLength={4}
           />
         </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'max offset'}
-            id={`max offset${i}`}
-            type="number" 
-            value={node.maxOffset}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={-100}
-            max={100}
-            maxLength={4}
-          />
-        </div>
-
         <div className="row inner-row">
           <input
             className='textbox'
