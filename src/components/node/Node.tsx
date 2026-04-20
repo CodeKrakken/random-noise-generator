@@ -61,19 +61,23 @@ export default function Node(props: props) {
           Object.keys(inputs).map(input =>
             <>
               <div className="row inner-row">
-                {inputs[input].title}{" "}
-                <input 
-                  className={inputs[input].className}
-                  title={inputs[input].title}
-                  id={inputs[input].id}
-                  data-testid={inputs[input]['data-testid']}
-                  type={inputs[input].type} 
-                  value={inputs[input].value}
-                  onChange={inputs[input].onChange}
-                  maxLength={inputs[input].maxLength}
-                  min={inputs[input].min}
-                  max={inputs[input].max}
-                />
+                <div className="textbox">
+                  {inputs[input].title}
+                </div>
+                <div className="textbox">
+                  <input 
+                    className={inputs[input].className}
+                    title={inputs[input].title}
+                    id={inputs[input].id}
+                    data-testid={inputs[input]['data-testid']}
+                    type={inputs[input].type} 
+                    value={inputs[input].value}
+                    onChange={inputs[input].onChange}
+                    maxLength={inputs[input].maxLength}
+                    min={inputs[input].min}
+                    max={inputs[input].max}
+                  />
+                </div>
               </div>
             </>
           )
