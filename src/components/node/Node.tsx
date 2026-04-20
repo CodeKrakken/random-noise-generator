@@ -26,6 +26,19 @@ export default function Node(props: props) {
     notes
   } = props
 
+  const inputs: any = {
+    label: {
+      className: 'textbox',  
+      title: "Label",
+      id: `label${i}`,
+      'data-testid': `node-label-${i}`,
+      type: "text",
+      value: node.label,
+      onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target!.value}, nodes.slice(i+1)].flat())
+    }
+
+  }
+
   return <div 
     className="node" 
     id={`node${i}`}
@@ -34,17 +47,21 @@ export default function Node(props: props) {
   >
     <div className="row">
       <div className="column">
-        <input
-          className='textbox'  
-          title="Label"
-          id={`label${i}`}
-          data-testid={`node-label-${i}`}
-          type="text" 
-          value={node.label}
-          onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target.value}, nodes.slice(i+1)].flat())}
-        />
+        {
+          Object.keys(inputs).map(input =>
+            <input 
+              className={inputs[input].className}
+              title={inputs[input].title}
+              id={inputs[input].id}
+              data-testid={inputs[input]['data-testid']}
+              type={inputs[input].type} 
+              value={inputs[input].value}
+              onChange={inputs[input].onChange}
+            />
+          )
+        }
       </div>
-
+ 
       <div className="column">
         <div className="row inner-row">
           <input
