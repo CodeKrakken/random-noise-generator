@@ -49,15 +49,18 @@ export default function Node(props: props) {
       <div className="column">
         {
           Object.keys(inputs).map(input =>
-            <input 
-              className={inputs[input].className}
-              title={inputs[input].title}
-              id={inputs[input].id}
-              data-testid={inputs[input]['data-testid']}
-              type={inputs[input].type} 
-              value={inputs[input].value}
-              onChange={inputs[input].onChange}
-            />
+            <>
+              {inputs[input].title}{" "}
+              <input 
+                className={inputs[input].className}
+                title={inputs[input].title}
+                id={inputs[input].id}
+                data-testid={inputs[input]['data-testid']}
+                type={inputs[input].type} 
+                value={inputs[input].value}
+                onChange={inputs[input].onChange}
+              />
+            </>
           )
         }
       </div>
