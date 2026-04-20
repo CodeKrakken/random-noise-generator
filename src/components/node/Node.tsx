@@ -57,7 +57,18 @@ export default function Node(props: props) {
       min:0,
       max:100,
       maxLength:3
-    }
+    },
+    maxLevel: {
+      className: 'textbox',
+      title: 'Max level',
+      id: `maxLevel${i}`,
+      type: "number",
+      value: node.maxLevel,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+      min:0,
+      max:100,
+      maxLength:3
+    },
   }
 
   return <div 
@@ -96,19 +107,7 @@ export default function Node(props: props) {
       </div>
  
       <div className="column">
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'Max level'}
-            id={`maxLevel${i}`}
-            type="number" 
-            value={node.maxLevel}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat())}
-            min={0}
-            max={100}
-            maxLength={3}
-          />
-        </div>
+        
         
         <div className="row inner-row">
           <input
