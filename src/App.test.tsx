@@ -153,10 +153,10 @@ describe('header', () => {
       target: { value: '0' }
     })
 
-    fireEvent.change(screen.getByTitle('min length'), {
+    fireEvent.change(screen.getByTitle('Min Length'), {
       target: { value: '10' }
     })
-    fireEvent.change(screen.getByTitle('max length'), {
+    fireEvent.change(screen.getByTitle('Max Length'), {
       target: { value: '10' }
     })
 
@@ -380,11 +380,11 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Node'))
 
-    fireEvent.change(screen.getByTitle('max length'), { target: { value: '200' } })
-    fireEvent.change(screen.getByTitle('min fade in'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('max fade in'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('min fade out'), { target: { value: '0' } })
-    fireEvent.change(screen.getByTitle('max fade out'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('Max Length'), { target: { value: '200' } })
+    fireEvent.change(screen.getByTitle('Min Fade In'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('Max Fade In'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('Min Fade Out'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('Max Fade Out'), { target: { value: '0' } })
 
     fireEvent.click(screen.getByText('Start'))
 

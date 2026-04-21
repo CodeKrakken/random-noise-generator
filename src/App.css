@@ -23,4 +23,7 @@
 
 .label {
   width: 100px;
+  padding: 5px;
+  height: 19px;
+  text-align: right
 }

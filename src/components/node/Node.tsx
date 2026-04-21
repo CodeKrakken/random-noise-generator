@@ -49,7 +49,7 @@ export default function Node(props: props) {
     },
     minLevel: {
       className: 'textbox',
-      title: 'Min level',
+      title: 'Min Level',
       id: `minLevel${i}`,
       type: "number",
       value: node.minLevel,
@@ -60,7 +60,7 @@ export default function Node(props: props) {
     },
     maxLevel: {
       className: 'textbox',
-      title: 'Max level',
+      title: 'Max Level',
       id: `maxLevel${i}`,
       type: "number",
       value: node.maxLevel,
@@ -71,7 +71,7 @@ export default function Node(props: props) {
     },
     minLength: {
       className: 'textbox',
-      title: 'min length',
+      title: 'Min Length',
       id: `minLength${i}`,
       type: "number",
       value: node.minNoteLength,
@@ -82,7 +82,7 @@ export default function Node(props: props) {
     },
     maxLength: {
       className: 'textbox',
-      title: 'max length',
+      title: 'Max Length',
       id: `maxLength${i}`,
       type: "number",
       value: node.maxNoteLength,
@@ -104,7 +104,7 @@ export default function Node(props: props) {
     },
     minOffset: {
       className: 'textbox',
-      title: 'Min offset',
+      title: 'Min Offset',
       id: `minOffset${i}`,
       type: "number",
       value: node.minOffset,
@@ -115,7 +115,7 @@ export default function Node(props: props) {
     },
     maxOffset: {
       className: 'textbox',
-      title: 'Max offset',
+      title: 'Max Offset',
       id: `maxOffset${i}`,
       type: "number",
       value: node.maxOffset,
@@ -126,8 +126,8 @@ export default function Node(props: props) {
     },
     minDetune: {
       className: 'textbox',
-      title: 'detune',
-      id: `min detune${i}`,
+      title: 'Min Detune',
+      id: `minDetune${i}`,
       type: "number",
       value: node.minDetune,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat()),
@@ -137,8 +137,8 @@ export default function Node(props: props) {
     },
     maxDetune: {
       className: 'textbox',
-      title: 'detune',
-      id: `detune${i}`,
+      title: 'Max Detune',
+      id: `maxDetune${i}`,
       type: "number",
       value: node.maxDetune,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat()),
@@ -148,8 +148,8 @@ export default function Node(props: props) {
     },
     minFadeIn: {
       className: 'textbox',
-      title: 'min fade in',
-      id: `min fade in${i}`,
+      title: 'Min Fade In',
+      id: `minFadeIn${i}`,
       type: "number",
       value: node.minFadeIn,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
@@ -157,8 +157,8 @@ export default function Node(props: props) {
     },
     maxFadeIn: {
       className: 'textbox',
-      title: 'max fade in',
-      id: `max fade in${i}`,
+      title: 'Max Fade In',
+      id: `maxFadeIn${i}`,
       type: "number",
       value: node.maxFadeIn,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
@@ -166,8 +166,8 @@ export default function Node(props: props) {
     },
     minFadeOut: {
       className: 'textbox',
-      title: 'min fade out',
-      id: `min fade out${i}`,
+      title: 'Min Fade Out',
+      id: `minFadeOut${i}`,
       type: "number",
       value: node.minFadeOut,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
@@ -175,8 +175,8 @@ export default function Node(props: props) {
     },
     maxFadeOut: {
       className: 'textbox',
-      title: 'max fade out',
-      id: `max fade out${i}`,
+      title: 'Max Fade Out',
+      id: `maxFadeOut${i}`,
       type: "number",
       value: node.maxFadeOut,
       onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
