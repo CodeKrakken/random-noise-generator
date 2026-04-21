@@ -254,7 +254,7 @@ export default function Node(props: props) {
             notes.map((note, j) => 
               <div key={`note-${j}`}>
                 <input
-                  className={`note${j}`}
+                  className={`note${i}`}
                   title={note.toString()}
                   type="checkbox"
                   value={note}
@@ -270,7 +270,7 @@ export default function Node(props: props) {
             scales.map((scale, j) =>
               <div key={`scale-${j}`}>
                 <input
-                  className={`scale${j}`}
+                  className={`scale${i}`}
                   title={scale.toString()}
                   type="checkbox"
                   value={scale}
@@ -287,7 +287,7 @@ export default function Node(props: props) {
               return <div key={`waveShape-${j}`}>
                 <input
                   title={waveShape}
-                  className={`wave${j}`}
+                  className={`wave${i}`}
                   type="checkbox"
                   value={waveShape}
                   checked={node.activeWaveShapes.includes(waveShape)}
@@ -302,7 +302,7 @@ export default function Node(props: props) {
             intervals.map((interval, j) => {
               return <div key={`interval-${j}`}>
                 <input
-                  className={`interval${j}`}
+                  className={`interval${i}`}
                   title={interval.toString()}
                   type="checkbox"
                   value={interval}
