@@ -26,162 +26,163 @@ export default function Node(props: props) {
     notes
   } = props
 
-  const inputs: any = {
-    label: {
-      className: 'textbox',  
-      title: "Label",
-      id: `label${i}`,
-      'data-testid': `node-label-${i}`,
-      type: "text",
-      value: node.label,
-      onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target!.value}, nodes.slice(i+1)].flat())
-    },
-    bpm: {
-      className: 'textbox',
-      title: "BPM",
-      id: `bpm${i}`,
-      type: "number",
-      value: node.bpm,
-      onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat()),
-      maxLength: 5,
-      min: 0,
-      max: 60000
-    },
-    minLevel: {
-      className: 'textbox',
-      title: 'Min Level',
-      id: `minLevel${i}`,
-      type: "number",
-      value: node.minLevel,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    maxLevel: {
-      className: 'textbox',
-      title: 'Max Level',
-      id: `maxLevel${i}`,
-      type: "number",
-      value: node.maxLevel,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    minLength: {
-      className: 'textbox',
-      title: 'Min Length',
-      id: `minLength${i}`,
-      type: "number",
-      value: node.minNoteLength,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    maxLength: {
-      className: 'textbox',
-      title: 'Max Length',
-      id: `maxLength${i}`,
-      type: "number",
-      value: node.maxNoteLength,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    restChance: {
-      className: 'textbox',
-      title: 'Rest %',
-      id: `restChance${i}`,
-      type: "number",
-      value: node.rest,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    minOffset: {
-      className: 'textbox',
-      title: 'Min Offset',
-      id: `minOffset${i}`,
-      type: "number",
-      value: node.minOffset,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    maxOffset: {
-      className: 'textbox',
-      title: 'Max Offset',
-      id: `maxOffset${i}`,
-      type: "number",
-      value: node.maxOffset,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:0,
-      max:100,
-      maxLength:3
-    },
-    minDetune: {
-      className: 'textbox',
-      title: 'detune',
-      id: `minDetune${i}`,
-      type: "number",
-      value: node.minDetune,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:-100,
-      max:100,
-      maxLength:4
-    },
-    maxDetune: {
-      className: 'textbox',
-      title: 'detune',
-      id: `maxDetune${i}`,
-      type: "number",
-      value: node.maxDetune,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat()),
-      min:-100,
-      max:100,
-      maxLength:4
-    },
-    minFadeIn: {
-      className: 'textbox',
-      title: 'Min Fade In',
-      id: `minFadeIn${i}`,
-      type: "number",
-      value: node.minFadeIn,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
-      maxLength:4
-    },
-    maxFadeIn: {
-      className: 'textbox',
-      title: 'Max Fade In',
-      id: `maxFadeIn${i}`,
-      type: "number",
-      value: node.maxFadeIn,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
-      maxLength:4
-    },
-    minFadeOut: {
-      className: 'textbox',
-      title: 'Min Fade Out',
-      id: `minFadeOut${i}`,
-      type: "number",
-      value: node.minFadeOut,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
-      maxLength:4
-    },
-    maxFadeOut: {
-      className: 'textbox',
-      title: 'Max Fade Out',
-      id: `maxFadeOut${i}`,
-      type: "number",
-      value: node.maxFadeOut,
-      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
-      maxLength:4
-    }
+  const attributes: any = {
+    // label: {
+    //   className: 'textbox',  
+    //   title: "Label",
+    //   id: `label${i}`,
+    //   'data-testid': `node-label-${i}`,
+    //   type: "text",
+    //   value: node.label,
+    //   onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target!.value}, nodes.slice(i+1)].flat())
+    // },
+    // bpm: {
+    //   className: 'textbox',
+    //   title: "BPM",
+    //   id: `bpm${i}`,
+    //   type: "number",
+    //   value: node.bpm,
+    //   onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   maxLength: 5,
+    //   min: 0,
+    //   max: 60000
+    // },
+    level: [
+      {
+        className: 'textbox',
+        title: 'Level',
+        id: `minLevel${i}`,
+        type: "number",
+        value: node.minLevel,
+        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+        min:0,
+        max:100,
+        maxLength:3
+      },
+      {
+        className: 'textbox',
+        id: `maxLevel${i}`,
+        type: "number",
+        value: node.maxLevel,
+        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+        min:0,
+        max:100,
+        maxLength:3
+      }
+    ],
+    // minLength: {
+    //   className: 'textbox',
+    //   title: 'Min Length',
+    //   id: `minLength${i}`,
+    //   type: "number",
+    //   value: node.minNoteLength,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:0,
+    //   max:100,
+    //   maxLength:3
+    // },
+    // maxLength: {
+    //   className: 'textbox',
+    //   title: 'Max Length',
+    //   id: `maxLength${i}`,
+    //   type: "number",
+    //   value: node.maxNoteLength,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:0,
+    //   max:100,
+    //   maxLength:3
+    // },
+    // restChance: {
+    //   className: 'textbox',
+    //   title: 'Rest %',
+    //   id: `restChance${i}`,
+    //   type: "number",
+    //   value: node.rest,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:0,
+    //   max:100,
+    //   maxLength:3
+    // },
+    // minOffset: {
+    //   className: 'textbox',
+    //   title: 'Min Offset',
+    //   id: `minOffset${i}`,
+    //   type: "number",
+    //   value: node.minOffset,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:0,
+    //   max:100,
+    //   maxLength:3
+    // },
+    // maxOffset: {
+    //   className: 'textbox',
+    //   title: 'Max Offset',
+    //   id: `maxOffset${i}`,
+    //   type: "number",
+    //   value: node.maxOffset,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:0,
+    //   max:100,
+    //   maxLength:3
+    // },
+    // minDetune: {
+    //   className: 'textbox',
+    //   title: 'detune',
+    //   id: `minDetune${i}`,
+    //   type: "number",
+    //   value: node.minDetune,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:-100,
+    //   max:100,
+    //   maxLength:4
+    // },
+    // maxDetune: {
+    //   className: 'textbox',
+    //   title: 'detune',
+    //   id: `maxDetune${i}`,
+    //   type: "number",
+    //   value: node.maxDetune,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   min:-100,
+    //   max:100,
+    //   maxLength:4
+    // },
+    // minFadeIn: {
+    //   className: 'textbox',
+    //   title: 'Min Fade In',
+    //   id: `minFadeIn${i}`,
+    //   type: "number",
+    //   value: node.minFadeIn,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   maxLength:4
+    // },
+    // maxFadeIn: {
+    //   className: 'textbox',
+    //   title: 'Max Fade In',
+    //   id: `maxFadeIn${i}`,
+    //   type: "number",
+    //   value: node.maxFadeIn,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   maxLength:4
+    // },
+    // minFadeOut: {
+    //   className: 'textbox',
+    //   title: 'Min Fade Out',
+    //   id: `minFadeOut${i}`,
+    //   type: "number",
+    //   value: node.minFadeOut,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   maxLength:4
+    // },
+    // maxFadeOut: {
+    //   className: 'textbox',
+    //   title: 'Max Fade Out',
+    //   id: `maxFadeOut${i}`,
+    //   type: "number",
+    //   value: node.maxFadeOut,
+    //   onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+    //   maxLength:4
+    // }
   }
 
   return <div 
@@ -193,44 +194,46 @@ export default function Node(props: props) {
     <div className="row">
       <div className="column">
         {
-          Object.keys(inputs).map(input => {
+          Object.keys(attributes).map(attribute =>
+            
+            attributes[attribute].map((input: any) => {
+              const {
+                title,
+                className,
+                id,
+                type,
+                value,
+                onChange,
+                maxLength,
+                min,
+                max
+              } = input
 
-            const {
-              title,
-              className,
-              id,
-              type,
-              value,
-              onChange,
-              maxLength,
-              min,
-              max
-            } = inputs[input]
+              const dataTestId = input['data-testid']
 
-            const dataTestId = inputs[input]['data-testid']
-
-            return <>
-              <div className="row inner-row">
-                <div className="label">
-                  {title}
+              return (
+                <div className="row inner-row" key={id}>
+                  <div className="label">
+                    {title}
+                  </div>
+                  <div className="textbox">
+                    <input 
+                      className={className}
+                      title={title}
+                      id={id}
+                      data-testid={dataTestId}
+                      type={type} 
+                      value={value}
+                      onChange={onChange}
+                      maxLength={maxLength}
+                      min={min}
+                      max={max}
+                    />
+                  </div>
                 </div>
-                <div className="textbox">
-                  <input 
-                    className={className}
-                    title={title}
-                    id={id}
-                    data-testid={dataTestId}
-                    type={type} 
-                    value={value}
-                    onChange={onChange}
-                    maxLength={maxLength}
-                    min={min}
-                    max={max}
-                  />
-                </div>
-              </div>
-            </>
-          })
+              )
+            })
+          )
         }
       </div>
 
