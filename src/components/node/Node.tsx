@@ -193,29 +193,44 @@ export default function Node(props: props) {
     <div className="row">
       <div className="column">
         {
-          Object.keys(inputs).map(input =>
-            <>
+          Object.keys(inputs).map(input => {
+
+            const {
+              title,
+              className,
+              id,
+              type,
+              value,
+              onChange,
+              maxLength,
+              min,
+              max
+            } = inputs[input]
+
+            const dataTestId = inputs[input]['data-testid']
+
+            return <>
               <div className="row inner-row">
                 <div className="label">
-                  {inputs[input].title}
+                  {title}
                 </div>
                 <div className="textbox">
                   <input 
-                    className={inputs[input].className}
-                    title={inputs[input].title}
-                    id={inputs[input].id}
-                    data-testid={inputs[input]['data-testid']}
-                    type={inputs[input].type} 
-                    value={inputs[input].value}
-                    onChange={inputs[input].onChange}
-                    maxLength={inputs[input].maxLength}
-                    min={inputs[input].min}
-                    max={inputs[input].max}
+                    className={className}
+                    title={title}
+                    id={id}
+                    data-testid={dataTestId}
+                    type={type} 
+                    value={value}
+                    onChange={onChange}
+                    maxLength={maxLength}
+                    min={min}
+                    max={max}
                   />
                 </div>
               </div>
             </>
-          )
+          })
         }
       </div>
 
