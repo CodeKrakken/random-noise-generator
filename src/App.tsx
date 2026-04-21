@@ -316,32 +316,30 @@ function App() {
   const scales  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return <>
-    <div>
-      <Header 
-        handleStartStop   = {handleStartStop}
-        cycleButtonLabel  = {cycleButtonLabel}
-        addNode           = {addNode}
-        showStart         = {Boolean(active(nodes).length)}
-      />
+    <Header 
+      handleStartStop   = {handleStartStop}
+      cycleButtonLabel  = {cycleButtonLabel}
+      addNode           = {addNode}
+      showStart         = {Boolean(active(nodes).length)}
+    />
 
-      <br />
-      
-      {nodes.map((node, i) => 
-        node.isActive &&
-        <Node 
-          node        = {node} 
-          i           = {i} 
-          setNodes    = {setNodes} 
-          nodes       = {nodes}
-          notes       = {notes}
-          scales      = {scales}
-          waveShapes  = {waveShapes}
-          intervals   = {intervals}
-          handleDelete= {handleDelete}
-          key         = {i}
-        />
-      )}
-    </div>
+    <br />
+    <br />
+    {nodes.map((node, i) => 
+      node.isActive &&
+      <Node 
+        node        = {node} 
+        i           = {i} 
+        setNodes    = {setNodes} 
+        nodes       = {nodes}
+        notes       = {notes}
+        scales      = {scales}
+        waveShapes  = {waveShapes}
+        intervals   = {intervals}
+        handleDelete= {handleDelete}
+        key         = {i}
+      />
+    )}
   </>
 }
 

@@ -18,9 +18,10 @@ body {
 }
 
 .node {
-  border: 1px dotted black;
+  border: 1px dotted red;
   padding: 5px;
-  width: auto
+  width: 560px;
+  margin: auto
 }
 
 .textbox {
