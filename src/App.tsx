@@ -158,6 +158,8 @@ function App() {
             ) {
               try {
                 const randomFrequency = getRandomFrequency(i)
+                console.log(randomFrequency)
+
                 const frequency   = detune(randomFrequency as number, i)
 
                 if (node.oscillator) node.oscillator.frequency.value = frequency
