@@ -136,7 +136,7 @@ function App() {
           const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value!
           const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value!
 
-          const offset = getRangeValue('offset', i)
+          const offset = getRangeValue('Offset', i)
           let noteLength = intervalLength
 
           setTimeout(async () => {
@@ -166,8 +166,8 @@ function App() {
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
 
-                const fadeInPercentage  = getRangeValue('fade in' , i)
-                const fadeOutPercentage = getRangeValue('fade out', i)
+                const fadeInPercentage  = getRangeValue('FadeIn' , i)
+                const fadeOutPercentage = getRangeValue('FadeOut', i)
                 const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
 
                 const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
