@@ -265,7 +265,7 @@ function App() {
 
   const detune = (frequency: number, i: number) => {
     // console.log('Getting Detune Value')
-    const detune = getRangeValue('detune', i)
+    const detune = getRangeValue('Detune', i)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency

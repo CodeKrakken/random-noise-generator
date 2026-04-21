@@ -126,7 +126,7 @@ export default function Node(props: props) {
     },
     minDetune: {
       className: 'textbox',
-      title: 'Min Detune',
+      title: 'detune',
       id: `minDetune${i}`,
       type: "number",
       value: node.minDetune,
@@ -137,7 +137,7 @@ export default function Node(props: props) {
     },
     maxDetune: {
       className: 'textbox',
-      title: 'Max Detune',
+      title: 'detune',
       id: `maxDetune${i}`,
       type: "number",
       value: node.maxDetune,
