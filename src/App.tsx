@@ -253,8 +253,11 @@ function App() {
 
   const getRangeValue = (key: string, i:number) => {
     // console.log('Getting Range Value')
-    const minEl = document.getElementById(`min ${key}${i}`)
-    const maxEl = document.getElementById(`max ${key}${i}`)
+    const minEl = document.getElementById(`min${key}${i}`)
+    console.log(minEl)
+    const maxEl = document.getElementById(`max${key}${i}`)
+    console.log(maxEl)
+
     const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
     const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
     return minValue + (Math.random() * (maxValue - minValue))
