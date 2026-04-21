@@ -71,7 +71,7 @@ export default function Node(props: props) {
     },
     minLength: {
       className: 'textbox',
-      title: 'Min length',
+      title: 'min length',
       id: `minLength${i}`,
       type: "number",
       value: node.minNoteLength,
@@ -82,7 +82,7 @@ export default function Node(props: props) {
     },
     maxLength: {
       className: 'textbox',
-      title: 'Max length',
+      title: 'max length',
       id: `maxLength${i}`,
       type: "number",
       value: node.maxNoteLength,
@@ -146,6 +146,42 @@ export default function Node(props: props) {
       max:100,
       maxLength:4
     },
+    minFadeIn: {
+      className: 'textbox',
+      title: 'min fade in',
+      id: `min fade in${i}`,
+      type: "number",
+      value: node.minFadeIn,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+      maxLength:4
+    },
+    maxFadeIn: {
+      className: 'textbox',
+      title: 'max fade in',
+      id: `max fade in${i}`,
+      type: "number",
+      value: node.maxFadeIn,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+      maxLength:4
+    },
+    minFadeOut: {
+      className: 'textbox',
+      title: 'min fade out',
+      id: `min fade out${i}`,
+      type: "number",
+      value: node.minFadeOut,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+      maxLength:4
+    },
+    maxFadeOut: {
+      className: 'textbox',
+      title: 'max fade out',
+      id: `max fade out${i}`,
+      type: "number",
+      value: node.maxFadeOut,
+      onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+      maxLength:4
+    }
   }
 
   return <div 
@@ -181,56 +217,6 @@ export default function Node(props: props) {
             </>
           )
         }
-      </div>
- 
-      <div className="column">
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'min fade in'}
-            id={`min fade in${i}`}
-            type="number" 
-            value={node.minFadeIn}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxLength={4}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'max fade in'}
-            id={`max fade in${i}`}
-            type="number" 
-            value={node.maxFadeIn}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxLength={4}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'min fade out'}
-            id={`min fade out${i}`}
-            type="number" 
-            value={node.minFadeOut}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxLength={4}
-          />
-        </div>
-
-        <div className="row inner-row">
-          <input
-            className='textbox'
-            title={'max fade out'}
-            id={`max fade out${i}`}
-            type="number" 
-            value={node.maxFadeOut}
-            onChange={(e) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat())}
-            maxLength={4}
-          />
-        </div>
       </div>
 
       <div className="column">
