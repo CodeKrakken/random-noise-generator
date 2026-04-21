@@ -158,7 +158,6 @@ function App() {
             ) {
               try {
                 const randomFrequency = getRandomFrequency(i)
-
                 const frequency   = detune(randomFrequency as number, i)
 
                 if (node.oscillator) node.oscillator.frequency.value = frequency
@@ -272,8 +271,6 @@ function App() {
   const getRandomFrequency = (i: number) => {
     // console.log('Getting Random Frequency')
     let activeFrequencies = getActiveFrequencies(i) 
-    // console.log(activeFrequencies)
-
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
     return activeFrequencies[randomIndex]
@@ -285,9 +282,7 @@ function App() {
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(
       (scale): scale is HTMLInputElement => scale instanceof HTMLInputElement && scale.checked    
     ).map(scale => { return +scale.value})
-
-    console.log(i)
-
+    
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
