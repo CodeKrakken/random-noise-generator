@@ -12,26 +12,27 @@ type props = {
   notes       : number[]
 }
 
-type nodeAttribute = 
-  'label' 
-| 'bpm' 
-| 'rest' 
-| 'minLevel' 
-| 'maxLevel' 
-| 'minNoteLength' 
-| 'maxNoteLength' 
-| 'minOffset'
-| 'maxOffset' 
-| 'minDetune' 
-| 'maxDetune' 
-| 'minFadeIn' 
-| 'maxFadeIn'
-| 'minFadeOut' 
-| 'maxFadeOut'
+const ranges = [
+  'Level',
+  'NoteLength',
+  'Offset',
+  'Detune',
+  'FadeIn',
+  'FadeOut',
+] as const
+
+type Range = typeof ranges[number]
+
+type NodeAttribute =
+  | 'label'
+  | 'bpm'
+  | 'rest'
+  | `min${Range}`
+  | `max${Range}`
 
 export default function Node(props: props) {
 
-  const updateNode = (e: any, attribute: nodeAttribute) => {
+  const updateNode = (e: any, attribute: NodeAttribute) => {
     nodes[i][attribute] = +e.target!.value
     setNodes([nodes.slice(0,i), nodes[i], nodes.slice(i+1)].flat())
   } 
