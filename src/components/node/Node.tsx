@@ -58,7 +58,7 @@ export default function Node(props: props) {
         className: 'textbox',
         title: 'Rest %',
         label: 'Rest %',
-        id: `restChance${i}`,
+        id: `rest${i}`,
         type: "number",
         value: node.rest,
         onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
