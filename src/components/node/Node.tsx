@@ -270,95 +270,84 @@ export default function Node(props: props) {
           )
         }
       </div>
-    </div>
+    
 
-    <div className="column">
-      <div className="row inner-row">
-        Notes
+      <div className="column">
+        <div className="row inner-row">
+          {
+            notes.map((note, j) => 
+              <div key={`note-${j}`}>
+                <input
+                  className={`note${i}`}
+                  title={note.toString()}
+                  type="checkbox"
+                  value={note}
+                  checked={node.activeNotes?.includes(note)}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.filter(note => note !== +e.target.value) : [node.activeNotes, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                />
+              </div>
+            )
+          }
+        </div>
+        <div className="row inner-row">
+          {
+            scales.map((scale, j) =>
+              <div key={`scale-${j}`}>
+                <input
+                  className={`scale${i}`}
+                  title={scale.toString()}
+                  type="checkbox"
+                  value={scale}
+                  checked={node.activeScales.includes(scale)}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeScales: node.activeScales.includes(+e.target.value) ? node.activeScales.filter(note => note !== +e.target.value) : [node.activeScales, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                />
+              </div>
+            )
+          }
+        </div>
+        <div className="row inner-row">
+          { 
+            waveShapes.map((waveShape, j) => {
+              return <div key={`waveShape-${j}`}>
+                <input
+                  title={waveShape}
+                  className={`wave${i}`}
+                  type="checkbox"
+                  value={waveShape}
+                  checked={node.activeWaveShapes.includes(waveShape)}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeWaveShapes: node.activeWaveShapes.includes(e.target.value) ? node.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [node.activeWaveShapes, e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                />
+              </div>
+            })
+          }
+        </div>
+        <div className="row inner-row">
+          { 
+            intervals.map((interval, j) => {
+              return <div key={`interval-${j}`}>
+                <input
+                  className={`interval${i}`}
+                  title={interval.toString()}
+                  type="checkbox"
+                  value={interval}
+                  checked={node.activeIntervals.includes(interval)}
+                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                />
+              </div>
+            })
+          }
+        </div>
       </div>
-      <div className="row inner-row">
-        Scales
-      </div>
-      <div className="row inner-row">
-        Waves
-      </div>
-      <div>
-        Intervals
-      </div>
-    </div>
-
-    <div className="column">
-      <div className="row inner-row">
-        {
-          notes.map((note, j) => 
-            <div key={`note-${j}`}>
-              <input
-                className={`note${i}`}
-                title={note.toString()}
-                type="checkbox"
-                value={note}
-                checked={node.activeNotes?.includes(note)}
-                onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.filter(note => note !== +e.target.value) : [node.activeNotes, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
-              />
-            </div>
-          )
-        }
-      </div>
-      <div className="row inner-row">
-        {
-          scales.map((scale, j) =>
-            <div key={`scale-${j}`}>
-              <input
-                className={`scale${i}`}
-                title={scale.toString()}
-                type="checkbox"
-                value={scale}
-                checked={node.activeScales.includes(scale)}
-                onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeScales: node.activeScales.includes(+e.target.value) ? node.activeScales.filter(note => note !== +e.target.value) : [node.activeScales, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
-              />
-            </div>
-          )
-        }
-      </div>
-      <div className="row inner-row">
-        { 
-          waveShapes.map((waveShape, j) => {
-            return <div key={`waveShape-${j}`}>
-              <input
-                title={waveShape}
-                className={`wave${i}`}
-                type="checkbox"
-                value={waveShape}
-                checked={node.activeWaveShapes.includes(waveShape)}
-                onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeWaveShapes: node.activeWaveShapes.includes(e.target.value) ? node.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [node.activeWaveShapes, e.target.value].flat()}, nodes.slice(i+1)].flat())}
-              />
-            </div>
-          })
-        }
-      </div>
-      <div className="row inner-row">
-        { 
-          intervals.map((interval, j) => {
-            return <div key={`interval-${j}`}>
-              <input
-                className={`interval${i}`}
-                title={interval.toString()}
-                type="checkbox"
-                value={interval}
-                checked={node.activeIntervals.includes(interval)}
-                onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
-              />
-            </div>
-          })
-        }
-      </div>
-    </div>
-    <div className="column">
       <button 
-        id={`delete-node${i}`} 
+        id="delete-node"
         onClick={(e) => handleDelete(i, e)}
         data-testid={`delete-node-${i}`}
-      >X</button>
+      >
+        X
+      </button>
     </div>
+
+
   </div>
+
 }

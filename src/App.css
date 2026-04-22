@@ -10,7 +10,7 @@ body {
 }
 
 .inner-row {
-  height: 25px
+  height: 29px
 }
 
 .column {
@@ -34,4 +34,8 @@ body {
   padding: 5px;
   height: 19px;
   text-align: right
+}
+
+#delete-node {
+  height: 29px
 }
