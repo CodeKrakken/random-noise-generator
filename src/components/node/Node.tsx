@@ -31,7 +31,7 @@ export default function Node(props: props) {
       {
         className: 'textbox',  
         title: "Label",
-        label: "Label",
+        label: "Name",
         id: `label${i}`,
         'data-testid': `node-label-${i}`,
         type: "text",
@@ -51,6 +51,20 @@ export default function Node(props: props) {
         maxLength: 5,
         min: 0,
         max: 60000
+      }
+    ],
+    restChance: [
+      {
+        className: 'textbox',
+        title: 'Rest %',
+        label: 'Rest %',
+        id: `restChance${i}`,
+        type: "number",
+        value: node.rest,
+        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
+        min:0,
+        max:100,
+        maxLength:3
       }
     ],
     level: [
@@ -98,19 +112,6 @@ export default function Node(props: props) {
         type: "number",
         value: node.maxNoteLength,
         onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
-        min:0,
-        max:100,
-        maxLength:3
-      }
-    ],
-    restChance: [
-      {
-        className: 'textbox',
-        title: 'Rest %',
-        id: `restChance${i}`,
-        type: "number",
-        value: node.rest,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
         min:0,
         max:100,
         maxLength:3
@@ -222,7 +223,6 @@ export default function Node(props: props) {
           Object.keys(attributes).map(attribute => 
             <div className="row inner-row">
               {
-
                 attributes[attribute].map((input: any) => {
 
                 const {
