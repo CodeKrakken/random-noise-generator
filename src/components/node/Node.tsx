@@ -194,9 +194,9 @@ export default function Node(props: props) {
     <div className="row">
       <div className="column">
         {
-          Object.keys(attributes).map(attribute =>
-            
+          Object.keys(attributes).map(attribute => 
             attributes[attribute].map((input: any) => {
+
               const {
                 title,
                 className,
@@ -212,7 +212,8 @@ export default function Node(props: props) {
               const dataTestId = input['data-testid']
 
               return (
-                <div className="row inner-row" key={id}>
+              
+                <div className="row inner-row">
                   <div className="label">
                     {title}
                   </div>
