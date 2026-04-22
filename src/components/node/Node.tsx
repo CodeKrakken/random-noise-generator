@@ -12,7 +12,29 @@ type props = {
   notes       : number[]
 }
 
+type nodeAttribute = 
+  'label' 
+| 'bpm' 
+| 'rest' 
+| 'minLevel' 
+| 'maxLevel' 
+| 'minNoteLength' 
+| 'maxNoteLength' 
+| 'minOffset'
+| 'maxOffset' 
+| 'minDetune' 
+| 'maxDetune' 
+| 'minFadeIn' 
+| 'maxFadeIn'
+| 'minFadeOut' 
+| 'maxFadeOut'
+
 export default function Node(props: props) {
+
+  const updateNode = (e: any, attribute: nodeAttribute) => {
+    nodes[i][attribute] = +e.target!.value
+    setNodes([nodes.slice(0,i), nodes[i], nodes.slice(i+1)].flat())
+  } 
 
   const {
     node, 
@@ -36,7 +58,7 @@ export default function Node(props: props) {
         'data-testid': `node-label-${i}`,
         type: "text",
         value: node.label,
-        onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], label: +e.target!.value}, nodes.slice(i+1)].flat())
+        onChange: (e: any) => updateNode(e, 'label')
       }
     ],
     bpm: [
@@ -47,7 +69,7 @@ export default function Node(props: props) {
         id: `bpm${i}`,
         type: "number",
         value: node.bpm,
-        onChange: (e: any) => setNodes([nodes.slice(0,i), {...nodes[i], bpm: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'bpm'),
         maxLength: 5,
         min: 0,
         max: 60000
@@ -58,10 +80,10 @@ export default function Node(props: props) {
         className: 'textbox',
         title: 'Rest %',
         label: 'Rest %',
-        id: `restChance${i}`,
+        id: `rest${i}`,
         type: "number",
         value: node.rest,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], rest: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'rest'),
         min:0,
         max:100,
         maxLength:3
@@ -75,7 +97,7 @@ export default function Node(props: props) {
         id: `minLevel${i}`,
         type: "number",
         value: node.minLevel,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minLevel'),
         min:0,
         max:100,
         maxLength:3
@@ -86,7 +108,7 @@ export default function Node(props: props) {
         id: `maxLevel${i}`,
         type: "number",
         value: node.maxLevel,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxLevel: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxLevel'),
         min:0,
         max:100,
         maxLength:3
@@ -100,7 +122,7 @@ export default function Node(props: props) {
         id: `minLength${i}`,
         type: "number",
         value: node.minNoteLength,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minNoteLength'),
         min:0,
         max:100,
         maxLength:3
@@ -111,7 +133,7 @@ export default function Node(props: props) {
         id: `maxLength${i}`,
         type: "number",
         value: node.maxNoteLength,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxNoteLength: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxNoteLength'),
         min:0,
         max:100,
         maxLength:3
@@ -125,7 +147,7 @@ export default function Node(props: props) {
         id: `minOffset${i}`,
         type: "number",
         value: node.minOffset,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minOffset'),
         min:0,
         max:100,
         maxLength:3
@@ -136,7 +158,7 @@ export default function Node(props: props) {
         id: `maxOffset${i}`,
         type: "number",
         value: node.maxOffset,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxOffset: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxOffset'),
         min:0,
         max:100,
         maxLength:3
@@ -150,7 +172,7 @@ export default function Node(props: props) {
         id: `minDetune${i}`,
         type: "number",
         value: node.minDetune,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minDetune'),
         min:-100,
         max:100,
         maxLength:4
@@ -161,7 +183,7 @@ export default function Node(props: props) {
         id: `maxDetune${i}`,
         type: "number",
         value: node.maxDetune,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxDetune: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxDetune'),
         min:-100,
         max:100,
         maxLength:4
@@ -175,7 +197,7 @@ export default function Node(props: props) {
         id: `minFadeIn${i}`,
         type: "number",
         value: node.minFadeIn,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minFadeIn'),
         maxLength:4
       },
       {
@@ -184,7 +206,7 @@ export default function Node(props: props) {
         id: `maxFadeIn${i}`,
         type: "number",
         value: node.maxFadeIn,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeIn: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxFadeIn'),
         maxLength:4
       }
     ],
@@ -196,7 +218,7 @@ export default function Node(props: props) {
         id: `minFadeOut${i}`,
         type: "number",
         value: node.minFadeOut,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], minFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'minFadeOut'),
         maxLength:4
       },
       {
@@ -205,7 +227,7 @@ export default function Node(props: props) {
         id: `maxFadeOut${i}`,
         type: "number",
         value: node.maxFadeOut,
-        onChange: (e: any) => setNodes([nodes.slice(0, i), {...nodes[i], maxFadeOut: +e.target.value}, nodes.slice(i+1)].flat()),
+        onChange: (e: any) => updateNode(e, 'maxFadeOut'),
         maxLength:4
       }
     ]

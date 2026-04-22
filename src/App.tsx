@@ -17,12 +17,10 @@ function App() {
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addNode = () => {
-    // console.log('Adding Node')
     setNodes((nodes) => [nodes, setUpNode()].flat())
   }
 
   useEffect(() => {
-    // console.log('Using Effect')
     if (!active(nodes).length) {
       cycling = false
       setCycleButtonLabel(false)
@@ -34,12 +32,11 @@ function App() {
   }
 
   const setUpNode = () => {
-    // console.log('Setting Up Node')
     
     const clonedNode = active(nodes).reverse()[0]
 
     return {
-      isActive          : true,
+      isActive        : true,
       label           : clonedNode?.label+1           || 1,
       nextInterval    : 0,
       bpm             : clonedNode?.bpm               ??  120,
@@ -64,7 +61,6 @@ function App() {
   }
 
   const setUpSample = (file: string) => {
-    // console.log('Setting Up Sample')
     const sample = new Audio(file)
     const sound = context.createMediaElementSource(sample);
     sound.connect(context.destination)
@@ -75,7 +71,6 @@ function App() {
   const kickSample  = setUpSample(kickFile)
 
   const handleStartStop = () => {
-    // console.log('Handling Start Stop')
     cycling = !cycling
     cycling ? start() : stop()
   }
@@ -103,7 +98,6 @@ function App() {
   }
 
   const stop = async () => {
-    // console.log('Stopping')
     setCycleButtonLabel(false) 
     await active(nodes).forEach(node => {
       node.gain?.gain.setValueAtTime(0, context.currentTime)
@@ -232,7 +226,6 @@ function App() {
   }
 
   const getIntervalLength = (i: number) => {
-    // console.log('Getting interval length')
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
@@ -244,7 +237,6 @@ function App() {
   }
        
   const isRest = (i: number) => {
-    // console.log('Determining Rest')
     const chanceOfRest  = +document.querySelector<HTMLInputElement>(`#rest${i}`)?.value!/100
 
     const diceRoll = Math.random()
@@ -252,11 +244,8 @@ function App() {
   }
 
   const getRangeValue = (key: string, i:number) => {
-    // console.log('Getting Range Value')
     const minEl = document.getElementById(`min${key}${i}`)
-    console.log(minEl)
     const maxEl = document.getElementById(`max${key}${i}`)
-    console.log(maxEl)
 
     const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
     const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
@@ -264,7 +253,6 @@ function App() {
   }
 
   const detune = (frequency: number, i: number) => {
-    // console.log('Getting Detune Value')
     const detune = getRangeValue('Detune', i)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
@@ -273,9 +261,7 @@ function App() {
   }
 
   const getRandomFrequency = (i: number) => {
-    // console.log('Getting Random Frequency')
     let activeFrequencies = getActiveFrequencies(i) 
-    // console.log(activeFrequencies)
 
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
 
@@ -283,13 +269,10 @@ function App() {
   }
 
   const getActiveFrequencies = (i: number) => {
-    // console.log('Getting Active Frequencies')
     
     const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(
       (scale): scale is HTMLInputElement => scale instanceof HTMLInputElement && scale.checked    
     ).map(scale => { return +scale.value})
-
-    console.log(i)
 
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
@@ -305,7 +288,6 @@ function App() {
   }
 
   const handleDelete = (i: number) => {
-    // console.log('Deleting Node')
     nodes[i].gain?.gain.setValueAtTime(0, 0)
     nodes[i].oscillator?.stop()
 
