@@ -30,9 +30,9 @@ type VoiceAttribute =
 | `min${Range}`
 | `max${Range}`
 
-const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-const octaves  = [0,1,2,3,4,5,6,7,8,9,10]
-const waveShapes = [
+const allNotes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+const allOctaves  = [0,1,2,3,4,5,6,7,8,9,10]
+const allWaveShapes = [
   'sine',
   'triangle',
   'sawtooth',
@@ -41,7 +41,7 @@ const waveShapes = [
   'snare'
 ]
 
-const intervals = [1, 1/2, 1/4, 1/8, 1/16]
+const allIntervals = [1, 1/2, 1/4, 1/8, 1/16]
 
 export default function Voice(props: props) {
 
@@ -55,7 +55,11 @@ export default function Voice(props: props) {
     i, 
     setVoices, 
     voices,  
-    handleDelete
+    handleDelete,
+    notes,
+    octaves,
+    waveShapes,
+    intervals
   } = props
 
   const attributes: any = {
@@ -241,7 +245,7 @@ export default function Voice(props: props) {
         maxLength:4
       }
     ],
-    notes: notes.map((note, j) => {
+    notes: allNotes.map((note, j) => {
       return {
         className: `note${i}`,
         title: note.toString(),
@@ -251,7 +255,7 @@ export default function Voice(props: props) {
         onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())
       }
     }),
-    octaves: octaves.map((octave, j) => {
+    octaves: allOctaves.map((octave, j) => {
       return {
         className: `octave${i}`,
         title: octave.toString(),
@@ -261,34 +265,26 @@ export default function Voice(props: props) {
         onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())
       }
     }),
-    waveShapes: [
-      () => waveShapes.map((waveShape, j) => {
-        return <div key={`waveShape-${j}`}>
-          <input
-            title={waveShape}
-            className={`wave${i}`}
-            type="checkbox"
-            value={waveShape}
-            checked={voice.activeWaveShapes.includes(waveShape)}
-            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())}
-          />
-        </div>
-      })
-    ],
-    intervals: [
-      () => intervals.map((interval, j) => {
-        return <div key={`interval-${j}`}>
-          <input
-            className={`interval${i}`}
-            title={interval.toString()}
-            type="checkbox"
-            value={interval}
-            checked={voice.activeIntervals.includes(interval)}
-            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-          />
-        </div>
-      })
-    ]
+    waveShapes: allWaveShapes.map((waveShape, j) => {
+      return {
+        title: waveShape,
+        className: `wave${i}`,
+        type: "checkbox",
+        value: waveShape,
+        checked: voice.activeWaveShapes.includes(waveShape),
+        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())
+      }
+    }),
+    intervals: allIntervals.map((interval, j) => {
+      return {
+        className: `interval${i}`,
+        title: interval.toString(),
+        type: "checkbox",
+        value: interval,
+        checked: voice.activeIntervals.includes(interval),
+        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())
+      }
+    })
   }
 
   return <div 
@@ -348,77 +344,6 @@ export default function Voice(props: props) {
             </div>
           )
         }
-      </div>
-    
-      <div className="column">
-        <div className="row inner-row">
-          <div className="label">Notes</div>
-          {
-            notes.map((note, j) => 
-              <div key={`note-${j}`}>
-                <input
-                  className={`note${i}`}
-                  title={note.toString()}
-                  type="checkbox"
-                  value={note}
-                  checked={voice.activeNotes?.includes(note)}
-                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-                />
-              </div>
-            )
-          }
-        </div>
-        <div className="row inner-row">
-          <div className="label">Octaves</div>
-          {
-            octaves.map((octave, j) =>
-              <div key={`octave-${j}`}>
-                <input
-                  className={`octave${i}`}
-                  title={octave.toString()}
-                  type="checkbox"
-                  value={octave}
-                  checked={voice.activeOctaves.includes(octave)}
-                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-                />
-              </div>
-            )
-          }
-        </div>
-        <div className="row inner-row">
-          <div className="label">WaveShapes</div>
-          { 
-            waveShapes.map((waveShape, j) => {
-              return <div key={`waveShape-${j}`}>
-                <input
-                  title={waveShape}
-                  className={`wave${i}`}
-                  type="checkbox"
-                  value={waveShape}
-                  checked={voice.activeWaveShapes.includes(waveShape)}
-                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())}
-                />
-              </div>
-            })
-          }
-        </div>
-        <div className="row inner-row">
-          <div className='label'>Intervals</div>
-          { 
-            intervals.map((interval, j) => {
-              return <div key={`interval-${j}`}>
-                <input
-                  className={`interval${i}`}
-                  title={interval.toString()}
-                  type="checkbox"
-                  value={interval}
-                  checked={voice.activeIntervals.includes(interval)}
-                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-                />
-              </div>
-            })
-          }
-        </div>
       </div>
       <button 
         id="delete-voice"
