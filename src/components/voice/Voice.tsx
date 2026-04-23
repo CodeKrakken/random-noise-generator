@@ -1,10 +1,10 @@
-import { node } from '../../types/node'
+import { voice } from '../../types/voice'
 
 type props = {
-  node        : node, 
+  voice        : voice, 
   i           : number, 
-  setNodes    : Function, 
-  nodes       : node[], 
+  setVoices    : Function, 
+  voices       : voice[], 
   scales      : number[], 
   waveShapes  : string[], 
   intervals   : number[], 
@@ -23,25 +23,25 @@ const ranges = [
 
 type Range = typeof ranges[number]
 
-type NodeAttribute =
+type VoiceAttribute =
   | 'label'
   | 'bpm'
   | 'rest'
   | `min${Range}`
   | `max${Range}`
 
-export default function Node(props: props) {
+export default function Voice(props: props) {
 
-  const updateNode = (e: any, attribute: NodeAttribute) => {
-    nodes[i][attribute] = +e.target!.value
-    setNodes([nodes.slice(0,i), nodes[i], nodes.slice(i+1)].flat())
+  const updateVoice = (e: any, attribute: VoiceAttribute) => {
+    voices[i][attribute] = +e.target!.value
+    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
   } 
 
   const {
-    node, 
+    voice, 
     i, 
-    setNodes, 
-    nodes, 
+    setVoices, 
+    voices, 
     scales, 
     waveShapes, 
     intervals, 
@@ -56,10 +56,10 @@ export default function Node(props: props) {
         title: "Label",
         label: "Name",
         id: `label${i}`,
-        'data-testid': `node-label-${i}`,
+        'data-testid': `voice-label-${i}`,
         type: "text",
-        value: node.label,
-        onChange: (e: any) => updateNode(e, 'label')
+        value: voice.label,
+        onChange: (e: any) => updateVoice(e, 'label')
       }
     ],
     bpm: [
@@ -69,8 +69,8 @@ export default function Node(props: props) {
         label: "BPM",
         id: `bpm${i}`,
         type: "number",
-        value: node.bpm,
-        onChange: (e: any) => updateNode(e, 'bpm'),
+        value: voice.bpm,
+        onChange: (e: any) => updateVoice(e, 'bpm'),
         maxLength: 5,
         min: 0,
         max: 60000
@@ -83,8 +83,8 @@ export default function Node(props: props) {
         label: 'Rest %',
         id: `rest${i}`,
         type: "number",
-        value: node.rest,
-        onChange: (e: any) => updateNode(e, 'rest'),
+        value: voice.rest,
+        onChange: (e: any) => updateVoice(e, 'rest'),
         min:0,
         max:100,
         maxLength:3
@@ -97,8 +97,8 @@ export default function Node(props: props) {
         label: 'Level',
         id: `minLevel${i}`,
         type: "number",
-        value: node.minLevel,
-        onChange: (e: any) => updateNode(e, 'minLevel'),
+        value: voice.minLevel,
+        onChange: (e: any) => updateVoice(e, 'minLevel'),
         min:0,
         max:100,
         maxLength:3
@@ -108,8 +108,8 @@ export default function Node(props: props) {
         title: 'Max Level',
         id: `maxLevel${i}`,
         type: "number",
-        value: node.maxLevel,
-        onChange: (e: any) => updateNode(e, 'maxLevel'),
+        value: voice.maxLevel,
+        onChange: (e: any) => updateVoice(e, 'maxLevel'),
         min:0,
         max:100,
         maxLength:3
@@ -122,8 +122,8 @@ export default function Node(props: props) {
         label: 'Length',
         id: `minLength${i}`,
         type: "number",
-        value: node.minNoteLength,
-        onChange: (e: any) => updateNode(e, 'minNoteLength'),
+        value: voice.minNoteLength,
+        onChange: (e: any) => updateVoice(e, 'minNoteLength'),
         min:0,
         max:100,
         maxLength:3
@@ -133,8 +133,8 @@ export default function Node(props: props) {
         title: 'Max Length',
         id: `maxLength${i}`,
         type: "number",
-        value: node.maxNoteLength,
-        onChange: (e: any) => updateNode(e, 'maxNoteLength'),
+        value: voice.maxNoteLength,
+        onChange: (e: any) => updateVoice(e, 'maxNoteLength'),
         min:0,
         max:100,
         maxLength:3
@@ -147,8 +147,8 @@ export default function Node(props: props) {
         label: 'Offset',
         id: `minOffset${i}`,
         type: "number",
-        value: node.minOffset,
-        onChange: (e: any) => updateNode(e, 'minOffset'),
+        value: voice.minOffset,
+        onChange: (e: any) => updateVoice(e, 'minOffset'),
         min:0,
         max:100,
         maxLength:3
@@ -158,8 +158,8 @@ export default function Node(props: props) {
         title: 'Max Offset',
         id: `maxOffset${i}`,
         type: "number",
-        value: node.maxOffset,
-        onChange: (e: any) => updateNode(e, 'maxOffset'),
+        value: voice.maxOffset,
+        onChange: (e: any) => updateVoice(e, 'maxOffset'),
         min:0,
         max:100,
         maxLength:3
@@ -172,8 +172,8 @@ export default function Node(props: props) {
         label: 'Detune',
         id: `minDetune${i}`,
         type: "number",
-        value: node.minDetune,
-        onChange: (e: any) => updateNode(e, 'minDetune'),
+        value: voice.minDetune,
+        onChange: (e: any) => updateVoice(e, 'minDetune'),
         min:-100,
         max:100,
         maxLength:4
@@ -183,8 +183,8 @@ export default function Node(props: props) {
         title: 'detune',
         id: `maxDetune${i}`,
         type: "number",
-        value: node.maxDetune,
-        onChange: (e: any) => updateNode(e, 'maxDetune'),
+        value: voice.maxDetune,
+        onChange: (e: any) => updateVoice(e, 'maxDetune'),
         min:-100,
         max:100,
         maxLength:4
@@ -197,8 +197,8 @@ export default function Node(props: props) {
         label: 'Fade In',
         id: `minFadeIn${i}`,
         type: "number",
-        value: node.minFadeIn,
-        onChange: (e: any) => updateNode(e, 'minFadeIn'),
+        value: voice.minFadeIn,
+        onChange: (e: any) => updateVoice(e, 'minFadeIn'),
         maxLength:4
       },
       {
@@ -206,8 +206,8 @@ export default function Node(props: props) {
         title: 'Max Fade In',
         id: `maxFadeIn${i}`,
         type: "number",
-        value: node.maxFadeIn,
-        onChange: (e: any) => updateNode(e, 'maxFadeIn'),
+        value: voice.maxFadeIn,
+        onChange: (e: any) => updateVoice(e, 'maxFadeIn'),
         maxLength:4
       }
     ],
@@ -218,8 +218,8 @@ export default function Node(props: props) {
         label: 'Fade Out',
         id: `minFadeOut${i}`,
         type: "number",
-        value: node.minFadeOut,
-        onChange: (e: any) => updateNode(e, 'minFadeOut'),
+        value: voice.minFadeOut,
+        onChange: (e: any) => updateVoice(e, 'minFadeOut'),
         maxLength:4
       },
       {
@@ -227,18 +227,18 @@ export default function Node(props: props) {
         title: 'Max Fade Out',
         id: `maxFadeOut${i}`,
         type: "number",
-        value: node.maxFadeOut,
-        onChange: (e: any) => updateNode(e, 'maxFadeOut'),
+        value: voice.maxFadeOut,
+        onChange: (e: any) => updateVoice(e, 'maxFadeOut'),
         maxLength:4
       }
     ]
   }
 
   return <div 
-    className="node" 
-    id={`node${i}`}
-    data-testid={`node-${i}`}
-    key={`node-${i}`}
+    className="voice" 
+    id={`voice${i}`}
+    data-testid={`voice-${i}`}
+    key={`voice-${i}`}
   >
     <div className="row">
       <div className="column">
@@ -264,7 +264,6 @@ export default function Node(props: props) {
                 const dataTestId = input['data-testid']
 
                 return (
-                
                   <>
                     {
                       label && <div className="label">
@@ -297,6 +296,7 @@ export default function Node(props: props) {
 
       <div className="column">
         <div className="row inner-row">
+          Notes
           {
             notes.map((note, j) => 
               <div key={`note-${j}`}>
@@ -305,8 +305,8 @@ export default function Node(props: props) {
                   title={note.toString()}
                   type="checkbox"
                   value={note}
-                  checked={node.activeNotes?.includes(note)}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeNotes: node.activeNotes.includes(+e.target.value) ? node.activeNotes.filter(note => note !== +e.target.value) : [node.activeNotes, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                  checked={voice.activeNotes?.includes(note)}
+                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())}
                 />
               </div>
             )
@@ -321,8 +321,8 @@ export default function Node(props: props) {
                   title={scale.toString()}
                   type="checkbox"
                   value={scale}
-                  checked={node.activeScales.includes(scale)}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeScales: node.activeScales.includes(+e.target.value) ? node.activeScales.filter(note => note !== +e.target.value) : [node.activeScales, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                  checked={voice.activeScales.includes(scale)}
+                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeScales: voice.activeScales.includes(+e.target.value) ? voice.activeScales.filter(note => note !== +e.target.value) : [voice.activeScales, +e.target.value].flat()}, voices.slice(i+1)].flat())}
                 />
               </div>
             )
@@ -337,8 +337,8 @@ export default function Node(props: props) {
                   className={`wave${i}`}
                   type="checkbox"
                   value={waveShape}
-                  checked={node.activeWaveShapes.includes(waveShape)}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeWaveShapes: node.activeWaveShapes.includes(e.target.value) ? node.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [node.activeWaveShapes, e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                  checked={voice.activeWaveShapes.includes(waveShape)}
+                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())}
                 />
               </div>
             })
@@ -353,8 +353,8 @@ export default function Node(props: props) {
                   title={interval.toString()}
                   type="checkbox"
                   value={interval}
-                  checked={node.activeIntervals.includes(interval)}
-                  onChange={(e) => setNodes([nodes.slice(0,i), {...nodes[i], activeIntervals: node.activeIntervals.includes(+e.target.value) ? node.activeIntervals.filter(interval => interval !== +e.target.value) : [node.activeIntervals, +e.target.value].flat()}, nodes.slice(i+1)].flat())}
+                  checked={voice.activeIntervals.includes(interval)}
+                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())}
                 />
               </div>
             })
@@ -362,9 +362,9 @@ export default function Node(props: props) {
         </div>
       </div>
       <button 
-        id="delete-node"
+        id="delete-voice"
         onClick={(e) => handleDelete(i, e)}
-        data-testid={`delete-node-${i}`}
+        data-testid={`delete-voice-${i}`}
       >
         X
       </button>

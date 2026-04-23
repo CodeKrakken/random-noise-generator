@@ -46,18 +46,18 @@ describe('header', () => {
     jest.clearAllTimers()
   })
 
-  test('adds a node', () => {
+  test('adds a voice', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
-    expect(document.querySelector('.node')).toBeInTheDocument()
+    expect(document.querySelector('.voice')).toBeInTheDocument()
   })
 
-  test('shows Start button after adding node', () => {
+  test('shows Start button after adding voice', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     expect(screen.getByText('Start')).toBeInTheDocument()
   })
@@ -65,7 +65,7 @@ describe('header', () => {
   test('starts audio when Start clicked', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.click(screen.getByText('Start'))
 
     // we can't easily inspect internals, but we can assert Stop appears
@@ -75,20 +75,20 @@ describe('header', () => {
   test('stops audio when Stop clicked', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.click(screen.getByText('Start'))
     fireEvent.click(screen.getByText('Stop'))
 
     expect(screen.getByText('Start')).toBeInTheDocument()
   })
 
-  test('new node copies previous node settings', () => {
+  test('new voice copies previous voice settings', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.change(screen.getByTitle('BPM'), { target: { value: '200' } })
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     const inputs = document.querySelectorAll('[title="BPM"]')
 
@@ -101,7 +101,7 @@ describe('header', () => {
 
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.click(screen.getByText('Start'))
 
     expect(globalThis.setTimeout).toHaveBeenCalled()
@@ -110,7 +110,7 @@ describe('header', () => {
   test('sets gain to 0 during rest', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.change(screen.getByTitle('Rest %'), {
       target: { value: '100' }
     })
@@ -128,7 +128,7 @@ describe('header', () => {
 
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     // force a future nextInterval so we hit the ELSE branch
     const bpmInput = screen.getByTitle('BPM')
@@ -147,7 +147,7 @@ describe('header', () => {
 
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     fireEvent.change(screen.getByTitle('Rest %'), {
       target: { value: '0' }
@@ -209,7 +209,7 @@ describe('header', () => {
 
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     // ensure it doesn't rest
     fireEvent.change(screen.getByTitle('Rest %'), {
@@ -263,7 +263,7 @@ describe('header', () => {
 
   //   render(<App />)
 
-  //   fireEvent.click(screen.getByText('Add Node'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
   //   fireEvent.change(screen.getByTitle('Rest %'), {
   //     target: { value: '0' }
@@ -294,20 +294,20 @@ describe('header', () => {
 
 
 
-  test('handleDelete sets node inactive via state update', () => {
+  test('handleDelete sets voice inactive via state update', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
     fireEvent.click(screen.getByText('X'))
 
-    // node should no longer be active in render tree
+    // voice should no longer be active in render tree
     expect(screen.queryByText('X')).not.toBeInTheDocument()
   })
 
   test('oscillator branch executes wave processing path', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     fireEvent.click(screen.getByTitle('sine')) // wave checkbox exists
 
@@ -350,7 +350,7 @@ describe('header', () => {
 
   //   render(<App />)
 
-  //   fireEvent.click(screen.getByText('Add Node'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
   //   fireEvent.change(screen.getByTitle('Rest %'), { target: { value: '0' } })
 
@@ -378,7 +378,7 @@ describe('header', () => {
   test('covers fade overlap branch when noteLength > intervalLength', () => {
     render(<App />)
 
-    fireEvent.click(screen.getByText('Add Node'))
+    fireEvent.click(screen.getByText('Add Voice'))
 
     fireEvent.change(screen.getByTitle('Max Length'), { target: { value: '200' } })
     fireEvent.change(screen.getByTitle('Min Fade In'), { target: { value: '100' } })
@@ -442,7 +442,7 @@ Object.defineProperty(HTMLMediaElement.prototype, 'play', {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const addNode = () => fireEvent.click(screen.getByRole('button', { name: /add node/i }));
+const addVoice = () => fireEvent.click(screen.getByRole('button', { name: /add voice/i }));
 const clickStartStop = () => fireEvent.click(screen.getByRole('button', { name: /start|stop/i }));
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -459,53 +459,53 @@ describe('App', () => {
     jest.useRealTimers();
   });
 
-  // ── Lines 101–133: addNode / setUpNode ──────────────────────────────────────
+  // ── Lines 101–133: addVoice / setUpVoice ──────────────────────────────────────
 
-  describe('addNode / setUpNode (lines 101–133)', () => {
-    it('renders a node component when Add Node is clicked', () => {
+  describe('addVoice / setUpVoice (lines 101–133)', () => {
+    it('renders a voice component when Add Voice is clicked', () => {
       render(<App />);
-      addNode();
-      // Node should appear — keyed by node index
-      expect(screen.getByTestId('node-0')).toBeInTheDocument();
+      addVoice();
+      // Voice should appear — keyed by voice index
+      expect(screen.getByTestId('voice-0')).toBeInTheDocument();
     });
 
-    it('clones settings from the last active node when a second node is added', () => {
+    it('clones settings from the last active voice when a second voice is added', () => {
       render(<App />);
-      addNode();
-      addNode();
-      const secondNode = screen.getByTestId('node-1');
-      expect(secondNode).toBeInTheDocument();
+      addVoice();
+      addVoice();
+      const secondVoice = screen.getByTestId('voice-1');
+      expect(secondVoice).toBeInTheDocument();
     });
 
-    // it('labels first node as 1', () => {
+    // it('labels first voice as 1', () => {
     //   render(<App />);
-    //   addNode();
-    //   expect(screen.getByTestId('node-label-0')).toHaveTextContent('1');
+    //   addVoice();
+    //   expect(screen.getByTestId('voice-label-0')).toHaveTextContent('1');
     // });
 
-    // it('increments label when cloning from last active node', () => {
+    // it('increments label when cloning from last active voice', () => {
     //   render(<App />);
-    //   addNode();
-    //   addNode();
-    //   expect(screen.getByTestId('node-label-1')).toHaveTextContent('2');
+    //   addVoice();
+    //   addVoice();
+    //   expect(screen.getByTestId('voice-label-1')).toHaveTextContent('2');
     // });
   });
 
-  // ── Lines 145–152: useEffect — stop cycling when no active nodes ────────────
+  // ── Lines 145–152: useEffect — stop cycling when no active voices ────────────
 
-  describe('useEffect: cycling stops when all nodes are deleted (lines 145–152)', () => {
-    it('hides the Start button when there are no active nodes', () => {
+  describe('useEffect: cycling stops when all voices are deleted (lines 145–152)', () => {
+    it('hides the Start button when there are no active voices', () => {
       render(<App />);
       expect(screen.queryByRole('button', { name: /start/i })).not.toBeInTheDocument();
     });
 
-    it('resets cycleButtonLabel to false when last node is deleted', async () => {
+    it('resets cycleButtonLabel to false when last voice is deleted', async () => {
       render(<App />);
-      addNode();
+      addVoice();
       clickStartStop(); // start cycling
 
-      // Delete the only node
-      fireEvent.click(screen.getByTestId('delete-node-0'));
+      // Delete the only voice
+      fireEvent.click(screen.getByTestId('delete-voice-0'));
 
       await waitFor(() => {
         expect(screen.queryByRole('button', { name: /stop/i })).not.toBeInTheDocument();
@@ -518,7 +518,7 @@ describe('App', () => {
   describe('handleStartStop (line 163)', () => {
     it('toggles the cycle button label between Start and Stop', () => {
       render(<App />);
-      addNode();
+      addVoice();
 
       clickStartStop();
       expect(screen.getByRole('button', { name: /stop/i })).toBeInTheDocument();
@@ -528,24 +528,24 @@ describe('App', () => {
     });
   });
 
-  // ── Lines 178–185: start() — creates oscillator/gain per active node ────────
+  // ── Lines 178–185: start() — creates oscillator/gain per active voice ────────
 
   describe('start() (lines 178–185)', () => {
-    // it('calls createOscillator and createGain for each active node', () => {
+    // it('calls createOscillator and createGain for each active voice', () => {
     //   render(<App />);
-    //   addNode();
-    //   addNode();
+    //   addVoice();
+    //   addVoice();
     //   clickStartStop();
 
     //   expect(mockContext.createOscillator).toHaveBeenCalledTimes(2);
     //   expect(mockContext.createGain).toHaveBeenCalledTimes(2);
     // });
 
-    // it('does not call createOscillator for inactive nodes', () => {
+    // it('does not call createOscillator for inactive voices', () => {
     //   render(<App />);
-    //   addNode();
-    //   addNode();
-    //   fireEvent.click(screen.getByTestId('delete-node-0')); // deactivate first
+    //   addVoice();
+    //   addVoice();
+    //   fireEvent.click(screen.getByTestId('delete-voice-0')); // deactivate first
     //   clickStartStop();
 
     //   expect(mockContext.createOscillator).toHaveBeenCalledTimes(1);
@@ -556,19 +556,19 @@ describe('App', () => {
 
   describe('stop() (lines 190–199)', () => {
     // it('sets gain to 0 and stops oscillators on stop', async () => {
-    //   const gainNode = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
-    //   const oscillatorNode = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
-    //   mockContext.createGain.mockReturnValue(gainNode as any);
-    //   mockContext.createOscillator.mockReturnValue(oscillatorNode);
+    //   const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
+    //   const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
+    //   mockContext.createGain.mockReturnValue(gainVoice as any);
+    //   mockContext.createOscillator.mockReturnValue(oscillatorVoice);
 
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
     //   clickStartStop(); // start
     //   clickStartStop(); // stop
 
     //   await waitFor(() => {
-    //     expect(gainNode.gain.setValueAtTime).toHaveBeenCalledWith(0, mockContext.currentTime);
-    //     expect(oscillatorNode.stop).toHaveBeenCalled();
+    //     expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, mockContext.currentTime);
+    //     expect(oscillatorVoice.stop).toHaveBeenCalled();
     //   });
     // });
   });
@@ -578,7 +578,7 @@ describe('App', () => {
   describe('newInterval() (lines 205–239)', () => {
     it('schedules a setTimeout callback when cycling starts', () => {
       render(<App />);
-      addNode();
+      addVoice();
       const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
       clickStartStop();
@@ -588,7 +588,7 @@ describe('App', () => {
 
     // it('does not throw when no checked wave inputs are present', () => {
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
 
     //   // Uncheck all wave checkboxes before starting
     //   const waveCheckboxes = document.querySelectorAll<HTMLInputElement>('[class*="wave0"]');
@@ -602,7 +602,7 @@ describe('App', () => {
 
     it('calls newInterval recursively via setTimeout', () => {
       render(<App />);
-      addNode();
+      addVoice();
       const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
       clickStartStop();
@@ -619,7 +619,7 @@ describe('App', () => {
   describe('getIntervalLength() (lines 253–273)', () => {
     // it('does not throw when interval checkboxes are present', () => {
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
 
     //   expect(() => {
     //     clickStartStop();
@@ -629,7 +629,7 @@ describe('App', () => {
 
     // it('respects bpm input for interval length calculation', () => {
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
 
     //   const bpmInput = document.querySelector<HTMLInputElement>('#bpm0');
     //   if (bpmInput) fireEvent.change(bpmInput, { target: { value: '60' } });
@@ -644,37 +644,37 @@ describe('App', () => {
   // ── Lines 316–319: handleDelete() ───────────────────────────────────────────
 
   describe('handleDelete() (lines 316–319)', () => {
-    it('removes the node visually when delete is clicked', () => {
+    it('removes the voice visually when delete is clicked', () => {
       render(<App />);
-      addNode();
-      expect(screen.getByTestId('node-0')).toBeInTheDocument();
+      addVoice();
+      expect(screen.getByTestId('voice-0')).toBeInTheDocument();
 
-      fireEvent.click(screen.getByTestId('delete-node-0'));
-      expect(screen.queryByTestId('node-0')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('delete-voice-0'));
+      expect(screen.queryByTestId('voice-0')).not.toBeInTheDocument();
     });
 
     // it('sets gain to 0 and stops oscillator on delete', () => {
-    //   const gainNode = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
-    //   const oscillatorNode = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
-    //   mockContext.createGain.mockReturnValue(gainNode as any);
-    //   mockContext.createOscillator.mockReturnValue(oscillatorNode);
+    //   const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
+    //   const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
+    //   mockContext.createGain.mockReturnValue(gainVoice as any);
+    //   mockContext.createOscillator.mockReturnValue(oscillatorVoice);
 
     //   render(<App />);
-    //   addNode();
-    //   clickStartStop(); // attach oscillator/gain to node
+    //   addVoice();
+    //   clickStartStop(); // attach oscillator/gain to voice
 
-    //   fireEvent.click(screen.getByTestId('delete-node-0'));
+    //   fireEvent.click(screen.getByTestId('delete-voice-0'));
 
-    //   expect(gainNode.gain.setValueAtTime).toHaveBeenCalledWith(0, 0);
-    //   expect(oscillatorNode.stop).toHaveBeenCalled();
+    //   expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, 0);
+    //   expect(oscillatorVoice.stop).toHaveBeenCalled();
     // });
 
-    it('does not throw when deleting a node that was never started', () => {
+    it('does not throw when deleting a voice that was never started', () => {
       render(<App />);
-      addNode();
+      addVoice();
 
       expect(() => {
-        fireEvent.click(screen.getByTestId('delete-node-0'));
+        fireEvent.click(screen.getByTestId('delete-voice-0'));
       }).not.toThrow();
     });
   });
@@ -684,7 +684,7 @@ describe('App', () => {
   describe('isRest() (called from newInterval)', () => {
     // it('does not throw when rest input is present', () => {
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
 
     //   const restInput = document.querySelector<HTMLInputElement>('#rest0');
     //   if (restInput) fireEvent.change(restInput, { target: { value: '50' } });
@@ -701,7 +701,7 @@ describe('App', () => {
   describe('getRangeValue() (called from newInterval)', () => {
     // it('falls back gracefully when min/max elements are missing', () => {
     //   render(<App />);
-    //   addNode();
+    //   addVoice();
 
     //   // Ensure the inputs exist but have no values — fallback to 0/100
     //   expect(() => {

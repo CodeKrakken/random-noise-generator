@@ -3,9 +3,9 @@ import './App.css';
 import { allFrequencies, waveShapes, intervals } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
-import Node from './components/node/Node';
+import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
-import { node } from './types/node'
+import { voice } from './types/voice'
 
 let cycling = false
 
@@ -13,50 +13,50 @@ function App() {
 
   const [context] = useState(() => new AudioContext())
 
-  const [nodes,             setNodes            ] = useState<node[]>([])
+  const [voices,             setVoices            ] = useState<voice[]>([])
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
-  const addNode = () => {
-    setNodes((nodes) => [nodes, setUpNode()].flat())
+  const addVoice = () => {
+    setVoices((voices) => [voices, setUpVoice()].flat())
   }
 
   useEffect(() => {
-    if (!active(nodes).length) {
+    if (!active(voices).length) {
       cycling = false
       setCycleButtonLabel(false)
     }
-  }, [nodes])
+  }, [voices])
 
-  const active = (nodes: node[]) => {
-    return nodes.filter(node => node.isActive)
+  const active = (voices: voice[]) => {
+    return voices.filter(voice => voice.isActive)
   }
 
-  const setUpNode = () => {
+  const setUpVoice = () => {
     
-    const clonedNode = active(nodes).reverse()[0]
+    const clonedVoice = active(voices).reverse()[0]
 
     return {
       isActive        : true,
-      label           : clonedNode?.label+1           || 1,
+      label           : clonedVoice?.label+1           || 1,
       nextInterval    : 0,
-      bpm             : clonedNode?.bpm               ??  120,
-      minLevel        : clonedNode?.minLevel          ??  100,
-      maxLevel        : clonedNode?.maxLevel          ??  100,
-      activeNotes     : clonedNode?.activeNotes       ??  [1,3,5,6,8,10,12,13],
-      activeScales    : clonedNode?.activeScales      ??  [4],
-      activeWaveShapes: clonedNode?.activeWaveShapes  ??  ['sine'],
-      rest            : clonedNode?.rest              ??  0,
-      activeIntervals : clonedNode?.activeIntervals   ??  [1/2],
-      minNoteLength   : clonedNode?.minNoteLength     ??  100,
-      maxNoteLength   : clonedNode?.maxNoteLength     ??  100,
-      minOffset       : clonedNode?.minOffset         ??  0,  
-      maxOffset       : clonedNode?.maxOffset         ??  0,
-      minDetune       : clonedNode?.minDetune         ??  0,
-      maxDetune       : clonedNode?.maxDetune         ??  0,
-      minFadeIn       : clonedNode?.minFadeIn         ??  100,
-      maxFadeIn       : clonedNode?.maxFadeIn         ??  100,
-      minFadeOut      : clonedNode?.minFadeOut        ??  100,
-      maxFadeOut      : clonedNode?.maxFadeOut        ??  100,
+      bpm             : clonedVoice?.bpm               ??  120,
+      minLevel        : clonedVoice?.minLevel          ??  100,
+      maxLevel        : clonedVoice?.maxLevel          ??  100,
+      activeNotes     : clonedVoice?.activeNotes       ??  [1,3,5,6,8,10,12,13],
+      activeScales    : clonedVoice?.activeScales      ??  [4],
+      activeWaveShapes: clonedVoice?.activeWaveShapes  ??  ['sine'],
+      rest            : clonedVoice?.rest              ??  0,
+      activeIntervals : clonedVoice?.activeIntervals   ??  [1/2],
+      minNoteLength   : clonedVoice?.minNoteLength     ??  100,
+      maxNoteLength   : clonedVoice?.maxNoteLength     ??  100,
+      minOffset       : clonedVoice?.minOffset         ??  0,  
+      maxOffset       : clonedVoice?.maxOffset         ??  0,
+      minDetune       : clonedVoice?.minDetune         ??  0,
+      maxDetune       : clonedVoice?.maxDetune         ??  0,
+      minFadeIn       : clonedVoice?.minFadeIn         ??  100,
+      maxFadeIn       : clonedVoice?.maxFadeIn         ??  100,
+      minFadeOut      : clonedVoice?.minFadeOut        ??  100,
+      maxFadeOut      : clonedVoice?.maxFadeOut        ??  100,
     }
   }
 
@@ -77,8 +77,8 @@ function App() {
 
   const start = () => {
     setCycleButtonLabel(true)
-    nodes.forEach((node, i) => {
-      if (node.isActive) {
+    voices.forEach((voice, i) => {
+      if (voice.isActive) {
 
         const oscillator  = context.createOscillator()
         const gain        = context.createGain()
@@ -88,10 +88,10 @@ function App() {
         gain.gain.setValueAtTime(0, 0)
         oscillator.start(0);
 
-        node.oscillator = oscillator
-        node.gain       = gain
+        voice.oscillator = oscillator
+        voice.gain       = gain
 
-        node.nextInterval = context.currentTime
+        voice.nextInterval = context.currentTime
         newInterval(i)
       }
     })
@@ -99,29 +99,29 @@ function App() {
 
   const stop = async () => {
     setCycleButtonLabel(false) 
-    await active(nodes).forEach(node => {
-      node.gain?.gain.setValueAtTime(0, context.currentTime)
-      node.oscillator?.stop()
+    await active(voices).forEach(voice => {
+      voice.gain?.gain.setValueAtTime(0, context.currentTime)
+      voice.oscillator?.stop()
     })
 
   }
 
   const newInterval = (i: number) => {
-    const node = nodes[i]
+    const voice = voices[i]
 
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
-      if (context.currentTime >= nodes[i].nextInterval) {
+      if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
 
-        nodes[i].thisInterval = nodes[i].nextInterval
-        nodes[i].nextInterval += intervalLength
+        voices[i].thisInterval = voices[i].nextInterval
+        voices[i].nextInterval += intervalLength
 
         const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
 
         if (isRest(i) || !liveWaves) {
-          nodes[i].gain?.gain.setValueAtTime(0,0)
+          voices[i].gain?.gain.setValueAtTime(0,0)
 
         } else {          
 
@@ -139,7 +139,7 @@ function App() {
 
             const waveShape = randomWave.value
 
-            if (node.oscillator) node.oscillator.type = waveShape as OscillatorType
+            if (voice.oscillator) voice.oscillator.type = waveShape as OscillatorType
 
             if (
               [
@@ -155,7 +155,7 @@ function App() {
 
                 const frequency   = detune(randomFrequency as number, i)
 
-                if (node.oscillator) node.oscillator.frequency.value = frequency
+                if (voice.oscillator) voice.oscillator.frequency.value = frequency
 
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
@@ -164,35 +164,35 @@ function App() {
                 const fadeOutPercentage = getRangeValue('FadeOut', i)
                 const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
 
-                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/nodes.filter(node => node.nextInterval).length
+                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
                 
                 if (noteLength < intervalLength) {
-                  setTimeout(() => {nodes[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+                  setTimeout(() => {voices[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                 }
 
                 if (cycling) {
                   const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                   const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-                  const startOfFadeOut  = nodes[i].nextInterval - fadeOutDuration
-                  const endOfFadeIn     = node.thisInterval ? node.thisInterval + fadeInDuration : fadeInDuration
+                  const startOfFadeOut  = voices[i].nextInterval - fadeOutDuration
+                  const endOfFadeIn     = voice.thisInterval ? voice.thisInterval + fadeInDuration : fadeInDuration
 
-                  const peakPoint       = node.thisInterval ? 
-                                          node.thisInterval + noteLength * peakPercentage / 100 : 
+                  const peakPoint       = voice.thisInterval ? 
+                                          voice.thisInterval + noteLength * peakPercentage / 100 : 
                                           noteLength * peakPercentage / 100
 
                   if (endOfFadeIn <= startOfFadeOut) {
 
-                    node.gain?.gain.setValueAtTime(node.gain.gain.value, 0)
-                    nodes[i].gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
-                    nodes[i].gain?.gain.setValueAtTime(level, startOfFadeOut)
-                    nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
+                    voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
+                    voices[i].gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+                    voices[i].gain?.gain.setValueAtTime(level, startOfFadeOut)
+                    voices[i].gain?.gain.linearRampToValueAtTime(0, voices[i].nextInterval)
 
                   } else {
 
-                    node.gain?.gain.setValueAtTime(node.gain.gain.value, 0)
-                    nodes[i].gain?.gain.linearRampToValueAtTime(level, peakPoint)
-                    nodes[i].gain?.gain.setValueAtTime(level, peakPoint)
-                    nodes[i].gain?.gain.linearRampToValueAtTime(0, nodes[i].nextInterval)
+                    voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
+                    voices[i].gain?.gain.linearRampToValueAtTime(level, peakPoint)
+                    voices[i].gain?.gain.setValueAtTime(level, peakPoint)
+                    voices[i].gain?.gain.linearRampToValueAtTime(0, voices[i].nextInterval)
 
                   }
                 }
@@ -204,7 +204,7 @@ function App() {
             } else {
               try {
 
-                if (node.oscillator) node.oscillator.frequency.value = 0
+                if (voice.oscillator) voice.oscillator.frequency.value = 0
                 if (waveShape === 'kick'  ) {kickSample.play()}
                 if (waveShape === 'snare' ) {snareSample.play()}
 
@@ -216,11 +216,11 @@ function App() {
           }, offset * 10 * intervalLength)
         }
 
-        if (document.getElementById(`node${i}`)) {
-          setTimeout(() => {newInterval(i)}, (nodes[i].nextInterval - context.currentTime)*1000)
+        if (document.getElementById(`voice${i}`)) {
+          setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
         }
       } else {
-        setTimeout(() => {newInterval(i)}, (nodes[i].nextInterval - context.currentTime)*1000)
+        setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
       }
     }
   }
@@ -288,10 +288,10 @@ function App() {
   }
 
   const handleDelete = (i: number) => {
-    nodes[i].gain?.gain.setValueAtTime(0, 0)
-    nodes[i].oscillator?.stop()
+    voices[i].gain?.gain.setValueAtTime(0, 0)
+    voices[i].oscillator?.stop()
 
-    setNodes(nodes.map((node, j) => i !== j ? node : {...node, isActive: false}))
+    setVoices(voices.map((voice, j) => i !== j ? voice : {...voice, isActive: false}))
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -302,19 +302,19 @@ function App() {
     <Header 
       handleStartStop   = {handleStartStop}
       cycleButtonLabel  = {cycleButtonLabel}
-      addNode           = {addNode}
-      showStart         = {Boolean(active(nodes).length)}
+      addVoice           = {addVoice}
+      showStart         = {Boolean(active(voices).length)}
     />
 
     <br />
     <br />
-    {nodes.map((node, i) => 
-      node.isActive &&
-      <Node 
-        node        = {node} 
+    {voices.map((voice, i) => 
+      voice.isActive &&
+      <Voice 
+        voice        = {voice} 
         i           = {i} 
-        setNodes    = {setNodes} 
-        nodes       = {nodes}
+        setVoices    = {setVoices} 
+        voices       = {voices}
         notes       = {notes}
         scales      = {scales}
         waveShapes  = {waveShapes}

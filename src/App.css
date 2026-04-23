@@ -18,7 +18,7 @@ body {
   padding: 5px
 }
 
-.node {
+.voice {
   border: 1px dotted red;
   padding: 5px;
   width: 560px;
@@ -36,6 +36,6 @@ body {
   text-align: right
 }
 
-#delete-node {
+#delete-voice {
   height: 29px
 }

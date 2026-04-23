@@ -1,8 +1,8 @@
 import { render, fireEvent } from '@testing-library/react'
-import Node from './Node'
-import { node } from '../../types/node'
+import Voice from './Voice'
+import { voice } from '../../types/voice'
 
-const baseNode: node = {
+const baseVoice: voice = {
   isActive: true,
   label: 1,
   nextInterval: 0,
@@ -51,14 +51,14 @@ describe('header', () => {
   })
 
   test('updates BPM input', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
     const { getByTitle } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}
@@ -69,18 +69,18 @@ describe('header', () => {
 
     fireEvent.change(getByTitle('BPM'), { target: { value: '140' } })
 
-    expect(setNodes).toHaveBeenCalled()
+    expect(setVoices).toHaveBeenCalled()
   })
 
   test('updates label when input changes', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
     const { getByTitle } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}
@@ -93,7 +93,7 @@ describe('header', () => {
       target: { value: '42' }
     })
 
-    expect(setNodes).toHaveBeenCalledWith([
+    expect(setVoices).toHaveBeenCalledWith([
       expect.objectContaining({
         label: 42
       })
@@ -101,16 +101,16 @@ describe('header', () => {
   })
 
   test('adds scale when checkbox is checked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeScales = []
+    baseVoice.activeScales = []
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[1]}
         notes={[1]}
         waveShapes={['sine']}
@@ -123,22 +123,22 @@ describe('header', () => {
 
     fireEvent.click(scaleCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeScales).toContain(1)
   })
 
   test('removes scale when checkbox is unchecked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeScales = [1]
+    baseVoice.activeScales = [1]
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[1]}
         notes={[1]}
         waveShapes={['sine']}
@@ -151,22 +151,22 @@ describe('header', () => {
 
     fireEvent.click(scaleCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeScales).not.toContain(1)
   })
 
   test('adds wave shape when checkbox is checked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeWaveShapes = []
+    baseVoice.activeWaveShapes = []
     
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine', 'square']}
@@ -179,23 +179,23 @@ describe('header', () => {
 
     fireEvent.click(waveCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeWaveShapes.length).toBe(1)
     expect(updated[0].activeWaveShapes).toContain('sine')
   })
 
   test('removes wave shape when checkbox is unchecked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeWaveShapes = ['sine']
+    baseVoice.activeWaveShapes = ['sine']
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine', 'square']}
@@ -208,22 +208,22 @@ describe('header', () => {
 
     fireEvent.click(waveCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeWaveShapes).not.toContain('sine')
   })
 
   test('adds interval when checkbox is checked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeIntervals = []
+    baseVoice.activeIntervals = []
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}
@@ -236,22 +236,22 @@ describe('header', () => {
 
     fireEvent.click(intervalCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeIntervals).toContain(1)
   })
 
   test('removes interval when checkbox is unchecked', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
-    baseNode.activeIntervals = [1]
+    baseVoice.activeIntervals = [1]
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}
@@ -264,20 +264,20 @@ describe('header', () => {
 
     fireEvent.click(intervalCheckbox)
 
-    const updated = setNodes.mock.calls[0][0]
+    const updated = setVoices.mock.calls[0][0]
 
     expect(updated[0].activeIntervals).not.toContain(1)
   })
 
   test('toggles note checkbox', () => {
-    const setNodes = jest.fn()
+    const setVoices = jest.fn()
 
     const { container } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={setNodes}
-        nodes={[baseNode]}
+        setVoices={setVoices}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}
@@ -290,18 +290,18 @@ describe('header', () => {
 
     fireEvent.click(noteCheckbox)
 
-    expect(setNodes).toHaveBeenCalled()
+    expect(setVoices).toHaveBeenCalled()
   })
 
   test('delete button calls handler', () => {
     const handleDelete = jest.fn()
 
     const { getByText } = render(
-      <Node
-        node={baseNode}
+      <Voice
+        voice={baseVoice}
         i={0}
-        setNodes={jest.fn()}
-        nodes={[baseNode]}
+        setVoices={jest.fn()}
+        voices={[baseVoice]}
         scales={[0]}
         notes={[1]}
         waveShapes={['sine']}

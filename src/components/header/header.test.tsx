@@ -13,39 +13,39 @@ describe('header', () => {
     jest.useRealTimers()
   })
 
-  test('renders Add Node button', () => {
+  test('renders Add Voice button', () => {
     render(
       <Header
-        addNode={jest.fn()}
+        addVoice={jest.fn()}
         handleStartStop={jest.fn()}
         showStart={false}
         cycleButtonLabel={false}
       />
     )
 
-    expect(screen.getByText('Add Node')).toBeInTheDocument()
+    expect(screen.getByText('Add Voice')).toBeInTheDocument()
   })
 
-  test('calls addNode when clicked', () => {
-    const addNode = jest.fn()
+  test('calls addVoice when clicked', () => {
+    const addVoice = jest.fn()
 
     render(
       <Header
-        addNode={addNode}
+        addVoice={addVoice}
         handleStartStop={jest.fn()}
         showStart={false}
         cycleButtonLabel={false}
       />
     )
 
-    fireEvent.click(screen.getByText('Add Node'))
-    expect(addNode).toHaveBeenCalled()
+    fireEvent.click(screen.getByText('Add Voice'))
+    expect(addVoice).toHaveBeenCalled()
   })
 
   test('shows Start button only when showStart is true', () => {
     const { rerender } = render(
       <Header
-        addNode={jest.fn()}
+        addVoice={jest.fn()}
         handleStartStop={jest.fn()}
         showStart={false}
         cycleButtonLabel={false}
@@ -56,7 +56,7 @@ describe('header', () => {
 
     rerender(
       <Header
-        addNode={jest.fn()}
+        addVoice={jest.fn()}
         handleStartStop={jest.fn()}
         showStart={true}
         cycleButtonLabel={false}
@@ -69,7 +69,7 @@ describe('header', () => {
   test('toggles label between Start and Stop', () => {
     render(
       <Header
-        addNode={jest.fn()}
+        addVoice={jest.fn()}
         handleStartStop={jest.fn()}
         showStart={true}
         cycleButtonLabel={true}
