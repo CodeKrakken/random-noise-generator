@@ -30,7 +30,7 @@ const baseVoice: voice = {
   maxFadeOut: 0,
 
   activeNotes: [1],
-  activeScales: [0],
+  activeOctaves: [0],
   activeWaveShapes: ['sine'],
   activeIntervals: [1],
 
@@ -59,7 +59,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -81,7 +81,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -100,10 +100,10 @@ describe('header', () => {
     ])
   })
 
-  test('adds scale when checkbox is checked', () => {
+  test('adds octave when checkbox is checked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeScales = []
+    baseVoice.activeOctaves = []
 
     const { container } = render(
       <Voice
@@ -111,7 +111,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[1]}
+        octaves={[1]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -119,19 +119,19 @@ describe('header', () => {
       />
     )
 
-    const scaleCheckbox = container.querySelector('.scale0') as HTMLInputElement
+    const octaveCheckbox = container.querySelector('.octave0') as HTMLInputElement
 
-    fireEvent.click(scaleCheckbox)
+    fireEvent.click(octaveCheckbox)
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeScales).toContain(1)
+    expect(updated[0].activeOctaves).toContain(1)
   })
 
-  test('removes scale when checkbox is unchecked', () => {
+  test('removes octave when checkbox is unchecked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeScales = [1]
+    baseVoice.activeOctaves = [1]
 
     const { container } = render(
       <Voice
@@ -139,7 +139,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[1]}
+        octaves={[1]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -147,13 +147,13 @@ describe('header', () => {
       />
     )
 
-    const scaleCheckbox = container.querySelector('.scale0') as HTMLInputElement
+    const octaveCheckbox = container.querySelector('.octave0') as HTMLInputElement
 
-    fireEvent.click(scaleCheckbox)
+    fireEvent.click(octaveCheckbox)
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeScales).not.toContain(1)
+    expect(updated[0].activeOctaves).not.toContain(1)
   })
 
   test('adds wave shape when checkbox is checked', () => {
@@ -167,7 +167,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine', 'square']}
         intervals={[1]}
@@ -196,7 +196,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine', 'square']}
         intervals={[1]}
@@ -224,7 +224,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -252,7 +252,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -278,7 +278,7 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}
@@ -302,7 +302,7 @@ describe('header', () => {
         i={0}
         setVoices={jest.fn()}
         voices={[baseVoice]}
-        scales={[0]}
+        octaves={[0]}
         notes={[1]}
         waveShapes={['sine']}
         intervals={[1]}

@@ -43,7 +43,7 @@ function App() {
       minLevel        : clonedVoice?.minLevel          ??  100,
       maxLevel        : clonedVoice?.maxLevel          ??  100,
       activeNotes     : clonedVoice?.activeNotes       ??  [1,3,5,6,8,10,12,13],
-      activeScales    : clonedVoice?.activeScales      ??  [4],
+      activeOctaves    : clonedVoice?.activeOctaves      ??  [4],
       activeWaveShapes: clonedVoice?.activeWaveShapes  ??  ['sine'],
       rest            : clonedVoice?.rest              ??  0,
       activeIntervals : clonedVoice?.activeIntervals   ??  [1/2],
@@ -270,18 +270,18 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     
-    const activeScales  = Array.from(document.getElementsByClassName(`scale${i}`)).filter(
-      (scale): scale is HTMLInputElement => scale instanceof HTMLInputElement && scale.checked    
-    ).map(scale => { return +scale.value})
+    const activeOctaves  = Array.from(document.getElementsByClassName(`octave${i}`)).filter(
+      (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
+    ).map(octave => { return +octave.value})
 
     const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
 
-    let currentFrequencies = allFrequencies.filter((scale, j) => activeScales.includes(j))
+    let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j))
     
-    let filteredFrequencies = currentFrequencies.map(scale =>
-      scale.filter((note, j) => activeNotes.includes(j+1))
+    let filteredFrequencies = currentFrequencies.map(octave =>
+      octave.filter((note, j) => activeNotes.includes(j+1))
     )
 
     return filteredFrequencies.flat(Infinity)
@@ -295,7 +295,7 @@ function App() {
   }
 
   const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-  const scales  = [0,1,2,3,4,5,6,7,8,9,10]
+  const octaves  = [0,1,2,3,4,5,6,7,8,9,10]
 
   return <>
     <br />
@@ -316,7 +316,7 @@ function App() {
         setVoices    = {setVoices} 
         voices       = {voices}
         notes       = {notes}
-        scales      = {scales}
+        octaves      = {octaves}
         waveShapes  = {waveShapes}
         intervals   = {intervals}
         handleDelete= {handleDelete}

@@ -5,7 +5,7 @@ type props = {
   i           : number, 
   setVoices    : Function, 
   voices       : voice[], 
-  scales      : number[], 
+  octaves      : number[], 
   waveShapes  : string[], 
   intervals   : number[], 
   handleDelete: Function, 
@@ -24,11 +24,24 @@ const ranges = [
 type Range = typeof ranges[number]
 
 type VoiceAttribute =
-  | 'label'
-  | 'bpm'
-  | 'rest'
-  | `min${Range}`
-  | `max${Range}`
+| 'label'
+| 'bpm'
+| 'rest'
+| `min${Range}`
+| `max${Range}`
+
+const notes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+const octaves  = [0,1,2,3,4,5,6,7,8,9,10]
+const waveShapes = [
+  'sine',
+  'triangle',
+  'sawtooth',
+  'square',
+  'kick',
+  'snare'
+]
+
+const intervals = [1, 1/2, 1/4, 1/8, 1/16]
 
 export default function Voice(props: props) {
 
@@ -41,12 +54,8 @@ export default function Voice(props: props) {
     voice, 
     i, 
     setVoices, 
-    voices, 
-    scales, 
-    waveShapes, 
-    intervals, 
-    handleDelete, 
-    notes
+    voices,  
+    handleDelete
   } = props
 
   const attributes: any = {
@@ -231,6 +240,69 @@ export default function Voice(props: props) {
         onChange: (e: any) => updateVoice(e, 'maxFadeOut'),
         maxLength:4
       }
+    ],
+    notes: notes.map((note, j) => {
+        return {
+          className: `note${i}`,
+          title: note.toString(),
+          type: "checkbox",
+          value: note,
+          checked: voice.activeNotes?.includes(note),
+          onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())
+        }
+        // <div key={`note-${j}`}>
+        //   <input
+        //     className={`note${i}`}
+        //     title={note.toString()}
+        //     type="checkbox"
+        //     value={note}
+        //     checked={voice.activeNotes?.includes(note)}
+        //     onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())}
+        //   />
+        // </div>
+      })
+    ,
+    octaves: [
+      () => octaves.map((octave, j) =>
+        <div key={`octave-${j}`}>
+          <input
+            className={`octave${i}`}
+            title={octave.toString()}
+            type="checkbox"
+            value={octave}
+            checked={voice.activeOctaves.includes(octave)}
+            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())}
+          />
+        </div>
+      )
+    ],
+    waveShapes: [
+      () => waveShapes.map((waveShape, j) => {
+        return <div key={`waveShape-${j}`}>
+          <input
+            title={waveShape}
+            className={`wave${i}`}
+            type="checkbox"
+            value={waveShape}
+            checked={voice.activeWaveShapes.includes(waveShape)}
+            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())}
+          />
+        </div>
+      })
+    ],
+    intervals: [
+      () => intervals.map((interval, j) => {
+        return <div key={`interval-${j}`}>
+          <input
+            className={`interval${i}`}
+            title={interval.toString()}
+            type="checkbox"
+            value={interval}
+            checked={voice.activeIntervals.includes(interval)}
+            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())}
+          />
+        </div>
+      })
     ]
   }
 
@@ -293,10 +365,9 @@ export default function Voice(props: props) {
         }
       </div>
     
-
       <div className="column">
         <div className="row inner-row">
-          Notes
+          <div className="label">Notes</div>
           {
             notes.map((note, j) => 
               <div key={`note-${j}`}>
@@ -313,22 +384,24 @@ export default function Voice(props: props) {
           }
         </div>
         <div className="row inner-row">
+          <div className="label">Octaves</div>
           {
-            scales.map((scale, j) =>
-              <div key={`scale-${j}`}>
+            octaves.map((octave, j) =>
+              <div key={`octave-${j}`}>
                 <input
-                  className={`scale${i}`}
-                  title={scale.toString()}
+                  className={`octave${i}`}
+                  title={octave.toString()}
                   type="checkbox"
-                  value={scale}
-                  checked={voice.activeScales.includes(scale)}
-                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeScales: voice.activeScales.includes(+e.target.value) ? voice.activeScales.filter(note => note !== +e.target.value) : [voice.activeScales, +e.target.value].flat()}, voices.slice(i+1)].flat())}
+                  value={octave}
+                  checked={voice.activeOctaves.includes(octave)}
+                  onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())}
                 />
               </div>
             )
           }
         </div>
         <div className="row inner-row">
+          <div className="label">WaveShapes</div>
           { 
             waveShapes.map((waveShape, j) => {
               return <div key={`waveShape-${j}`}>
@@ -345,6 +418,7 @@ export default function Voice(props: props) {
           }
         </div>
         <div className="row inner-row">
+          <div className='label'>Intervals</div>
           { 
             intervals.map((interval, j) => {
               return <div key={`interval-${j}`}>
@@ -369,8 +443,5 @@ export default function Voice(props: props) {
         X
       </button>
     </div>
-
-
   </div>
-
 }
