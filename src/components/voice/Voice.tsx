@@ -311,7 +311,8 @@ export default function Voice(props: props) {
                   onChange,
                   maxLength,
                   min,
-                  max
+                  max,
+                  checked
                 } = input
 
                 const dataTestId = input['data-testid']
@@ -335,6 +336,7 @@ export default function Voice(props: props) {
                         maxLength={maxLength}
                         min={min}
                         max={max}
+                        checked={checked}
                       />
                     </div>
                   </>
