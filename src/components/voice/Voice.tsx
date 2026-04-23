@@ -5,11 +5,7 @@ type props = {
   i           : number, 
   setVoices    : Function, 
   voices       : voice[], 
-  octaves      : number[], 
-  waveShapes  : string[], 
-  intervals   : number[], 
-  handleDelete: Function, 
-  notes       : number[]
+  handleDelete: Function
 }
 
 const ranges = [
@@ -55,11 +51,7 @@ export default function Voice(props: props) {
     i, 
     setVoices, 
     voices,  
-    handleDelete,
-    notes,
-    octaves,
-    waveShapes,
-    intervals
+    handleDelete
   } = props
 
   const attributes: any = {

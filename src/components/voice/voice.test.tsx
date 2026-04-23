@@ -59,10 +59,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -81,10 +77,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -111,10 +103,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[1]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -138,11 +126,7 @@ describe('header', () => {
         voice={baseVoice}
         i={0}
         setVoices={setVoices}
-        voices={[baseVoice]}
-        octaves={[1]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
+        voices={[baseVoice]}        
         handleDelete={jest.fn()}
       />
     )
@@ -167,10 +151,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine', 'square']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -196,10 +176,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine', 'square']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -224,10 +200,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -252,10 +224,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -278,10 +246,6 @@ describe('header', () => {
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={jest.fn()}
       />
     )
@@ -302,10 +266,6 @@ describe('header', () => {
         i={0}
         setVoices={jest.fn()}
         voices={[baseVoice]}
-        octaves={[0]}
-        notes={[1]}
-        waveShapes={['sine']}
-        intervals={[1]}
         handleDelete={handleDelete}
       />
     )
