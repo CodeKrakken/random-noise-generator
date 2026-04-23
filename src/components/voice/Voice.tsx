@@ -242,40 +242,25 @@ export default function Voice(props: props) {
       }
     ],
     notes: notes.map((note, j) => {
-        return {
-          className: `note${i}`,
-          title: note.toString(),
-          type: "checkbox",
-          value: note,
-          checked: voice.activeNotes?.includes(note),
-          onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())
-        }
-        // <div key={`note-${j}`}>
-        //   <input
-        //     className={`note${i}`}
-        //     title={note.toString()}
-        //     type="checkbox"
-        //     value={note}
-        //     checked={voice.activeNotes?.includes(note)}
-        //     onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-        //   />
-        // </div>
-      })
-    ,
-    octaves: [
-      () => octaves.map((octave, j) =>
-        <div key={`octave-${j}`}>
-          <input
-            className={`octave${i}`}
-            title={octave.toString()}
-            type="checkbox"
-            value={octave}
-            checked={voice.activeOctaves.includes(octave)}
-            onChange={(e) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())}
-          />
-        </div>
-      )
-    ],
+      return {
+        className: `note${i}`,
+        title: note.toString(),
+        type: "checkbox",
+        value: note,
+        checked: voice.activeNotes?.includes(note),
+        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())
+      }
+    }),
+    octaves: octaves.map((octave, j) => {
+      return {
+        className: `octave${i}`,
+        title: octave.toString(),
+        type: "checkbox",
+        value: octave,
+        checked: voice.activeOctaves.includes(octave),
+        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())
+      }
+    }),
     waveShapes: [
       () => waveShapes.map((waveShape, j) => {
         return <div key={`waveShape-${j}`}>
