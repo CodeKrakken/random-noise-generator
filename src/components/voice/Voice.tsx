@@ -19,12 +19,16 @@ const ranges = [
 
 type Range = typeof ranges[number]
 
-type VoiceAttribute =
-| 'label'
+type Scalar = 
+  'label'
 | 'bpm'
 | 'rest'
 | `min${Range}`
 | `max${Range}`
+
+type Compound = 'activeNotes'
+
+type VoiceAttribute = Scalar | Compound
 
 const allNotes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 const allOctaves  = [0,1,2,3,4,5,6,7,8,9,10]
@@ -41,18 +45,19 @@ const allIntervals = [1, 1/2, 1/4, 1/8, 1/16]
 
 export default function Voice(props: props) {
 
-  const updateVoice = (e: any, attribute: VoiceAttribute) => {
+  const updateVoice = (e: any, attribute: Scalar) => {
     voices[i][attribute] = +e.target!.value
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
   } 
 
   const updateCheckbox = (e: any, attribute: VoiceAttribute) => {
+    
     setVoices(
       [
         voices.slice(0,i), 
         {
           ...voices[i], 
-          activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()
+          attribute: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()
         }, 
         voices.slice(i+1)
       ].flat()
@@ -257,7 +262,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: note,
         checked: voice.activeNotes?.includes(note),
-        onChange: (e: any) => updateCheckbox(e)
+        onChange: (e: any) => updateCheckbox(e, 'activeNotes')
       }
     }),
     octaves: allOctaves.map((octave, j) => {
