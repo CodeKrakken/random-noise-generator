@@ -46,6 +46,19 @@ export default function Voice(props: props) {
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
   } 
 
+  const updateCheckbox = (e: any, attribute: VoiceAttribute) => {
+    setVoices(
+      [
+        voices.slice(0,i), 
+        {
+          ...voices[i], 
+          activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()
+        }, 
+        voices.slice(i+1)
+      ].flat()
+    )
+  }
+
   const {
     voice, 
     i, 
@@ -244,7 +257,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: note,
         checked: voice.activeNotes?.includes(note),
-        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeNotes: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()}, voices.slice(i+1)].flat())
+        onChange: (e: any) => updateCheckbox(e)
       }
     }),
     octaves: allOctaves.map((octave, j) => {

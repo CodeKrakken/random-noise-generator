@@ -164,8 +164,8 @@ function App() {
                 const fadeOutPercentage = getRangeValue('FadeOut', i)
                 const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
 
-                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
-                
+                let level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
+
                 if (noteLength < intervalLength) {
                   setTimeout(() => {voices[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                 }
@@ -229,10 +229,12 @@ function App() {
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
-    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value
+    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || 0
+
     const intervalBpmAdjuster = 4
     const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!
     const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
+
     return intervalLength/1000
   }
        
