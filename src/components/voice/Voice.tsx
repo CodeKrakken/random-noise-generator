@@ -26,9 +26,16 @@ type Scalar =
 | `min${Range}`
 | `max${Range}`
 
-type Compound = 'activeNotes'
+type NumberCompound = 
+  'activeNotes'
+| 'activeOctaves'
+| 'activeIntervals'
 
-type VoiceAttribute = Scalar | Compound
+type StringCompound = 'activeWaveShapes'
+
+type Compound = NumberCompound | StringCompound
+
+type VoiceAttribute = Scalar
 
 const allNotes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 const allOctaves  = [0,1,2,3,4,5,6,7,8,9,10]
@@ -51,12 +58,10 @@ export default function Voice(props: props) {
   } 
 
   const updateCheckbox = (e: any, attribute: Compound) => {
-    if (voices[i][attribute].includes(+e.target.value)) {
-      console.log('here')
-      voices[i][attribute] = voices[i][attribute].filter(value => value !== +e.target.value)
+    if ((voices[i][attribute] as (number | string)[]).includes(+e.target.value)) {
+      (voices[i][attribute] as (number | string)[]) = (voices[i][attribute] as (number | string)[]).filter(value => value !== +e.target.value)
     } else {
-      voices[i][attribute] = [voices[i][attribute], +e.target.value].flat()
-      console.log('there')
+      (voices[i][attribute] as (number | string)[]) = [(voices[i][attribute] as (number | string)[]), +e.target.value].flat()
     }
     
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat()
@@ -261,7 +266,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: note,
         checked: voice.activeNotes?.includes(note),
-        onChange: (e: any) => updateCheckbox(e, 'activeNotes')
+        onChange: (e: any) => updateCheckbox(e, 'activeNotes' as NumberCompound)
       }
     }),
     octaves: allOctaves.map((octave, j) => {
@@ -271,7 +276,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: octave,
         checked: voice.activeOctaves.includes(octave),
-        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeOctaves: voice.activeOctaves.includes(+e.target.value) ? voice.activeOctaves.filter(note => note !== +e.target.value) : [voice.activeOctaves, +e.target.value].flat()}, voices.slice(i+1)].flat())
+        onChange: (e: any) => updateCheckbox(e, 'activeOctaves' as NumberCompound)
       }
     }),
     waveShapes: allWaveShapes.map((waveShape, j) => {
@@ -281,7 +286,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: waveShape,
         checked: voice.activeWaveShapes.includes(waveShape),
-        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeWaveShapes: voice.activeWaveShapes.includes(e.target.value) ? voice.activeWaveShapes.filter(waveShape => waveShape !== e.target.value) : [voice.activeWaveShapes, e.target.value].flat()}, voices.slice(i+1)].flat())
+        onChange: (e: any) => updateCheckbox(e, 'activeWaveShapes' as StringCompound)
       }
     }),
     intervals: allIntervals.map((interval, j) => {
@@ -291,7 +296,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: interval,
         checked: voice.activeIntervals.includes(interval),
-        onChange: (e: any) => setVoices([voices.slice(0,i), {...voices[i], activeIntervals: voice.activeIntervals.includes(+e.target.value) ? voice.activeIntervals.filter(interval => interval !== +e.target.value) : [voice.activeIntervals, +e.target.value].flat()}, voices.slice(i+1)].flat())
+        onChange: (e: any) => updateCheckbox(e, 'activeIntervals' as NumberCompound)
       }
     })
   }
