@@ -308,21 +308,19 @@ function App() {
 
     <br />
     <br />
-    {voices.map((voice, i) => 
-      voice.isActive &&
-      <Voice 
-        voice        = {voice} 
-        i           = {i} 
-        setVoices    = {setVoices} 
-        voices       = {voices}
-        notes       = {notes}
-        octaves      = {octaves}
-        waveShapes  = {waveShapes}
-        intervals   = {intervals}
-        handleDelete= {handleDelete}
-        key         = {i}
-      />
-    )}
+    {
+      voices.map((voice, i) => 
+        voice.isActive &&
+        <Voice 
+          voice         = {voice} 
+          i             = {i} 
+          setVoices     = {setVoices} 
+          voices        = {voices}
+          handleDelete  = {handleDelete}
+          key           = {i}
+        />
+      )
+    }
   </>
 }
 
