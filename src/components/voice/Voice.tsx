@@ -50,17 +50,16 @@ export default function Voice(props: props) {
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
   } 
 
-  const updateCheckbox = (e: any, attribute: VoiceAttribute) => {
+  const updateCheckbox = (e: any, attribute: Compound) => {
+    if (voices[i][attribute].includes(+e.target.value)) {
+      console.log('here')
+      voices[i][attribute] = voices[i][attribute].filter(value => value !== +e.target.value)
+    } else {
+      voices[i][attribute] = [voices[i][attribute], +e.target.value].flat()
+      console.log('there')
+    }
     
-    setVoices(
-      [
-        voices.slice(0,i), 
-        {
-          ...voices[i], 
-          attribute: voice.activeNotes.includes(+e.target.value) ? voice.activeNotes.filter(note => note !== +e.target.value) : [voice.activeNotes, +e.target.value].flat()
-        }, 
-        voices.slice(i+1)
-      ].flat()
+    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat()
     )
   }
 
