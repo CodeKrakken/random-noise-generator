@@ -46,7 +46,7 @@ function App() {
       activeOctaves    : clonedVoice?.activeOctaves      ??  [4],
       activeWaveShapes: clonedVoice?.activeWaveShapes  ??  ['sine'],
       rest            : clonedVoice?.rest              ??  0,
-      activeIntervals : clonedVoice?.activeIntervals   ??  [1/2],
+      activeIntervals : clonedVoice?.activeIntervals   ??  ['1/2'],
       minNoteLength   : clonedVoice?.minNoteLength     ??  100,
       maxNoteLength   : clonedVoice?.maxNoteLength     ??  100,
       minOffset       : clonedVoice?.minOffset         ??  0,  
