@@ -19,11 +19,11 @@ export type voice = {
   bpm             : number
   minLevel        : number
   maxLevel        : number
-  activeNotes     : number[]
-  activeOctaves    : number[]
+  activeNotes     : string[]
+  activeOctaves   : string[]
   activeWaveShapes: string[]
   rest            : number
-  activeIntervals : number[]
+  activeIntervals : string[]
   minNoteLength   : number
   maxNoteLength   : number
   minOffset       : number

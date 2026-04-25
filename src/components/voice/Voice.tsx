@@ -26,19 +26,14 @@ type Scalar =
 | `min${Range}`
 | `max${Range}`
 
-type NumberCompound = 
+type Compound = 
   'activeNotes'
 | 'activeOctaves'
 | 'activeIntervals'
+| 'activeWaveShapes'
 
-type StringCompound = 'activeWaveShapes'
-
-type Compound = NumberCompound | StringCompound
-
-type VoiceAttribute = Scalar
-
-const allNotes   = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-const allOctaves  = [0,1,2,3,4,5,6,7,8,9,10]
+const allNotes   = ['1','2','3','4','5','6','7','8','9','10','11','12','13']
+const allOctaves  = ['0','1','2','3','4','5','6','7','8','9','10']
 const allWaveShapes = [
   'sine',
   'triangle',
@@ -48,7 +43,7 @@ const allWaveShapes = [
   'snare'
 ]
 
-const allIntervals = [1, 1/2, 1/4, 1/8, 1/16]
+const allIntervals = ['1','0.5','0.25','0.125','0.0625']
 
 export default function Voice(props: props) {
 
@@ -267,7 +262,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: note,
         checked: voice.activeNotes?.includes(note),
-        onChange: (e: any) => updateCheckbox(e, 'activeNotes' as NumberCompound)
+        onChange: (e: any) => updateCheckbox(e, 'activeNotes')
       }
     }),
     octaves: allOctaves.map((octave, j) => {
@@ -277,7 +272,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: octave,
         checked: voice.activeOctaves.includes(octave),
-        onChange: (e: any) => updateCheckbox(e, 'activeOctaves' as NumberCompound)
+        onChange: (e: any) => updateCheckbox(e, 'activeOctaves')
       }
     }),
     waveShapes: allWaveShapes.map((waveShape, j) => {
@@ -287,7 +282,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: waveShape,
         checked: voice.activeWaveShapes.includes(waveShape),
-        onChange: (e: any) => updateCheckbox(e, 'activeWaveShapes' as StringCompound)
+        onChange: (e: any) => updateCheckbox(e, 'activeWaveShapes')
       }
     }),
     intervals: allIntervals.map((interval, j) => {
@@ -297,7 +292,7 @@ export default function Voice(props: props) {
         type: "checkbox",
         value: interval,
         checked: voice.activeIntervals.includes(interval),
-        onChange: (e: any) => updateCheckbox(e, 'activeIntervals' as NumberCompound)
+        onChange: (e: any) => updateCheckbox(e, 'activeIntervals')
       }
     })
   }

@@ -42,11 +42,11 @@ function App() {
       bpm             : clonedVoice?.bpm               ??  120,
       minLevel        : clonedVoice?.minLevel          ??  100,
       maxLevel        : clonedVoice?.maxLevel          ??  100,
-      activeNotes     : clonedVoice?.activeNotes       ??  [1,3,5,6,8,10,12,13],
-      activeOctaves    : clonedVoice?.activeOctaves      ??  [4],
+      activeNotes     : clonedVoice?.activeNotes       ??  ['1','3','5','6','8','10','12','13'],
+      activeOctaves    : clonedVoice?.activeOctaves      ??  ['4'],
       activeWaveShapes: clonedVoice?.activeWaveShapes  ??  ['sine'],
       rest            : clonedVoice?.rest              ??  0,
-      activeIntervals : clonedVoice?.activeIntervals   ??  ['1/2'],
+      activeIntervals : clonedVoice?.activeIntervals   ??  ['0.5'],
       minNoteLength   : clonedVoice?.minNoteLength     ??  100,
       maxNoteLength   : clonedVoice?.maxNoteLength     ??  100,
       minOffset       : clonedVoice?.minOffset         ??  0,  
@@ -112,7 +112,6 @@ function App() {
     if (cycling && document.getElementsByClassName(`interval${i}`))  {
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
-
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
 
@@ -229,12 +228,13 @@ function App() {
     const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
-    const interval = +liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || 0
-
+    let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
+    console.log(interval)
     const intervalBpmAdjuster = 4
     const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!
-    const intervalLength  = 60000/bpm * interval * intervalBpmAdjuster
-
+    const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
+    console.log(interval)
+    console.log(parseFloat(interval))
     return intervalLength/1000
   }
        

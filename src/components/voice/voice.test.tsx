@@ -29,10 +29,10 @@ const baseVoice: voice = {
   minFadeOut: 0,
   maxFadeOut: 0,
 
-  activeNotes: [1],
-  activeOctaves: [0],
+  activeNotes: ['1'],
+  activeOctaves: ['0'],
   activeWaveShapes: ['sine'],
-  activeIntervals: [1],
+  activeIntervals: ['1'],
 
   // 👇 add these
   oscillator: undefined,
@@ -119,7 +119,7 @@ describe('header', () => {
   test('removes octave when checkbox is unchecked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeOctaves = [1]
+    baseVoice.activeOctaves = ['1']
 
     const { container } = render(
       <Voice
@@ -210,13 +210,13 @@ describe('header', () => {
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeIntervals).toContain(1)
+    expect(updated[0].activeIntervals).toContain('1')
   })
 
   test('removes interval when checkbox is unchecked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeIntervals = [1]
+    baseVoice.activeIntervals = ['1']
 
     const { container } = render(
       <Voice
@@ -234,7 +234,7 @@ describe('header', () => {
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeIntervals).not.toContain(1)
+    expect(updated[0].activeIntervals).not.toContain('1')
   })
 
   test('toggles note checkbox', () => {
