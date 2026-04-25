@@ -112,8 +112,8 @@ describe('header', () => {
     fireEvent.click(octaveCheckbox)
 
     const updated = setVoices.mock.calls[0][0]
-
-    expect(updated[0].activeOctaves).toContain(1)
+    console.log(updated[0].activeOctaves)
+    expect(updated[0].activeOctaves).toContain('1')
   })
 
   test('removes octave when checkbox is unchecked', () => {
