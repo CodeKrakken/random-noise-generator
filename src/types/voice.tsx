@@ -1,4 +1,5 @@
 import { SoundSource } from '../types'
+import { ranges } from '../content/data'
 
 export type voice = {
   isActive        : Boolean
@@ -35,3 +36,18 @@ export type props = {
   voices      : voice[], 
   handleDelete: Function
 }
+
+type Range = typeof ranges[number]
+
+export type Scalar = 
+  'label'
+| 'bpm'
+| 'rest'
+| `min${Range}`
+| `max${Range}`
+
+export type Compound = 
+  'activeNotes'
+| 'activeOctaves'
+| 'activeIntervals'
+| 'activeWaveShapes'

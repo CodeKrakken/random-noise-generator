@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { allFrequencies, waveShapes, intervals } from './content/data'
+import { allFrequencies } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Voice from './components/voice/Voice';

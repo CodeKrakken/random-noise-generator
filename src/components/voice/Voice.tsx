@@ -1,43 +1,5 @@
-import { voice, props } from '../../types/voice'
-
-
-
-const ranges = [
-  'Level',
-  'NoteLength',
-  'Offset',
-  'Detune',
-  'FadeIn',
-  'FadeOut',
-] as const
-
-type Range = typeof ranges[number]
-
-type Scalar = 
-  'label'
-| 'bpm'
-| 'rest'
-| `min${Range}`
-| `max${Range}`
-
-type Compound = 
-  'activeNotes'
-| 'activeOctaves'
-| 'activeIntervals'
-| 'activeWaveShapes'
-
-const allNotes   = ['1','2','3','4','5','6','7','8','9','10','11','12','13']
-const allOctaves  = ['0','1','2','3','4','5','6','7','8','9','10']
-const allWaveShapes = [
-  'sine',
-  'triangle',
-  'sawtooth',
-  'square',
-  'kick',
-  'snare'
-]
-
-const allIntervals = ['1','0.5','0.25','0.125','0.0625']
+import { props, Scalar, Compound } from '../../types/voice'
+import {allNotes, allOctaves, allIntervals, allWaveShapes} from '../../content/data'
 
 export default function Voice(props: props) {
 
