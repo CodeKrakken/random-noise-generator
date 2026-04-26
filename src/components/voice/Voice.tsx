@@ -1,10 +1,10 @@
 import { voice } from '../../types/voice'
 
 type props = {
-  voice        : voice, 
+  voice       : voice, 
   i           : number, 
-  setVoices    : Function, 
-  voices       : voice[], 
+  setVoices   : Function, 
+  voices      : voice[], 
   handleDelete: Function
 }
 
