@@ -96,7 +96,7 @@ describe('header', () => {
     const setVoices = jest.fn()
 
     baseVoice.activeOctaves = []
-    
+
     const { container } = render(
       <Voice
         voice={baseVoice}
@@ -119,7 +119,7 @@ describe('header', () => {
   test('removes octave when checkbox is unchecked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeOctaves = ['1']
+    baseVoice.activeOctaves = ['0']
 
     const { container } = render(
       <Voice
@@ -137,7 +137,7 @@ describe('header', () => {
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeOctaves).not.toContain(1)
+    expect(updated[0].activeOctaves).not.toContain('0')
   })
 
   test('adds wave shape when checkbox is checked', () => {
