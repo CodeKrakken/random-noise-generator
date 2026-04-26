@@ -3,6 +3,14 @@ import {allNotes, allOctaves, allIntervals, allWaveShapes} from '../../content/d
 
 export default function Voice(props: props) {
 
+  const {
+    voice, 
+    i, 
+    setVoices, 
+    voices,  
+    handleDelete
+  } = props
+
   const updateVoice = (e: any, attribute: Scalar) => {
     voices[i][attribute] = +e.target!.value
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
@@ -20,13 +28,7 @@ export default function Voice(props: props) {
     )
   }
 
-  const {
-    voice, 
-    i, 
-    setVoices, 
-    voices,  
-    handleDelete
-  } = props
+  
 
   const attributes: any = {
     label: [
