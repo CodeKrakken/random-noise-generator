@@ -96,7 +96,7 @@ describe('header', () => {
     const setVoices = jest.fn()
 
     baseVoice.activeOctaves = []
-
+    
     const { container } = render(
       <Voice
         voice={baseVoice}
@@ -108,12 +108,12 @@ describe('header', () => {
     )
 
     const octaveCheckbox = container.querySelector('.octave0') as HTMLInputElement
+    console.log(octaveCheckbox)
 
     fireEvent.click(octaveCheckbox)
 
     const updated = setVoices.mock.calls[0][0]
-    console.log(updated[0].activeOctaves)
-    expect(updated[0].activeOctaves).toContain('1')
+    expect(updated[0].activeOctaves).toContain('0')
   })
 
   test('removes octave when checkbox is unchecked', () => {
