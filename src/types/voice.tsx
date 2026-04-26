@@ -27,3 +27,11 @@ export type voice = {
   gain?           : GainNode
   source?         : SoundSource
 }
+
+export type props = {
+  voice       : voice, 
+  i           : number, 
+  setVoices   : Function, 
+  voices      : voice[], 
+  handleDelete: Function
+}

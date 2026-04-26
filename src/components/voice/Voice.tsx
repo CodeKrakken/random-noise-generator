@@ -1,12 +1,6 @@
-import { voice } from '../../types/voice'
+import { voice, props } from '../../types/voice'
 
-type props = {
-  voice       : voice, 
-  i           : number, 
-  setVoices   : Function, 
-  voices      : voice[], 
-  handleDelete: Function
-}
+
 
 const ranges = [
   'Level',
