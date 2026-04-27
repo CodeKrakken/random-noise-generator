@@ -40,7 +40,7 @@ export default function Voice(props: VoiceProps) {
       i={i}
       type= "text"
       value= {voice.label}
-      // onChange= (e: any) => updateVoice(e, 'label') 
+      onChange= {(e: any) => updateVoice(e, 'label')}
     />,
     // label: [
     //   {

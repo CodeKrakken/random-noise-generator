@@ -5,6 +5,7 @@ export default function Input(props: InputProps) {
     title,
     label,
     className,
+    i,
     id,
     type,
     value,
@@ -15,7 +16,7 @@ export default function Input(props: InputProps) {
     checked
   } = props
 
-  const dataTestId = props['data-testid']
+  const dataTestId = `voice-${title}-${i}`
 
   return (
     <>

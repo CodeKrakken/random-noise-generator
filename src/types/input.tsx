@@ -1,3 +1,5 @@
+import { ChangeEventHandler } from "react"
+
 export type InputProps = {
   className     : string  
   title         : string
@@ -5,10 +7,10 @@ export type InputProps = {
   id            : string
   i             : number
   type          : string
-  value         : string
-  onChange      : Function
-  maxLength     : number
-  min           : number
-  max           : number
-  checked       : Boolean
+  value         : number
+  onChange      : ChangeEventHandler
+  maxLength?     : number
+  min?           : number
+  max?           : number
+  checked?       : boolean | undefined
 }
