@@ -307,11 +307,11 @@ export default function Voice(props: VoiceProps) {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string, j: number) => {
                     return <Input
                       className= {`${checkboxGroup}${i}`}
-                      title= {checkboxGroup}
+                      title= {checkbox}
                       type= "checkbox"
-                      value= {checkboxGroup}
+                      value= {checkbox}
                       checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
-                      onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
+                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`)}
                     />
                   })
                 }
