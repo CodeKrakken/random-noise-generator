@@ -2,19 +2,19 @@ import { VoiceProps, Scalar, Compound, CheckboxGroup } from '../../types/voice'
 import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
 
-export default function Voice(props: VoiceProps) {
-
-  const {
+export default function Voice(
+  {
     voice, 
     i, 
     setVoices, 
     voices,  
     handleDelete
-  } = props
+  }: VoiceProps
+) {
 
   const updateAttribute = (e: any, attribute: Scalar) => {
     voices[i][attribute] = +e.target!.value
-    updateState()
+    updateVoice()
   } 
 
   const updateCheckbox = (e: any, attribute: Compound) => {
@@ -25,10 +25,10 @@ export default function Voice(props: VoiceProps) {
       voices[i][attribute] = [voices[i][attribute], e.target.value].flat()
     }
     
-    updateState()
+    updateVoice()
   }
 
-  const updateState = () => {
+  const updateVoice = () => {
     setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
   }
 
