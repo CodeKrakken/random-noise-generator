@@ -77,6 +77,7 @@ function App() {
 
   const start = () => {
     setCycleButtonLabel(true)
+    
     voices.forEach((voice, i) => {
       if (voice.isActive) {
 
@@ -92,6 +93,7 @@ function App() {
         voice.gain       = gain
 
         voice.nextInterval = context.currentTime
+
         newInterval(i)
       }
     })
@@ -107,15 +109,17 @@ function App() {
   }
 
   const newInterval = (i: number) => {
+
     const voice = voices[i]
 
-    if (cycling && document.getElementsByClassName(`interval${i}`))  {
+    if (cycling && document.getElementsByClassName(`Intervals${i}`))  {
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
+        console.log(intervalLength)
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
 
-        const liveWaves = Array.from(document.getElementsByClassName(`wave${i}`)).filter(
+        const liveWaves = Array.from(document.getElementsByClassName(`Waves${i}`)).filter(
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
 
@@ -225,7 +229,7 @@ function App() {
   }
 
   const getIntervalLength = (i: number) => {
-    const liveIntervals = Array.from(document.getElementsByClassName(`interval${i}`)).filter(
+    const liveIntervals = Array.from(document.getElementsByClassName(`Intervals${i}`)).filter(
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
     let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
@@ -269,11 +273,11 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     
-    const activeOctaves  = Array.from(document.getElementsByClassName(`octave${i}`)).filter(
+    const activeOctaves  = Array.from(document.getElementsByClassName(`Octaves${i}`)).filter(
       (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
     ).map(octave => { return +octave.value})
 
-    const activeNotes   = Array.from(document.getElementsByClassName(`note${i}` )).filter(
+    const activeNotes   = Array.from(document.getElementsByClassName(`Notes${i}` )).filter(
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
 
