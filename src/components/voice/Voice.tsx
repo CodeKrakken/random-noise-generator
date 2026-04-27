@@ -12,9 +12,9 @@ export default function Voice(props: VoiceProps) {
     handleDelete
   } = props
 
-  const updateVoice = (e: any, attribute: Scalar) => {
+  const updateAttribute = (e: any, attribute: Scalar) => {
     voices[i][attribute] = +e.target!.value
-    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
+    updateState()
   } 
 
   const updateCheckbox = (e: any, attribute: Compound) => {
@@ -25,11 +25,12 @@ export default function Voice(props: VoiceProps) {
       voices[i][attribute] = [voices[i][attribute], e.target.value].flat()
     }
     
-    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat()
-    )
+    updateState()
   }
 
-  
+  const updateState = () => {
+    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
+  }
 
   const attributes: any = {
     label: [
@@ -41,7 +42,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "text"
         value= {voice.label}
-        onChange= {(e: any) => updateVoice(e, 'label')}
+        onChange= {(e: any) => updateAttribute(e, 'label')}
       />
     ],
     bpm: [
@@ -53,7 +54,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.bpm}
-        onChange= {(e: any) => updateVoice(e, 'bpm')}
+        onChange= {(e: any) => updateAttribute(e, 'bpm')}
         maxLength= {5}
         min= {0}
         max= {60000}
@@ -68,7 +69,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.rest}
-        onChange= {(e: any) => updateVoice(e, 'rest')}
+        onChange= {(e: any) => updateAttribute(e, 'rest')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -83,7 +84,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minLevel}
-        onChange= {(e: any) => updateVoice(e, 'minLevel')}
+        onChange= {(e: any) => updateAttribute(e, 'minLevel')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -95,7 +96,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxLevel}
-        onChange= {(e: any) => updateVoice(e, 'maxLevel')}
+        onChange= {(e: any) => updateAttribute(e, 'maxLevel')}
         min= {0}
         max= {100}
         maxLength= {3} 
@@ -110,7 +111,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minNoteLength}
-        onChange= {(e: any) => updateVoice(e, 'minNoteLength')}
+        onChange= {(e: any) => updateAttribute(e, 'minNoteLength')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -122,7 +123,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxNoteLength}
-        onChange= {(e: any) => updateVoice(e, 'maxNoteLength')}
+        onChange= {(e: any) => updateAttribute(e, 'maxNoteLength')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -137,7 +138,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minOffset}
-        onChange= {(e: any) => updateVoice(e, 'minOffset')}
+        onChange= {(e: any) => updateAttribute(e, 'minOffset')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -149,7 +150,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxOffset}
-        onChange= {(e: any) => updateVoice(e, 'maxOffset')}
+        onChange= {(e: any) => updateAttribute(e, 'maxOffset')}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -164,7 +165,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minDetune}
-        onChange= {(e: any) => updateVoice(e, 'minDetune')}
+        onChange= {(e: any) => updateAttribute(e, 'minDetune')}
         min= {-100}
         max= {100}
         maxLength= {4}
@@ -176,7 +177,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxDetune}
-        onChange= {(e: any) => updateVoice(e, 'maxDetune')}
+        onChange= {(e: any) => updateAttribute(e, 'maxDetune')}
         min= {-100}
         max= {100}
         maxLength= {4}
@@ -191,7 +192,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minFadeIn}
-        onChange= {(e: any) => updateVoice(e, 'minFadeIn')}
+        onChange= {(e: any) => updateAttribute(e, 'minFadeIn')}
         maxLength= {4}
       />,
       <Input
@@ -201,7 +202,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxFadeIn}
-        onChange= {(e: any) => updateVoice(e, 'maxFadeIn')}
+        onChange= {(e: any) => updateAttribute(e, 'maxFadeIn')}
         maxLength= {4}
       />
     ],
@@ -214,7 +215,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.minFadeOut}
-        onChange= {(e: any) => updateVoice(e, 'minFadeOut')}
+        onChange= {(e: any) => updateAttribute(e, 'minFadeOut')}
         maxLength= {4}
       />,
       <Input
@@ -224,7 +225,7 @@ export default function Voice(props: VoiceProps) {
         i={i}
         type= "number"
         value= {voice.maxFadeOut}
-        onChange= {(e: any) => updateVoice(e, 'maxFadeOut')}
+        onChange= {(e: any) => updateAttribute(e, 'maxFadeOut')}
         maxLength= {4}
       />
     ],
