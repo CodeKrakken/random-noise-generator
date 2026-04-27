@@ -91,7 +91,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'Max Level'
-        label= 'Level'
         id= {`maxLevel${i}`}
         i={i}
         type= "number"
@@ -119,7 +118,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'Max Length'
-        label= 'Length'
         id= {`maxLength${i}`}
         i={i}
         type= "number"
@@ -147,7 +145,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'Max Offset'
-        label= 'Offset'
         id= {`maxOffset${i}`}
         i={i}
         type= "number"
@@ -175,7 +172,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'detune'
-        label= 'Detune'
         id= {`maxDetune${i}`}
         i={i}
         type= "number"
@@ -201,7 +197,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'Max Fade In'
-        label= 'Fade In'
         id= {`maxFadeIn${i}`}
         i={i}
         type= "number"
@@ -225,7 +220,6 @@ export default function Voice(props: VoiceProps) {
       <Input
         className= 'textbox'
         title= 'Max Fade Out'
-        label= 'Fade Out'
         id= {`maxFadeOut${i}`}
         i={i}
         type= "number"
@@ -234,46 +228,74 @@ export default function Voice(props: VoiceProps) {
         maxLength= {4}
       />
     ],
-    notes: allNotes.map((note, j) => {
-      return <Input
-        className= {`note${i}`}
-        title= {note.toString()}
-        type= "checkbox"
-        value= {note}
-        checked= {voice.activeNotes?.includes(note)}
-        onChange= {(e: any) => updateCheckbox(e, 'activeNotes')}
-      />
-    }),
-    octaves: allOctaves.map((octave, j) => {
-      return <Input
-        className= {`octave${i}`}
-        title= {octave.toString()}
-        type= "checkbox"
-        value= {octave}
-        checked= {voice.activeOctaves.includes(octave)}
-        onChange= {(e: any) => updateCheckbox(e, 'activeOctaves')}
-      />
-    }),
-    waveShapes: allWaveShapes.map((waveShape, j) => {
-      return <Input
-        className= {`wave${i}`}
-        title= {waveShape}
-        type= "checkbox"
-        value= {waveShape}
-        checked= {voice.activeWaveShapes.includes(waveShape)}
-        onChange= {(e: any) => updateCheckbox(e, 'activeWaveShapes')}
-      />
-    }),
-    intervals: allIntervals.map((interval, j) => {
-      return <Input
-        className= {`interval${i}`}
-        title= {interval.toString()}
-        type= "checkbox"
-        value= {interval}
-        checked= {voice.activeIntervals.includes(interval)}
-        onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
-      />
-    })
+    notes: [
+      <>
+        <div className="label">Notes</div>
+        {
+          allNotes.map((note, j) => {
+            return <Input
+              className= {`note${i}`}
+              title= {note.toString()}
+              type= "checkbox"
+              value= {note}
+              checked= {voice.activeNotes?.includes(note)}
+              onChange= {(e: any) => updateCheckbox(e, 'activeNotes')}
+            />
+          })
+        }
+      </>
+    ],
+    octaves: [
+      <>
+        <div className="label">Octaves</div>
+        {
+          allOctaves.map((octave, j) => {
+            return <Input
+              className= {`octave${i}`}
+              title= {octave.toString()}
+              type= "checkbox"
+              value= {octave}
+              checked= {voice.activeOctaves.includes(octave)}
+              onChange= {(e: any) => updateCheckbox(e, 'activeOctaves')}
+            />
+          })
+        }
+      </>
+    ],
+    waveShapes: [
+      <>
+        <div className="label">WaveShapes</div>
+        {
+          allWaveShapes.map((waveShape, j) => {
+            return <Input
+              className= {`wave${i}`}
+              title= {waveShape}
+              type= "checkbox"
+              value= {waveShape}
+              checked= {voice.activeWaveShapes.includes(waveShape)}
+              onChange= {(e: any) => updateCheckbox(e, 'activeWaveShapes')}
+            />
+          }
+        )}
+      </>
+    ],
+    intervals: [
+      <>
+        <div className="label">Intervals</div>
+        {
+          allIntervals.map((interval, j) => {
+            return <Input
+              className= {`interval${i}`}
+              title= {interval.toString()}
+              type= "checkbox"
+              value= {interval}
+              checked= {voice.activeIntervals.includes(interval)}
+              onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
+            />
+          })
+        }
+      </>
+    ]
   }
 
   return <div 
