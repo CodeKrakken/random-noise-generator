@@ -11,13 +11,13 @@ export const updateAttribute = (
     callbackFunction()
 } 
 
-  export const updateCheckbox = (
+export const updateCheckbox = (
     e: any, 
     attribute: Compound, 
     voices: voice[], 
     i: number, 
     callbackFunction: Function
-  ) => {
+) => {
 
     if ((voices[i][attribute]).includes(e.target.value)) {
       voices[i][attribute] = voices[i][attribute].filter(value => value !== e.target.value)
@@ -26,4 +26,8 @@ export const updateAttribute = (
     }
     
     callbackFunction()
-  }
+}
+
+export  const updateVoice = (array: voice[], i: number, callback: Function) => {
+    callback([array.slice(0,i), array[i], array.slice(i+1)].flat())
+}

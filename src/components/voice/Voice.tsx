@@ -1,21 +1,18 @@
 import { VoiceProps, CheckboxGroup } from '../../types/voice'
 import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
-import { updateAttribute, updateCheckbox } from './functions'
+import { updateAttribute, updateCheckbox, updateVoice } from './functions'
 
 export default function Voice(
   {
     voice, 
     i, 
-    setVoices, 
     voices,  
     handleDelete
   }: VoiceProps
 ) {
 
-  const updateVoice = () => {
-    setVoices([voices.slice(0,i), voices[i], voices.slice(i+1)].flat())
-  }
+
 
   const attributes: any = {
     label: [
@@ -60,33 +57,21 @@ export default function Voice(
         maxLength= {3}
       />
     ],
-    level: [
+    level: ['Min', 'Max'].map((input, j) => 
       <Input
         className= 'textbox'
-        title= 'Min Level'
-        label= 'Level'
-        id= {`minLevel${i}`}
+        title={`${input} Level`}
+        label={j ? '' : 'Level'}
+        id= {`${input.toLowerCase()}Level${i}`}
         i={i}
         type= "number"
-        value= {voice.minLevel}
-        onChange= {(e: any) => updateAttribute(e, 'minLevel', voices, i, updateVoice)}
+        value= {voice[`${input.toLowerCase()}Level`]}
+        onChange= {(e: any) => updateAttribute(e, `${input.toLowerCase()}Level`, voices, i, updateVoice)}
         min= {0}
         max= {100}
         maxLength= {3}
-      />,
-      <Input
-        className= 'textbox'
-        title= 'Max Level'
-        id= {`maxLevel${i}`}
-        i={i}
-        type= "number"
-        value= {voice.maxLevel}
-        onChange= {(e: any) => updateAttribute(e, 'maxLevel', voices, i, updateVoice)}
-        min= {0}
-        max= {100}
-        maxLength= {3} 
       />
-    ],
+    ),
     length: [
       <Input
         className= 'textbox'

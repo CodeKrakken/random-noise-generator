@@ -11,7 +11,7 @@ export type voice = {
   maxLevel        : number
   activeNotes     : string[]
   activeOctaves   : string[]
-  activeWaveforms: string[]
+  activeWaveforms : string[]
   rest            : number
   activeIntervals : string[]
   minNoteLength   : number
