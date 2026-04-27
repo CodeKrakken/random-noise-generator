@@ -1,5 +1,5 @@
 import { VoiceProps, Scalar, Compound } from '../../types/voice'
-import {allNotes, allOctaves, allIntervals, allWaveShapes} from '../../content/data'
+import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
 
 export default function Voice(props: VoiceProps) {
@@ -228,73 +228,98 @@ export default function Voice(props: VoiceProps) {
         maxLength= {4}
       />
     ],
-    notes: [
-      <>
-        <div className="label">Notes</div>
+    // notes: [
+    //   <>
+    //     <div className="label">Notes</div>
+    //     {
+    //       allNotes.map((note, j) => {
+    //         return <Input
+    //           className= {`note${i}`}
+    //           title= {note.toString()}
+    //           type= "checkbox"
+    //           value= {note}
+    //           checked= {voice.activeNotes?.includes(note)}
+    //           onChange= {(e: any) => updateCheckbox(e, 'activeNotes')}
+    //         />
+    //       })
+    //     }
+    //   </>
+    // ],
+    // octaves: [
+    //   <>
+    //     <div className="label">Octaves</div>
+    //     {
+    //       allOctaves.map((octave, j) => {
+    //         return <Input
+    //           className= {`octave${i}`}
+    //           title= {octave.toString()}
+    //           type= "checkbox"
+    //           value= {octave}
+    //           checked= {voice.activeOctaves.includes(octave)}
+    //           onChange= {(e: any) => updateCheckbox(e, 'activeOctaves')}
+    //         />
+    //       })
+    //     }
+    //   </>
+    // ],
+    // waveShapes: [
+    //   <>
+    //     <div className="label">WaveShapes</div>
+    //     {
+    //       allWaveShapes.map((waveShape, j) => {
+    //         return <Input
+    //           className= {`wave${i}`}
+    //           title= {waveShape}
+    //           type= "checkbox"
+    //           value= {waveShape}
+    //           checked= {voice.activeWaveShapes.includes(waveShape)}
+    //           onChange= {(e: any) => updateCheckbox(e, 'activeWaveShapes')}
+    //         />
+    //       }
+    //     )}
+    //   </>
+    // ],
+    // intervals: [
+    //   <>
+    //     <div className="label">Intervals</div>
+    //     {
+    //       allIntervals.map((interval, j) => {
+    //         return <Input
+    //           className= {`interval${i}`}
+    //           title= {interval.toString()}
+    //           type= "checkbox"
+    //           value= {interval}
+    //           checked= {voice.activeIntervals.includes(interval)}
+    //           onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
+    //         />
+    //       })
+    //     }
+    //   </>
+    // ],
+    checkboxGroups: [
+      <div className="column">
         {
-          allNotes.map((note, j) => {
-            return <Input
-              className= {`note${i}`}
-              title= {note.toString()}
-              type= "checkbox"
-              value= {note}
-              checked= {voice.activeNotes?.includes(note)}
-              onChange= {(e: any) => updateCheckbox(e, 'activeNotes')}
-            />
-          })
+          Object.keys(checkboxGroups).map(checkboxGroup =>
+            <>
+              <div className="row">
+                <div className="label">{checkboxGroup}</div>
+                {
+                  checkboxGroups[checkboxGroup as 'Octaves' | 'Notes' | 'Waveshapes' | 'Intervals'].map((interval: any, j: number) => {
+                    return <Input
+                      className= {`interval${i}`}
+                      title= {interval.toString()}
+                      type= "checkbox"
+                      value= {interval}
+                      checked= {voice.activeIntervals.includes(interval)}
+                      onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
+                    />
+                  })
+                }
+              </div>
+            </>
+          )
         }
-      </>
-    ],
-    octaves: [
-      <>
-        <div className="label">Octaves</div>
-        {
-          allOctaves.map((octave, j) => {
-            return <Input
-              className= {`octave${i}`}
-              title= {octave.toString()}
-              type= "checkbox"
-              value= {octave}
-              checked= {voice.activeOctaves.includes(octave)}
-              onChange= {(e: any) => updateCheckbox(e, 'activeOctaves')}
-            />
-          })
-        }
-      </>
-    ],
-    waveShapes: [
-      <>
-        <div className="label">WaveShapes</div>
-        {
-          allWaveShapes.map((waveShape, j) => {
-            return <Input
-              className= {`wave${i}`}
-              title= {waveShape}
-              type= "checkbox"
-              value= {waveShape}
-              checked= {voice.activeWaveShapes.includes(waveShape)}
-              onChange= {(e: any) => updateCheckbox(e, 'activeWaveShapes')}
-            />
-          }
-        )}
-      </>
-    ],
-    intervals: [
-      <>
-        <div className="label">Intervals</div>
-        {
-          allIntervals.map((interval, j) => {
-            return <Input
-              className= {`interval${i}`}
-              title= {interval.toString()}
-              type= "checkbox"
-              value= {interval}
-              checked= {voice.activeIntervals.includes(interval)}
-              onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
-            />
-          })
-        }
-      </>
+      </div>
     ]
   }
 

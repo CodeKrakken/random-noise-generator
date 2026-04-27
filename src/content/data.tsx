@@ -30,7 +30,10 @@ export const ranges = [
   'FadeOut',
 ] as const
 
-export const allNotes   = ['1','2','3','4','5','6','7','8','9','10','11','12','13']
+export const allNotes   = {
+  label: 'Notes',
+  notes: ['1','2','3','4','5','6','7','8','9','10','11','12','13']
+}
 export const allOctaves  = ['0','1','2','3','4','5','6','7','8','9','10']
 export const allWaveShapes = [
   'sine',
@@ -42,3 +45,17 @@ export const allWaveShapes = [
 ]
 
 export const allIntervals = ['1','0.5','0.25','0.125','0.0625']
+
+export const checkboxGroups = {
+  Notes: ['1','2','3','4','5','6','7','8','9','10','11','12','13'],
+  Octaves: ['0','1','2','3','4','5','6','7','8','9','10'],
+  Waveshapes: [
+    'sine',
+    'triangle',
+    'sawtooth',
+    'square',
+    'kick',
+    'snare'
+  ],
+  Intervals: ['1','0.5','0.25','0.125','0.0625']
+}
