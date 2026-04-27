@@ -1,4 +1,4 @@
-import { VoiceProps, Scalar, Compound, CheckboxGroup } from '../../types/voice'
+import { VoiceProps, Scalar, Compound, CheckboxGroup, voice } from '../../types/voice'
 import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
 
@@ -12,12 +12,23 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-  const updateAttribute = (e: any, attribute: Scalar) => {
+  const updateAttribute = (
+    e: any, 
+    attribute: Scalar, 
+    voices: voice[], 
+    i: number
+  ) => {
     voices[i][attribute] = +e.target!.value
     updateVoice()
   } 
 
-  const updateCheckbox = (e: any, attribute: Compound) => {
+  const updateCheckbox = (
+    e: any, 
+    attribute: Compound, 
+    voices: voice[], 
+    i: number, 
+    callbackFunction: Function
+  ) => {
 
     if ((voices[i][attribute]).includes(e.target.value)) {
       voices[i][attribute] = voices[i][attribute].filter(value => value !== e.target.value)
@@ -25,7 +36,7 @@ export default function Voice(
       voices[i][attribute] = [voices[i][attribute], e.target.value].flat()
     }
     
-    updateVoice()
+    callbackFunction()
   }
 
   const updateVoice = () => {
@@ -42,7 +53,7 @@ export default function Voice(
         i={i}
         type= "text"
         value= {voice.label}
-        onChange= {(e: any) => updateAttribute(e, 'label')}
+        onChange= {(e: any) => updateAttribute(e, 'label', voices, i)}
       />
     ],
     bpm: [
@@ -54,7 +65,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.bpm}
-        onChange= {(e: any) => updateAttribute(e, 'bpm')}
+        onChange= {(e: any) => updateAttribute(e, 'bpm', voices, i)}
         maxLength= {5}
         min= {0}
         max= {60000}
@@ -69,7 +80,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.rest}
-        onChange= {(e: any) => updateAttribute(e, 'rest')}
+        onChange= {(e: any) => updateAttribute(e, 'rest', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -84,7 +95,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minLevel}
-        onChange= {(e: any) => updateAttribute(e, 'minLevel')}
+        onChange= {(e: any) => updateAttribute(e, 'minLevel', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -96,7 +107,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxLevel}
-        onChange= {(e: any) => updateAttribute(e, 'maxLevel')}
+        onChange= {(e: any) => updateAttribute(e, 'maxLevel', voices, i )}
         min= {0}
         max= {100}
         maxLength= {3} 
@@ -111,7 +122,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minNoteLength}
-        onChange= {(e: any) => updateAttribute(e, 'minNoteLength')}
+        onChange= {(e: any) => updateAttribute(e, 'minNoteLength', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -123,7 +134,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxNoteLength}
-        onChange= {(e: any) => updateAttribute(e, 'maxNoteLength')}
+        onChange= {(e: any) => updateAttribute(e, 'maxNoteLength', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -138,7 +149,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minOffset}
-        onChange= {(e: any) => updateAttribute(e, 'minOffset')}
+        onChange= {(e: any) => updateAttribute(e, 'minOffset', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -150,7 +161,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxOffset}
-        onChange= {(e: any) => updateAttribute(e, 'maxOffset')}
+        onChange= {(e: any) => updateAttribute(e, 'maxOffset', voices, i)}
         min= {0}
         max= {100}
         maxLength= {3}
@@ -165,7 +176,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minDetune}
-        onChange= {(e: any) => updateAttribute(e, 'minDetune')}
+        onChange= {(e: any) => updateAttribute(e, 'minDetune', voices, i)}
         min= {-100}
         max= {100}
         maxLength= {4}
@@ -177,7 +188,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxDetune}
-        onChange= {(e: any) => updateAttribute(e, 'maxDetune')}
+        onChange= {(e: any) => updateAttribute(e, 'maxDetune', voices, i)}
         min= {-100}
         max= {100}
         maxLength= {4}
@@ -192,7 +203,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minFadeIn}
-        onChange= {(e: any) => updateAttribute(e, 'minFadeIn')}
+        onChange= {(e: any) => updateAttribute(e, 'minFadeIn', voices, i)}
         maxLength= {4}
       />,
       <Input
@@ -202,7 +213,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxFadeIn}
-        onChange= {(e: any) => updateAttribute(e, 'maxFadeIn')}
+        onChange= {(e: any) => updateAttribute(e, 'maxFadeIn', voices, i)}
         maxLength= {4}
       />
     ],
@@ -215,7 +226,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.minFadeOut}
-        onChange= {(e: any) => updateAttribute(e, 'minFadeOut')}
+        onChange= {(e: any) => updateAttribute(e, 'minFadeOut', voices, i)}
         maxLength= {4}
       />,
       <Input
@@ -225,7 +236,7 @@ export default function Voice(
         i={i}
         type= "number"
         value= {voice.maxFadeOut}
-        onChange= {(e: any) => updateAttribute(e, 'maxFadeOut')}
+        onChange= {(e: any) => updateAttribute(e, 'maxFadeOut', voices, i)}
         maxLength= {4}
       />
     ],
@@ -244,7 +255,7 @@ export default function Voice(
                       type= "checkbox"
                       value= {checkbox}
                       checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
-                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`)}
+                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, updateVoice)}
                     />
                   })
                 }
@@ -255,7 +266,7 @@ export default function Voice(
       </div>
     ]
   }
-
+  
   return <div 
     className="voice" 
     id={`voice${i}`}
