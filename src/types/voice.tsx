@@ -29,7 +29,7 @@ export type voice = {
   source?         : SoundSource
 }
 
-export type props = {
+export type VoiceProps = {
   voice       : voice, 
   i           : number, 
   setVoices   : Function, 

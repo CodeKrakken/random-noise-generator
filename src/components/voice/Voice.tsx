@@ -1,7 +1,8 @@
-import { props, Scalar, Compound } from '../../types/voice'
+import { VoiceProps, Scalar, Compound } from '../../types/voice'
 import {allNotes, allOctaves, allIntervals, allWaveShapes} from '../../content/data'
+import Input from '../input/Input'
 
-export default function Voice(props: props) {
+export default function Voice(props: VoiceProps) {
 
   const {
     voice, 
@@ -31,18 +32,28 @@ export default function Voice(props: props) {
   
 
   const attributes: any = {
-    label: [
-      {
-        className: 'textbox',  
-        title: "Label",
-        label: "Name",
-        id: `label${i}`,
-        'data-testid': `voice-label-${i}`,
-        type: "text",
-        value: voice.label,
-        onChange: (e: any) => updateVoice(e, 'label')
-      }
-    ],
+    label: <Input 
+      className='textbox'  
+      title= "Label"
+      label= "Name"
+      id= {`label${i}`}
+      i={i}
+      type= "text"
+      value= {voice.label}
+      // onChange= (e: any) => updateVoice(e, 'label') 
+    />,
+    // label: [
+    //   {
+    //     className: 'textbox',  
+    //     title: "Label",
+    //     label: "Name",
+    //     id: `label${i}`,
+    //     'data-testid': `voice-label-${i}`,
+    //     type: "text",
+    //     value: voice.label,
+    //     onChange: (e: any) => updateVoice(e, 'label')
+    //   }
+    // ],
     bpm: [
       {
         className: 'textbox',
@@ -269,46 +280,7 @@ export default function Voice(props: props) {
               {
                 attributes[attribute].map((input: any) => {
 
-                const {
-                  title,
-                  label,
-                  className,
-                  id,
-                  type,
-                  value,
-                  onChange,
-                  maxLength,
-                  min,
-                  max,
-                  checked
-                } = input
-
-                const dataTestId = input['data-testid']
-
-                return (
-                  <>
-                    {
-                      label && <div className="label">
-                        {label}
-                      </div>
-                    }
-                    <div>
-                      <input 
-                        className={className}
-                        title={title}
-                        id={id}
-                        data-testid={dataTestId}
-                        type={type} 
-                        value={value}
-                        onChange={onChange}
-                        maxLength={maxLength}
-                        min={min}
-                        max={max}
-                        checked={checked}
-                      />
-                    </div>
-                  </>
-                )
+                  
                 })
               }
             </div>
