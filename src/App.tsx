@@ -119,9 +119,10 @@ function App() {
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
 
-        const liveWaves = Array.from(document.getElementsByClassName(`Waves${i}`)).filter(
+        const liveWaves = Array.from(document.getElementsByClassName(`Waveforms${i}`)).filter(
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
+        console.log(liveWaves)
 
         if (isRest(i) || !liveWaves) {
           voices[i].gain?.gain.setValueAtTime(0,0)
