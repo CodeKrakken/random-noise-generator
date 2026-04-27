@@ -1,4 +1,4 @@
-import { VoiceProps, Scalar, Compound } from '../../types/voice'
+import { VoiceProps, Scalar, Compound, CheckboxGroup } from '../../types/voice'
 import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
 
@@ -262,18 +262,18 @@ export default function Voice(props: VoiceProps) {
     //     }
     //   </>
     // ],
-    // waveShapes: [
+    // waveforms: [
     //   <>
-    //     <div className="label">WaveShapes</div>
+    //     <div className="label">Waveforms</div>
     //     {
-    //       allWaveShapes.map((waveShape, j) => {
+    //       allWaveforms.map((waveShape, j) => {
     //         return <Input
     //           className= {`wave${i}`}
     //           title= {waveShape}
     //           type= "checkbox"
     //           value= {waveShape}
-    //           checked= {voice.activeWaveShapes.includes(waveShape)}
-    //           onChange= {(e: any) => updateCheckbox(e, 'activeWaveShapes')}
+    //           checked= {voice.activeWaveforms.includes(waveShape)}
+    //           onChange= {(e: any) => updateCheckbox(e, 'activeWaveforms')}
     //         />
     //       }
     //     )}
@@ -304,13 +304,13 @@ export default function Voice(props: VoiceProps) {
               <div className="row">
                 <div className="label">{checkboxGroup}</div>
                 {
-                  checkboxGroups[checkboxGroup as 'Octaves' | 'Notes' | 'Waveshapes' | 'Intervals'].map((interval: any, j: number) => {
+                  checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string, j: number) => {
                     return <Input
-                      className= {`interval${i}`}
-                      title= {interval.toString()}
+                      className= {`${checkboxGroup}${i}`}
+                      title= {checkboxGroup}
                       type= "checkbox"
-                      value= {interval}
-                      checked= {voice.activeIntervals.includes(interval)}
+                      value= {checkboxGroup}
+                      checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
                       onChange= {(e: any) => updateCheckbox(e, 'activeIntervals')}
                     />
                   })

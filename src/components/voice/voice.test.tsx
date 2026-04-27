@@ -31,7 +31,7 @@ const baseVoice: voice = {
 
   activeNotes: ['1'],
   activeOctaves: ['0'],
-  activeWaveShapes: ['sine'],
+  activeWaveforms: ['sine'],
   activeIntervals: ['1'],
 
   // 👇 add these
@@ -143,7 +143,7 @@ describe('header', () => {
   test('adds wave shape when checkbox is checked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeWaveShapes = []
+    baseVoice.activeWaveforms = []
     
     const { container } = render(
       <Voice
@@ -161,14 +161,14 @@ describe('header', () => {
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeWaveShapes.length).toBe(1)
-    expect(updated[0].activeWaveShapes).toContain('sine')
+    expect(updated[0].activeWaveforms.length).toBe(1)
+    expect(updated[0].activeWaveforms).toContain('sine')
   })
 
   test('removes wave shape when checkbox is unchecked', () => {
     const setVoices = jest.fn()
 
-    baseVoice.activeWaveShapes = ['sine']
+    baseVoice.activeWaveforms = ['sine']
 
     const { container } = render(
       <Voice
@@ -186,7 +186,7 @@ describe('header', () => {
 
     const updated = setVoices.mock.calls[0][0]
 
-    expect(updated[0].activeWaveShapes).not.toContain('sine')
+    expect(updated[0].activeWaveforms).not.toContain('sine')
   })
 
   test('adds interval when checkbox is checked', () => {
