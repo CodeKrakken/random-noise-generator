@@ -13,7 +13,7 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-
+  const extrema = ['Min', 'Max']
 
   const attributes: any = {
     label: [
@@ -58,7 +58,7 @@ export default function Voice(
         maxLength= {3}
       />
     ],
-    level: ['Min', 'Max'].map((input, j) => 
+    level: extrema.map((input, j) => 
       <Input
         className= 'textbox'
         title={`${input} Level`}
@@ -73,7 +73,7 @@ export default function Voice(
         maxLength= {3}
       />
     ),
-    length:['Min', 'Max'].map((input, j) =>
+    length: extrema.map((input, j) =>
       <Input
         className= 'textbox'
         title={`${input} Length`}
@@ -88,33 +88,21 @@ export default function Voice(
         maxLength= {3}
       />
     ),
-    offset: [
+    offset: extrema.map((input, j) =>
       <Input
         className= 'textbox'
-        title= 'Min Offset'
-        label= 'Offset'
-        id= {`minOffset${i}`}
+        title={`${input} Offset`}
+        label={j ? '' : 'Offset'}
+        id= {`${input.toLowerCase()}Offset${i}`}
         i={i}
         type= "number"
-        value= {voice.minOffset}
-        onChange= {(e: any) => updateField(e, 'minOffset', voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />,
-      <Input
-        className= 'textbox'
-        title= 'Max Offset'
-        id= {`maxOffset${i}`}
-        i={i}
-        type= "number"
-        value= {voice.maxOffset}
-        onChange= {(e: any) => updateField(e, 'maxOffset', voices, i, setVoices)}
+        value= {voice[`${input.toLowerCase()}Offset` as Scalar]}
+        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Offset` as Scalar, voices, i, setVoices)}
         min= {0}
         max= {100}
         maxLength= {3}
       />
-    ],
+    ),
     detune: [
       <Input
         className= 'textbox'
