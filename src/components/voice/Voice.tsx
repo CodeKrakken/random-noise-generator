@@ -15,8 +15,8 @@ export default function Voice(
 
   const extrema = ['Min', 'Max']
 
-  const attributes: any = {
-    label: [
+  const inputs: any = {
+    label: <>
       <Input 
         className='textbox'  
         title= "Label"
@@ -27,8 +27,8 @@ export default function Voice(
         value= {voice.label}
         onChange= {(e: any) => updateField(e, 'label', voices, i, setVoices)}
       />
-    ],
-    bpm: [
+    </>,
+    bpm: <>
       <Input
         className= 'textbox'
         title= "BPM"
@@ -42,8 +42,8 @@ export default function Voice(
         min= {0}
         max= {60000}
       />
-    ],
-    restChance: [
+    </>,
+    restChance: <>
       <Input
         className= 'textbox'
         title= 'Rest %'
@@ -57,8 +57,8 @@ export default function Voice(
         max= {100}
         maxLength= {3}
       />
-    ],
-    scalarFields: [
+    </>,
+    scalarFields: <> 
       <div className="column">
         {
           scalarFields.map(scalarField =>
@@ -82,8 +82,8 @@ export default function Voice(
           )
         }
       </div>
-    ],
-    checkboxGroups: [
+    </>,
+    checkboxGroups: <>
       <div className="column">
         {
           Object.keys(checkboxGroups).map(checkboxGroup =>
@@ -107,7 +107,7 @@ export default function Voice(
           )
         }
       </div>
-    ]
+    </> 
   }
   
   return <div 
@@ -119,13 +119,9 @@ export default function Voice(
     <div className="row">
       <div className="column">
         {
-          Object.keys(attributes).map(attribute => 
+          Object.keys(inputs).map(input => 
             <div className="row">
-              {
-                attributes[attribute].map((input: any) =>
-                  input
-                )
-              }
+              {inputs[input]}
             </div>
           )
         }
