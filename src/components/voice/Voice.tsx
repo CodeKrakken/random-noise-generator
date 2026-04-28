@@ -118,29 +118,19 @@ export default function Voice(
         maxLength= {4}
       />
     ),
-    fadeIn: [
+    fadeIn: extrema.map((input, j) =>
       <Input
         className= 'textbox'
-        title= 'Min Fade In'
-        label= 'Fade In'
-        id= {`minFadeIn${i}`}
+        title={`${input} Fade In`}        
+        label={j ? '' : 'Fade In'}
+        id= {`${input.toLowerCase()}FadeIn${i}`}
         i={i}
         type= "number"
-        value= {voice.minFadeIn}
-        onChange= {(e: any) => updateField(e, 'minFadeIn', voices, i, setVoices)}
-        maxLength= {4}
-      />,
-      <Input
-        className= 'textbox'
-        title= 'Max Fade In'
-        id= {`maxFadeIn${i}`}
-        i={i}
-        type= "number"
-        value= {voice.maxFadeIn}
-        onChange= {(e: any) => updateField(e, 'maxFadeIn', voices, i, setVoices)}
+        value= {voice[`${input.toLowerCase()}FadeIn` as Scalar]}
+        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeIn` as Scalar, voices, i, setVoices)}
         maxLength= {4}
       />
-    ],
+    ),
     fadeOut: [
       <Input
         className= 'textbox'
