@@ -115,14 +115,12 @@ function App() {
     if (cycling && document.getElementsByClassName(`Intervals${i}`))  {
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
-        console.log(intervalLength)
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
 
         const liveWaves = Array.from(document.getElementsByClassName(`Waveforms${i}`)).filter(
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
-        console.log(liveWaves)
 
         if (isRest(i) || !liveWaves) {
           voices[i].gain?.gain.setValueAtTime(0,0)

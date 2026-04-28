@@ -108,7 +108,6 @@ describe('header', () => {
     )
 
     const octaveCheckbox = container.querySelector('.Octaves0') as HTMLInputElement
-    console.log(octaveCheckbox)
 
     fireEvent.click(octaveCheckbox)
 

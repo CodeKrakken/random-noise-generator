@@ -8,7 +8,8 @@ export default function Voice(
     voice, 
     i, 
     voices,  
-    handleDelete
+    handleDelete,
+    setVoices
   }: VoiceProps
 ) {
 
@@ -214,7 +215,7 @@ export default function Voice(
                       type= "checkbox"
                       value= {checkbox}
                       checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
-                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, updateVoice)}
+                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)}
                     />
                   })
                 }
