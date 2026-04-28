@@ -131,29 +131,19 @@ export default function Voice(
         maxLength= {4}
       />
     ),
-    fadeOut: [
+    fadeOut: extrema.map((input, j) =>
       <Input
         className= 'textbox'
-        title= 'Min Fade Out'
-        label= 'Fade Out'
-        id= {`minFadeOut${i}`}
+        title={`${input} Fade Out`}
+        label={j ? '' : 'Fade Out'}
+        id= {`${input.toLowerCase()}FadeOut${i}`}
         i={i}
         type= "number"
-        value= {voice.minFadeOut}
-        onChange= {(e: any) => updateField(e, 'minFadeOut', voices, i, setVoices)}
-        maxLength= {4}
-      />,
-      <Input
-        className= 'textbox'
-        title= 'Max Fade Out'
-        id= {`maxFadeOut${i}`}
-        i={i}
-        type= "number"
-        value= {voice.maxFadeOut}
-        onChange= {(e: any) => updateField(e, 'maxFadeOut', voices, i, setVoices)}
+        value= {voice[`${input.toLowerCase()}FadeOut` as Scalar]}
+        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeOut` as Scalar, voices, i, setVoices)}
         maxLength= {4}
       />
-    ],
+    ),
     checkboxGroups: [
       <div className="column">
         {
