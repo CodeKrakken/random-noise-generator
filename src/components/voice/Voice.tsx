@@ -119,36 +119,36 @@ export default function Voice(
         maxLength= {4}
       />
     ),
-    fadeIn: extrema.map((input, j) =>
-      <Input
-        className= 'textbox'
-        title={`${input} Fade In`}        
-        label={j ? '' : 'Fade In'}
-        id= {`${input.toLowerCase()}FadeIn${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}FadeIn` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeIn` as Scalar, voices, i, setVoices)}
-        maxLength= {4}
-      />
-    ),
-    fadeOut: extrema.map((input, j) =>
-      <Input
-        className= 'textbox'
-        title={`${input} Fade Out`}
-        label={j ? '' : 'Fade Out'}
-        id= {`${input.toLowerCase()}FadeOut${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}FadeOut` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeOut` as Scalar, voices, i, setVoices)}
-        maxLength= {4}
-      />
-    ),
+    // fadeIn: extrema.map((input, j) =>
+    //   <Input
+    //     className= 'textbox'
+    //     title={`${input} Fade In`}        
+    //     label={j ? '' : 'Fade In'}
+    //     id= {`${input.toLowerCase()}FadeIn${i}`}
+    //     i={i}
+    //     type= "number"
+    //     value= {voice[`${input.toLowerCase()}FadeIn` as Scalar]}
+    //     onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeIn` as Scalar, voices, i, setVoices)}
+    //     maxLength= {4}
+    //   />
+    // ),
+    // fadeOut: extrema.map((input, j) =>
+    //   <Input
+    //     className= 'textbox'
+    //     title={`${input} Fade Out`}
+    //     label={j ? '' : 'Fade Out'}
+    //     id= {`${input.toLowerCase()}FadeOut${i}`}
+    //     i={i}
+    //     type= "number"
+    //     value= {voice[`${input.toLowerCase()}FadeOut` as Scalar]}
+    //     onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeOut` as Scalar, voices, i, setVoices)}
+    //     maxLength= {4}
+    //   />
+    // ),
     scalarFields: [
       <div className="column">
         {
-          Object.keys(scalarFields).map(scalarField =>
+          scalarFields.map(scalarField =>
             extrema.map((input, j) =>
               <Input
                 className= 'textbox'

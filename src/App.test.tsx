@@ -381,10 +381,10 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     fireEvent.change(screen.getByTitle('Max Length'), { target: { value: '200' } })
-    fireEvent.change(screen.getByTitle('Min Fade In'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('Max Fade In'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('Min Fade Out'), { target: { value: '0' } })
-    fireEvent.change(screen.getByTitle('Max Fade Out'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('Min FadeIn'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('Max FadeIn'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('Min FadeOut'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('Max FadeOut'), { target: { value: '0' } })
 
     fireEvent.click(screen.getByText('Start'))
 
