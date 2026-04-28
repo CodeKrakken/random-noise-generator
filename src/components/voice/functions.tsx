@@ -5,10 +5,10 @@ export const updateAttribute = (
   attribute: Scalar, 
   voices: voice[], 
   i: number,
-  callbackFunction: Function
+  callback: Function
 ) => {
   voices[i][attribute] = +e.target!.value
-  callbackFunction()
+  updateVoice(voices, i, callback)
 } 
 
 export const updateCheckbox = (
