@@ -12,15 +12,6 @@ export const allFrequencies = [
   [16744.04, 17739.68, 18794.52, 19912.12, 21096.16, 22350.60, 23679.64, 25087.72, 26579.52, 28160.00, 29834.48, 31608.52, 33488.08]
 ]
 
-export const waveforms = [
-  'sine',
-  'triangle',
-  'sawtooth',
-  'square',
-  'kick',
-  'snare'
-]
-
 export const ranges = [
   'Level',
   'Length',
@@ -28,10 +19,9 @@ export const ranges = [
   'Detune',
   'FadeIn',
   'FadeOut',
-] as const
+]
 
 export const allNotes   = {
-  label: 'Notes',
   notes: ['1','2','3','4','5','6','7','8','9','10','11','12','13']
 }
 export const allOctaves  = ['0','1','2','3','4','5','6','7','8','9','10']
@@ -60,11 +50,4 @@ export const checkboxGroups = {
   Intervals: ['1','0.5','0.25','0.125','0.0625']
 }
 
-export const scalarFields = [
-  'Level',
-  'Length',
-  'Offset',
-  'Detune',
-  'FadeIn',
-  'FadeOut'
-]
+export const extrema = ['Min', 'Max']

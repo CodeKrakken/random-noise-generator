@@ -1,8 +1,8 @@
-import { Compound, Scalar, voice } from "../../types/voice"
+import { Composite, Atom, voice } from "../../types/voice"
 
 export const updateField = (
   e: any, 
-  attribute: Scalar, 
+  attribute: Atom, 
   voices: voice[], 
   i: number,
   callback: Function
@@ -13,7 +13,7 @@ export const updateField = (
 
 export const updateCheckbox = (
   e: any, 
-  attribute: Compound, 
+  attribute: Composite, 
   voices: voice[], 
   i: number, 
   callback: Function
