@@ -23,7 +23,7 @@ export const waveforms = [
 
 export const ranges = [
   'Level',
-  'NoteLength',
+  'Length',
   'Offset',
   'Detune',
   'FadeIn',

@@ -12,8 +12,8 @@ const baseVoice: voice = {
   minLevel: 10,
   maxLevel: 50,
 
-  minNoteLength: 10,
-  maxNoteLength: 50,
+  minLength: 10,
+  maxLength: 50,
 
   rest: 0,
 

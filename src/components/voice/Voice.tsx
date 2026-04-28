@@ -73,33 +73,21 @@ export default function Voice(
         maxLength= {3}
       />
     ),
-    length: [
+    length:['Min', 'Max'].map((input, j) =>
       <Input
         className= 'textbox'
-        title= 'Min Length'
-        label= 'Length'
-        id= {`minLength${i}`}
+        title={`${input} Length`}
+        label={j ? '' : 'Length'}
+        id= {`${input.toLowerCase()}Length${i}`}
         i={i}
         type= "number"
-        value= {voice.minNoteLength}
-        onChange= {(e: any) => updateField(e, 'minNoteLength', voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />,
-      <Input
-        className= 'textbox'
-        title= 'Max Length'
-        id= {`maxLength${i}`}
-        i={i}
-        type= "number"
-        value= {voice.maxNoteLength}
-        onChange= {(e: any) => updateField(e, 'maxNoteLength', voices, i, setVoices )}
+        value= {voice[`${input.toLowerCase()}Length` as Scalar]}
+        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Length` as Scalar, voices, i, setVoices)}
         min= {0}
         max= {100}
         maxLength= {3}
       />
-    ],
+    ),
     offset: [
       <Input
         className= 'textbox'

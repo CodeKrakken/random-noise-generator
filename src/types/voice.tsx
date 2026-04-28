@@ -14,8 +14,8 @@ export type voice = {
   activeWaveforms : string[]
   rest            : number
   activeIntervals : string[]
-  minNoteLength   : number
-  maxNoteLength   : number
+  minLength       : number
+  maxLength       : number
   minOffset       : number
   maxOffset       : number
   minDetune       : number
