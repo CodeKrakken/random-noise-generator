@@ -58,67 +58,6 @@ export default function Voice(
         maxLength= {3}
       />
     ],
-    level: extrema.map((input, j) => 
-      <Input
-        className= 'textbox'
-        title={`${input} Level`}
-        label={j ? '' : 'Level'}
-        id= {`${input.toLowerCase()}Level${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}Level` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Level` as Scalar, voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />
-    ),
-    length: extrema.map((input, j) =>
-      <Input
-        className= 'textbox'
-        title={`${input} Length`}
-        label={j ? '' : 'Length'}
-        id= {`${input.toLowerCase()}Length${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}Length` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Length` as Scalar, voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />
-    ),
-
-    offset: extrema.map((input, j) =>
-      <Input
-        className= 'textbox'
-        title={`${input} Offset`}
-        label={j ? '' : 'Offset'}
-        id= {`${input.toLowerCase()}Offset${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}Offset` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Offset` as Scalar, voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />
-    ),
-    detune: extrema.map((input, j) =>
-      <Input
-        className= 'textbox'
-        title={`${input} Detune`}
-        label={j ? '' : 'Detune'}
-        id= {`${input.toLowerCase()}Detune${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${input.toLowerCase()}Detune` as Scalar]}
-        onChange= {(e: any) => updateField(e, `${input.toLowerCase()}Detune` as Scalar, voices, i, setVoices)}
-        min= {-100}
-        max= {100}
-        maxLength= {4}
-      />
-    ),
     scalarFields: [
       <div className="column">
         {

@@ -61,6 +61,10 @@ export const checkboxGroups = {
 }
 
 export const scalarFields = [
+  'Level',
+  'Length',
+  'Offset',
+  'Detune',
   'FadeIn',
   'FadeOut'
 ]
