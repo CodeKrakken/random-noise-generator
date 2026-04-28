@@ -1,5 +1,5 @@
 import { VoiceProps, CheckboxGroup, Scalar } from '../../types/voice'
-import {checkboxGroups} from '../../content/data'
+import {checkboxGroups, scalarFields} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -88,6 +88,7 @@ export default function Voice(
         maxLength= {3}
       />
     ),
+
     offset: extrema.map((input, j) =>
       <Input
         className= 'textbox'
@@ -144,6 +145,27 @@ export default function Voice(
         maxLength= {4}
       />
     ),
+    scalarFields: [
+      <div className="column">
+        {
+          Object.keys(scalarFields).map(scalarField =>
+            extrema.map((input, j) =>
+              <Input
+                className= 'textbox'
+                title={`${input} ${scalarField}`}
+                label={j ? '' : scalarField}
+                id= {`${input.toLowerCase()}${scalarField}${i}`}
+                i={i}
+                type= "number"
+                value= {voice[`${input.toLowerCase()}${scalarField}` as Scalar]}
+                onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${scalarField}` as Scalar, voices, i, setVoices)}
+                maxLength= {4}
+              />
+            )
+          )
+        }
+      </div>
+    ],
     checkboxGroups: [
       <div className="column">
         {
