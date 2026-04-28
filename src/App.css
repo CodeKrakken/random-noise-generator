@@ -9,10 +9,6 @@ body {
   flex-direction: row;
 }
 
-.inner-row {
-  height: 29px
-}
-
 .column {
   column-width: auto;
   padding: 5px

@@ -119,49 +119,27 @@ export default function Voice(
         maxLength= {4}
       />
     ),
-    // fadeIn: extrema.map((input, j) =>
-    //   <Input
-    //     className= 'textbox'
-    //     title={`${input} Fade In`}        
-    //     label={j ? '' : 'Fade In'}
-    //     id= {`${input.toLowerCase()}FadeIn${i}`}
-    //     i={i}
-    //     type= "number"
-    //     value= {voice[`${input.toLowerCase()}FadeIn` as Scalar]}
-    //     onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeIn` as Scalar, voices, i, setVoices)}
-    //     maxLength= {4}
-    //   />
-    // ),
-    // fadeOut: extrema.map((input, j) =>
-    //   <Input
-    //     className= 'textbox'
-    //     title={`${input} Fade Out`}
-    //     label={j ? '' : 'Fade Out'}
-    //     id= {`${input.toLowerCase()}FadeOut${i}`}
-    //     i={i}
-    //     type= "number"
-    //     value= {voice[`${input.toLowerCase()}FadeOut` as Scalar]}
-    //     onChange= {(e: any) => updateField(e, `${input.toLowerCase()}FadeOut` as Scalar, voices, i, setVoices)}
-    //     maxLength= {4}
-    //   />
-    // ),
     scalarFields: [
       <div className="column">
         {
           scalarFields.map(scalarField =>
-            extrema.map((input, j) =>
-              <Input
-                className= 'textbox'
-                title={`${input} ${scalarField}`}
-                label={j ? '' : scalarField}
-                id= {`${input.toLowerCase()}${scalarField}${i}`}
-                i={i}
-                type= "number"
-                value= {voice[`${input.toLowerCase()}${scalarField}` as Scalar]}
-                onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${scalarField}` as Scalar, voices, i, setVoices)}
-                maxLength= {4}
-              />
-            )
+            <div className="row">
+              {
+                extrema.map((input, j) =>
+                  <Input
+                    className= 'textbox'
+                    title={`${input} ${scalarField}`}
+                    label={j ? '' : scalarField}
+                    id= {`${input.toLowerCase()}${scalarField}${i}`}
+                    i={i}
+                    type= "number"
+                    value= {voice[`${input.toLowerCase()}${scalarField}` as Scalar]}
+                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${scalarField}` as Scalar, voices, i, setVoices)}
+                    maxLength= {4}
+                  />
+                )
+              }
+            </div>
           )
         }
       </div>
@@ -203,7 +181,7 @@ export default function Voice(
       <div className="column">
         {
           Object.keys(attributes).map(attribute => 
-            <div className="row inner-row">
+            <div className="row">
               {
                 attributes[attribute].map((input: any) =>
                   input
