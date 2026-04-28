@@ -1,4 +1,4 @@
-import { VoiceProps, CheckboxGroup } from '../../types/voice'
+import { VoiceProps, CheckboxGroup, Scalar } from '../../types/voice'
 import {checkboxGroups} from '../../content/data'
 import Input from '../input/Input'
 import { updateAttribute, updateCheckbox, updateVoice } from './functions'
@@ -65,8 +65,8 @@ export default function Voice(
         id= {`${input.toLowerCase()}Level${i}`}
         i={i}
         type= "number"
-        value= {voice[`${input.toLowerCase()}Level`]}
-        onChange= {(e: any) => updateAttribute(e, `${input.toLowerCase()}Level`, voices, i, updateVoice)}
+        value= {voice[`${input.toLowerCase()}Level` as Scalar]}
+        onChange= {(e: any) => updateAttribute(e, `${input.toLowerCase()}Level` as Scalar, voices, i, updateVoice)}
         min= {0}
         max= {100}
         maxLength= {3}
