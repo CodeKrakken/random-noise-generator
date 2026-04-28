@@ -1,6 +1,6 @@
 import { Compound, Scalar, voice } from "../../types/voice"
 
-export const updateAttribute = (
+export const updateField = (
   e: any, 
   attribute: Scalar, 
   voices: voice[], 

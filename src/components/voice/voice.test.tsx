@@ -130,7 +130,7 @@ describe('header', () => {
       />
     )
 
-    const octaveCheckbox = container.querySelector('.octave0') as HTMLInputElement
+    const octaveCheckbox = container.querySelector('.Octaves0') as HTMLInputElement
 
     fireEvent.click(octaveCheckbox)
 
@@ -154,7 +154,7 @@ describe('header', () => {
       />
     )
 
-    const waveCheckbox = container.querySelector('.wave0') as HTMLInputElement
+    const waveCheckbox = container.querySelector('.Waveforms0') as HTMLInputElement
 
     fireEvent.click(waveCheckbox)
 
@@ -179,7 +179,7 @@ describe('header', () => {
       />
     )
 
-    const waveCheckbox = container.querySelector('.wave0') as HTMLInputElement
+    const waveCheckbox = container.querySelector('.Waveforms0') as HTMLInputElement
 
     fireEvent.click(waveCheckbox)
 
@@ -203,7 +203,7 @@ describe('header', () => {
       />
     )
 
-    const intervalCheckbox = container.querySelector('.interval0') as HTMLInputElement
+    const intervalCheckbox = container.querySelector('.Intervals0') as HTMLInputElement
 
     fireEvent.click(intervalCheckbox)
 
@@ -227,7 +227,7 @@ describe('header', () => {
       />
     )
 
-    const intervalCheckbox = container.querySelector('.interval0') as HTMLInputElement
+    const intervalCheckbox = container.querySelector('.Intervals0') as HTMLInputElement
 
     fireEvent.click(intervalCheckbox)
 
@@ -249,7 +249,7 @@ describe('header', () => {
       />
     )
 
-    const noteCheckbox = container.querySelector('.note0') as HTMLInputElement
+    const noteCheckbox = container.querySelector('.Notes0') as HTMLInputElement
 
     fireEvent.click(noteCheckbox)
 
