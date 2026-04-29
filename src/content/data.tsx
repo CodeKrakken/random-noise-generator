@@ -68,3 +68,5 @@ export const atomicFields = [
   'FadeIn',
   'FadeOut'
 ]
+
+export const extrema = ['Min', 'Max']

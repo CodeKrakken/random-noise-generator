@@ -1,5 +1,5 @@
 import { VoiceProps, CheckboxGroup, Atom } from '../../types/voice'
-import {checkboxGroups, atomicFields} from '../../content/data'
+import {checkboxGroups, atomicFields, extrema} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -13,7 +13,6 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-  const extrema = ['Min', 'Max']
 
   const inputs: any = {
     label: <>
