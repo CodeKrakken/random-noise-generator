@@ -91,7 +91,6 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     const inputs = document.querySelectorAll('[title="BPM"]')
-
     expect((inputs[1] as HTMLInputElement).value).toBe('200')
   })
 

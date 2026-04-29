@@ -87,7 +87,7 @@ describe('header', () => {
 
     expect(setVoices).toHaveBeenCalledWith([
       expect.objectContaining({
-        label: 42
+        Label: 42
       })
     ])
   })
