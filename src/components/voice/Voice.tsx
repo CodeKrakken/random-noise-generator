@@ -1,4 +1,4 @@
-import { VoiceProps, CheckboxGroup, Atom } from '../../types/voice'
+import { VoiceProps, CheckboxGroup, Atom, AtomicField } from '../../types/voice'
 import {checkboxGroups, rangeFields, extrema} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
@@ -13,49 +13,56 @@ export default function Voice(
   }: VoiceProps
 ) {
 
+  const atomicFields = {
+    label: {
+      title: "Label",
+      label: "Name",
+      id: `label${i}`,
+      i: i,
+      type: "text",
+      value: voice.label,
+      onChange: (e: any) => updateField(e, 'label', voices, i, setVoices)
+    },
+    bpm: {
+      title: "BPM",
+      label: "BPM",
+      id: `bpm${i}`,
+      i:i,
+      type: "number",
+      value: voice.bpm,
+      onChange: (e: any) => updateField(e, 'bpm', voices, i, setVoices),
+      maxLength: 5,
+      min: 0,
+      max: 60000
+    },
+    restChance: {
+      title: 'Rest %',
+      label: 'Rest %',
+      id: `rest${i}`,
+      i:i,
+      type: "number",
+      value: voice.rest,
+      onChange: (e: any) => updateField(e, 'rest', voices, i, setVoices),
+      min: 0,
+      max: 100,
+      maxLength: 3
+    }
+  }
 
   const inputs: any = {
-    label: <>
-      <Input 
-        className='textbox'  
-        title= "Label"
-        label= "Name"
-        id= {`label${i}`}
-        i={i}
-        type= "text"
-        value= {voice.label}
-        onChange= {(e: any) => updateField(e, 'label', voices, i, setVoices)}
-      />
-    </>,
-    bpm: <>
-      <Input
-        className= 'textbox'
-        title= "BPM"
-        label= "BPM"
-        id= {`bpm${i}`}
-        i={i}
-        type= "number"
-        value= {voice.bpm}
-        onChange= {(e: any) => updateField(e, 'bpm', voices, i, setVoices)}
-        maxLength= {5}
-        min= {0}
-        max= {60000}
-      />
-    </>,
-    restChance: <>
-      <Input
-        className= 'textbox'
-        title= 'Rest %'
-        label= 'Rest %'
-        id= {`rest${i}`}
-        i={i}
-        type= "number"
-        value= {voice.rest}
-        onChange= {(e: any) => updateField(e, 'rest', voices, i, setVoices)}
-        min= {0}
-        max= {100}
-        maxLength= {3}
-      />
+    atomicFields: <> 
+      <div className="column">
+        {
+          Object.keys(atomicFields).map(field =>
+            <div className="row">
+              <Input 
+                className= "textbox"  
+                {...atomicFields[field as AtomicField]}
+              />
+            </div>
+          )
+        }
+      </div>
     </>,
     rangeFields: <> 
       <div className="column">

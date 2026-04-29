@@ -47,6 +47,11 @@ export type Atom =
 | `min${Range}`
 | `max${Range}`
 
+export type AtomicField =
+  'label' 
+| 'bpm' 
+| 'restChance'
+
 export type Compound = 
   'activeNotes'
 | 'activeOctaves'
