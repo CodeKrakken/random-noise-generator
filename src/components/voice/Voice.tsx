@@ -1,5 +1,5 @@
 import { VoiceProps, CheckboxGroup, Atom } from '../../types/voice'
-import {checkboxGroups, atomicFields, extrema} from '../../content/data'
+import {checkboxGroups, rangeFields, extrema} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -57,22 +57,22 @@ export default function Voice(
         maxLength= {3}
       />
     </>,
-    atomicFields: <> 
+    rangeFields: <> 
       <div className="column">
         {
-          atomicFields.map(atomicField =>
+          rangeFields.map(field =>
             <div className="row">
               {
                 extrema.map((input, j) =>
                   <Input
                     className= 'textbox'
-                    title={`${input} ${atomicField}`}
-                    label={j ? '' : atomicField}
-                    id= {`${input.toLowerCase()}${atomicField}${i}`}
+                    title={`${input} ${field}`}
+                    label={j ? '' : field}
+                    id= {`${input.toLowerCase()}${field}${i}`}
                     i={i}
                     type= "number"
-                    value= {voice[`${input.toLowerCase()}${atomicField}` as Atom]}
-                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${atomicField}` as Atom, voices, i, setVoices)}
+                    value= {voice[`${input.toLowerCase()}${field}` as Atom]}
+                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${field}` as Atom, voices, i, setVoices)}
                     maxLength= {4}
                   />
                 )
