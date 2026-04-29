@@ -14,37 +14,16 @@ export default function Voice(
 ) {
 
   const atomicFields = {
-    label: {
-      title: "Label",
-      label: "Name",
-      id: `label${i}`,
-      value: voice.label,
-      onChange: (e: any) => updateField(e, 'label', voices, i, setVoices),
-      attribs: {}
+    Label: {},
+    BPM: {
+      maxLength: 5,
+      min: 0,
+      max: 60000
     },
-    bpm: {
-      title: "BPM",
-      label: "BPM",
-      id: `bpm${i}`,
-      value: voice.bpm,
-      onChange: (e: any) => updateField(e, 'bpm', voices, i, setVoices),
-      attribs: {
-        maxLength: 5,
-        min: 0,
-        max: 60000
-      }
-    },
-    restChance: {
-      title: 'Rest Chance',
-      label: 'Rest Chance',
-      id: `restChance${i}`,
-      value: voice.restChance,
-      onChange: (e: any) => updateField(e, 'restChance', voices, i, setVoices),
-      attribs: {
-        min: 0,
-        max: 100,
-        maxLength: 3
-      }
+    'Rest Chance': {
+      min: 0,
+      max: 100,
+      maxLength: 3
     }
   }
 
@@ -58,12 +37,12 @@ export default function Voice(
                 className= "textbox"
                 i={i}
                 type="number"
-                title={atomicFields[field as AtomicField].title}
-                label={atomicFields[field as AtomicField].label}
+                title={field}
+                label={field}
                 id={`${field}${i}`}
                 value={voice[field as Atom]}
                 onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
-                {...atomicFields[field].attribs}
+                {...atomicFields[field]}
               />
             </div>
           )
