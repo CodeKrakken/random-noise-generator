@@ -1,8 +1,8 @@
-import { Compound, Scalar, voice } from "../../types/voice"
+import { Compound, Atom, voice } from "../../types/voice"
 
 export const updateField = (
   e: any, 
-  attribute: Scalar, 
+  attribute: Atom, 
   voices: voice[], 
   i: number,
   callback: Function

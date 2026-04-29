@@ -40,7 +40,7 @@ export type VoiceProps = {
 
 type Range = typeof ranges[number]
 
-export type Scalar = 
+export type Atom = 
   'label'
 | 'bpm'
 | 'rest'

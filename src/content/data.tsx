@@ -60,7 +60,7 @@ export const checkboxGroups = {
   Intervals: ['1','0.5','0.25','0.125','0.0625']
 }
 
-export const scalarFields = [
+export const atomicFields = [
   'Level',
   'Length',
   'Offset',

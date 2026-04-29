@@ -1,5 +1,5 @@
-import { VoiceProps, CheckboxGroup, Scalar } from '../../types/voice'
-import {checkboxGroups, scalarFields} from '../../content/data'
+import { VoiceProps, CheckboxGroup, Atom } from '../../types/voice'
+import {checkboxGroups, atomicFields} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -58,22 +58,22 @@ export default function Voice(
         maxLength= {3}
       />
     </>,
-    scalarFields: <> 
+    atomicFields: <> 
       <div className="column">
         {
-          scalarFields.map(scalarField =>
+          atomicFields.map(atomicField =>
             <div className="row">
               {
                 extrema.map((input, j) =>
                   <Input
                     className= 'textbox'
-                    title={`${input} ${scalarField}`}
-                    label={j ? '' : scalarField}
-                    id= {`${input.toLowerCase()}${scalarField}${i}`}
+                    title={`${input} ${atomicField}`}
+                    label={j ? '' : atomicField}
+                    id= {`${input.toLowerCase()}${atomicField}${i}`}
                     i={i}
                     type= "number"
-                    value= {voice[`${input.toLowerCase()}${scalarField}` as Scalar]}
-                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${scalarField}` as Scalar, voices, i, setVoices)}
+                    value= {voice[`${input.toLowerCase()}${atomicField}` as Atom]}
+                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${atomicField}` as Atom, voices, i, setVoices)}
                     maxLength= {4}
                   />
                 )
