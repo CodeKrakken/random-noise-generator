@@ -63,7 +63,7 @@ describe('header', () => {
       />
     )
 
-    fireEvent.change(getByTitle('BPM'), { target: { value: '140' } })
+    fireEvent.change(getByTitle('bpm'), { target: { value: '140' } })
 
     expect(setVoices).toHaveBeenCalled()
   })
@@ -81,13 +81,13 @@ describe('header', () => {
       />
     )
 
-    fireEvent.change(getByTitle('Label'), {
+    fireEvent.change(getByTitle('label'), {
       target: { value: '42' }
     })
 
     expect(setVoices).toHaveBeenCalledWith([
       expect.objectContaining({
-        Label: 42
+        label: 42
       })
     ])
   })

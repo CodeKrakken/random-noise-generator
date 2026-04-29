@@ -14,16 +14,20 @@ export default function Voice(
 ) {
 
   const atomicFields = {
-    Label: {},
-    BPM: {
+    label: {
+      label: 'Name'
+    },
+    bpm: {
       maxLength: 5,
       min: 0,
-      max: 60000
+      max: 60000,
+      label: 'BPM'
     },
-    'Rest Chance': {
+    restChance: {
       min: 0,
       max: 100,
-      maxLength: 3
+      maxLength: 3,
+      label: 'Rest Chance'
     }
   }
 
@@ -31,20 +35,20 @@ export default function Voice(
     atomicFields: <> 
       <div className="column">
         {
-          (Object.keys(atomicFields) as Array<keyof typeof atomicFields>).map(field =>
-            <div className="row">
+          (Object.keys(atomicFields) as Array<keyof typeof atomicFields>).map(field => {
+            return <div className="row">
               <Input 
                 className= "textbox"
                 i={i}
                 type="number"
                 title={field}
-                label={field}
                 id={`${field}${i}`}
                 value={voice[field as Atom]}
                 onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
                 {...atomicFields[field]}
               />
             </div>
+          }
           )
         }
       </div>
@@ -55,16 +59,16 @@ export default function Voice(
           rangeFields.map(field =>
             <div className="row">
               {
-                extrema.map((input, j) =>
+                extrema.map((ex, j) =>
                   <Input
                     className= 'textbox'
-                    title={`${input} ${field}`}
+                    title={`${ex} ${field}`}
                     label={j ? '' : field}
-                    id= {`${input.toLowerCase()}${field}${i}`}
+                    id= {`${ex.toLowerCase()}${field}${i}`}
                     i={i}
                     type= "number"
-                    value= {voice[`${input.toLowerCase()}${field}` as Atom]}
-                    onChange= {(e: any) => updateField(e, `${input.toLowerCase()}${field}` as Atom, voices, i, setVoices)}
+                    value= {voice[`${ex.toLowerCase()}${field}` as Atom]}
+                    onChange= {(e: any) => updateField(e, `${ex.toLowerCase()}${field}` as Atom, voices, i, setVoices)}
                     maxLength= {4}
                   />
                 )

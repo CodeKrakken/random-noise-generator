@@ -86,11 +86,10 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(screen.getByTitle('BPM'), { target: { value: '200' } })
-
+    fireEvent.change(screen.getByTitle('bpm'), { target: { value: '200' } })
     fireEvent.click(screen.getByText('Add Voice'))
 
-    const inputs = document.querySelectorAll('[title="BPM"]')
+    const inputs = document.querySelectorAll('[title="bpm"]')
     expect((inputs[1] as HTMLInputElement).value).toBe('200')
   })
 
@@ -110,7 +109,7 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(screen.getByTitle('Rest Chance'), {
+    fireEvent.change(screen.getByTitle('restChance'), {
       target: { value: '100' }
     })
     fireEvent.click(screen.getByText('Start'))
@@ -130,7 +129,7 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     // force a future nextInterval so we hit the ELSE branch
-    const bpmInput = screen.getByTitle('BPM')
+    const bpmInput = screen.getByTitle('bpm')
     fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
 
     fireEvent.click(screen.getByText('Start'))
@@ -148,7 +147,7 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Voice'))
 
-    fireEvent.change(screen.getByTitle('Rest Chance'), {
+    fireEvent.change(screen.getByTitle('restChance'), {
       target: { value: '0' }
     })
 
@@ -211,7 +210,7 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     // ensure it doesn't rest
-    fireEvent.change(screen.getByTitle('Rest Chance'), {
+    fireEvent.change(screen.getByTitle('restChance'), {
       target: { value: '0' }
     })
 
@@ -264,7 +263,7 @@ describe('header', () => {
 
   //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('Rest Chance'), {
+  //   fireEvent.change(screen.getByTitle('restChance'), {
   //     target: { value: '0' }
   //   })
 
@@ -351,7 +350,7 @@ describe('header', () => {
 
   //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('Rest Chance'), { target: { value: '0' } })
+  //   fireEvent.change(screen.getByTitle('restChance'), { target: { value: '0' } })
 
   //   // find the 'kick' checkbox
   //   const kickCheckbox = [...document.getElementsByClassName('wave0')]
