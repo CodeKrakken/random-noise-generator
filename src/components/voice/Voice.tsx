@@ -21,9 +21,10 @@ export default function Voice(
             return <div className="row">
               <Input 
                 className= "textbox"
+                title={field}
                 i={i}
                 type="number"
-                title={field}
+                
                 id={`${field}${i}`}
                 value={voice[field as Atom]}
                 onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
@@ -38,14 +39,14 @@ export default function Voice(
     rangeFields: <> 
       <div className="column">
         {
-          rangeFields.map(field =>
+          Object.keys(rangeFields).map(field =>
             <div className="row">
               {
                 extrema.map((ex, j) =>
                   <Input
                     className= 'textbox'
                     title={`${ex}${field}`}
-                    label={j ? '' : field}
+                    label={j ? '' : rangeFields[field].label}
                     id= {`${ex.toLowerCase()}${field}${i}`}
                     i={i}
                     type= "number"

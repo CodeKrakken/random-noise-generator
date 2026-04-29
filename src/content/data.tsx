@@ -60,14 +60,14 @@ export const checkboxGroups = {
   Intervals: ['1','0.5','0.25','0.125','0.0625']
 }
 
-export const rangeFields = [
-  'Level',
-  'Length',
-  'Offset',
-  'Detune',
-  'FadeIn',
-  'FadeOut'
-]
+export const rangeFields = {
+  level: {label:'Level'},
+  length: {label: 'Length'},
+  offset: {label: 'Offset'},
+  detune: {label: 'Detune'},
+  fadeIn: {label: 'FadeIn'},
+  fadeOut: {label: 'FadeOut'}
+}
 
 export const atomicFields = {
   label: {
