@@ -1,5 +1,5 @@
 import { VoiceProps, CheckboxGroup, Atom, AtomicField } from '../../types/voice'
-import {checkboxGroups, rangeFields, extrema} from '../../content/data'
+import {checkboxGroups, rangeFields, atomicFields, extrema} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -12,24 +12,6 @@ export default function Voice(
     setVoices
   }: VoiceProps
 ) {
-
-  const atomicFields = {
-    label: {
-      label: 'Name'
-    },
-    bpm: {
-      maxLength: 5,
-      min: 0,
-      max: 60000,
-      label: 'BPM'
-    },
-    restChance: {
-      min: 0,
-      max: 100,
-      maxLength: 3,
-      label: 'Rest Chance'
-    }
-  }
 
   const inputs: any = {
     atomicFields: <> 
@@ -62,7 +44,7 @@ export default function Voice(
                 extrema.map((ex, j) =>
                   <Input
                     className= 'textbox'
-                    title={`${ex} ${field}`}
+                    title={`${ex}${field}`}
                     label={j ? '' : field}
                     id= {`${ex.toLowerCase()}${field}${i}`}
                     i={i}

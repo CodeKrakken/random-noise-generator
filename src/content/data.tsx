@@ -69,4 +69,22 @@ export const rangeFields = [
   'FadeOut'
 ]
 
-export const extrema = ['Min', 'Max']
+export const atomicFields = {
+  label: {
+    label: 'Name'
+  },
+  bpm: {
+    maxLength: 5,
+    min: 0,
+    max: 60000,
+    label: 'BPM'
+  },
+  restChance: {
+    min: 0,
+    max: 100,
+    maxLength: 3,
+    label: 'Rest Chance'
+  }
+}
+
+export const extrema = ['min', 'max']

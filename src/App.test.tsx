@@ -151,10 +151,10 @@ describe('header', () => {
       target: { value: '0' }
     })
 
-    fireEvent.change(screen.getByTitle('Min Length'), {
+    fireEvent.change(screen.getByTitle('minLength'), {
       target: { value: '10' }
     })
-    fireEvent.change(screen.getByTitle('Max Length'), {
+    fireEvent.change(screen.getByTitle('maxLength'), {
       target: { value: '10' }
     })
 
@@ -378,11 +378,11 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Voice'))
 
-    fireEvent.change(screen.getByTitle('Max Length'), { target: { value: '200' } })
-    fireEvent.change(screen.getByTitle('Min FadeIn'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('Max FadeIn'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('Min FadeOut'), { target: { value: '0' } })
-    fireEvent.change(screen.getByTitle('Max FadeOut'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('maxLength'), { target: { value: '200' } })
+    fireEvent.change(screen.getByTitle('minFadeIn'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('maxFadeIn'), { target: { value: '100' } })
+    fireEvent.change(screen.getByTitle('minFadeOut'), { target: { value: '0' } })
+    fireEvent.change(screen.getByTitle('maxFadeOut'), { target: { value: '0' } })
 
     fireEvent.click(screen.getByText('Start'))
 
