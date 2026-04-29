@@ -111,7 +111,7 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(screen.getByTitle('Rest %'), {
+    fireEvent.change(screen.getByTitle('Rest Chance'), {
       target: { value: '100' }
     })
     fireEvent.click(screen.getByText('Start'))
@@ -149,7 +149,7 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Voice'))
 
-    fireEvent.change(screen.getByTitle('Rest %'), {
+    fireEvent.change(screen.getByTitle('Rest Chance'), {
       target: { value: '0' }
     })
 
@@ -212,7 +212,7 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     // ensure it doesn't rest
-    fireEvent.change(screen.getByTitle('Rest %'), {
+    fireEvent.change(screen.getByTitle('Rest Chance'), {
       target: { value: '0' }
     })
 
@@ -265,7 +265,7 @@ describe('header', () => {
 
   //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('Rest %'), {
+  //   fireEvent.change(screen.getByTitle('Rest Chance'), {
   //     target: { value: '0' }
   //   })
 
@@ -352,7 +352,7 @@ describe('header', () => {
 
   //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('Rest %'), { target: { value: '0' } })
+  //   fireEvent.change(screen.getByTitle('Rest Chance'), { target: { value: '0' } })
 
   //   // find the 'kick' checkbox
   //   const kickCheckbox = [...document.getElementsByClassName('wave0')]
@@ -686,8 +686,8 @@ describe('App', () => {
     //   render(<App />);
     //   addVoice();
 
-    //   const restInput = document.querySelector<HTMLInputElement>('#rest0');
-    //   if (restInput) fireEvent.change(restInput, { target: { value: '50' } });
+    //   const restChanceInput = document.querySelector<HTMLInputElement>('#restChance0');
+    //   if (restChanceInput) fireEvent.change(restChanceInput, { target: { value: '50' } });
 
     //   expect(() => {
     //     clickStartStop();

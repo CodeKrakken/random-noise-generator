@@ -15,7 +15,7 @@ const baseVoice: voice = {
   minLength: 10,
   maxLength: 50,
 
-  rest: 0,
+  restChance: 0,
 
   minOffset: 0,
   maxOffset: 0,

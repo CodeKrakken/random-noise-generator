@@ -1,8 +1,8 @@
-import { Compound, Atom, voice } from "../../types/voice"
+import { Compound, Atom, voice, AtomicField } from "../../types/voice"
 
 export const updateField = (
   e: any, 
-  attribute: Atom, 
+  attribute: Atom | AtomicField, 
   voices: voice[], 
   i: number,
   callback: Function

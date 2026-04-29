@@ -18,34 +18,33 @@ export default function Voice(
       title: "Label",
       label: "Name",
       id: `label${i}`,
-      i: i,
-      type: "text",
       value: voice.label,
-      onChange: (e: any) => updateField(e, 'label', voices, i, setVoices)
+      onChange: (e: any) => updateField(e, 'label', voices, i, setVoices),
+      attribs: {}
     },
     bpm: {
       title: "BPM",
       label: "BPM",
       id: `bpm${i}`,
-      i:i,
-      type: "number",
       value: voice.bpm,
       onChange: (e: any) => updateField(e, 'bpm', voices, i, setVoices),
-      maxLength: 5,
-      min: 0,
-      max: 60000
+      attribs: {
+        maxLength: 5,
+        min: 0,
+        max: 60000
+      }
     },
     restChance: {
-      title: 'Rest %',
-      label: 'Rest %',
-      id: `rest${i}`,
-      i:i,
-      type: "number",
-      value: voice.rest,
-      onChange: (e: any) => updateField(e, 'rest', voices, i, setVoices),
-      min: 0,
-      max: 100,
-      maxLength: 3
+      title: 'Rest Chance',
+      label: 'Rest Chance',
+      id: `restChance${i}`,
+      value: voice.restChance,
+      onChange: (e: any) => updateField(e, 'restChance', voices, i, setVoices),
+      attribs: {
+        min: 0,
+        max: 100,
+        maxLength: 3
+      }
     }
   }
 
@@ -53,11 +52,18 @@ export default function Voice(
     atomicFields: <> 
       <div className="column">
         {
-          Object.keys(atomicFields).map(field =>
+          (Object.keys(atomicFields) as Array<keyof typeof atomicFields>).map(field =>
             <div className="row">
               <Input 
-                className= "textbox"  
-                {...atomicFields[field as AtomicField]}
+                className= "textbox"
+                i={i}
+                type="number"
+                title={atomicFields[field as AtomicField].title}
+                label={atomicFields[field as AtomicField].label}
+                id={`${field}${i}`}
+                value={voice[field as Atom]}
+                onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
+                {...atomicFields[field].attribs}
               />
             </div>
           )
@@ -97,7 +103,7 @@ export default function Voice(
               <div className="row">
                 <div className="label">{checkboxGroup}</div>
                 {
-                  checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string, j: number) => {
+                  checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
                     return <Input
                       className= {`${checkboxGroup}${i}`}
                       title= {checkbox}

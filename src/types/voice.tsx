@@ -12,7 +12,7 @@ export type voice = {
   activeNotes     : string[]
   activeOctaves   : string[]
   activeWaveforms : string[]
-  rest            : number
+  restChance      : number
   activeIntervals : string[]
   minLength       : number
   maxLength       : number
@@ -43,7 +43,7 @@ type Range = typeof ranges[number]
 export type Atom = 
   'label'
 | 'bpm'
-| 'rest'
+| 'restChance'
 | `min${Range}`
 | `max${Range}`
 

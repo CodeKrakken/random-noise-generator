@@ -37,7 +37,7 @@ function App() {
 
     return {
       isActive        : true,
-      label           : clonedVoice?.label+1          || 1,
+      label           : clonedVoice?.label+1          ||  1,
       nextInterval    : 0,
       bpm             : clonedVoice?.bpm              ??  120,
       minLevel        : clonedVoice?.minLevel         ??  100,
@@ -45,10 +45,10 @@ function App() {
       activeNotes     : clonedVoice?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
       activeOctaves   : clonedVoice?.activeOctaves    ??  ['4'],
       activeWaveforms : clonedVoice?.activeWaveforms  ??  ['sine'],
-      rest            : clonedVoice?.rest             ??  0,
+      restChance      : clonedVoice?.restChance       ??  0,
       activeIntervals : clonedVoice?.activeIntervals  ??  ['0.5'],
-      minLength   : clonedVoice?.minLength    ??  100,
-      maxLength   : clonedVoice?.maxLength    ??  100,
+      minLength       : clonedVoice?.minLength        ??  100,
+      maxLength       : clonedVoice?.maxLength        ??  100,
       minOffset       : clonedVoice?.minOffset        ??  0,  
       maxOffset       : clonedVoice?.maxOffset        ??  0,
       minDetune       : clonedVoice?.minDetune        ??  0,
@@ -239,10 +239,10 @@ function App() {
   }
        
   const isRest = (i: number) => {
-    const chanceOfRest  = +document.querySelector<HTMLInputElement>(`#rest${i}`)?.value!/100
+    const restChance  = +document.querySelector<HTMLInputElement>(`#restChance${i}`)?.value!/100
 
     const diceRoll = Math.random()
-    return diceRoll < chanceOfRest
+    return diceRoll < restChance
   }
 
   const getRangeValue = (key: string, i:number) => {
