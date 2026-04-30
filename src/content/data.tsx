@@ -87,4 +87,49 @@ export const atomicFields = {
   }
 }
 
+export const fields = {
+  label: {
+    label: 'Name', 
+    type: 'atom'
+  },
+  bpm: {
+    maxLength: 5,
+    min: 0,
+    max: 60000,
+    label: 'BPM', 
+    type: 'atom'
+  },
+  restChance: {
+    min: 0,
+    max: 100,
+    maxLength: 3,
+    label: 'Rest Chance', 
+    type: 'atom'
+  },
+  level: {
+    label:'Level', 
+    type: 'range'
+  },
+  length: {
+    label: 'Length', 
+    type: 'range'
+  },
+  offset: {
+    label: 'Offset', 
+    type: 'range'
+  },
+  detune: {
+    label: 'Detune', 
+    type: 'range'
+  },
+  fadeIn: {
+    label: 'FadeIn', 
+    type: 'range'
+  },
+  fadeOut: {
+    label: 'FadeOut', 
+    type: 'range'
+  }
+}
+
 export const extrema = ['min', 'max']

@@ -1,5 +1,5 @@
 import { VoiceProps, CheckboxGroup, Atom, AtomicField } from '../../types/voice'
-import {checkboxGroups, rangeFields, atomicFields, extrema} from '../../content/data'
+import {checkboxGroups, rangeFields, atomicFields, extrema, fields} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
 
@@ -14,50 +14,45 @@ export default function Voice(
 ) {
 
   const inputs: any = {
-    atomicFields: <> 
+    fields: <>
       <div className="column">
         {
-          (Object.keys(atomicFields) as Array<keyof typeof atomicFields>).map(field => {
+          Object.keys(fields).map(field => {
             return <div className="row">
-              <Input 
-                className= "textbox"
-                title={field}
-                i={i}
-                type="number"
-                
-                id={`${field}${i}`}
-                value={voice[field as Atom]}
-                onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
-                {...atomicFields[field]}
-              />
-            </div>
-          }
-          )
-        }
-      </div>
-    </>,
-    rangeFields: <> 
-      <div className="column">
-        {
-          Object.keys(rangeFields).map(field =>
-            <div className="row">
               {
-                extrema.map((ex, j) => 
-                  <Input
-                    className= 'textbox'
-                    title={`${ex}${rangeFields[field as keyof typeof rangeFields].label}`}
-                    label={j ? '' : rangeFields[field as keyof typeof rangeFields].label}
-                    id= {`${ex}${rangeFields[field as keyof typeof rangeFields].label}${i}`}
+                fields[field as keyof typeof fields].type === 'atom' ? (
+                  <Input 
+                    className= "textbox"
+                    title={field}
                     i={i}
-                    type= "number"
-                    value= {voice[`${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom]}
-                    onChange= {(e: any) => updateField(e, `${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom, voices, i, setVoices)}
-                    maxLength= {4}
+                    type="number"
+                    id={`${field}${i}`}
+                    value={voice[field as Atom]}
+                    onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
+                    {...atomicFields[field as AtomicField]}
                   />
+                ) : (
+                  <>
+                    {
+                      extrema.map((ex, j) => 
+                        <Input
+                          className= 'textbox'
+                          title={`${ex}${rangeFields[field as keyof typeof rangeFields].label}`}
+                          label={j ? '' : rangeFields[field as keyof typeof rangeFields].label}
+                          id= {`${ex}${rangeFields[field as keyof typeof rangeFields].label}${i}`}
+                          i={i}
+                          type= "number"
+                          value= {voice[`${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom]}
+                          onChange= {(e: any) => updateField(e, `${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom, voices, i, setVoices)}
+                          maxLength= {4}
+                        />
+                      )
+                    }
+                  </>
                 )
               }
             </div>
-          )
+          })
         }
       </div>
     </>,
