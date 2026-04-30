@@ -60,75 +60,48 @@ export const checkboxGroups = {
   Intervals: ['1','0.5','0.25','0.125','0.0625']
 }
 
-export const rangeFields = {
-  level: {label:'Level'},
-  length: {label: 'Length'},
-  offset: {label: 'Offset'},
-  detune: {label: 'Detune'},
-  fadeIn: {label: 'FadeIn'},
-  fadeOut: {label: 'FadeOut'}
-}
-
-export const atomicFields = {
-  label: {
-    label: 'Name'
-  },
-  bpm: {
-    maxLength: 5,
-    min: 0,
-    max: 60000,
-    label: 'BPM'
-  },
-  restChance: {
-    min: 0,
-    max: 100,
-    maxLength: 3,
-    label: 'Rest Chance'
-  }
-}
-
 export const fields = {
   label: {
     label: 'Name', 
-    type: 'atom'
+    range: false
   },
   bpm: {
     maxLength: 5,
     min: 0,
     max: 60000,
     label: 'BPM', 
-    type: 'atom'
+    range: false
   },
   restChance: {
     min: 0,
     max: 100,
     maxLength: 3,
     label: 'Rest Chance', 
-    type: 'atom'
+    range: false
   },
   level: {
     label:'Level', 
-    type: 'range'
+    range: true
   },
   length: {
     label: 'Length', 
-    type: 'range'
+    range: true
   },
   offset: {
     label: 'Offset', 
-    type: 'range'
+    range: true
   },
   detune: {
     label: 'Detune', 
-    type: 'range'
+    range: true
   },
   fadeIn: {
     label: 'FadeIn', 
-    type: 'range'
+    range: true
   },
   fadeOut: {
     label: 'FadeOut', 
-    type: 'range'
+    range: true
   }
 }
 
