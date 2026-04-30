@@ -232,6 +232,7 @@ function App() {
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
     let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
+
     const intervalBpmAdjuster = 4
     const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!
     const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
