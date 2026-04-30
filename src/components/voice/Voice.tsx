@@ -42,16 +42,16 @@ export default function Voice(
           Object.keys(rangeFields).map(field =>
             <div className="row">
               {
-                extrema.map((ex, j) =>
+                extrema.map((ex, j) => 
                   <Input
                     className= 'textbox'
-                    title={`${ex}${field}`}
-                    label={j ? '' : rangeFields[field].label}
-                    id= {`${ex.toLowerCase()}${field}${i}`}
+                    title={`${ex}${rangeFields[field as keyof typeof rangeFields].label}`}
+                    label={j ? '' : rangeFields[field as keyof typeof rangeFields].label}
+                    id= {`${ex}${rangeFields[field as keyof typeof rangeFields].label}${i}`}
                     i={i}
                     type= "number"
-                    value= {voice[`${ex.toLowerCase()}${field}` as Atom]}
-                    onChange= {(e: any) => updateField(e, `${ex.toLowerCase()}${field}` as Atom, voices, i, setVoices)}
+                    value= {voice[`${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom]}
+                    onChange= {(e: any) => updateField(e, `${ex}${rangeFields[field as keyof typeof rangeFields].label}` as Atom, voices, i, setVoices)}
                     maxLength= {4}
                   />
                 )
