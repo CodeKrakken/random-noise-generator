@@ -13,6 +13,21 @@ export default function Voice(
   }: VoiceProps
 ) {
 
+  const input = ((field: string, j: number = 0, ex: string = '') => {
+
+    return <Input
+      className= 'textbox'
+      title={`${ex}${fields[field as keyof typeof fields].label}`}
+      id= {`${ex}${fields[field as keyof typeof fields].label}${i}`}
+      i={i}
+      type= "number"
+      value= {voice[`${ex}${fields[field as keyof typeof fields].label}` as Atom]}
+      onChange= {(e: any) => updateField(e, `${ex}${fields[field as keyof typeof fields].label}` as Atom, voices, i, setVoices)}
+      maxLength= {4}
+      
+    />
+  })
+
   const inputs: any = {
     fields: <>
       <div className="column">
@@ -21,19 +36,10 @@ export default function Voice(
             <div className="row">
               {
                 fields[field as keyof typeof fields].range ? <>
+                  <div className="label">{fields[field as keyof typeof fields].label}</div>
                   {
                     extrema.map((ex, j) => 
-                      <Input
-                        className= 'textbox'
-                        title={`${ex}${fields[field as keyof typeof fields].label}`}
-                        label={j ? '' : fields[field as keyof typeof fields].label}
-                        id= {`${ex}${fields[field as keyof typeof fields].label}${i}`}
-                        i={i}
-                        type= "number"
-                        value= {voice[`${ex}${fields[field as keyof typeof fields].label}` as Atom]}
-                        onChange= {(e: any) => updateField(e, `${ex}${fields[field as keyof typeof fields].label}` as Atom, voices, i, setVoices)}
-                        maxLength= {4}
-                      />
+                      input(field, j, ex)
                     )
                   }
                 </> : <>

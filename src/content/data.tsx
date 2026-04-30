@@ -66,16 +66,20 @@ export const fields = {
     range: false
   },
   bpm: {
-    maxLength: 5,
-    min: 0,
-    max: 60000,
+    attribs: {
+      maxLength: 5,
+      min: 0,
+      max: 60000
+    },
     label: 'BPM', 
     range: false
   },
   restChance: {
-    min: 0,
-    max: 100,
-    maxLength: 3,
+    attribs: {
+      min: 0,
+      max: 100,
+      maxLength: 3
+    },
     label: 'Rest Chance', 
     range: false
   },
