@@ -13,18 +13,18 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-  const input = ((field: string, j: number = 0, ex: string = '') => {
+  const input = ((field: any, ex: string = '') => {
 
     return <Input
       className= 'textbox'
-      title={`${ex}${fields[field as keyof typeof fields].label}`}
-      id= {`${ex}${fields[field as keyof typeof fields].label}${i}`}
+      title={`${ex}${field.label}`}
+      id= {`${ex}${field.label}${i}`}
       i={i}
       type= "number"
-      value= {voice[`${ex}${fields[field as keyof typeof fields].label}` as Atom]}
-      onChange= {(e: any) => updateField(e, `${ex}${fields[field as keyof typeof fields].label}` as Atom, voices, i, setVoices)}
+      value= {voice[`${ex}${field.value}` as Atom]}
+      onChange= {(e: any) => updateField(e, `${ex}${field.label}` as Atom, voices, i, setVoices)}
       maxLength= {4}
-      
+      {...field.attribs}
     />
   })
 
@@ -34,25 +34,16 @@ export default function Voice(
         {
           Object.keys(fields).map(field => 
             <div className="row">
+              <div className="label">{fields[field as keyof typeof fields].label}</div>
               {
                 fields[field as keyof typeof fields].range ? <>
-                  <div className="label">{fields[field as keyof typeof fields].label}</div>
                   {
                     extrema.map((ex, j) => 
-                      input(field, j, ex)
+                      input(fields[field as keyof typeof fields], ex)
                     )
                   }
                 </> : <>
-                  <Input 
-                    className= "textbox"
-                    title={field}
-                    i={i}
-                    type="number"
-                    id={`${field}${i}`}
-                    value={voice[field as Atom]}
-                    onChange= {(e: any) => updateField(e, field as AtomicField, voices, i, setVoices)}
-                    {...fields[field as AtomicField]}
-                  />
+                  {input(fields[field as keyof typeof fields])}
                 </>
               }
             </div>

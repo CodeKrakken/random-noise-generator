@@ -63,6 +63,7 @@ export const checkboxGroups = {
 export const fields = {
   label: {
     label: 'Name', 
+    value: 'label',
     range: false
   },
   bpm: {
@@ -71,7 +72,8 @@ export const fields = {
       min: 0,
       max: 60000
     },
-    label: 'BPM', 
+    label: 'BPM',
+    value: 'bpm', 
     range: false
   },
   restChance: {
@@ -81,30 +83,37 @@ export const fields = {
       maxLength: 3
     },
     label: 'Rest Chance', 
+    value: 'restChance',
     range: false
   },
   level: {
-    label:'Level', 
+    label: 'Level',
+    value: 'Level',  
     range: true
   },
   length: {
-    label: 'Length', 
+    label: 'Length',
+    value: 'Length',   
     range: true
   },
   offset: {
-    label: 'Offset', 
+    label: 'Offset',
+    value: 'Offset',   
     range: true
   },
   detune: {
-    label: 'Detune', 
+    label: 'Detune',
+    value: 'Detune',   
     range: true
   },
   fadeIn: {
-    label: 'FadeIn', 
+    label: 'FadeIn',
+    value: 'FadeIn',   
     range: true
   },
   fadeOut: {
-    label: 'FadeOut', 
+    label: 'FadeOut',
+    value: 'FadeOut',   
     range: true
   }
 }
