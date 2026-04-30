@@ -15,17 +15,19 @@ export default function Voice(
 
   const input = ((field: any, ex: string = '') => {
 
-    return <Input
-      className= 'textbox'
-      title={`${ex}${field.label}`}
-      id= {`${ex}${field.label}${i}`}
-      i={i}
-      type= "number"
-      value= {voice[`${ex}${field.value}` as Atom]}
-      onChange= {(e: any) => updateField(e, `${ex}${field.label}` as Atom, voices, i, setVoices)}
-      maxLength= {4}
-      {...field.attribs}
-    />
+    return <>
+      <Input
+        className= 'textbox'
+        title={`${ex}${field.value}`}
+        id= {`${ex}${field.value}${i}`}
+        i={i}
+        type= "number"
+        value= {voice[`${ex}${field.value}` as Atom]}
+        onChange= {(e: any) => updateField(e, `${ex}${field.value}` as Atom, voices, i, setVoices)}
+        maxLength= {4}
+        {...field.attribs}
+      />
+    </>
   })
 
   const inputs: any = {
@@ -36,14 +38,16 @@ export default function Voice(
             <div className="row">
               <div className="label">{fields[field as keyof typeof fields].label}</div>
               {
-                fields[field as keyof typeof fields].range ? <>
+                fields[field as keyof typeof fields].input === 'range' ? <>
                   {
                     extrema.map((ex, j) => 
                       input(fields[field as keyof typeof fields], ex)
                     )
                   }
                 </> : <>
-                  {input(fields[field as keyof typeof fields])}
+                  {
+                    input(fields[field as keyof typeof fields])
+                  }
                 </>
               }
             </div>

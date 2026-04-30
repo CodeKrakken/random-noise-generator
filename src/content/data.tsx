@@ -64,7 +64,7 @@ export const fields = {
   label: {
     label: 'Name', 
     value: 'label',
-    range: false
+    input: 'single'
   },
   bpm: {
     attribs: {
@@ -74,7 +74,7 @@ export const fields = {
     },
     label: 'BPM',
     value: 'bpm', 
-    range: false
+    input: 'single'
   },
   restChance: {
     attribs: {
@@ -84,37 +84,37 @@ export const fields = {
     },
     label: 'Rest Chance', 
     value: 'restChance',
-    range: false
+    input: 'single'
   },
   level: {
     label: 'Level',
     value: 'Level',  
-    range: true
+    input: 'range'
   },
   length: {
     label: 'Length',
     value: 'Length',   
-    range: true
+    input: 'range'
   },
   offset: {
     label: 'Offset',
     value: 'Offset',   
-    range: true
+    input: 'range'
   },
   detune: {
     label: 'Detune',
     value: 'Detune',   
-    range: true
+    input: 'range'
   },
   fadeIn: {
     label: 'FadeIn',
     value: 'FadeIn',   
-    range: true
+    input: 'range'
   },
   fadeOut: {
     label: 'FadeOut',
     value: 'FadeOut',   
-    range: true
+    input: 'range'
   }
 }
 
