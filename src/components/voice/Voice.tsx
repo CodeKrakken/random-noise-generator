@@ -42,9 +42,10 @@ export default function Voice(
                     {
                       extrema.map((ex) => {
 
-                        const props: any = {};
-                        props.title = `${ex}${f.value}`;
-                        props.type = 'number'
+                        const props: any = {
+                          title: `${ex}${f.value}`,
+                          type: 'number'
+                        }
 
                         return input(f, props, ex);
                       })
@@ -71,15 +72,14 @@ export default function Voice(
                 {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
 
-                    const props: any = {};
-                    props.title = checkbox;
-                    props.className= `${checkboxGroup}${i}`; // code and tests grab element
-                    props.title= checkbox // one test grabs element
-                    props.type= "checkbox" // makes it be a checkbox
-                    props.value= checkbox // code grabs element for playback and update 
-                    props.checked= voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox) // populates checks
-                    props.onChange= (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices) // updates checks
-                  
+                    const props: any = {
+                      className: `${checkboxGroup}${i}`, // code and tests grab element
+                      title: checkbox, // one test grabs element
+                      type: "checkbox", // makes it be a checkbox
+                      value: checkbox, // code grabs element for playback and update 
+                      checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox), // populates checks
+                      onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices) // updates checks
+                    };
                     return input(checkbox, props)
                   })
                 }
