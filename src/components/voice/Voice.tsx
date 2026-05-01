@@ -17,15 +17,15 @@ export default function Voice(
 
     return <>
       <Input
-        className= 'textbox'
-        title={`${ex}${field.value}`}
-        id= {`${ex}${field.value}${i}`}
-        i={i}
-        type= "number"
-        value= {voice[`${ex}${field.value}` as Atom]}
-        onChange= {(e: any) => updateField(e, `${ex}${field.value}` as Atom, voices, i, setVoices)}
-        maxLength= {4}
-        {...field.attribs}
+        className= 'textbox' // sets the width of the input box
+        title={`${ex}${field.value}`} // tests grab element
+        id= {`${ex}${field.value}${i}`} // code grabs element 
+        i={i} // does nothing
+        type= "number" // does nothing
+        value= {voice[`${ex}${field.value}` as Atom]} // populates field
+        onChange= {(e: any) => updateField(e, `${ex}${field.value}` as Atom, voices, i, setVoices)} // updates field
+        maxLength= {4} // does nothing
+        {...field.attribs} // currently does nothing
       />
     </>
   })
@@ -65,12 +65,12 @@ export default function Voice(
                 {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
                     return <Input
-                      className= {`${checkboxGroup}${i}`}
-                      title= {checkbox}
-                      type= "checkbox"
-                      value= {checkbox}
-                      checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
-                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)}
+                      className= {`${checkboxGroup}${i}`} // code and tests grab element
+                      title= {checkbox} // one test grabs element
+                      type= "checkbox" // makes it be a checkbox
+                      value= {checkbox} // code grabs element for playback and update 
+                      checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)} // populates checks
+                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)} // updates checks
                     />
                   })
                 }
