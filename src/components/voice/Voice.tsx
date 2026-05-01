@@ -63,18 +63,16 @@ export default function Voice(
               <div className="row">
                 <div className="label">{checkboxGroup}</div>
                 {
-                  checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) =>
-                    input(checkboxGroups[checkboxGroup as keyof typeof checkboxGroups][parseInt(checkbox)])
-                    
-                    // <Input
-                    //   className= {`${checkboxGroup}${i}`}
-                    //   title= {checkbox}
-                    //   type= "checkbox"
-                    //   value= {checkbox}
-                    //   checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
-                    //   onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)}
-                    // />
-                  )
+                  checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
+                    return <Input
+                      className= {`${checkboxGroup}${i}`}
+                      title= {checkbox}
+                      type= "checkbox"
+                      value= {checkbox}
+                      checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)}
+                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)}
+                    />
+                  })
                 }
               </div>
             </>
