@@ -13,19 +13,17 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-  const input = ((field: any, ex: string = '') => {
+  const input = ((field: any, props: {}, ex: string = '') => {
 
     return <>
       <Input
         className= 'textbox' // sets the width of the input box
         title={`${ex}${field.value}`} // tests grab element
         id= {`${ex}${field.value}${i}`} // code grabs element 
-        i={i} // does nothing
-        type= "number" // does nothing
         value= {voice[`${ex}${field.value}` as Atom]} // populates field
         onChange= {(e: any) => updateField(e, `${ex}${field.value}` as Atom, voices, i, setVoices)} // updates field
-        maxLength= {4} // does nothing
         {...field.attribs} // currently does nothing
+        {...props}
       />
     </>
   })
@@ -34,24 +32,32 @@ export default function Voice(
     fields: <>
       <div className="column">
         {
-          Object.keys(fields).map(field => 
-            <div className="row">
-              <div className="label">{fields[field as keyof typeof fields].label}</div>
-              {
-                fields[field as keyof typeof fields].input === 'range' ? <>
-                  {
-                    extrema.map((ex, j) => 
-                      input(fields[field as keyof typeof fields], ex)
-                    )
-                  }
-                </> : <>
-                  {
-                    input(fields[field as keyof typeof fields])
-                  }
-                </>
-              }
-            </div>
-          )
+          Object.keys(fields).map(field => {
+            const f = fields[field as keyof typeof fields]
+            return <>
+              <div className="row">
+                <div className="label">{f.label}</div>
+                {
+                  f.input === 'range' ? <>
+                    {
+                      extrema.map((ex) => {
+
+                        const props: any = {};
+                        props.title = `${ex}${f.value}`;
+                        props.type = 'number'
+
+                        return input(f, props, ex);
+                      })
+                    }
+                  </> : <>
+                    {
+                      input(f, {type: 'number'})
+                    }
+                  </>
+                }
+              </div>
+            </>
+          })
         }
       </div>
     </>,
@@ -64,14 +70,17 @@ export default function Voice(
                 <div className="label">{checkboxGroup}</div>
                 {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
-                    return <Input
-                      className= {`${checkboxGroup}${i}`} // code and tests grab element
-                      title= {checkbox} // one test grabs element
-                      type= "checkbox" // makes it be a checkbox
-                      value= {checkbox} // code grabs element for playback and update 
-                      checked= {voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox)} // populates checks
-                      onChange= {(e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)} // updates checks
-                    />
+
+                    const props: any = {};
+                    props.title = checkbox;
+                    props.className= `${checkboxGroup}${i}`; // code and tests grab element
+                    props.title= checkbox // one test grabs element
+                    props.type= "checkbox" // makes it be a checkbox
+                    props.value= checkbox // code grabs element for playback and update 
+                    props.checked= voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox) // populates checks
+                    props.onChange= (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices) // updates checks
+                  
+                    return input(checkbox, props)
                   })
                 }
               </div>
