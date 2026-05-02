@@ -35,7 +35,7 @@ export default function Voice(
               id: `${f.value}${i}`, // code grabs element 
               value: voice[`${f.value}` as Atom], // populates field
               onChange: (e: any) => updateField(e, `${f.value}` as Atom, voices, i, setVoices), // updates field
-              type: 'number'
+              type: 'number' // stops field freezing with NaN when text entered
             }
 
             return <>
@@ -75,14 +75,13 @@ export default function Voice(
                 <div className="label">{checkboxGroup}</div>
                 {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
-
                     const props: any = {
                       className: `${checkboxGroup}${i}`, // code and tests grab element
                       title: checkbox, // one test grabs element
                       type: "checkbox", // makes it be a checkbox
                       value: checkbox, // code grabs element for playback and update 
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox), // populates checks
-                      onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices) // updates checks
+                      onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices), // updates checks
                     };
                     return input(props)
                   })
