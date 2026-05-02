@@ -13,16 +13,10 @@ export default function Voice(
   }: VoiceProps
 ) {
 
-  const input = ((field: any, props: {}, ex: string = '') => {
+  const input = ((props: any) => {
 
     return <>
       <Input
-        className= 'textbox' // sets the width of the input box
-        title={`${ex}${field.value}`} // tests grab element
-        id= {`${ex}${field.value}${i}`} // code grabs element 
-        value= {voice[`${ex}${field.value}` as Atom]} // populates field
-        onChange= {(e: any) => updateField(e, `${ex}${field.value}` as Atom, voices, i, setVoices)} // updates field
-        {...field.attribs} // currently does nothing
         {...props}
       />
     </>
@@ -34,6 +28,16 @@ export default function Voice(
         {
           Object.keys(fields).map(field => {
             const f = fields[field as keyof typeof fields]
+
+            const props: any = {
+              className: 'textbox', // sets the width of the input box
+              title:`${f.value}`, // tests grab element
+              id: `${f.value}${i}`, // code grabs element 
+              value: voice[`${f.value}` as Atom], // populates field
+              onChange: (e: any) => updateField(e, `${f.value}` as Atom, voices, i, setVoices), // updates field
+              type: 'number'
+            }
+
             return <>
               <div className="row">
                 <div className="label">{f.label}</div>
@@ -42,17 +46,17 @@ export default function Voice(
                     {
                       extrema.map((ex) => {
 
-                        const props: any = {
-                          title: `${ex}${f.value}`,
-                          type: 'number'
-                        }
+                        props.title = `${ex}${f.value}` // tests grab element
+                        props.id = `${ex}${f.value}${i}` // code grabs element 
+                        props.value = voice[`${ex}${f.value}` as Atom] // populates field
+                        props.onChange = (e: any) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
 
-                        return input(f, props, ex);
+                        return input(props);
                       })
                     }
                   </> : <>
                     {
-                      input(f, {type: 'number'})
+                      input(props)
                     }
                   </>
                 }
@@ -80,7 +84,7 @@ export default function Voice(
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox), // populates checks
                       onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices) // updates checks
                     };
-                    return input(checkbox, props)
+                    return input(props)
                   })
                 }
               </div>
