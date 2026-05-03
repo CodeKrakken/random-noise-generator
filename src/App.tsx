@@ -112,13 +112,13 @@ function App() {
 
     const voice = voices[i]
 
-    if (cycling && document.getElementsByClassName(`Intervals${i}`))  {
+    if (cycling && document.getElementsByClassName(`Intervals${i}`))  { // HERE'S ONE
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
 
-        const liveWaves = Array.from(document.getElementsByClassName(`Waveforms${i}`)).filter(
+        const liveWaves = Array.from(document.getElementsByClassName(`Waveforms${i}`)).filter( // HERE'S ONE
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
 
@@ -127,10 +127,10 @@ function App() {
 
         } else {          
 
-          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`)?.value!
-          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`)?.value!
-          const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value!
-          const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value!
+          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`)?.value!  // HERE'S ONE
+          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`)?.value!  // HERE'S ONE
+          const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value! // HERE'S ONE
+          const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value! // HERE'S ONE
 
           const offset = getRangeValue('Offset', i)
           let noteLength = intervalLength
@@ -228,27 +228,27 @@ function App() {
   }
 
   const getIntervalLength = (i: number) => {
-    const liveIntervals = Array.from(document.getElementsByClassName(`Intervals${i}`)).filter(
+    const liveIntervals = Array.from(document.getElementsByClassName(`Intervals${i}`)).filter(  // HERE'S ONE
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
     let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
 
     const intervalBpmAdjuster = 4
-    const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!
+    const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!  // HERE'S ONE
     const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
     return intervalLength/1000
   }
        
   const isRest = (i: number) => {
-    const restChance  = +document.querySelector<HTMLInputElement>(`#restChance${i}`)?.value!/100
+    const restChance  = +document.querySelector<HTMLInputElement>(`#restChance${i}`)?.value!/100  // HERE'S ONE
 
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
 
   const getRangeValue = (key: string, i:number) => {
-    const minEl = document.getElementById(`min${key}${i}`)
-    const maxEl = document.getElementById(`max${key}${i}`)
+    const minEl = document.getElementById(`min${key}${i}`)  // HERE'S ONE
+    const maxEl = document.getElementById(`max${key}${i}`)  // HERE'S ONE
 
     const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
     const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
@@ -273,11 +273,11 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     
-    const activeOctaves  = Array.from(document.getElementsByClassName(`Octaves${i}`)).filter(
+    const activeOctaves  = Array.from(document.getElementsByClassName(`Octaves${i}`)).filter(  // HERE'S ONE
       (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
     ).map(octave => { return +octave.value})
 
-    const activeNotes   = Array.from(document.getElementsByClassName(`Notes${i}` )).filter(
+    const activeNotes   = Array.from(document.getElementsByClassName(`Notes${i}` )).filter(  // HERE'S ONE
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
 
