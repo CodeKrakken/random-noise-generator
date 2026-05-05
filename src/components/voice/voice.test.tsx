@@ -53,7 +53,7 @@ describe('header', () => {
   test('updates BPM input', () => {
     const setVoices = jest.fn()
 
-    const { getByTitle } = render(
+    render(
       <Voice
         voice={baseVoice}
         i={0}
@@ -63,7 +63,7 @@ describe('header', () => {
       />
     )
 
-    fireEvent.change(getByTitle('bpm'), { target: { value: '140' } })
+    fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '140' } })
 
     expect(setVoices).toHaveBeenCalled()
   })
@@ -71,7 +71,7 @@ describe('header', () => {
   test('updates label when input changes', () => {
     const setVoices = jest.fn()
 
-    const { getByTitle } = render(
+    render(
       <Voice
         voice={baseVoice}
         i={0}
@@ -81,7 +81,7 @@ describe('header', () => {
       />
     )
 
-    fireEvent.change(getByTitle('label'), {
+    fireEvent.change(document.querySelector(`[data-attribute="label"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '42' }
     })
 
@@ -107,7 +107,7 @@ describe('header', () => {
       />
     )
 
-    const octaveCheckbox = container.querySelector('.Octaves0') as HTMLInputElement
+    const octaveCheckbox = container.querySelector(`[data-attribute="Octaves"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(octaveCheckbox)
 
@@ -130,7 +130,7 @@ describe('header', () => {
       />
     )
 
-    const octaveCheckbox = container.querySelector('.Octaves0') as HTMLInputElement
+    const octaveCheckbox = container.querySelector(`[data-attribute="Octaves"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(octaveCheckbox)
 
@@ -154,7 +154,7 @@ describe('header', () => {
       />
     )
 
-    const waveCheckbox = container.querySelector('.Waveforms0') as HTMLInputElement
+    const waveCheckbox = container.querySelector(`[data-attribute="Waveforms"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(waveCheckbox)
 
@@ -179,7 +179,7 @@ describe('header', () => {
       />
     )
 
-    const waveCheckbox = container.querySelector('.Waveforms0') as HTMLInputElement
+    const waveCheckbox = container.querySelector(`[data-attribute="Waveforms"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(waveCheckbox)
 
@@ -203,7 +203,7 @@ describe('header', () => {
       />
     )
 
-    const intervalCheckbox = container.querySelector('.Intervals0') as HTMLInputElement
+    const intervalCheckbox = container.querySelector(`[data-attribute="Intervals"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(intervalCheckbox)
 
@@ -227,7 +227,7 @@ describe('header', () => {
       />
     )
 
-    const intervalCheckbox = container.querySelector('.Intervals0') as HTMLInputElement
+    const intervalCheckbox = container.querySelector(`[data-attribute="Intervals"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(intervalCheckbox)
 
@@ -249,7 +249,7 @@ describe('header', () => {
       />
     )
 
-    const noteCheckbox = container.querySelector('.Notes0') as HTMLInputElement
+    const noteCheckbox = container.querySelector(`[data-attribute="Notes"][data-voice="0"]`) as HTMLInputElement
 
     fireEvent.click(noteCheckbox)
 

@@ -112,13 +112,12 @@ function App() {
 
     const voice = voices[i]
 
-    if (cycling && document.getElementsByClassName(`Intervals${i}`))  { // HERE'S ONE
+    if (cycling && document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  { // HERE'S ONE
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
         voices[i].thisInterval = voices[i].nextInterval
         voices[i].nextInterval += intervalLength
-
-        const liveWaves = Array.from(document.getElementsByClassName(`Waveforms${i}`)).filter( // HERE'S ONE
+        const liveWaves = Array.from(document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="${i}"]`)).filter( // HERE'S ONE
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
 
@@ -127,20 +126,17 @@ function App() {
 
         } else {          
 
-          const minLevel  = +document.querySelector<HTMLInputElement>(`#minLevel${i}`)?.value!  // HERE'S ONE
-          const maxLevel  = +document.querySelector<HTMLInputElement>(`#maxLevel${i}`)?.value!  // HERE'S ONE
-          const minLength = +document.querySelector<HTMLInputElement>(`#minLength${i}`)?.value! // HERE'S ONE
-          const maxLength = +document.querySelector<HTMLInputElement>(`#maxLength${i}`)?.value! // HERE'S ONE
+          const minLevel  = document.querySelector(`[data-attribute="minLevel"][data-voice="${i}"]`)!.value // HERE'S ONE
+          const maxLevel  = document.querySelector(`[data-attribute="maxLevel"][data-voice="${i}"]`)!.value  // HERE'S ONE
+          const minLength = document.querySelector(`[data-attribute="minLength"][data-voice="${i}"]`)!.value // HERE'S ONE
+          const maxLength = document.querySelector(`[data-attribute="maxLength"][data-voice="${i}"]`)!.value // HERE'S ONE
 
           const offset = getRangeValue('Offset', i)
           let noteLength = intervalLength
-
           setTimeout(async () => {
             if (!liveWaves.length) return
             const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
-
             const waveShape = randomWave.value
-
             if (voice.oscillator) voice.oscillator.type = waveShape as OscillatorType
 
             if (
@@ -154,18 +150,14 @@ function App() {
             ) {
               try {
                 const randomFrequency = getRandomFrequency(i)
-
                 const frequency   = detune(randomFrequency as number, i)
-
                 if (voice.oscillator) voice.oscillator.frequency.value = frequency
 
                 const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                 noteLength = intervalLength / 100 * noteLengthPercentage
-
                 const fadeInPercentage  = getRangeValue('FadeIn' , i)
                 const fadeOutPercentage = getRangeValue('FadeOut', i)
                 const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
-
                 let level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
 
                 if (noteLength < intervalLength) {
@@ -218,37 +210,37 @@ function App() {
           }, offset * 10 * intervalLength)
         }
 
-        if (document.getElementById(`voice${i}`)) {
+        if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
           setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
         }
+
       } else {
+
         setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
       }
     }
   }
 
   const getIntervalLength = (i: number) => {
-    const liveIntervals = Array.from(document.getElementsByClassName(`Intervals${i}`)).filter(  // HERE'S ONE
+    const liveIntervals = Array.from(document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`)).filter(  // HERE'S ONE
       (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
     )
     let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
-
     const intervalBpmAdjuster = 4
-    const bpm  = +document.querySelector<HTMLInputElement>(`#bpm${i}`)?.value!  // HERE'S ONE
+    const bpm  = document.querySelector(`[data-attribute="bpm"][data-voice="${i}"]`)!.value // HERE'S ONE
     const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
     return intervalLength/1000
   }
        
   const isRest = (i: number) => {
-    const restChance  = +document.querySelector<HTMLInputElement>(`#restChance${i}`)?.value!/100  // HERE'S ONE
-
+    const restChance  = +document.querySelector(`[data-attribute="restChance"][data-voice="${i}"]`)! // HERE'S ONE
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
 
   const getRangeValue = (key: string, i:number) => {
-    const minEl = document.getElementById(`min${key}${i}`)  // HERE'S ONE
-    const maxEl = document.getElementById(`max${key}${i}`)  // HERE'S ONE
+    const minEl = document.querySelector(`[data-attribute="min${key}"][data-voice="${i}"]`)  // HERE'S ONE
+    const maxEl = document.querySelector(`[data-attribute="max${key}"][data-voice="${i}"]`)  // HERE'S ONE
 
     const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
     const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
@@ -273,11 +265,11 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     
-    const activeOctaves  = Array.from(document.getElementsByClassName(`Octaves${i}`)).filter(  // HERE'S ONE
+    const activeOctaves  = Array.from(document.querySelectorAll(`[data-attribute="Octaves"][data-voice="${i}"]`)).filter(  // HERE'S ONE
       (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
     ).map(octave => { return +octave.value})
 
-    const activeNotes   = Array.from(document.getElementsByClassName(`Notes${i}` )).filter(  // HERE'S ONE
+    const activeNotes   = Array.from(document.querySelectorAll(`[data-attribute="Notes"][data-voice="${i}"]`)).filter(  // HERE'S ONE
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
 
@@ -318,6 +310,8 @@ function App() {
           voices        = {voices}
           handleDelete  = {handleDelete}
           key           = {i}
+          dataVoice     = {i}
+          dataAttribute = "Voices"
         />
       )
     }

@@ -36,6 +36,8 @@ export type VoiceProps = {
   setVoices   : Function, 
   voices      : voice[], 
   handleDelete: Function
+  dataVoice?     : number,
+  dataAttribute? : string
 }
 
 type Range = typeof ranges[number]

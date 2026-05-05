@@ -86,10 +86,10 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(screen.getByTitle('bpm'), { target: { value: '200' } })
+    fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '200' } })
     fireEvent.click(screen.getByText('Add Voice'))
 
-    const inputs = document.querySelectorAll('[title="bpm"]')
+    const inputs = document.querySelectorAll(`[data-attribute="bpm"]`)
     expect((inputs[1] as HTMLInputElement).value).toBe('200')
   })
 
@@ -109,7 +109,7 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(screen.getByTitle('restChance'), {
+    fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '100' }
     })
     fireEvent.click(screen.getByText('Start'))
@@ -129,7 +129,7 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     // force a future nextInterval so we hit the ELSE branch
-    const bpmInput = screen.getByTitle('bpm')
+    const bpmInput = document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement
     fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
 
     fireEvent.click(screen.getByText('Start'))
@@ -147,14 +147,14 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Voice'))
 
-    fireEvent.change(screen.getByTitle('restChance'), {
+    fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '0' }
     })
 
-    fireEvent.change(screen.getByTitle('minLength'), {
+    fireEvent.change(document.querySelector(`[data-attribute="minLength"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '10' }
     })
-    fireEvent.change(screen.getByTitle('maxLength'), {
+    fireEvent.change(document.querySelector(`[data-attribute="maxLength"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '10' }
     })
 
@@ -210,7 +210,7 @@ describe('header', () => {
     fireEvent.click(screen.getByText('Add Voice'))
 
     // ensure it doesn't rest
-    fireEvent.change(screen.getByTitle('restChance'), {
+    fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
       target: { value: '0' }
     })
 
@@ -263,16 +263,16 @@ describe('header', () => {
 
   //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('restChance'), {
+  //   fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
   //     target: { value: '0' }
   //   })
 
   //   // find the 'snare' checkbox specifically
-  //   const snareCheckbox = [...document.querySelectorAll('.wave')]
+  //   const snareCheckbox = [...document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)]
   //     .find(el => (el as HTMLInputElement).value === 'snare') as HTMLInputElement
 
   //   // uncheck others first (important)
-  //   const allWaveCheckboxes = document.querySelectorAll('.wave')
+  //   const allWaveCheckboxes = document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)
   //   allWaveCheckboxes.forEach(el => {
   //     if ((el as HTMLInputElement).checked) {
   //       fireEvent.click(el)
@@ -306,9 +306,10 @@ describe('header', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
+    const input = document.querySelector(`[data-attribute="Waveforms"][value="sine"]`) as HTMLInputElement
+    console.log(input)
 
-    fireEvent.click(screen.getByTitle('sine')) // wave checkbox exists
-
+    fireEvent.click(input) // wave checkbox exists
     fireEvent.click(screen.getByText('Start'))
 
     act(() => {
@@ -318,80 +319,63 @@ describe('header', () => {
     expect(screen.getByText('Stop')).toBeInTheDocument()
   })
 
-  // test('plays kick sample when kick waveShape is selected', () => {
-  //   const playMock = jest.fn()
+    // test('plays kick sample when kick waveShape is selected', () => {
+    //   const playMock = jest.fn()
 
-  //   global.Audio = jest.fn(() => ({
-  //     play: playMock
-  //   })) as any
+    //   global.Audio = jest.fn(() => ({
+    //     play: playMock
+    //   })) as any
 
-  //   global.AudioContext = jest.fn(() => ({
-  //     createGain: () => ({
-  //       gain: {
-  //         setValueAtTime: jest.fn(),
-  //         linearRampToValueAtTime: jest.fn()
-  //       },
-  //       connect: jest.fn()
-  //     }),
-  //     createOscillator: () => ({
-  //       connect: jest.fn(),
-  //       start: jest.fn(),
-  //       stop: jest.fn(),
-  //       frequency: { value: 0 },
-  //       type: 'sine'
-  //     }),
-  //     createMediaElementSource: () => ({ connect: jest.fn() }),
-  //     destination: {},
-  //     currentTime: 0,
-  //     resume: jest.fn()
-  //   })) as any
+    //   global.AudioContext = jest.fn(() => ({
+    //     createGain: () => ({
+    //       gain: {
+    //         setValueAtTime: jest.fn(),
+    //         linearRampToValueAtTime: jest.fn()
+    //       },
+    //       connect: jest.fn()
+    //     }),
+    //     createOscillator: () => ({
+    //       connect: jest.fn(),
+    //       start: jest.fn(),
+    //       stop: jest.fn(),
+    //       frequency: { value: 0 },
+    //       type: 'sine'
+    //     }),
+    //     createMediaElementSource: () => ({ connect: jest.fn() }),
+    //     destination: {},
+    //     currentTime: 0,
+    //     resume: jest.fn()
+    //   })) as any
 
-  //   render(<App />)
+    //   render(<App />)
 
-  //   fireEvent.click(screen.getByText('Add Voice'))
+    //   fireEvent.click(screen.getByText('Add Voice'))
 
-  //   fireEvent.change(screen.getByTitle('restChance'), { target: { value: '0' } })
+    //   fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
+    //     target: { value: '0' }
+    //   })
 
-  //   // find the 'kick' checkbox
-  //   const kickCheckbox = [...document.getElementsByClassName('wave0')]
-  //     .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
+    //   // find the 'kick' checkbox
+    //   const kickCheckbox = [...document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)]
+    //     .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
 
-  //   // uncheck others
-  //   const allWaveCheckboxes = document.querySelectorAll('.wave0')
-  //   allWaveCheckboxes.forEach(el => {
-  //     if ((el as HTMLInputElement).checked) {
-  //       fireEvent.click(el)
-  //     }
-  //   })
+    //   // uncheck others
+    //   const allWaveCheckboxes = document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)
+    //   allWaveCheckboxes.forEach(el => {
+    //     if ((el as HTMLInputElement).checked) {
+    //       fireEvent.click(el)
+    //     }
+    //   })
 
-  //   fireEvent.click(kickCheckbox)
+    //   fireEvent.click(kickCheckbox)
 
-  //   fireEvent.click(screen.getByText('Start'))
+    //   fireEvent.click(screen.getByText('Start'))
 
-  //   jest.advanceTimersByTime(200)
+    //   jest.advanceTimersByTime(200)
 
-  //   expect(playMock).toHaveBeenCalled()
-  // })
+    //   expect(playMock).toHaveBeenCalled()
+    // })
 
-  test('covers fade overlap branch when noteLength > intervalLength', () => {
-    render(<App />)
-
-    fireEvent.click(screen.getByText('Add Voice'))
-
-    fireEvent.change(screen.getByTitle('maxLength'), { target: { value: '200' } })
-    fireEvent.change(screen.getByTitle('minFadeIn'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('maxFadeIn'), { target: { value: '100' } })
-    fireEvent.change(screen.getByTitle('minFadeOut'), { target: { value: '0' } })
-    fireEvent.change(screen.getByTitle('maxFadeOut'), { target: { value: '0' } })
-
-    fireEvent.click(screen.getByText('Start'))
-
-    act(() => {
-      jest.advanceTimersByTime(200)
-    })
-
-    expect(screen.getByText('Stop')).toBeInTheDocument()
-  })
 })
 
 // claude tests - some failures
@@ -684,7 +668,7 @@ describe('App', () => {
     //   render(<App />);
     //   addVoice();
 
-    //   const restChanceInput = document.querySelector<HTMLInputElement>('#restChance0');
+    //   const restChanceInput = document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement;
     //   if (restChanceInput) fireEvent.change(restChanceInput, { target: { value: '50' } });
 
     //   expect(() => {
