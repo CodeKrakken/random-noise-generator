@@ -109,9 +109,7 @@ function App() {
   }
 
   const newInterval = (i: number) => {
-
     const voice = voices[i]
-
     if (cycling && document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  { // HERE'S ONE
       if (context.currentTime >= voices[i].nextInterval) {
         const intervalLength = getIntervalLength(i)
@@ -120,7 +118,7 @@ function App() {
         const liveWaves = Array.from(document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="${i}"]`)).filter( // HERE'S ONE
           (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
         )
-
+        console.log(liveWaves)
         if (isRest(i) || !liveWaves) {
           voices[i].gain?.gain.setValueAtTime(0,0)
 
@@ -130,7 +128,6 @@ function App() {
           const maxLevel  = document.querySelector(`[data-attribute="maxLevel"][data-voice="${i}"]`)!.value  // HERE'S ONE
           const minLength = document.querySelector(`[data-attribute="minLength"][data-voice="${i}"]`)!.value // HERE'S ONE
           const maxLength = document.querySelector(`[data-attribute="maxLength"][data-voice="${i}"]`)!.value // HERE'S ONE
-
           const offset = getRangeValue('Offset', i)
           let noteLength = intervalLength
           setTimeout(async () => {
@@ -157,8 +154,9 @@ function App() {
                 noteLength = intervalLength / 100 * noteLengthPercentage
                 const fadeInPercentage  = getRangeValue('FadeIn' , i)
                 const fadeOutPercentage = getRangeValue('FadeOut', i)
+
                 const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
-                let level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
+                const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
 
                 if (noteLength < intervalLength) {
                   setTimeout(() => {voices[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
@@ -209,7 +207,6 @@ function App() {
             }            
           }, offset * 10 * intervalLength)
         }
-
         if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
           setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
         }
@@ -233,7 +230,7 @@ function App() {
   }
        
   const isRest = (i: number) => {
-    const restChance  = +document.querySelector(`[data-attribute="restChance"][data-voice="${i}"]`)! // HERE'S ONE
+    const restChance  = document.querySelector(`[data-attribute="restChance"][data-voice="${i}"]`)!.value // HERE'S ONE
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
@@ -241,9 +238,9 @@ function App() {
   const getRangeValue = (key: string, i:number) => {
     const minEl = document.querySelector(`[data-attribute="min${key}"][data-voice="${i}"]`)  // HERE'S ONE
     const maxEl = document.querySelector(`[data-attribute="max${key}"][data-voice="${i}"]`)  // HERE'S ONE
-
     const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
     const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
+    console.log(minEl, maxEl, minValue, maxValue)
     return minValue + (Math.random() * (maxValue - minValue))
   }
 
@@ -268,11 +265,9 @@ function App() {
     const activeOctaves  = Array.from(document.querySelectorAll(`[data-attribute="Octaves"][data-voice="${i}"]`)).filter(  // HERE'S ONE
       (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
     ).map(octave => { return +octave.value})
-
     const activeNotes   = Array.from(document.querySelectorAll(`[data-attribute="Notes"][data-voice="${i}"]`)).filter(  // HERE'S ONE
       (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
     ).map(note => { return +note.value})
-
     let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j))
     
     let filteredFrequencies = currentFrequencies.map(octave =>
