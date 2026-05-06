@@ -2,6 +2,7 @@ import { VoiceProps, CheckboxGroup, Atom } from '../../types/voice'
 import {checkboxGroups, extrema, fields} from '../../content/data'
 import Input from '../input/Input'
 import { updateField, updateCheckbox } from './functions'
+import DeleteButton from '../delete-button/DeleteButton'
 
 export default function Voice(
   {
@@ -114,13 +115,12 @@ export default function Voice(
           )
         }
       </div>
-      <button 
-        id="delete-voice"
-        onClick={() => handleDelete(i)}
-        data-testid={`delete-voice-${i}`}
-      >
-        X
-      </button>
+      
+      <DeleteButton
+        handleDelete={handleDelete}
+        i={i}
+      />
+      
     </div>
   </div>
 }
