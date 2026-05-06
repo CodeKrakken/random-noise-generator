@@ -301,7 +301,6 @@ function App() {
           setVoices     = {setVoices} 
           voices        = {voices}
           handleDelete  = {handleDelete}
-          dataVoice     = {i}
           dataAttribute = "Voices"
         />
       )

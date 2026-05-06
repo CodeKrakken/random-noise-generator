@@ -271,6 +271,6 @@ describe('header', () => {
 
     fireEvent.click(getByText('X'))
 
-    expect(handleDelete).toHaveBeenCalledWith(0, expect.anything())
+    expect(handleDelete).toHaveBeenCalledWith(0)
   })
 })

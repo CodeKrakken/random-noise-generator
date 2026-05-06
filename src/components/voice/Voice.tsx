@@ -10,7 +10,6 @@ export default function Voice(
     voices,  
     handleDelete,
     setVoices,
-    dataVoice,
     dataAttribute
   }: VoiceProps
 ) {
@@ -102,7 +101,7 @@ export default function Voice(
     id={`voice${i}`}
     data-testid={`voice-${i}`}
     key={`voice-${i}`}
-    data-voice={dataVoice}
+    data-voice={i}
     data-attribute={dataAttribute}
   >
     <div className="row">
@@ -117,7 +116,7 @@ export default function Voice(
       </div>
       <button 
         id="delete-voice"
-        onClick={(e) => handleDelete(i, e)}
+        onClick={() => handleDelete(i)}
         data-testid={`delete-voice-${i}`}
       >
         X
