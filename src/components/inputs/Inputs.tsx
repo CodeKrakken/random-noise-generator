@@ -15,10 +15,11 @@ const input = ((props: any) => {
 export default function Inputs(
   { 
     i,
-    voice,
     voices,
     setVoices
   }: InputsProps) {
+
+  const voice = voices[i]
 
   const inputs: any = {
     fields: <>

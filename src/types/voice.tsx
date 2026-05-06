@@ -31,7 +31,6 @@ export type voice = {
 
 
 export type VoiceProps = {
-  voice       : voice, 
   i           : number, 
   setVoices   : Function, 
   voices      : voice[], 

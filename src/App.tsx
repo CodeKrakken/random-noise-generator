@@ -297,7 +297,6 @@ function App() {
         voice.isActive &&
         <div key={i}>
           <Voice 
-            voice         = {voice} 
             i             = {i} 
             setVoices     = {setVoices} 
             voices        = {voices}
