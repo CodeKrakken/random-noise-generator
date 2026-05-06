@@ -13,6 +13,6 @@ export type InputProps = {
   min?          : number
   max?          : number
   checked?      : boolean | undefined
-  dataVoice?     : number
-  dataAttribute? : string
+  'data-voice'?     : number
+  'data-attribute'? : string
 }

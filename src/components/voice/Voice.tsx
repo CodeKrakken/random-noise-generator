@@ -34,8 +34,8 @@ export default function Voice(
 
             const props: any = {
               className: 'textbox',
-              dataVoice: i,
-              dataAttribute: `${f.value}`,
+              'data-voice': i,
+              'data-attribute': `${f.value}`,
               type: 'number',
               value: voice[`${f.value}` as Atom],
               onChange: (e: any) => updateField(e, `${f.value}` as Atom, voices, i, setVoices)
@@ -49,7 +49,7 @@ export default function Voice(
                     {
                       extrema.map((ex) => {
 
-                        props.dataAttribute = `${ex}${f.value}`;
+                        props['data-attribute'] = `${ex}${f.value}`;
                         props.value = voice[`${ex}${f.value}` as Atom] // populates field
                         props.onChange = (e: any) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
                         
@@ -79,8 +79,8 @@ export default function Voice(
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
                     const props: any = {
                       className: 'checkbox',
-                      dataAttribute: checkboxGroup,
-                      dataVoice: i,
+                      'data-attribute': checkboxGroup,
+                      'data-voice': i,
                       type: "checkbox",
                       value: checkbox,
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox),
