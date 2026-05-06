@@ -81,7 +81,6 @@ export default function Voice(
                       className: 'checkbox',
                       dataAttribute: checkboxGroup,
                       dataVoice: i,
-                      dataValue: checkbox,
                       type: "checkbox",
                       value: checkbox,
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox),
