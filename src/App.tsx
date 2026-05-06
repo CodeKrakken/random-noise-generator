@@ -33,30 +33,30 @@ function App() {
 
   const setUpVoice = () => {
     
-    const clonedVoice = active(voices).reverse()[0]
+    const lastVoice = active(voices).reverse()[0]
 
     return {
       isActive        : true,
-      label           : clonedVoice?.label+1          ||  1,
+      label           : lastVoice?.label+1          ||  1,
       nextInterval    : 0,
-      bpm             : clonedVoice?.bpm              ??  120,
-      minLevel        : clonedVoice?.minLevel         ??  100,
-      maxLevel        : clonedVoice?.maxLevel         ??  100,
-      activeNotes     : clonedVoice?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
-      activeOctaves   : clonedVoice?.activeOctaves    ??  ['4'],
-      activeWaveforms : clonedVoice?.activeWaveforms  ??  ['sine'],
-      restChance      : clonedVoice?.restChance       ??  0,
-      activeIntervals : clonedVoice?.activeIntervals  ??  ['0.5'],
-      minLength       : clonedVoice?.minLength        ??  100,
-      maxLength       : clonedVoice?.maxLength        ??  100,
-      minOffset       : clonedVoice?.minOffset        ??  0,  
-      maxOffset       : clonedVoice?.maxOffset        ??  0,
-      minDetune       : clonedVoice?.minDetune        ??  0,
-      maxDetune       : clonedVoice?.maxDetune        ??  0,
-      minFadeIn       : clonedVoice?.minFadeIn        ??  100,
-      maxFadeIn       : clonedVoice?.maxFadeIn        ??  100,
-      minFadeOut      : clonedVoice?.minFadeOut       ??  100,
-      maxFadeOut      : clonedVoice?.maxFadeOut       ??  100,
+      bpm             : lastVoice?.bpm              ??  120,
+      minLevel        : lastVoice?.minLevel         ??  100,
+      maxLevel        : lastVoice?.maxLevel         ??  100,
+      activeNotes     : lastVoice?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
+      activeOctaves   : lastVoice?.activeOctaves    ??  ['4'],
+      activeWaveforms : lastVoice?.activeWaveforms  ??  ['sine'],
+      restChance      : lastVoice?.restChance       ??  0,
+      activeIntervals : lastVoice?.activeIntervals  ??  ['0.5'],
+      minLength       : lastVoice?.minLength        ??  100,
+      maxLength       : lastVoice?.maxLength        ??  100,
+      minOffset       : lastVoice?.minOffset        ??  0,  
+      maxOffset       : lastVoice?.maxOffset        ??  0,
+      minDetune       : lastVoice?.minDetune        ??  0,
+      maxDetune       : lastVoice?.maxDetune        ??  0,
+      minFadeIn       : lastVoice?.minFadeIn        ??  100,
+      maxFadeIn       : lastVoice?.maxFadeIn        ??  100,
+      minFadeOut      : lastVoice?.minFadeOut       ??  100,
+      maxFadeOut      : lastVoice?.maxFadeOut       ??  100,
     }
   }
 
