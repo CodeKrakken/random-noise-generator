@@ -229,9 +229,7 @@ function App() {
        
   const isRest = (i: number) => {
     const restChance  = Number(document.querySelector<any>(`[data-attribute="restChance"][data-voice="${i}"]`)!.value/100)
-    console.log(restChance)
     const diceRoll = Math.random()
-    console.log(diceRoll)
     return diceRoll < restChance
   }
 

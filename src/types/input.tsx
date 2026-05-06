@@ -14,6 +14,5 @@ export type InputProps = {
   max?          : number
   checked?      : boolean | undefined
   dataVoice?     : number
-  dataRole?      : string
   dataAttribute? : string
 }
