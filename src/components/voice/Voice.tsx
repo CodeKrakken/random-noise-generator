@@ -14,7 +14,6 @@ export default function Voice(
   
   return <div 
     className="voice" 
-    // id={`voice${i}`}
     data-testid={`voice-${i}`}
     // key={`voice-${i}`}
     data-voice={i}

@@ -39,7 +39,10 @@ export default function Inputs(
             }
 
             return <>
-              <div className="row">
+              <div 
+                className="row" 
+                key={field}
+              >
                 <div className="label">{f.label}</div>
                 {
                   f.input === 'range' ? <>
