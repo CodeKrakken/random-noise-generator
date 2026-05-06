@@ -55,7 +55,7 @@ describe('header', () => {
 
     render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -73,7 +73,7 @@ describe('header', () => {
 
     render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -99,7 +99,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -122,7 +122,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}        
@@ -146,7 +146,7 @@ describe('header', () => {
     
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -171,7 +171,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -195,7 +195,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -219,7 +219,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -241,7 +241,7 @@ describe('header', () => {
 
     const { container } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={setVoices}
         voices={[baseVoice]}
@@ -261,7 +261,7 @@ describe('header', () => {
 
     const { getByText } = render(
       <Voice
-        voice={baseVoice}
+        // voice={baseVoice}
         i={0}
         setVoices={jest.fn()}
         voices={[baseVoice]}

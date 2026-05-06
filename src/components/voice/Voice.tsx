@@ -14,23 +14,25 @@ export default function Voice(
   
   return <div 
     className="voice" 
-    id={`voice${i}`}
+    // id={`voice${i}`}
     data-testid={`voice-${i}`}
-    key={`voice-${i}`}
+    // key={`voice-${i}`}
     data-voice={i}
     data-attribute={dataAttribute}
   >
     <div className="row">
+
       <Inputs 
         i={i}
         voices={voices}
         setVoices={setVoices}
-      />      
+      />   
+
       <DeleteButton
         handleDelete={handleDelete}
         i={i}
       />
-      
+
     </div>
   </div>
 }
