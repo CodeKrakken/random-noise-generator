@@ -295,14 +295,16 @@ function App() {
     {
       voices.map((voice, i) => 
         voice.isActive &&
-        <Voice 
-          voice         = {voice} 
-          i             = {i} 
-          setVoices     = {setVoices} 
-          voices        = {voices}
-          handleDelete  = {handleDelete}
-          dataAttribute = "Voices"
-        />
+        <div key={i}>
+          <Voice 
+            voice         = {voice} 
+            i             = {i} 
+            setVoices     = {setVoices} 
+            voices        = {voices}
+            handleDelete  = {handleDelete}
+            dataAttribute = "Voices"
+          />
+        </div>
       )
     }
   </>

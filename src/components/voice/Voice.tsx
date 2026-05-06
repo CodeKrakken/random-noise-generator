@@ -15,15 +15,6 @@ export default function Voice(
     dataAttribute
   }: VoiceProps
 ) {
-
-  const input = ((props: any) => {
-
-    return <>
-      <Input
-        {...props}
-      />
-    </>
-  })
   
   return <div 
     className="voice" 

@@ -49,7 +49,11 @@ export default function Inputs(
                         props.value = voice[`${ex}${f.value}` as Atom] // populates field
                         props.onChange = (e: any) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
                         
-                        return input(props);
+                        return <>
+                          <div key={ex}>
+                            {input(props)}
+                          </div>
+                        </>
                       })
                     }
                   </> : <>
@@ -94,7 +98,9 @@ export default function Inputs(
   }
 
   return <>
-    <div className="column">
+    <div 
+      className="column"
+    >
       {
         Object.keys(inputs).map(input => 
           <div className="row">
