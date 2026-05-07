@@ -691,4 +691,73 @@ describe('App', () => {
     //   }).not.toThrow();
     // });
   });
+
+  test('plays kick sample', () => {
+    jest.useFakeTimers()
+
+    const playMock = jest.fn()
+
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: jest.fn().mockImplementation(() => ({
+        play: playMock
+      }))
+    })
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Voice'))
+
+    // disable sine
+    fireEvent.click(document.querySelector(`[data-attribute="Waveforms"][value="sine"]`) as HTMLInputElement)
+
+    // enable kick
+    fireEvent.click(document.querySelector(`[data-attribute="Waveforms"][value="kick"]`) as HTMLInputElement)
+
+    fireEvent.click(screen.getByText('Start'))
+
+    jest.advanceTimersByTime(2000)
+
+    expect(playMock).toHaveBeenCalled()
+  })
+
+  test('logs sample playback errors', () => {
+    jest.useFakeTimers()
+
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
+    const playMock = jest.fn(() => {
+      throw new Error('sample failure')
+    })
+
+    Object.defineProperty(window, 'Audio', {
+      writable: true,
+      value: jest.fn().mockImplementation(() => ({
+        play: playMock
+      }))
+    })
+
+    render(<App />)
+
+    fireEvent.click(screen.getByText('Add Voice'))
+
+    fireEvent.click(document.querySelector(`[data-attribute="Waveforms"][value="sine"]`) as HTMLInputElement)
+
+    const kickWave = document.querySelector(
+      'input[value="kick"]'
+    ) as HTMLInputElement
+
+    fireEvent.click(kickWave)
+
+    fireEvent.click(screen.getByText('Start'))
+
+    jest.advanceTimersByTime(1000)
+
+    expect(playMock).toHaveBeenCalled()
+    expect(errorSpy).toHaveBeenCalled()
+
+    errorSpy.mockRestore()
+  })
 });
