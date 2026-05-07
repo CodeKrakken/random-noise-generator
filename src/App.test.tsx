@@ -307,7 +307,6 @@ describe('header', () => {
 
     fireEvent.click(screen.getByText('Add Voice'))
     const input = document.querySelector(`[data-attribute="Waveforms"][value="sine"]`) as HTMLInputElement
-    console.log(input)
 
     fireEvent.click(input) // wave checkbox exists
     fireEvent.click(screen.getByText('Start'))
