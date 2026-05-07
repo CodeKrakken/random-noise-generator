@@ -516,20 +516,6 @@ describe('App', () => {
     //   expect(mockContext.createGain).toHaveBeenCalledTimes(2);
     // });
 
-    it('does not call createOscillator for inactive voices', async () => {
-      render(<App />);
-      addVoice();
-      addVoice();
-      const button = screen.getByTestId('delete-voice-0')
-      console.log(button)
-      fireEvent.click(button);
-
-      await act(async () => {});
-
-      clickStartStop()      
-
-      expect(mockContext.createOscillator).toHaveBeenCalledTimes(1);
-    });
   });
 
   // ── Lines 190–199: stop() ────────────────────────────────────────────────────

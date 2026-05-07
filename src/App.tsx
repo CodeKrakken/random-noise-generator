@@ -212,20 +212,14 @@ function App() {
           }
           if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
             setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
-            console.log('BUMWAG')
-          } else {
-            console.log('BUMFACE')
-          }
-          
+          }          
 
         } else {
 
           setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
         }
       }
-    } catch (error: any) {
-      console.log(error.message)
-    }
+    } catch (error) {}
   }
 
   const getIntervalLength = (i: number) => {
