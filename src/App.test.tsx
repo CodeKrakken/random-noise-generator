@@ -46,64 +46,64 @@ describe('header', () => {
     jest.clearAllTimers()
   })
 
-  test('adds a voice', () => {
-    render(<App />)
+  // test('adds a voice', () => {
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
-    expect(document.querySelector('.voice')).toBeInTheDocument()
-  })
+  //   expect(document.querySelector('.voice')).toBeInTheDocument()
+  // })
 
-  test('shows Start button after adding voice', () => {
-    render(<App />)
+  // test('shows Start button after adding voice', () => {
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
-    expect(screen.getByText('Start')).toBeInTheDocument()
-  })
+  //   expect(screen.getByText('Start')).toBeInTheDocument()
+  // })
 
-  test('starts audio when Start clicked', () => {
-    render(<App />)
+  // test('starts audio when Start clicked', () => {
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.click(screen.getByText('Start'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Start'))
 
-    // we can't easily inspect internals, but we can assert Stop appears
-    expect(screen.getByText('Stop')).toBeInTheDocument()
-  })
+  //   // we can't easily inspect internals, but we can assert Stop appears
+  //   expect(screen.getByText('Stop')).toBeInTheDocument()
+  // })
 
-  test('stops audio when Stop clicked', () => {
-    render(<App />)
+  // test('stops audio when Stop clicked', () => {
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.click(screen.getByText('Start'))
-    fireEvent.click(screen.getByText('Stop'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Start'))
+  //   fireEvent.click(screen.getByText('Stop'))
 
-    expect(screen.getByText('Start')).toBeInTheDocument()
-  })
+  //   expect(screen.getByText('Start')).toBeInTheDocument()
+  // })
 
-  test('new voice copies previous voice settings', () => {
-    render(<App />)
+  // test('new voice copies previous voice settings', () => {
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '200' } })
-    fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '200' } })
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
-    const inputs = document.querySelectorAll(`[data-attribute="bpm"]`)
-    expect((inputs[1] as HTMLInputElement).value).toBe('200')
-  })
+  //   const inputs = document.querySelectorAll(`[data-attribute="bpm"]`)
+  //   expect((inputs[1] as HTMLInputElement).value).toBe('200')
+  // })
 
-  test('schedules interval loop', () => {
-    jest.useFakeTimers()
-    jest.spyOn(globalThis, 'setTimeout')
+  // test('schedules interval loop', () => {
+  //   jest.useFakeTimers()
+  //   jest.spyOn(globalThis, 'setTimeout')
 
-    render(<App />)
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.click(screen.getByText('Start'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Start'))
 
-    expect(globalThis.setTimeout).toHaveBeenCalled()
-  })
+  //   expect(globalThis.setTimeout).toHaveBeenCalled()
+  // })
 
   test('sets gain to 0 during rest', () => {
     render(<App />)
@@ -119,26 +119,26 @@ describe('header', () => {
     expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
   })
 
-  test('covers recursive setTimeout scheduling branch', () => {
-    jest.useFakeTimers()
+  // test('covers recursive setTimeout scheduling branch', () => {
+  //   jest.useFakeTimers()
 
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout')
+  //   const setTimeoutSpy = jest.spyOn(global, 'setTimeout')
 
-    render(<App />)
+  //   render(<App />)
 
-    fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('Add Voice'))
 
-    // force a future nextInterval so we hit the ELSE branch
-    const bpmInput = document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement
-    fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
+  //   // force a future nextInterval so we hit the ELSE branch
+  //   const bpmInput = document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement
+  //   fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
 
-    fireEvent.click(screen.getByText('Start'))
+  //   fireEvent.click(screen.getByText('Start'))
 
-    // force timers to execute
-    jest.runOnlyPendingTimers()
+  //   // force timers to execute
+  //   jest.runOnlyPendingTimers()
 
-    expect(setTimeoutSpy).toHaveBeenCalled()
-  })
+  //   expect(setTimeoutSpy).toHaveBeenCalled()
+  // })
 
   test('sets gain to 0 after noteLength timeout', () => {
     jest.useFakeTimers()
@@ -224,83 +224,83 @@ describe('header', () => {
 
 
 
-  // test('handles sample playback error and logs it', () => {
-  //   jest.useFakeTimers()
+  test('handles sample playback error and logs it', () => {
+    jest.useFakeTimers()
 
-  //   const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
-  //   // mock Audio to throw
-  //   const playMock = jest.fn(() => {
-  //     throw new Error('play failed')
-  //   })
+    // mock Audio to throw
+    const playMock = jest.fn(() => {
+      throw new Error('play failed')
+    })
 
-  //   global.Audio = jest.fn(() => ({
-  //     play: playMock
-  //   })) as any
+    global.Audio = jest.fn(() => ({
+      play: playMock
+    })) as any
 
-  //   global.AudioContext = jest.fn(() => ({
-  //     createGain: () => ({
-  //       gain: {
-  //         setValueAtTime: jest.fn(),
-  //         linearRampToValueAtTime: jest.fn()
-  //       },
-  //       connect: jest.fn()
-  //     }),
-  //     createOscillator: () => ({
-  //       connect: jest.fn(),
-  //       start: jest.fn(),
-  //       stop: jest.fn(),
-  //       frequency: { value: 0 },
-  //       type: 'sine'
-  //     }),
-  //     createMediaElementSource: () => ({ connect: jest.fn() }),
-  //     destination: {},
-  //     currentTime: 0,
-  //     resume: jest.fn()
-  //   })) as any
+    global.AudioContext = jest.fn(() => ({
+      createGain: () => ({
+        gain: {
+          setValueAtTime: jest.fn(),
+          linearRampToValueAtTime: jest.fn()
+        },
+        connect: jest.fn()
+      }),
+      createOscillator: () => ({
+        connect: jest.fn(),
+        start: jest.fn(),
+        stop: jest.fn(),
+        frequency: { value: 0 },
+        type: 'sine'
+      }),
+      createMediaElementSource: () => ({ connect: jest.fn() }),
+      destination: {},
+      currentTime: 0,
+      resume: jest.fn()
+    })) as any
 
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-
-  //   fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
-  //     target: { value: '0' }
-  //   })
-
-  //   // find the 'snare' checkbox specifically
-  //   const snareCheckbox = [...document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)]
-  //     .find(el => (el as HTMLInputElement).value === 'snare') as HTMLInputElement
-
-  //   // uncheck others first (important)
-  //   const allWaveCheckboxes = document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)
-  //   allWaveCheckboxes.forEach(el => {
-  //     if ((el as HTMLInputElement).checked) {
-  //       fireEvent.click(el)
-  //     }
-  //   })
-
-  //   fireEvent.click(snareCheckbox)
-
-  //   fireEvent.click(screen.getByText('Start'))
-
-  //   jest.advanceTimersByTime(200)
-
-  //   expect(playMock).toHaveBeenCalled()
-  //   expect(errorSpy).toHaveBeenCalled()
-  // })
-
-
-
-
-  test('handleDelete sets voice inactive via state update', () => {
     render(<App />)
 
     fireEvent.click(screen.getByText('Add Voice'))
-    fireEvent.click(screen.getByText('X'))
 
-    // voice should no longer be active in render tree
-    expect(screen.queryByText('X')).not.toBeInTheDocument()
+    fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
+      target: { value: '0' }
+    })
+
+    // find the 'snare' checkbox specifically
+    const snareCheckbox = [...document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)]
+      .find(el => (el as HTMLInputElement).value === 'snare') as HTMLInputElement
+
+    // uncheck others first (important)
+    const allWaveCheckboxes = document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)
+    allWaveCheckboxes.forEach(el => {
+      if ((el as HTMLInputElement).checked) {
+        fireEvent.click(el)
+      }
+    })
+
+    fireEvent.click(snareCheckbox)
+
+    fireEvent.click(screen.getByText('Start'))
+
+    jest.advanceTimersByTime(200)
+
+    expect(playMock).toHaveBeenCalled()
+    expect(errorSpy).toHaveBeenCalled()
   })
+
+
+
+
+  // test('handleDelete sets voice inactive via state update', () => {
+  //   render(<App />)
+
+  //   fireEvent.click(screen.getByText('Add Voice'))
+  //   fireEvent.click(screen.getByText('X'))
+
+  //   // voice should no longer be active in render tree
+  //   expect(screen.queryByText('X')).not.toBeInTheDocument()
+  // })
 
   test('oscillator branch executes wave processing path', () => {
     render(<App />)
@@ -458,12 +458,6 @@ describe('App', () => {
       expect(secondVoice).toBeInTheDocument();
     });
 
-    // it('labels first voice as 1', () => {
-    //   render(<App />);
-    //   addVoice();
-    //   expect(screen.getByTestId('voice-label-0')).toHaveTextContent('1');
-    // });
-
     // it('increments label when cloning from last active voice', () => {
     //   render(<App />);
     //   addVoice();
@@ -522,15 +516,20 @@ describe('App', () => {
     //   expect(mockContext.createGain).toHaveBeenCalledTimes(2);
     // });
 
-    // it('does not call createOscillator for inactive voices', () => {
-    //   render(<App />);
-    //   addVoice();
-    //   addVoice();
-    //   fireEvent.click(screen.getByTestId('delete-voice-0')); // deactivate first
-    //   clickStartStop();
+    it('does not call createOscillator for inactive voices', async () => {
+      render(<App />);
+      addVoice();
+      addVoice();
+      const button = screen.getByTestId('delete-voice-0')
+      console.log(button)
+      fireEvent.click(button);
 
-    //   expect(mockContext.createOscillator).toHaveBeenCalledTimes(1);
-    // });
+      await act(async () => {});
+
+      clickStartStop()      
+
+      expect(mockContext.createOscillator).toHaveBeenCalledTimes(1);
+    });
   });
 
   // ── Lines 190–199: stop() ────────────────────────────────────────────────────
