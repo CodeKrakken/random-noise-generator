@@ -521,22 +521,22 @@ describe('App', () => {
   // ── Lines 190–199: stop() ────────────────────────────────────────────────────
 
   describe('stop() (lines 190–199)', () => {
-    // it('sets gain to 0 and stops oscillators on stop', async () => {
-    //   const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
-    //   const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
-    //   mockContext.createGain.mockReturnValue(gainVoice as any);
-    //   mockContext.createOscillator.mockReturnValue(oscillatorVoice);
+    it('sets gain to 0 and stops oscillators on stop', async () => {
+      const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
+      const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
+      mockContext.createGain.mockReturnValue(gainVoice as any);
+      mockContext.createOscillator.mockReturnValue(oscillatorVoice);
 
-    //   render(<App />);
-    //   addVoice();
-    //   clickStartStop(); // start
-    //   clickStartStop(); // stop
+      render(<App />);
+      addVoice();
+      clickStartStop(); // start
+      clickStartStop(); // stop
 
-    //   await waitFor(() => {
-    //     expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, mockContext.currentTime);
-    //     expect(oscillatorVoice.stop).toHaveBeenCalled();
-    //   });
-    // });
+      await waitFor(() => {
+        expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, mockContext.currentTime);
+        expect(oscillatorVoice.stop).toHaveBeenCalled();
+      });
+    });
   });
 
   // ── Lines 205–239: newInterval() ────────────────────────────────────────────

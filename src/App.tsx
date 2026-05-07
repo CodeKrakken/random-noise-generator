@@ -29,8 +29,6 @@ function App() {
       cycling = false
       setCycleButtonLabel(false)
     }
-
-    console.log(voices)
   }, [voices])
 
   const setUpVoice = () => {
@@ -80,24 +78,28 @@ function App() {
   const start = () => {
     setCycleButtonLabel(true)
     
-    voices.forEach((voice, i) => {
-      if (voice.isActive) {
-
+    setVoices(prev =>
+      prev.map(voice => {
+        
         const oscillator  = context.createOscillator()
         const gain        = context.createGain()
-    
+
         oscillator.connect(gain);
         gain.connect(context.destination);
         gain.gain.setValueAtTime(0, 0)
         oscillator.start(0);
 
-        voice.oscillator = oscillator
-        voice.gain       = gain
+        return {
+          ...voice,
+          oscillator,
+          gain,
+          nextInterval: context.currentTime
+        }
+      })
+    );
 
-        voice.nextInterval = context.currentTime
-
-        newInterval(i)
-      }
+    voices.forEach((voice, i) => {
+      newInterval(i)
     })
   }
 
