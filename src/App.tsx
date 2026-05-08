@@ -29,6 +29,8 @@ function App() {
       cycling = false
       setCycleButtonLabel(false)
     }
+
+    console.log(voices)
   }, [voices])
 
   const setUpVoice = () => {
@@ -78,28 +80,24 @@ function App() {
   const start = () => {
     setCycleButtonLabel(true)
     
-    setVoices(prev =>
-      prev.map(voice => {
-        
+    voices.forEach((voice, i) => {
+      if (voice.isActive) {
+
         const oscillator  = context.createOscillator()
         const gain        = context.createGain()
-
+    
         oscillator.connect(gain);
         gain.connect(context.destination);
         gain.gain.setValueAtTime(0, 0)
         oscillator.start(0);
 
-        return {
-          ...voice,
-          oscillator,
-          gain,
-          nextInterval: context.currentTime
-        }
-      })
-    );
+        voice.oscillator = oscillator
+        voice.gain       = gain
 
-    voices.forEach((voice, i) => {
-      newInterval(i)
+        voice.nextInterval = context.currentTime
+
+        newInterval(i)
+      }
     })
   }
 
@@ -114,6 +112,8 @@ function App() {
 
   const newInterval = (i: number) => {
     try {
+      
+    
       const voice = voices[i]
       if (cycling && document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
         if (context.currentTime >= voices[i].nextInterval) {
@@ -191,7 +191,11 @@ function App() {
 
                     }
                   }
-                } catch (error: unknown) {}
+                } catch (error: unknown) {
+
+                  console.error(error instanceof Error ? error.message : "Unknown error", error)
+                  
+                }
               } else {
                 try {
 
