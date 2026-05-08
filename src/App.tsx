@@ -7,7 +7,7 @@ import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
 
-let cycling = false
+// let cycling = false
 
 const active = (voices: voice[]) => {
   return voices.filter(voice => voice.isActive)
@@ -17,7 +17,8 @@ function App() {
 
   const [context] = useState(() => new AudioContext())
 
-  const [voices,             setVoices            ] = useState<voice[]>([])
+  const [voices,  setVoices ] = useState<voice[]>([])
+  const [cycling, setCycling] = useState<Boolean>(false)
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
 
   const addVoice = () => {
@@ -26,7 +27,7 @@ function App() {
 
   useEffect(() => {
     if (!active(voices).length) {
-      cycling = false
+      setCycling(false)
       setCycleButtonLabel(false)
     }
 
@@ -72,7 +73,7 @@ function App() {
   const kickSample  = setUpSample(kickFile)
 
   const handleStartStop = () => {
-    cycling = !cycling
+    setCycling(cycling => !cycling)
     cycling ? start() : stop()
   }
 
