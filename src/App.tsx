@@ -7,8 +7,6 @@ import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
 
-// let cycling = false
-
 const active = (voices: voice[]) => {
   return voices.filter(voice => voice.isActive)
 }
