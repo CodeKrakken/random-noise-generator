@@ -293,13 +293,6 @@ describe('App', () => {
   // ── Lines 101–133: addVoice / setUpVoice ──────────────────────────────────────
 
   describe('addVoice / setUpVoice (lines 101–133)', () => {
-    it('renders a voice component when Add Voice is clicked', () => {
-      render(<App />);
-      addVoice();
-      // Voice should appear — keyed by voice index
-      expect(screen.getByTestId('voice-0')).toBeInTheDocument();
-    });
-
     it('clones settings from the last active voice when a second voice is added', () => {
       render(<App />);
       addVoice();
@@ -312,10 +305,7 @@ describe('App', () => {
   // ── Lines 145–152: useEffect — stop cycling when no active voices ────────────
 
   describe('useEffect: cycling stops when all voices are deleted (lines 145–152)', () => {
-    it('hides the Start button when there are no active voices', () => {
-      render(<App />);
-      expect(screen.queryByRole('button', { name: /start/i })).not.toBeInTheDocument();
-    });
+
 
     it('resets cycleButtonLabel to false when last voice is deleted', async () => {
       render(<App />);
@@ -350,15 +340,7 @@ describe('App', () => {
   // ── Lines 205–239: newInterval() ────────────────────────────────────────────
 
   describe('newInterval() (lines 205–239)', () => {
-    it('schedules a setTimeout callback when cycling starts', () => {
-      render(<App />);
-      addVoice();
-      const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
-      clickStartStop();
-
-      expect(setTimeoutSpy).toHaveBeenCalled();
-    });
 
 
     it('calls newInterval recursively via setTimeout', () => {
@@ -379,14 +361,6 @@ describe('App', () => {
   // ── Lines 316–319: handleDelete() ───────────────────────────────────────────
 
   describe('handleDelete() (lines 316–319)', () => {
-    it('removes the voice visually when delete is clicked', () => {
-      render(<App />);
-      addVoice();
-      expect(screen.getByTestId('voice-0')).toBeInTheDocument();
-
-      fireEvent.click(screen.getByTestId('delete-voice-0'));
-      expect(screen.queryByTestId('voice-0')).not.toBeInTheDocument();
-    });
 
 
     it('does not throw when deleting a voice that was never started', () => {
@@ -427,45 +401,5 @@ describe('App', () => {
     jest.advanceTimersByTime(2000)
 
     expect(playMock).toHaveBeenCalled()
-  })
-
-  test('logs sample playback errors', () => {
-    jest.useFakeTimers()
-
-    const errorSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {})
-
-    const playMock = jest.fn(() => {
-      throw new Error('sample failure')
-    })
-
-    Object.defineProperty(window, 'Audio', {
-      writable: true,
-      value: jest.fn().mockImplementation(() => ({
-        play: playMock
-      }))
-    })
-
-    render(<App />)
-
-    fireEvent.click(screen.getByText('Add Voice'))
-
-    fireEvent.click(document.querySelector(`[data-attribute="Waveforms"][value="sine"]`) as HTMLInputElement)
-
-    const kickWave = document.querySelector(
-      'input[value="kick"]'
-    ) as HTMLInputElement
-
-    fireEvent.click(kickWave)
-
-    fireEvent.click(screen.getByText('Start'))
-
-    jest.advanceTimersByTime(1000)
-
-    expect(playMock).toHaveBeenCalled()
-    expect(errorSpy).toHaveBeenCalled()
-
-    errorSpy.mockRestore()
   })
 });

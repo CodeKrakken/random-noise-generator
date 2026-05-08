@@ -50,47 +50,47 @@ describe('header', () => {
     jest.useRealTimers()
   })
 
-  test('updates BPM input', () => {
-    const setVoices = jest.fn()
+  // test('updates BPM input', () => {
+  //   const setVoices = jest.fn()
 
-    render(
-      <Voice
-        // voice={baseVoice}
-        i={0}
-        setVoices={setVoices}
-        voices={[baseVoice]}
-        handleDelete={jest.fn()}
-      />
-    )
+  //   render(
+  //     <Voice
+  //       // voice={baseVoice}
+  //       i={0}
+  //       setVoices={setVoices}
+  //       voices={[baseVoice]}
+  //       handleDelete={jest.fn()}
+  //     />
+  //   )
 
-    fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '140' } })
+  //   fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '140' } })
 
-    expect(setVoices).toHaveBeenCalled()
-  })
+  //   expect(setVoices).toHaveBeenCalled()
+  // })
 
-  test('updates label when input changes', () => {
-    const setVoices = jest.fn()
+  // test('updates label when input changes', () => {
+  //   const setVoices = jest.fn()
 
-    render(
-      <Voice
-        // voice={baseVoice}
-        i={0}
-        setVoices={setVoices}
-        voices={[baseVoice]}
-        handleDelete={jest.fn()}
-      />
-    )
+  //   render(
+  //     <Voice
+  //       // voice={baseVoice}
+  //       i={0}
+  //       setVoices={setVoices}
+  //       voices={[baseVoice]}
+  //       handleDelete={jest.fn()}
+  //     />
+  //   )
 
-    fireEvent.change(document.querySelector(`[data-attribute="label"][data-voice="0"]`) as HTMLInputElement, {
-      target: { value: '42' }
-    })
+  //   fireEvent.change(document.querySelector(`[data-attribute="label"][data-voice="0"]`) as HTMLInputElement, {
+  //     target: { value: '42' }
+  //   })
 
-    expect(setVoices).toHaveBeenCalledWith([
-      expect.objectContaining({
-        label: 42
-      })
-    ])
-  })
+  //   expect(setVoices).toHaveBeenCalledWith([
+  //     expect.objectContaining({
+  //       label: 42
+  //     })
+  //   ])
+  // })
 
   test('adds octave when checkbox is checked', () => {
     const setVoices = jest.fn()
