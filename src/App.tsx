@@ -30,7 +30,6 @@ function App() {
       setCycleButtonLabel(false)
     }
 
-    console.log(voices)
   }, [voices])
 
   const setUpVoice = () => {

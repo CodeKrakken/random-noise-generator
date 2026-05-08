@@ -46,64 +46,6 @@ describe('header', () => {
     jest.clearAllTimers()
   })
 
-  // test('adds a voice', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-
-  //   expect(document.querySelector('.voice')).toBeInTheDocument()
-  // })
-
-  // test('shows Start button after adding voice', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-
-  //   expect(screen.getByText('Start')).toBeInTheDocument()
-  // })
-
-  // test('starts audio when Start clicked', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-  //   fireEvent.click(screen.getByText('Start'))
-
-  //   // we can't easily inspect internals, but we can assert Stop appears
-  //   expect(screen.getByText('Stop')).toBeInTheDocument()
-  // })
-
-  // test('stops audio when Stop clicked', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-  //   fireEvent.click(screen.getByText('Start'))
-  //   fireEvent.click(screen.getByText('Stop'))
-
-  //   expect(screen.getByText('Start')).toBeInTheDocument()
-  // })
-
-  // test('new voice copies previous voice settings', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-  //   fireEvent.change(document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement, { target: { value: '200' } })
-  //   fireEvent.click(screen.getByText('Add Voice'))
-
-  //   const inputs = document.querySelectorAll(`[data-attribute="bpm"]`)
-  //   expect((inputs[1] as HTMLInputElement).value).toBe('200')
-  // })
-
-  // test('schedules interval loop', () => {
-  //   jest.useFakeTimers()
-  //   jest.spyOn(globalThis, 'setTimeout')
-
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-  //   fireEvent.click(screen.getByText('Start'))
-
-  //   expect(globalThis.setTimeout).toHaveBeenCalled()
-  // })
 
   test('sets gain to 0 during rest', () => {
     render(<App />)
@@ -118,27 +60,6 @@ describe('header', () => {
 
     expect(setValueAtTime).toHaveBeenCalledWith(0, 0)
   })
-
-  // test('covers recursive setTimeout scheduling branch', () => {
-  //   jest.useFakeTimers()
-
-  //   const setTimeoutSpy = jest.spyOn(global, 'setTimeout')
-
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-
-  //   // force a future nextInterval so we hit the ELSE branch
-  //   const bpmInput = document.querySelector(`[data-attribute="bpm"][data-voice="0"]`) as HTMLInputElement
-  //   fireEvent.change(bpmInput, { target: { value: '1' } }) // huge interval
-
-  //   fireEvent.click(screen.getByText('Start'))
-
-  //   // force timers to execute
-  //   jest.runOnlyPendingTimers()
-
-  //   expect(setTimeoutSpy).toHaveBeenCalled()
-  // })
 
   test('sets gain to 0 after noteLength timeout', () => {
     jest.useFakeTimers()
@@ -289,19 +210,6 @@ describe('header', () => {
     expect(errorSpy).toHaveBeenCalled()
   })
 
-
-
-
-  // test('handleDelete sets voice inactive via state update', () => {
-  //   render(<App />)
-
-  //   fireEvent.click(screen.getByText('Add Voice'))
-  //   fireEvent.click(screen.getByText('X'))
-
-  //   // voice should no longer be active in render tree
-  //   expect(screen.queryByText('X')).not.toBeInTheDocument()
-  // })
-
   test('oscillator branch executes wave processing path', () => {
     render(<App />)
 
@@ -317,67 +225,9 @@ describe('header', () => {
 
     expect(screen.getByText('Stop')).toBeInTheDocument()
   })
-
-    // test('plays kick sample when kick waveShape is selected', () => {
-    //   const playMock = jest.fn()
-
-    //   global.Audio = jest.fn(() => ({
-    //     play: playMock
-    //   })) as any
-
-    //   global.AudioContext = jest.fn(() => ({
-    //     createGain: () => ({
-    //       gain: {
-    //         setValueAtTime: jest.fn(),
-    //         linearRampToValueAtTime: jest.fn()
-    //       },
-    //       connect: jest.fn()
-    //     }),
-    //     createOscillator: () => ({
-    //       connect: jest.fn(),
-    //       start: jest.fn(),
-    //       stop: jest.fn(),
-    //       frequency: { value: 0 },
-    //       type: 'sine'
-    //     }),
-    //     createMediaElementSource: () => ({ connect: jest.fn() }),
-    //     destination: {},
-    //     currentTime: 0,
-    //     resume: jest.fn()
-    //   })) as any
-
-    //   render(<App />)
-
-    //   fireEvent.click(screen.getByText('Add Voice'))
-
-    //   fireEvent.change(document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement, {
-    //     target: { value: '0' }
-    //   })
-
-    //   // find the 'kick' checkbox
-    //   const kickCheckbox = [...document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)]
-    //     .find(el => (el as HTMLInputElement).value === 'kick') as HTMLInputElement
-
-    //   // uncheck others
-    //   const allWaveCheckboxes = document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="0"]`)
-    //   allWaveCheckboxes.forEach(el => {
-    //     if ((el as HTMLInputElement).checked) {
-    //       fireEvent.click(el)
-    //     }
-    //   })
-
-    //   fireEvent.click(kickCheckbox)
-
-    //   fireEvent.click(screen.getByText('Start'))
-
-    //   jest.advanceTimersByTime(200)
-
-    //   expect(playMock).toHaveBeenCalled()
-    // })
-
 })
 
-// claude tests - some failures
+// claude tests
 
 import { waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -457,13 +307,6 @@ describe('App', () => {
       const secondVoice = screen.getByTestId('voice-1');
       expect(secondVoice).toBeInTheDocument();
     });
-
-    // it('increments label when cloning from last active voice', () => {
-    //   render(<App />);
-    //   addVoice();
-    //   addVoice();
-    //   expect(screen.getByTestId('voice-label-1')).toHaveTextContent('2');
-    // });
   });
 
   // ── Lines 145–152: useEffect — stop cycling when no active voices ────────────
@@ -503,41 +346,6 @@ describe('App', () => {
     });
   });
 
-  // ── Lines 178–185: start() — creates oscillator/gain per active voice ────────
-
-  describe('start() (lines 178–185)', () => {
-    // it('calls createOscillator and createGain for each active voice', () => {
-    //   render(<App />);
-    //   addVoice();
-    //   addVoice();
-    //   clickStartStop();
-
-    //   expect(mockContext.createOscillator).toHaveBeenCalledTimes(2);
-    //   expect(mockContext.createGain).toHaveBeenCalledTimes(2);
-    // });
-
-  });
-
-  // ── Lines 190–199: stop() ────────────────────────────────────────────────────
-
-  describe('stop() (lines 190–199)', () => {
-    // it('sets gain to 0 and stops oscillators on stop', async () => {
-    //   const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
-    //   const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
-    //   mockContext.createGain.mockReturnValue(gainVoice as any);
-    //   mockContext.createOscillator.mockReturnValue(oscillatorVoice);
-
-    //   render(<App />);
-    //   addVoice();
-    //   clickStartStop(); // start
-    //   clickStartStop(); // stop
-
-    //   await waitFor(() => {
-    //     expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, mockContext.currentTime);
-    //     expect(oscillatorVoice.stop).toHaveBeenCalled();
-    //   });
-    // });
-  });
 
   // ── Lines 205–239: newInterval() ────────────────────────────────────────────
 
@@ -552,19 +360,6 @@ describe('App', () => {
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
-    // it('does not throw when no checked wave inputs are present', () => {
-    //   render(<App />);
-    //   addVoice();
-
-    //   // Uncheck all wave checkboxes before starting
-    //   const waveCheckboxes = document.querySelectorAll<HTMLInputElement>('[class*="wave0"]');
-    //   waveCheckboxes.forEach(cb => { cb.checked = false; });
-
-    //   expect(() => {
-    //     clickStartStop();
-    //     act(() => { jest.runAllTimers(); });
-    //   }).not.toThrow();
-    // });
 
     it('calls newInterval recursively via setTimeout', () => {
       render(<App />);
@@ -580,32 +375,6 @@ describe('App', () => {
     });
   });
 
-  // ── Lines 253–273: getIntervalLength() ──────────────────────────────────────
-
-  describe('getIntervalLength() (lines 253–273)', () => {
-    // it('does not throw when interval checkboxes are present', () => {
-    //   render(<App />);
-    //   addVoice();
-
-    //   expect(() => {
-    //     clickStartStop();
-    //     act(() => { jest.runAllTimers(); });
-    //   }).not.toThrow();
-    // });
-
-    // it('respects bpm input for interval length calculation', () => {
-    //   render(<App />);
-    //   addVoice();
-
-    //   const bpmInput = document.querySelector<HTMLInputElement>('#bpm0');
-    //   if (bpmInput) fireEvent.change(bpmInput, { target: { value: '60' } });
-
-    //   expect(() => {
-    //     clickStartStop();
-    //     act(() => { jest.runAllTimers(); });
-    //   }).not.toThrow();
-    // });
-  });
 
   // ── Lines 316–319: handleDelete() ───────────────────────────────────────────
 
@@ -619,21 +388,6 @@ describe('App', () => {
       expect(screen.queryByTestId('voice-0')).not.toBeInTheDocument();
     });
 
-    // it('sets gain to 0 and stops oscillator on delete', () => {
-    //   const gainVoice = { gain: { setValueAtTime: jest.fn() }, connect: jest.fn() };
-    //   const oscillatorVoice = { ...mockOscillator, connect: jest.fn(), stop: jest.fn() };
-    //   mockContext.createGain.mockReturnValue(gainVoice as any);
-    //   mockContext.createOscillator.mockReturnValue(oscillatorVoice);
-
-    //   render(<App />);
-    //   addVoice();
-    //   clickStartStop(); // attach oscillator/gain to voice
-
-    //   fireEvent.click(screen.getByTestId('delete-voice-0'));
-
-    //   expect(gainVoice.gain.setValueAtTime).toHaveBeenCalledWith(0, 0);
-    //   expect(oscillatorVoice.stop).toHaveBeenCalled();
-    // });
 
     it('does not throw when deleting a voice that was never started', () => {
       render(<App />);
@@ -645,37 +399,6 @@ describe('App', () => {
     });
   });
 
-  // ── isRest() — called inside newInterval ────────────────────────────────────
-
-  describe('isRest() (called from newInterval)', () => {
-    // it('does not throw when rest input is present', () => {
-    //   render(<App />);
-    //   addVoice();
-
-    //   const restChanceInput = document.querySelector(`[data-attribute="restChance"][data-voice="0"]`) as HTMLInputElement;
-    //   if (restChanceInput) fireEvent.change(restChanceInput, { target: { value: '50' } });
-
-    //   expect(() => {
-    //     clickStartStop();
-    //     act(() => { jest.runAllTimers(); });
-    //   }).not.toThrow();
-    // });
-  });
-
-  // ── getRangeValue() ─────────────────────────────────────────────────────────
-
-  describe('getRangeValue() (called from newInterval)', () => {
-    // it('falls back gracefully when min/max elements are missing', () => {
-    //   render(<App />);
-    //   addVoice();
-
-    //   // Ensure the inputs exist but have no values — fallback to 0/100
-    //   expect(() => {
-    //     clickStartStop();
-    //     act(() => { jest.runAllTimers(); });
-    //   }).not.toThrow();
-    // });
-  });
 
   test('plays kick sample', () => {
     jest.useFakeTimers()
