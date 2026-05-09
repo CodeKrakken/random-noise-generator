@@ -18,42 +18,34 @@ function App() {
   const [running, setRunning] = useState<Boolean>(false)
 
   const addVoice = () => {
-    setVoices((voices) => [voices, setUpVoice()].flat())
+    setVoices(voices => [voices, setUpVoice(active(voices).reverse()[0])].flat())
   }
 
-  useEffect(() => {
-    if (!active(voices).length) {
-      setRunning(false)
-    }
-
-  }, [voices])
-
-  const setUpVoice = () => {
+  const setUpVoice = (templateVoice: voice | null = null) => {
     
-    const lastVoice = active(voices).reverse()[0]
 
     return {
       isActive        : true,
-      label           : lastVoice?.label+1          ||  1,
+      label           : templateVoice?.label!+1          ||  1,
       nextInterval    : 0,
-      bpm             : lastVoice?.bpm              ??  120,
-      minLevel        : lastVoice?.minLevel         ??  100,
-      maxLevel        : lastVoice?.maxLevel         ??  100,
-      activeNotes     : lastVoice?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
-      activeOctaves   : lastVoice?.activeOctaves    ??  ['4'],
-      activeWaveforms : lastVoice?.activeWaveforms  ??  ['sine'],
-      restChance      : lastVoice?.restChance       ??  0,
-      activeIntervals : lastVoice?.activeIntervals  ??  ['0.5'],
-      minLength       : lastVoice?.minLength        ??  100,
-      maxLength       : lastVoice?.maxLength        ??  100,
-      minOffset       : lastVoice?.minOffset        ??  0,  
-      maxOffset       : lastVoice?.maxOffset        ??  0,
-      minDetune       : lastVoice?.minDetune        ??  0,
-      maxDetune       : lastVoice?.maxDetune        ??  0,
-      minFadeIn       : lastVoice?.minFadeIn        ??  100,
-      maxFadeIn       : lastVoice?.maxFadeIn        ??  100,
-      minFadeOut      : lastVoice?.minFadeOut       ??  100,
-      maxFadeOut      : lastVoice?.maxFadeOut       ??  100,
+      bpm             : templateVoice?.bpm              ??  120,
+      minLevel        : templateVoice?.minLevel         ??  100,
+      maxLevel        : templateVoice?.maxLevel         ??  100,
+      activeNotes     : templateVoice?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
+      activeOctaves   : templateVoice?.activeOctaves    ??  ['4'],
+      activeWaveforms : templateVoice?.activeWaveforms  ??  ['sine'],
+      restChance      : templateVoice?.restChance       ??  0,
+      activeIntervals : templateVoice?.activeIntervals  ??  ['0.5'],
+      minLength       : templateVoice?.minLength        ??  100,
+      maxLength       : templateVoice?.maxLength        ??  100,
+      minOffset       : templateVoice?.minOffset        ??  0,  
+      maxOffset       : templateVoice?.maxOffset        ??  0,
+      minDetune       : templateVoice?.minDetune        ??  0,
+      maxDetune       : templateVoice?.maxDetune        ??  0,
+      minFadeIn       : templateVoice?.minFadeIn        ??  100,
+      maxFadeIn       : templateVoice?.maxFadeIn        ??  100,
+      minFadeOut      : templateVoice?.minFadeOut       ??  100,
+      maxFadeOut      : templateVoice?.maxFadeOut       ??  100,
     }
   }
 
