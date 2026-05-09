@@ -14,7 +14,6 @@ const active = (voices: voice[]) => {
 function App() {
 
   const [context] = useState(() => new AudioContext())
-
   const [voices,  setVoices ] = useState<voice[]>([])
   const [cycling, setCycling] = useState<Boolean>(false)
   const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
@@ -70,12 +69,12 @@ function App() {
   const snareSample = setUpSample(snareFile)
   const kickSample  = setUpSample(kickFile)
 
-  const handleStartStop = () => {
-    setCycling(cycling => !cycling)
-    cycling ? start() : stop()
+  const handleStartStop = async () => {
+    cycling ? stop() : start()
   }
 
   const start = () => {
+    setCycling(true)
     setCycleButtonLabel(true)
     
     voices.forEach((voice, i) => {
@@ -100,6 +99,7 @@ function App() {
   }
 
   const stop = async () => {
+    setCycling(false)
     setCycleButtonLabel(false) 
     await active(voices).forEach(voice => {
       voice.gain?.gain.setValueAtTime(0, context.currentTime)
@@ -113,7 +113,7 @@ function App() {
       
     
       const voice = voices[i]
-      if (cycling && document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
+      if (document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
         if (context.currentTime >= voices[i].nextInterval) {
           const intervalLength = getIntervalLength(i)
           voices[i].thisInterval = voices[i].nextInterval
@@ -163,7 +163,6 @@ function App() {
                     setTimeout(() => {voices[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                   }
 
-                  if (cycling) {
                     const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                     const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
                     const startOfFadeOut  = voices[i].nextInterval - fadeOutDuration
@@ -188,7 +187,6 @@ function App() {
                       voices[i].gain?.gain.linearRampToValueAtTime(0, voices[i].nextInterval)
 
                     }
-                  }
                 } catch (error: unknown) {
 
                   console.error(error instanceof Error ? error.message : "Unknown error", error)
