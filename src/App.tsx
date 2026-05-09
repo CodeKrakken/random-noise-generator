@@ -7,13 +7,8 @@ import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
 
-const active = (voices: voice[]) => {
-  return voices.filter(voice => voice.isActive)
-}
-
 const setUpVoice = (template: voice | null = null) => {
   return {
-    isActive        : true,
     label           : template?.label!+1          ||  1,
     nextInterval    : 0,
     bpm             : template?.bpm              ??  120,
@@ -51,7 +46,7 @@ function App() {
   const [running, setRunning] = useState<Boolean>(false)
 
   const addVoice = () => {
-    setVoices(voices => [voices, setUpVoice(active(voices).reverse()[0])].flat())
+    setVoices(voices => [voices, setUpVoice(voices.reverse()[0])].flat())
   }
  
   const snareSample = setUpSample(snareFile, context)
@@ -61,33 +56,34 @@ function App() {
     running ? stop() : start()
   }
 
+  const setUpOscillator = (voice: voice) => {
+    const oscillator  = context.createOscillator()
+    const gain        = context.createGain()
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    gain.gain.setValueAtTime(0, 0)
+    oscillator.start(0);
+
+    voice.oscillator = oscillator
+    voice.gain       = gain
+    voice.nextInterval = context.currentTime
+  }
+
   const start = () => {
     setRunning(true)
     
     voices.forEach((voice, i) => {
-      if (voice.isActive) {
 
-        const oscillator  = context.createOscillator()
-        const gain        = context.createGain()
-    
-        oscillator.connect(gain);
-        gain.connect(context.destination);
-        gain.gain.setValueAtTime(0, 0)
-        oscillator.start(0);
-
-        voice.oscillator = oscillator
-        voice.gain       = gain
-
-        voice.nextInterval = context.currentTime
-
-        newInterval(i)
-      }
+      setUpOscillator(voice)
+      newInterval(i)
+      
     })
   }
 
   const stop = async () => {
     setRunning(false)
-    await active(voices).forEach(voice => {
+    await voices.forEach(voice => {
       voice.gain?.gain.setValueAtTime(0, context.currentTime)
       voice.oscillator?.stop()
     })
@@ -275,14 +271,13 @@ function App() {
       handleStartStop   = {handleStartStop}
       cycleButtonLabel  = {running}
       addVoice           = {addVoice}
-      showStart         = {Boolean(active(voices).length)}
+      showStart         = {Boolean(voices.length)}
     />
 
     <br />
     <br />
     {
       voices.map((voice, i) => 
-        voice.isActive &&
         <div key={i}>
           <Voice 
             i             = {i} 
