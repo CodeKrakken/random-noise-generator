@@ -170,12 +170,14 @@ function App() {
       }
     } catch (error) {}
   }
-
   const getIntervalLength = (i: number) => {
-    const liveIntervals = Array.from(document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`)).filter( 
-      (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
-    )
-    let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)]?.value || '0'
+      console.log(voices[i])
+
+    const liveIntervals = voices[i].activeIntervals
+    // Array.from(document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`)).filter( 
+    //   (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
+    // )
+    let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
     const intervalBpmAdjuster = 4
     const bpm  = document.querySelector<any>(`[data-attribute="bpm"][data-voice="${i}"]`)!.value
     const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
