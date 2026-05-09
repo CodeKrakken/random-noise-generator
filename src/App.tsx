@@ -15,8 +15,7 @@ function App() {
 
   const [context] = useState(() => new AudioContext())
   const [voices,  setVoices ] = useState<voice[]>([])
-  const [cycling, setCycling] = useState<Boolean>(false)
-  const [cycleButtonLabel,  setCycleButtonLabel ] = useState(false)
+  const [running, setRunning] = useState<Boolean>(false)
 
   const addVoice = () => {
     setVoices((voices) => [voices, setUpVoice()].flat())
@@ -24,8 +23,7 @@ function App() {
 
   useEffect(() => {
     if (!active(voices).length) {
-      setCycling(false)
-      setCycleButtonLabel(false)
+      setRunning(false)
     }
 
   }, [voices])
@@ -70,12 +68,11 @@ function App() {
   const kickSample  = setUpSample(kickFile)
 
   const handleStartStop = async () => {
-    cycling ? stop() : start()
+    running ? stop() : start()
   }
 
   const start = () => {
-    setCycling(true)
-    setCycleButtonLabel(true)
+    setRunning(true)
     
     voices.forEach((voice, i) => {
       if (voice.isActive) {
@@ -99,8 +96,7 @@ function App() {
   }
 
   const stop = async () => {
-    setCycling(false)
-    setCycleButtonLabel(false) 
+    setRunning(false)
     await active(voices).forEach(voice => {
       voice.gain?.gain.setValueAtTime(0, context.currentTime)
       voice.oscillator?.stop()
@@ -287,7 +283,7 @@ function App() {
     <br />
     <Header 
       handleStartStop   = {handleStartStop}
-      cycleButtonLabel  = {cycleButtonLabel}
+      cycleButtonLabel  = {running}
       addVoice           = {addVoice}
       showStart         = {Boolean(active(voices).length)}
     />
