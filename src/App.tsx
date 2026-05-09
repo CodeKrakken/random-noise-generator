@@ -77,17 +77,20 @@ function App() {
 
       setUpOscillator(voice)
       newInterval(i)
-      
     })
   }
 
-  const stop = async () => {
+  const stop = () => {
     setRunning(false)
-    await voices.forEach(voice => {
-      voice.gain?.gain.setValueAtTime(0, context.currentTime)
-      voice.oscillator?.stop()
-    })
 
+    voices.forEach(voice => {
+      stopVoice(voice)
+    })
+  }
+
+  const stopVoice = (voice: voice) => {
+    voice.gain?.gain.setValueAtTime(0, context.currentTime)
+    voice.oscillator?.stop()
   }
 
   const newInterval = (i: number) => {
