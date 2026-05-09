@@ -16,7 +16,7 @@ function App() {
   const [running, setRunning] = useState<Boolean>(false)
 
   const addVoice = () => {
-    setVoices(voices => [voices, setUpVoice(voices.reverse()[0])].flat())
+    setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
   }
  
   const snareSample = setUpSample(snareFile, context)
