@@ -241,7 +241,7 @@ function App() {
     <Header 
       handleStartStop   = {handleStartStop}
       cycleButtonLabel  = {running}
-      addVoice           = {addVoice}
+      addVoice          = {addVoice}
       showStart         = {Boolean(voices.length)}
     />
 
