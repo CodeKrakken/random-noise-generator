@@ -40,8 +40,8 @@ function App() {
     voice.nextInterval = context.currentTime
   }
 
-  const start = () => {
-    setRunning(true)
+  const start = async () => {
+    await setRunning(true)
     
     voices.forEach((voice, i) => {
 
@@ -50,8 +50,8 @@ function App() {
     })
   }
 
-  const stop = () => {
-    setRunning(false)
+  const stop = async () => {
+    await setRunning(false)
 
     voices.forEach(voice => {
       stopVoice(voice)
@@ -66,6 +66,7 @@ function App() {
   const newInterval = (i: number) => {
     try {   
       const voice = voices[i]
+      console.log(running)
       if (voices[i].activeIntervals) {
       // if (document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
         if (context.currentTime >= voices[i].nextInterval) {
@@ -83,10 +84,10 @@ function App() {
 
           } else {          
 
-            const minLevel  = Number(document.querySelector<any>(`[data-attribute="minLevel"][data-voice="${i}"]`)!.value)
-            const maxLevel  = Number(document.querySelector<any>(`[data-attribute="maxLevel"][data-voice="${i}"]`)!.value)
-            const minLength = Number(document.querySelector<any>(`[data-attribute="minLength"][data-voice="${i}"]`)!.value)
-            const maxLength = Number(document.querySelector<any>(`[data-attribute="maxLength"][data-voice="${i}"]`)!.value)
+            const minLevel  = voices[i].minLevel // Number(document.querySelector<any>(`[data-attribute="minLevel"][data-voice="${i}"]`)!.value)
+            const maxLevel  = voices[i].maxLevel // Number(document.querySelector<any>(`[data-attribute="maxLevel"][data-voice="${i}"]`)!.value)
+            const minLength = voices[i].minLength // Number(document.querySelector<any>(`[data-attribute="minLength"][data-voice="${i}"]`)!.value)
+            const maxLength = voices[i].maxLength // Number(document.querySelector<any>(`[data-attribute="maxLength"][data-voice="${i}"]`)!.value)
             const offset = getRangeValue('Offset', i)
             let noteLength = intervalLength
             setTimeout(async () => {
@@ -163,7 +164,8 @@ function App() {
               }            
             }, offset * 10 * intervalLength)
           }
-          if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
+          // if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
+          if (voices.length) {
             setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
           }          
 
@@ -183,23 +185,22 @@ function App() {
     // )
     let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
     const intervalBpmAdjuster = 4
-    const bpm  = document.querySelector<any>(`[data-attribute="bpm"][data-voice="${i}"]`)!.value
+    const bpm = voices[i].bpm
+    // const bpm  = document.querySelector<any>(`[data-attribute="bpm"][data-voice="${i}"]`)!.value
     const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
     return intervalLength/1000
   }
        
   const isRest = (i: number) => {
-    const restChance  = Number(document.querySelector<any>(`[data-attribute="restChance"][data-voice="${i}"]`)!.value/100)
+    const restChance  = voices[i].restChance
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
 
   const getRangeValue = (key: string, i:number) => {
-    const minEl = document.querySelector(`[data-attribute="min${key}"][data-voice="${i}"]`) 
-    const maxEl = document.querySelector(`[data-attribute="max${key}"][data-voice="${i}"]`) 
-    const minValue = minEl instanceof HTMLInputElement ? +minEl.value : 0
-    const maxValue = maxEl instanceof HTMLInputElement ? +maxEl.value : 100
-    return minValue + (Math.random() * (maxValue - minValue))
+    const minEl = voices[i][`min${key}` as keyof voice] || 0
+    const maxEl = voices[i][`max${key}` as keyof voice] || 100
+    return minEl as number + (Math.random() * (maxEl as number - minEl as number))
   }
 
   const detune = (frequency: number, i: number) => {
