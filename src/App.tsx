@@ -66,7 +66,8 @@ function App() {
   const newInterval = (i: number) => {
     try {   
       const voice = voices[i]
-      if (document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
+      if (voices[i].activeIntervals) {
+      // if (document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
         if (context.currentTime >= voices[i].nextInterval) {
           const intervalLength = getIntervalLength(i)
           voices[i].thisInterval = voices[i].nextInterval
