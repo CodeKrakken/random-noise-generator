@@ -72,9 +72,12 @@ function App() {
           const intervalLength = getIntervalLength(i)
           voices[i].thisInterval = voices[i].nextInterval
           voices[i].nextInterval += intervalLength
-          const liveWaves = Array.from(document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="${i}"]`)).filter(
-            (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
-          )
+          
+          const liveWaves = voices[i].activeWaveforms
+
+          // const liveWaves = Array.from(document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="${i}"]`)).filter(
+          //   (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
+          // )
           if (isRest(i) || !liveWaves) {
             voices[i].gain?.gain.setValueAtTime(0,0)
 
@@ -89,7 +92,7 @@ function App() {
             setTimeout(async () => {
               if (!liveWaves.length) return
               const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
-              const waveShape = randomWave.value
+              const waveShape = randomWave
               if (voice.oscillator) voice.oscillator.type = waveShape as OscillatorType
 
               if (
