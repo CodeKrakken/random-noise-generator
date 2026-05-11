@@ -67,17 +67,25 @@ function App() {
     voice.oscillator?.stop()
   }
 
+  const isRunning = () => {
+    return runningRef.current
+  }
+
   const newInterval = (i: number) => {
+
     try {   
+    
       const voice = voices[i]
-      if (runningRef.current) {
+    
+      if (isRunning()) {
+    
         if (context.currentTime >= voice.nextInterval) {
           const intervalLength = getIntervalLength(i)
           voice.thisInterval = voice.nextInterval
           voice.nextInterval += intervalLength
           
-          const liveWaves = voice.activeWaveforms
-          if (isRest(i) || !liveWaves) {
+          const activeWaveforms = voice.activeWaveforms
+          if (isRest(i) || !activeWaveforms) {
             voice.gain?.gain.setValueAtTime(0,0)
 
           } else {          
@@ -89,8 +97,8 @@ function App() {
             const offset = getRangeValue('Offset', voice)
             let noteLength = intervalLength
             setTimeout(() => {
-              if (!liveWaves.length) return
-              const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
+              if (!activeWaveforms.length) return
+              const randomWave = activeWaveforms[Math.floor(Math.random() * activeWaveforms.length)]
               const waveShape = randomWave
               if (voice.oscillator) voice.oscillator.type = waveShape as OscillatorType
 
