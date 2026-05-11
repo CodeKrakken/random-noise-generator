@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { allFrequencies } from './content/data'
+import { allFrequencies, waveforms } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Voice from './components/voice/Voice';
@@ -71,104 +71,115 @@ function App() {
     return runningRef.current
   }
 
+  const isTimeForScheduled = (timeCode: number) => {
+    return context.currentTime >= timeCode
+  }
+
+  const playNote = (voice: voice, intervalLength: number) => {
+
+    const minLevel  = voice.minLevel
+    const maxLevel  = voice.maxLevel
+    const minLength = voice.minLength
+    const maxLength = voice.maxLength
+    const offset    = getRangeValue('Offset', voice)
+
+    let noteLength = intervalLength
+
+    setTimeout(() => {
+
+      const activeWaveforms = voice.activeWaveforms
+      // if (!activeWaveforms.length) return
+      
+      const randomWaveform = activeWaveforms[Math.floor(Math.random() * activeWaveforms.length)]
+
+      if (voice.oscillator) voice.oscillator.type = randomWaveform as OscillatorType
+
+      if (waveforms.includes(randomWaveform)) {
+        try {
+          const randomFrequency = getRandomFrequency(voice)
+          const frequency   = detune(randomFrequency as number, voice)
+          if (voice.oscillator) voice.oscillator.frequency.value = frequency
+
+          const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+          noteLength = intervalLength / 100 * noteLengthPercentage
+          const fadeInPercentage  = getRangeValue('FadeIn' , voice)
+          const fadeOutPercentage = getRangeValue('FadeOut', voice)
+          const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
+          const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
+          if (noteLength < intervalLength) {
+            setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+          }
+
+            const fadeInDuration  = noteLength  / 100 * fadeInPercentage
+            const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
+            const startOfFadeOut  = voice.nextInterval - fadeOutDuration
+            const endOfFadeIn     = voice.thisInterval ? voice.thisInterval + fadeInDuration : fadeInDuration
+
+            const peakPoint       = voice.thisInterval ? 
+                                    voice.thisInterval + noteLength * peakPercentage / 100 : 
+                                    noteLength * peakPercentage / 100
+
+            if (endOfFadeIn <= startOfFadeOut) {
+
+              voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
+              voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+              voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
+              voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
+
+            } else {
+
+              voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
+              voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
+              voice.gain?.gain.setValueAtTime(level, peakPoint)
+              voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
+
+            }
+        } catch (error: unknown) {
+
+          console.error(error instanceof Error ? error.message : "Unknown error", error)
+          
+        }
+      } else {
+        try {
+
+          if (voice.oscillator) voice.oscillator.frequency.value = 0
+          if (randomWaveform === 'kick'  ) {kickSample.play()}
+          if (randomWaveform === 'snare' ) {snareSample.play()}
+
+        } catch (error: unknown) {
+
+          console.error(error instanceof Error ? error.message : "Unknown error", error)
+        }
+      }            
+    }, offset * 10 * intervalLength)
+  }
+
   const newInterval = (i: number) => {
 
     try {   
-    
-      const voice = voices[i]
-    
+        
       if (isRunning()) {
+
+        const voice = voices[i]
+        const interval = voice.nextInterval
     
-        if (context.currentTime >= voice.nextInterval) {
+        if (isTimeForScheduled(interval)) {
+
           const intervalLength = getIntervalLength(i)
+
           voice.thisInterval = voice.nextInterval
           voice.nextInterval += intervalLength
           
           const activeWaveforms = voice.activeWaveforms
+          
           if (isRest(i) || !activeWaveforms) {
             voice.gain?.gain.setValueAtTime(0,0)
 
           } else {          
 
-            const minLevel  = voice.minLevel
-            const maxLevel  = voice.maxLevel
-            const minLength = voice.minLength
-            const maxLength = voice.maxLength
-            const offset = getRangeValue('Offset', voice)
-            let noteLength = intervalLength
-            setTimeout(() => {
-              if (!activeWaveforms.length) return
-              const randomWave = activeWaveforms[Math.floor(Math.random() * activeWaveforms.length)]
-              const waveShape = randomWave
-              if (voice.oscillator) voice.oscillator.type = waveShape as OscillatorType
-
-              if (
-                [
-                  'sine',
-                  'triangle',
-                  'sawtooth',
-                  'square',
-                ]
-                .includes(waveShape)
-              ) {
-                try {
-                  const randomFrequency = getRandomFrequency(i)
-                  const frequency   = detune(randomFrequency as number, i)
-                  if (voice.oscillator) voice.oscillator.frequency.value = frequency
-
-                  const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-                  noteLength = intervalLength / 100 * noteLengthPercentage
-                  const fadeInPercentage  = getRangeValue('FadeIn' , voice)
-                  const fadeOutPercentage = getRangeValue('FadeOut', voice)
-                  const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
-                  const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
-                  if (noteLength < intervalLength) {
-                    setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
-                  }
-
-                    const fadeInDuration  = noteLength  / 100 * fadeInPercentage
-                    const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-                    const startOfFadeOut  = voice.nextInterval - fadeOutDuration
-                    const endOfFadeIn     = voice.thisInterval ? voice.thisInterval + fadeInDuration : fadeInDuration
-
-                    const peakPoint       = voice.thisInterval ? 
-                                            voice.thisInterval + noteLength * peakPercentage / 100 : 
-                                            noteLength * peakPercentage / 100
-
-                    if (endOfFadeIn <= startOfFadeOut) {
-
-                      voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
-                      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
-                      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
-                      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
-
-                    } else {
-
-                      voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
-                      voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
-                      voice.gain?.gain.setValueAtTime(level, peakPoint)
-                      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
-
-                    }
-                } catch (error: unknown) {
-
-                  console.error(error instanceof Error ? error.message : "Unknown error", error)
-                  
-                }
-              } else {
-                try {
-
-                  if (voice.oscillator) voice.oscillator.frequency.value = 0
-                  if (waveShape === 'kick'  ) {kickSample.play()}
-                  if (waveShape === 'snare' ) {snareSample.play()}
-
-                } catch (error: unknown) {
-
-                  console.error(error instanceof Error ? error.message : "Unknown error", error)
-                }
-              }            
-            }, offset * 10 * intervalLength)
+            playNote(voice, intervalLength)
           }
+
           if (voices.length) {
             setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)
           }          
@@ -202,26 +213,27 @@ function App() {
     return minEl as number + (Math.random() * (maxEl as number - (minEl as number)))
   }
 
-  const detune = (frequency: number, i: number) => {
-    const detune = getRangeValue('Detune', voices[i])
+  const detune = (frequency: number, voice: voice) => {
+    const detune = getRangeValue('Detune', voice)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
     return frequency + hzDiff / 100 * detune
   }
 
-  const getRandomFrequency = (i: number) => {
-    let activeFrequencies = getActiveFrequencies(i) 
-
+  const getRandomFrequency = (voice: voice) => {
+    
+    const activeFrequencies = getActiveFrequencies(voice) 
     const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
-
-    return activeFrequencies[randomIndex]
+    const randomFrequency = activeFrequencies[randomIndex]
+    
+    return randomFrequency
   }
 
-  const getActiveFrequencies = (i: number) => {
+  const getActiveFrequencies = (voice: voice) => {
     
-    const activeOctaves = voices[i].activeOctaves
-    const activeNotes   = voices[i].activeNotes
+    const activeOctaves = voice.activeOctaves
+    const activeNotes   = voice.activeNotes
 
     let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j.toString()))
     

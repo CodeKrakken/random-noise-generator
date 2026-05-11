@@ -17,8 +17,6 @@ export const waveforms = [
   'triangle',
   'sawtooth',
   'square',
-  'kick',
-  'snare'
 ]
 
 export const ranges = [
