@@ -48,7 +48,6 @@ function App() {
 
   const start = async () => {
     await setRunning(true)
-    console.log(runningRef.current)
     voices.forEach((voice, i) => {
 
       setUpOscillator(voice)
@@ -58,7 +57,6 @@ function App() {
 
   const stop = () => {
     setRunning(false)
-    console.log(runningRef.current)
     voices.forEach(voice => {
       stopVoice(voice)
     })
@@ -72,31 +70,23 @@ function App() {
   const newInterval = (i: number) => {
     try {   
       const voice = voices[i]
-      console.log(runningRef.current)
       if (runningRef.current) {
         if (context.currentTime >= voices[i].nextInterval) {
           const intervalLength = getIntervalLength(i)
-          console.log('Interval length: ', intervalLength)
           voices[i].thisInterval = voices[i].nextInterval
           voices[i].nextInterval += intervalLength
           
           const liveWaves = voices[i].activeWaveforms
-          console.log('Live waves: ', liveWaves)
           if (isRest(i) || !liveWaves) {
             voices[i].gain?.gain.setValueAtTime(0,0)
 
           } else {          
 
             const minLevel  = voices[i].minLevel
-            console.log('Min level: ', minLevel)
             const maxLevel  = voices[i].maxLevel
-            console.log('Max level: ', maxLevel)
             const minLength = voices[i].minLength
-            console.log('Min length: ', minLength)
             const maxLength = voices[i].maxLength
-            console.log('Max length: ', maxLength)
             const offset = getRangeValue('Offset', voices[i])
-            console.log('Offset: ', offset)
             let noteLength = intervalLength
             setTimeout(() => {
               if (!liveWaves.length) return
@@ -121,9 +111,7 @@ function App() {
                   const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                   noteLength = intervalLength / 100 * noteLengthPercentage
                   const fadeInPercentage  = getRangeValue('FadeIn' , voices[i])
-                  console.log('Fade in percentage: ', fadeInPercentage)
                   const fadeOutPercentage = getRangeValue('FadeOut', voices[i])
-                  console.log('Fade out percentage: ', fadeOutPercentage)
                   const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
                   const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
                   if (noteLength < intervalLength) {
@@ -187,30 +175,27 @@ function App() {
 
   const getIntervalLength = (i: number) => {
     const liveIntervals = voices[i].activeIntervals
-    console.log('Live intervals: ', liveIntervals)
     const interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
     const bpm = voices[i].bpm
-    console.log('BPM: ', bpm)
     const intervalLength  = 60000/bpm * parseFloat(interval)
     return intervalLength/1000
   }
        
   const isRest = (i: number) => {
     const restChance  = voices[i].restChance
-    console.log('Rest chance: ', restChance)
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
 
   const getRangeValue = (key: string, voice: voice) => {
-    const minEl = voice[`min${key}` as keyof voice] || 0
-    const maxEl = voice[`max${key}` as keyof voice] || 100
+    const minEl = voice[`min${key}` as keyof voice] ?? 0
+    const maxEl = voice[`max${key}` as keyof voice] ?? 100
+
     return minEl as number + (Math.random() * (maxEl as number - (minEl as number)))
   }
 
   const detune = (frequency: number, i: number) => {
     const detune = getRangeValue('Detune', voices[i])
-    console.log('Detune: ', detune)
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
