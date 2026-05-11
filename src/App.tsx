@@ -68,25 +68,31 @@ function App() {
   }
 
   const newInterval = (i: number) => {
+
     try {   
+
       const voice = voices[i]
+
       if (runningRef.current) {
-        if (context.currentTime >= voices[i].nextInterval) {
+
+        if (context.currentTime >= voice.nextInterval) {
+
           const intervalLength = getIntervalLength(i)
-          voices[i].thisInterval = voices[i].nextInterval
-          voices[i].nextInterval += intervalLength
+
+          voice.thisInterval = voice.nextInterval
+          voice.nextInterval += intervalLength
           
-          const liveWaves = voices[i].activeWaveforms
+          const liveWaves = voice.activeWaveforms
           if (isRest(i) || !liveWaves) {
-            voices[i].gain?.gain.setValueAtTime(0,0)
+            voice.gain?.gain.setValueAtTime(0,0)
 
           } else {          
 
-            const minLevel  = voices[i].minLevel
-            const maxLevel  = voices[i].maxLevel
-            const minLength = voices[i].minLength
-            const maxLength = voices[i].maxLength
-            const offset = getRangeValue('Offset', voices[i])
+            const minLevel  = voice.minLevel
+            const maxLevel  = voice.maxLevel
+            const minLength = voice.minLength
+            const maxLength = voice.maxLength
+            const offset = getRangeValue('Offset', voice)
             let noteLength = intervalLength
             setTimeout(() => {
               if (!liveWaves.length) return
@@ -110,17 +116,17 @@ function App() {
 
                   const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                   noteLength = intervalLength / 100 * noteLengthPercentage
-                  const fadeInPercentage  = getRangeValue('FadeIn' , voices[i])
-                  const fadeOutPercentage = getRangeValue('FadeOut', voices[i])
+                  const fadeInPercentage  = getRangeValue('FadeIn' , voice)
+                  const fadeOutPercentage = getRangeValue('FadeOut', voice)
                   const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
                   const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
                   if (noteLength < intervalLength) {
-                    setTimeout(() => {voices[i].gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+                    setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
                   }
 
                     const fadeInDuration  = noteLength  / 100 * fadeInPercentage
                     const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-                    const startOfFadeOut  = voices[i].nextInterval - fadeOutDuration
+                    const startOfFadeOut  = voice.nextInterval - fadeOutDuration
                     const endOfFadeIn     = voice.thisInterval ? voice.thisInterval + fadeInDuration : fadeInDuration
 
                     const peakPoint       = voice.thisInterval ? 
@@ -130,16 +136,16 @@ function App() {
                     if (endOfFadeIn <= startOfFadeOut) {
 
                       voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
-                      voices[i].gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
-                      voices[i].gain?.gain.setValueAtTime(level, startOfFadeOut)
-                      voices[i].gain?.gain.linearRampToValueAtTime(0, voices[i].nextInterval)
+                      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+                      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
+                      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
 
                     } else {
 
                       voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
-                      voices[i].gain?.gain.linearRampToValueAtTime(level, peakPoint)
-                      voices[i].gain?.gain.setValueAtTime(level, peakPoint)
-                      voices[i].gain?.gain.linearRampToValueAtTime(0, voices[i].nextInterval)
+                      voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
+                      voice.gain?.gain.setValueAtTime(level, peakPoint)
+                      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
 
                     }
                 } catch (error: unknown) {
@@ -162,12 +168,12 @@ function App() {
             }, offset * 10 * intervalLength)
           }
           if (voices.length) {
-            setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
+            setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)
           }          
 
         } else {
 
-          setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
+          setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)
         }
       }
     } catch (error) {}
