@@ -68,17 +68,11 @@ function App() {
   }
 
   const newInterval = (i: number) => {
-
     try {   
-
       const voice = voices[i]
-
       if (runningRef.current) {
-
         if (context.currentTime >= voice.nextInterval) {
-
           const intervalLength = getIntervalLength(i)
-
           voice.thisInterval = voice.nextInterval
           voice.nextInterval += intervalLength
           
