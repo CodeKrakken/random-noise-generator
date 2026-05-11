@@ -28,7 +28,7 @@ function App() {
   const snareSample = setUpSample(snareFile, context)
   const kickSample  = setUpSample(kickFile, context)
 
-  const handleStartStop = async () => {
+  const handleStartStop = () => {
     runningRef.current ? stop() : start()
   }
 
@@ -56,8 +56,8 @@ function App() {
     })
   }
 
-  const stop = async () => {
-    await setRunning(false)
+  const stop = () => {
+    setRunning(false)
     console.log(runningRef.current)
     voices.forEach(voice => {
       stopVoice(voice)
@@ -92,7 +92,7 @@ function App() {
             const maxLength = voices[i].maxLength
             const offset = getRangeValue('Offset', voices[i])
             let noteLength = intervalLength
-            setTimeout(async () => {
+            setTimeout(() => {
               if (!liveWaves.length) return
               const randomWave = liveWaves[Math.floor(Math.random() * liveWaves.length)]
               const waveShape = randomWave
