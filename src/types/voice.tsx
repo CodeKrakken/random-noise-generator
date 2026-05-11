@@ -3,8 +3,8 @@ import { ranges } from '../content/data'
 
 export type voice = {
   label           : number
-  thisSlot?   : number
-  nextSlot    : number
+  thisInterval?   : number
+  nextInterval    : number
   bpm             : number
   minLevel        : number
   maxLevel        : number
@@ -12,7 +12,7 @@ export type voice = {
   activeOctaves   : string[]
   activeWaveforms : string[]
   restChance      : number
-  activeSlots : string[]
+  activeIntervals : string[]
   minLength       : number
   maxLength       : number
   minOffset       : number
@@ -55,11 +55,11 @@ export type AtomicField =
 export type Compound = 
   'activeNotes'
 | 'activeOctaves'
-| 'activeSlots'
+| 'activeIntervals'
 | 'activeWaveforms'
 
 export type CheckboxGroup = 
   'Octaves' 
 | 'Notes' 
 | 'Waveforms' 
-| 'Slots'
+| 'Intervals'

@@ -44,7 +44,7 @@ export const allWaveforms = [
   'snare'
 ]
 
-export const allSlots = ['1','0.5','0.25','0.125','0.0625']
+export const allIntervals = ['1','0.5','0.25','0.125','0.0625']
 
 export const checkboxGroups = {
   Notes: ['1','2','3','4','5','6','7','8','9','10','11','12','13'],
@@ -57,7 +57,7 @@ export const checkboxGroups = {
     'kick',
     'snare'
   ],
-  Slots: ['1','0.5','0.25','0.125','0.0625']
+  Intervals: ['1','0.5','0.25','0.125','0.0625']
 }
 
 export const fields = {
