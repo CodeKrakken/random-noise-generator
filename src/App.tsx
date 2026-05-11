@@ -68,7 +68,6 @@ function App() {
       const voice = voices[i]
       console.log(running)
       if (voices[i].activeIntervals) {
-      // if (document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`))  {
         if (context.currentTime >= voices[i].nextInterval) {
           const intervalLength = getIntervalLength(i)
           voices[i].thisInterval = voices[i].nextInterval
@@ -76,19 +75,16 @@ function App() {
           
           const liveWaves = voices[i].activeWaveforms
 
-          // const liveWaves = Array.from(document.querySelectorAll(`[data-attribute="Waveforms"][data-voice="${i}"]`)).filter(
-          //   (wave): wave is HTMLInputElement => wave instanceof HTMLInputElement && wave.checked
-          // )
           if (isRest(i) || !liveWaves) {
             voices[i].gain?.gain.setValueAtTime(0,0)
 
           } else {          
 
-            const minLevel  = voices[i].minLevel // Number(document.querySelector<any>(`[data-attribute="minLevel"][data-voice="${i}"]`)!.value)
-            const maxLevel  = voices[i].maxLevel // Number(document.querySelector<any>(`[data-attribute="maxLevel"][data-voice="${i}"]`)!.value)
-            const minLength = voices[i].minLength // Number(document.querySelector<any>(`[data-attribute="minLength"][data-voice="${i}"]`)!.value)
-            const maxLength = voices[i].maxLength // Number(document.querySelector<any>(`[data-attribute="maxLength"][data-voice="${i}"]`)!.value)
-            const offset = getRangeValue('Offset', i)
+            const minLevel  = voices[i].minLevel
+            const maxLevel  = voices[i].maxLevel
+            const minLength = voices[i].minLength
+            const maxLength = voices[i].maxLength
+            const offset = getRangeValue('Offset', voices[i])
             let noteLength = intervalLength
             setTimeout(async () => {
               if (!liveWaves.length) return
@@ -112,8 +108,8 @@ function App() {
 
                   const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
                   noteLength = intervalLength / 100 * noteLengthPercentage
-                  const fadeInPercentage  = getRangeValue('FadeIn' , i)
-                  const fadeOutPercentage = getRangeValue('FadeOut', i)
+                  const fadeInPercentage  = getRangeValue('FadeIn' , voices[i])
+                  const fadeOutPercentage = getRangeValue('FadeOut', voices[i])
 
                   const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
                   const level       = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
@@ -164,7 +160,6 @@ function App() {
               }            
             }, offset * 10 * intervalLength)
           }
-          // if (document.querySelector(`[data-attribute="Voices"][data-voice="${i}"]`)) {
           if (voices.length) {
             setTimeout(() => {newInterval(i)}, (voices[i].nextInterval - context.currentTime)*1000)
           }          
@@ -176,18 +171,12 @@ function App() {
       }
     } catch (error) {}
   }
-  const getIntervalLength = (i: number) => {
-      console.log(voices[i])
 
+  const getIntervalLength = (i: number) => {
     const liveIntervals = voices[i].activeIntervals
-    // Array.from(document.querySelectorAll(`[data-attribute="Intervals"][data-voice="${i}"]`)).filter( 
-    //   (interval): interval is HTMLInputElement => interval instanceof HTMLInputElement && interval.checked
-    // )
-    let interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
-    const intervalBpmAdjuster = 4
+    const interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
     const bpm = voices[i].bpm
-    // const bpm  = document.querySelector<any>(`[data-attribute="bpm"][data-voice="${i}"]`)!.value
-    const intervalLength  = 60000/bpm * parseFloat(interval) * intervalBpmAdjuster
+    const intervalLength  = 60000/bpm * parseFloat(interval)
     return intervalLength/1000
   }
        
@@ -197,14 +186,14 @@ function App() {
     return diceRoll < restChance
   }
 
-  const getRangeValue = (key: string, i:number) => {
-    const minEl = voices[i][`min${key}` as keyof voice] || 0
-    const maxEl = voices[i][`max${key}` as keyof voice] || 100
-    return minEl as number + (Math.random() * (maxEl as number - minEl as number))
+  const getRangeValue = (key: string, voice: voice) => {
+    const minEl = voice[`min${key}` as keyof voice] || 0
+    const maxEl = voice[`max${key}` as keyof voice] || 100
+    return minEl as number + (Math.random() * (maxEl as number - (minEl as number)))
   }
 
   const detune = (frequency: number, i: number) => {
-    const detune = getRangeValue('Detune', i)
+    const detune = getRangeValue('Detune', voices[i])
     const ratio = 105.94637142137626184333
     const semitoneUp = frequency / 100 * ratio
     const hzDiff = semitoneUp - frequency
@@ -221,16 +210,13 @@ function App() {
 
   const getActiveFrequencies = (i: number) => {
     
-    const activeOctaves  = Array.from(document.querySelectorAll(`[data-attribute="Octaves"][data-voice="${i}"]`)).filter( 
-      (octave): octave is HTMLInputElement => octave instanceof HTMLInputElement && octave.checked    
-    ).map(octave => { return +octave.value})
-    const activeNotes   = Array.from(document.querySelectorAll(`[data-attribute="Notes"][data-voice="${i}"]`)).filter( 
-      (note): note is HTMLInputElement => note instanceof HTMLInputElement && note.checked
-    ).map(note => { return +note.value})
-    let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j))
+    const activeOctaves = voices[i].activeOctaves
+    const activeNotes   = voices[i].activeNotes
+
+    let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j.toString()))
     
     let filteredFrequencies = currentFrequencies.map(octave =>
-      octave.filter((note, j) => activeNotes.includes(j+1))
+      octave.filter((note, j) => activeNotes.includes((j+1).toString()))
     )
 
     return filteredFrequencies.flat(Infinity)
