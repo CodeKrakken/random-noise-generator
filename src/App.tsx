@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { allFrequencies } from './content/data'
 import snareFile  from './sounds/snare.wav';
@@ -13,7 +13,13 @@ function App() {
 
   const [context] = useState(() => new AudioContext())
   const [voices,  setVoices ] = useState<voice[]>([])
-  const [running, setRunning] = useState<Boolean>(false)
+  const [running, setRunning] = useState<boolean>(false)
+
+  const runningRef = useRef(false)
+
+  useEffect(() => {
+    runningRef.current = running
+  }, [running])
 
   const addVoice = () => {
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
@@ -23,7 +29,7 @@ function App() {
   const kickSample  = setUpSample(kickFile, context)
 
   const handleStartStop = async () => {
-    running ? stop() : start()
+    runningRef.current ? stop() : start()
   }
 
   const setUpOscillator = (voice: voice) => {
@@ -42,7 +48,7 @@ function App() {
 
   const start = async () => {
     await setRunning(true)
-    
+    console.log(runningRef.current)
     voices.forEach((voice, i) => {
 
       setUpOscillator(voice)
@@ -52,7 +58,7 @@ function App() {
 
   const stop = async () => {
     await setRunning(false)
-
+    console.log(runningRef.current)
     voices.forEach(voice => {
       stopVoice(voice)
     })
@@ -66,8 +72,8 @@ function App() {
   const newInterval = (i: number) => {
     try {   
       const voice = voices[i]
-      console.log(running)
-      if (voices[i].activeIntervals) {
+      console.log(runningRef.current)
+      if (runningRef.current) {
         if (context.currentTime >= voices[i].nextInterval) {
           const intervalLength = getIntervalLength(i)
           voices[i].thisInterval = voices[i].nextInterval
