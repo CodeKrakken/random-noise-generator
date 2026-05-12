@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { allFrequencies, waveforms } from './content/data'
+import { allFrequencies, noteRatio, waveforms } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Voice from './components/voice/Voice';
@@ -207,8 +207,7 @@ function App() {
 
   const detune = (frequency: number, voice: voice) => {
     const detune = getRangeValue('Detune', voice)
-    const ratio = 105.94637142137626184333
-    const semitoneUp = frequency / 100 * ratio
+    const semitoneUp = frequency / 100 * noteRatio
     const hzDiff = semitoneUp - frequency
     return frequency + hzDiff / 100 * detune
   }
