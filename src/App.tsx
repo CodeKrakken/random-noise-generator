@@ -103,23 +103,23 @@ function App() {
 
   const playNote = (voice: voice, intervalLength: number) => {
 
-    const { 
-      minLevel,
-      maxLevel,
-      minLength,
-      maxLength,
-      activeWaveforms
-    } = voice
-
     const offsetTime    = getOffsetTime(voice, intervalLength)
 
     setTimeout(() => {
+
+      const { 
+        minLevel,
+        maxLevel,
+        minLength,
+        maxLength,
+        activeSounds
+      } = voice
       
-      const randomWaveform = randomOneOf(activeWaveforms)
+      const randomSound = randomOneOf(activeSounds)
 
-      voice.oscillator!.type = randomOneOf(activeWaveforms) as OscillatorType
+      voice.oscillator!.type = randomSound
 
-      if (waveforms.includes(randomWaveform)) {
+      if (waveforms.includes(randomSound)) {
         try {
           const randomFrequency = getRandomFrequency(voice)
           const frequency   = detune(randomFrequency as number, voice)
@@ -168,8 +168,8 @@ function App() {
         try {
 
           if (voice.oscillator) voice.oscillator.frequency.value = 0
-          if (randomWaveform === 'kick'  ) {kickSample.play()}
-          if (randomWaveform === 'snare' ) {snareSample.play()}
+          if (randomSound === 'kick'  ) {kickSample.play()}
+          if (randomSound === 'snare' ) {snareSample.play()}
 
         } catch (error: unknown) {
 

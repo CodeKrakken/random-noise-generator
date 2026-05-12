@@ -10,7 +10,7 @@ export type voice = {
   maxLevel        : number
   activeNotes     : string[]
   activeOctaves   : string[]
-  activeWaveforms : string[]
+  activeSounds    : string[]
   restChance      : number
   activeIntervals : string[]
   minLength       : number
@@ -56,10 +56,10 @@ export type Compound =
   'activeNotes'
 | 'activeOctaves'
 | 'activeIntervals'
-| 'activeWaveforms'
+| 'activeSounds'
 
 export type CheckboxGroup = 
   'Octaves' 
 | 'Notes' 
-| 'Waveforms' 
+| 'Sounds' 
 | 'Intervals'

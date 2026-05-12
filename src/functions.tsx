@@ -9,7 +9,7 @@ export const setUpVoice = (template: voice | null = null) => {
     maxLevel        : template?.maxLevel         ??  100,
     activeNotes     : template?.activeNotes      ??  ['1','3','5','6','8','10','12','13'],
     activeOctaves   : template?.activeOctaves    ??  ['4'],
-    activeWaveforms : template?.activeWaveforms  ??  ['sine'],
+    activeSounds    : template?.activeSounds     ??  ['sine'],
     restChance      : template?.restChance       ??  0,
     activeIntervals : template?.activeIntervals  ??  ['0.5'],
     minLength       : template?.minLength        ??  100,
