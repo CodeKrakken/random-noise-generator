@@ -138,6 +138,10 @@ function App() {
       scheduleNoteEnd(voice, noteLength)
     }
 
+    manageLevel(voice, noteLength)
+  }
+
+  const manageLevel = (voice: voice, noteLength: number) => {
     const level = generateLevel(voice)
 
     const fadeInPercentage  = getRangeValue('FadeIn' , voice)
