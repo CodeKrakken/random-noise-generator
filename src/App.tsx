@@ -24,9 +24,11 @@ function App() {
   const addVoice = () => {
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
   }
- 
-  const snareSample = setUpSample(snareFile, context)
-  const kickSample  = setUpSample(kickFile, context)
+
+  const samples = {
+    snare: setUpSample(snareFile, context),
+    kick: setUpSample(kickFile, context)
+  }
 
   const handleStartStop = () => {
     runningRef.current ? stopAll(voices) : start()
@@ -117,9 +119,7 @@ function App() {
           oscillate(voice, duration)
           
         } else {
-          if (voice.oscillator) voice.oscillator.frequency.value = 0
-          if (randomSound === 'kick'  ) {kickSample.play()}
-          if (randomSound === 'snare' ) {snareSample.play()}
+          playSample(voice, randomSound)
         }
 
       } catch (error) {
@@ -141,7 +141,14 @@ function App() {
     manageLevel(voice, noteLength)
   }
 
+  const playSample = (voice: voice, sound: string) => {
+    voice.oscillator!.frequency.value = 0
+
+    samples[sound as keyof typeof samples].play()
+  }
+
   const manageLevel = (voice: voice, noteLength: number) => {
+    
     const level = generateLevel(voice)
 
     const fadeInPercentage  = getRangeValue('FadeIn' , voice)
@@ -157,19 +164,17 @@ function App() {
                             voice.thisInterval + noteLength * peakPercentage / 100 : 
                             noteLength * peakPercentage / 100
 
-    if (endOfFadeIn <= startOfFadeOut) {
-
-      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
-      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
-      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
-
-    } else {
-
+    if (endOfFadeIn >= startOfFadeOut) {
       voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
       voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
       voice.gain?.gain.setValueAtTime(level, peakPoint)
       voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
+      
+    } else {
 
+      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
+      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
     }
   }
 
