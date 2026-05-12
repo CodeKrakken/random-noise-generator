@@ -138,14 +138,16 @@ function App() {
 
     generateFrequency(voice)
 
+
     const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
     let noteLength = duration / 100 * noteLengthPercentage
+
     const fadeInPercentage  = getRangeValue('FadeIn' , voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
     const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
     
     if (noteLength < duration) {
-      setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+      scheduleNoteEnd(voice, noteLength)
     }
 
     const fadeInDuration  = noteLength  / 100 * fadeInPercentage
@@ -174,6 +176,11 @@ function App() {
 
     }
   }
+
+  const scheduleNoteEnd = (voice: voice, noteLength: number) => {
+    setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+  }
+
 
   const generateFrequency = (voice: voice) => {
     const randomFrequency = getRandomFrequency(voice)
