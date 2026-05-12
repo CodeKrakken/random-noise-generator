@@ -48,10 +48,10 @@ function App() {
 
   const start = async () => {
     await setRunning(true)
-    voices.forEach((voice, i) => {
+    voices.forEach((voice) => {
 
       setUpOscillator(voice)
-      newInterval(i)
+      runInterval(voice)
     })
   }
 
@@ -65,6 +65,31 @@ function App() {
   const stopVoice = (voice: voice) => {
     voice.gain?.gain.setValueAtTime(0, context.currentTime)
     voice.oscillator?.stop()
+  }
+
+
+  const runInterval = (voice: voice) => {
+    try {    
+      if (isRunning()) {
+
+        const interval = voice.nextInterval
+    
+        if (isTimeForScheduled(interval)) {
+          const intervalLength = getIntervalLength(voice)
+
+          voice.thisInterval = voice.nextInterval
+          voice.nextInterval += intervalLength
+                    
+          if (isRest(voice)) {
+            voice.gain?.gain.setValueAtTime(0,0)
+          } else {          
+            playNote(voice, intervalLength)
+          }
+        } 
+
+        nextInterval(voice)
+      }
+    } catch (error) {}
   }
 
   const isRunning = () => {
@@ -154,44 +179,14 @@ function App() {
     }, offset * 10 * intervalLength)
   }
 
-  const nextInterval = (i: number, voice: voice) => {
-    setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)    
+  const nextInterval = (voice: voice) => {
+    setTimeout(() => {runInterval(voice)}, (voice.nextInterval - context.currentTime)*1000)    
   }
 
-  const newInterval = (i: number) => {
-    try {    
-      if (isRunning()) {
-
-        const voice = voices[i]
-        const interval = voice.nextInterval
-    
-        if (isTimeForScheduled(interval)) {
-          const intervalLength = getIntervalLength(i)
-
-          voice.thisInterval = voice.nextInterval
-          voice.nextInterval += intervalLength
-                    
-          if (isRest(voice)) {
-            voice.gain?.gain.setValueAtTime(0,0)
-          } else {          
-            playNote(voice, intervalLength)
-          }
-
-          nextInterval(i, voice)
-
-        } else {
-
-          nextInterval(i, voice)
-
-        }
-      }
-    } catch (error) {}
-  }
-
-  const getIntervalLength = (i: number) => {
-    const liveIntervals = voices[i].activeIntervals
+  const getIntervalLength = (voice: voice) => {
+    const liveIntervals = voice.activeIntervals
     const interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
-    const bpm = voices[i].bpm
+    const bpm = voice.bpm
     const intervalLength  = 60000/bpm * parseFloat(interval)
     return intervalLength/1000
   }
