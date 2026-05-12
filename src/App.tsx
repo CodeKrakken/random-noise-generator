@@ -29,7 +29,7 @@ function App() {
   const kickSample  = setUpSample(kickFile, context)
 
   const handleStartStop = () => {
-    runningRef.current ? stop() : start()
+    runningRef.current ? stopAll(voices) : start()
   }
 
   const setUpOscillator = (voice: voice) => {
@@ -55,14 +55,15 @@ function App() {
     })
   }
 
-  const stop = () => {
+  const stopAll = (voices: voice[]) => {
     setRunning(false)
+    
     voices.forEach(voice => {
-      stopVoice(voice)
+      stopOne(voice)
     })
   }
 
-  const stopVoice = (voice: voice) => {
+  const stopOne = (voice: voice) => {
     voice.gain?.gain.setValueAtTime(0, context.currentTime)
     voice.oscillator?.stop()
   }
