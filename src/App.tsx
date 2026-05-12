@@ -154,39 +154,35 @@ function App() {
     }, offset * 10 * intervalLength)
   }
 
-  const newInterval = (i: number) => {
+  const nextInterval = (i: number, voice: voice) => {
+    setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)    
+  }
 
-    try {   
-        
+  const newInterval = (i: number) => {
+    try {    
       if (isRunning()) {
 
         const voice = voices[i]
         const interval = voice.nextInterval
     
         if (isTimeForScheduled(interval)) {
-
           const intervalLength = getIntervalLength(i)
 
           voice.thisInterval = voice.nextInterval
           voice.nextInterval += intervalLength
-          
-          const activeWaveforms = voice.activeWaveforms
-          
-          if (isRest(i) || !activeWaveforms) {
+                    
+          if (isRest(voice)) {
             voice.gain?.gain.setValueAtTime(0,0)
-
           } else {          
-
             playNote(voice, intervalLength)
           }
 
-          if (voices.length) {
-            setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)
-          }          
+          nextInterval(i, voice)
 
         } else {
 
-          setTimeout(() => {newInterval(i)}, (voice.nextInterval - context.currentTime)*1000)
+          nextInterval(i, voice)
+
         }
       }
     } catch (error) {}
@@ -200,8 +196,8 @@ function App() {
     return intervalLength/1000
   }
        
-  const isRest = (i: number) => {
-    const restChance  = voices[i].restChance/100
+  const isRest = (voice: voice) => {
+    const restChance  = voice.restChance/100
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
