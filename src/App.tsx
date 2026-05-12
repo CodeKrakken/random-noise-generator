@@ -201,7 +201,7 @@ function App() {
   }
        
   const isRest = (i: number) => {
-    const restChance  = voices[i].restChance
+    const restChance  = voices[i].restChance/100
     const diceRoll = Math.random()
     return diceRoll < restChance
   }
