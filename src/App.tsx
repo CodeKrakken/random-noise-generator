@@ -107,21 +107,17 @@ function App() {
       minLevel,
       maxLevel,
       minLength,
-      maxLength
+      maxLength,
+      activeWaveforms
     } = voice
 
     const offsetTime    = getOffsetTime(voice, intervalLength)
 
-    let noteLength = intervalLength
-
     setTimeout(() => {
-
-      const activeWaveforms = voice.activeWaveforms
-      // if (!activeWaveforms.length) return
       
-      const randomWaveform = activeWaveforms[Math.floor(Math.random() * activeWaveforms.length)]
+      const randomWaveform = randomOneOf(activeWaveforms)
 
-      if (voice.oscillator) voice.oscillator.type = randomWaveform as OscillatorType
+      voice.oscillator!.type = randomOneOf(activeWaveforms) as OscillatorType
 
       if (waveforms.includes(randomWaveform)) {
         try {
@@ -130,7 +126,7 @@ function App() {
           if (voice.oscillator) voice.oscillator.frequency.value = frequency
 
           const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-          noteLength = intervalLength / 100 * noteLengthPercentage
+          let noteLength = intervalLength / 100 * noteLengthPercentage
           const fadeInPercentage  = getRangeValue('FadeIn' , voice)
           const fadeOutPercentage = getRangeValue('FadeOut', voice)
           const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
@@ -181,6 +177,10 @@ function App() {
         }
       }            
     }, offsetTime)
+  }
+
+  const randomOneOf = (array: any[]) => {
+    return array[Math.floor(Math.random() * array.length)]
   }
 
   const getOffsetTime = (voice: voice, intervalLength: number) => {
