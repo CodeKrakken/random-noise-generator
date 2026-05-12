@@ -109,7 +109,7 @@ function App() {
  
       try {
         const activeSounds = voice.activeSounds
-        const randomSound = randomOneOf(activeSounds)
+        const randomSound = randomOneFrom(activeSounds)
 
         if (waveforms.includes(randomSound)) {
 
@@ -198,7 +198,7 @@ function App() {
     voice.oscillator!.frequency.value = frequency
   }
 
-  const randomOneOf = (array: any[]) => {
+  const randomOneFrom = (array: any[]) => {
     return array[Math.floor(Math.random() * array.length)]
   }
 
