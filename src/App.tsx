@@ -103,11 +103,14 @@ function App() {
 
   const playNote = (voice: voice, intervalLength: number) => {
 
-    const minLevel  = voice.minLevel
-    const maxLevel  = voice.maxLevel
-    const minLength = voice.minLength
-    const maxLength = voice.maxLength
-    const offset    = getRangeValue('Offset', voice)
+    const { 
+      minLevel,
+      maxLevel,
+      minLength,
+      maxLength
+    } = voice
+
+    const offsetTime    = getOffsetTime(voice, intervalLength)
 
     let noteLength = intervalLength
 
@@ -145,9 +148,9 @@ function App() {
                                     voice.thisInterval + noteLength * peakPercentage / 100 : 
                                     noteLength * peakPercentage / 100
 
+            
             if (endOfFadeIn <= startOfFadeOut) {
 
-              voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
               voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
               voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
               voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
@@ -177,7 +180,11 @@ function App() {
           console.error(error instanceof Error ? error.message : "Unknown error", error)
         }
       }            
-    }, offset * 10 * intervalLength)
+    }, offsetTime)
+  }
+
+  const getOffsetTime = (voice: voice, intervalLength: number) => {
+    return getRangeValue('Offset', voice) * 10 * intervalLength
   }
 
   const nextInterval = (voice: voice) => {
