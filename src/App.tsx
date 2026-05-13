@@ -158,8 +158,7 @@ function App() {
 
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
     const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-    const startOfFadeOut  = nextInterval - fadeOutDuration
-
+    const startOfFadeOut  = thisInterval! + noteLength - fadeOutDuration
     const peakPercentage  = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100
     const peakPoint       = thisInterval! + noteLength * peakPercentage / 100
 
