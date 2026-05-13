@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { allFrequencies, noteRatio, waveforms } from './content/data'
+import { allFrequencies, noteRatio, waveforms, oneMinute } from './content/data'
 import snareFile  from './sounds/snare.wav';
 import kickFile   from './sounds/kick.wav';
 import Voice from './components/voice/Voice';
@@ -229,11 +229,10 @@ function App() {
   }
 
   const getIntervalLength = (voice: voice) => {
-    const liveIntervals = voice.activeIntervals
-    const interval = randomOneFrom(liveIntervals) || '0'
-    const bpm = voice.bpm
-    const intervalLength  = 60000/bpm * parseFloat(interval)
-    return intervalLength/1000
+    const {activeIntervals, bpm} = voice
+    const interval = randomOneFrom(activeIntervals) || '0'
+    const intervalLength  = oneMinute / bpm * parseFloat(interval)
+    return intervalLength
   }
        
   const isRest = (voice: voice) => {

@@ -104,3 +104,5 @@ export const fields = {
 export const extrema = ['min', 'max']
 
 export const noteRatio = 1.0594630943592953
+
+export const oneMinute = 60
