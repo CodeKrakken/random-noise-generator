@@ -222,12 +222,15 @@ function App() {
   }
 
   const nextInterval = (voice: voice) => {
-    setTimeout(() => {runInterval(voice)}, (voice.nextInterval - context.currentTime)*1000)    
+    setTimeout(
+      () => {runInterval(voice)}, 
+      (voice.nextInterval - context.currentTime)*1000
+    )    
   }
 
   const getIntervalLength = (voice: voice) => {
     const liveIntervals = voice.activeIntervals
-    const interval = liveIntervals[Math.floor(Math.random() * liveIntervals.length)] || '0'
+    const interval = randomOneFrom(liveIntervals) || '0'
     const bpm = voice.bpm
     const intervalLength  = 60000/bpm * parseFloat(interval)
     return intervalLength/1000
