@@ -147,42 +147,69 @@ function App() {
     samples[sound as keyof typeof samples].play()
   }
 
+  // const manageLevel = (voice: voice, noteLength: number, offsetTime: number) => {
+
+  //   const { thisInterval, nextInterval } = voice
+  //   const gain = voice.gain!.gain
+  //   const level = generateLevel(voice)
+  //   const fadeInPercent  = getRangeValue('FadeIn' , voice)
+  //   const fadeOutPercent = getRangeValue('FadeOut', voice)
+  //   const peakPercent    = (fadeInPercent/(fadeInPercent+fadeOutPercent)) * 100
+  //   const fadeInSec      = noteLength  / 100 * fadeInPercent
+  //   const fadeOutSec     = noteLength  / 100 * fadeOutPercent
+  //   const endOfFadeIn    = thisInterval! + offsetTime + fadeInSec
+  //   const startOfFadeOut = thisInterval! + offsetTime + noteLength - fadeOutSec
+  //   const peakPoint      = (thisInterval! + offsetTime + noteLength) * peakPercent / 100
+  //   console.log(peakPoint)
+  //   let startOfPeak: number
+  //   let endOfPeak: number
+                            
+  //   if (endOfFadeIn >= startOfFadeOut) {
+  //     gain.setValueAtTime(gain.value, 0)
+  //     startOfPeak = peakPoint
+  //     endOfPeak = peakPoint
+            
+  //   } else {
+
+  //     startOfPeak = endOfFadeIn
+  //     endOfPeak = startOfFadeOut
+  //   }
+
+  //   gain.linearRampToValueAtTime(level, startOfPeak + offsetTime)
+  //   gain.setValueAtTime(level, endOfPeak)
+  //   gain.linearRampToValueAtTime(0, voice.nextInterval)
+  //   gain.setValueAtTime(gain.value, 0)
+  // }
+
   const manageLevel = (voice: voice, noteLength: number, offsetTime: number) => {
-
-    const { thisInterval, nextInterval } = voice
-    const gain = voice.gain!.gain
-
+    
     const level = generateLevel(voice)
 
-    const fadeInPercent  = getRangeValue('FadeIn' , voice)
-    const fadeOutPercent = getRangeValue('FadeOut', voice)
-    const peakPercent    = (fadeInPercent/(fadeInPercent+fadeOutPercent)) * 100
-    const fadeInSec      = noteLength  / 100 * fadeInPercent
-    const fadeOutSec     = noteLength  / 100 * fadeOutPercent
-    const endOfFadeIn    = thisInterval! + offsetTime + fadeInSec
-    const startOfFadeOut = thisInterval! + offsetTime + noteLength - fadeOutSec
+    const fadeInPercentage  = getRangeValue('FadeIn' , voice)
+    const fadeOutPercentage = getRangeValue('FadeOut', voice)
+    const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
+    
+    const fadeInDuration  = noteLength  / 100 * fadeInPercentage
+    const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
+    const endOfFadeIn     = voice.thisInterval! + fadeInDuration
+    const startOfFadeOut  = voice.nextInterval - fadeOutDuration
 
-    const peakPoint      = (thisInterval! + offsetTime + noteLength) * peakPercent / 100
-    console.log(peakPoint)
-    let startOfPeak: number
-    let endOfPeak: number
-                            
+    const peakPoint       = voice.thisInterval ? 
+                            voice.thisInterval + noteLength * peakPercentage / 100 : 
+                            noteLength * peakPercentage / 100
+
     if (endOfFadeIn >= startOfFadeOut) {
-      gain.setValueAtTime(gain.value, 0)
-
-      startOfPeak = peakPoint
-      endOfPeak = peakPoint
-            
+      voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
+      voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
+      voice.gain?.gain.setValueAtTime(level, peakPoint)
+      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
+      
     } else {
 
-      startOfPeak = endOfFadeIn
-      endOfPeak = startOfFadeOut
+      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
+      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
+      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
     }
-
-    gain.linearRampToValueAtTime(level, startOfPeak + offsetTime)
-    gain.setValueAtTime(level, endOfPeak)
-    gain.linearRampToValueAtTime(0, voice.nextInterval)
-    gain.setValueAtTime(gain.value, 0)
   }
 
   const generateLevel = (voice: voice) => {
