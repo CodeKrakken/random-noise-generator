@@ -8,7 +8,6 @@ import Header from './components/header/Header';
 import { voice } from './types/voice'
 import { setUpVoice, setUpSample } from './functions';
 
-
 function App() {
 
   const [context] = useState(() => new AudioContext())
@@ -19,11 +18,11 @@ function App() {
   const voicesRef = useRef(voices)
 
   useEffect(() => { runningRef.current = running }, [running])
+
   useEffect(() => { 
     voicesRef.current   = voices
     !voices.length && setRunning(false)
   }, [voices])
-
 
   const addVoice = () => {
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
@@ -107,9 +106,9 @@ function App() {
     return context.currentTime >= timeCode
   }
 
-  const playNote = (voice: voice, duration: number) => {
+  const playNote = (voice: voice, length: number) => {
 
-    const offsetTime = getOffsetTime(voice, duration)
+    const offsetTime = getOffsetTime(voice, length)
 
     setTimeout(() => {
  
@@ -120,7 +119,7 @@ function App() {
         if (waveforms.includes(randomSound)) {
 
           voice.oscillator!.type = randomSound
-          oscillate(voice, duration, offsetTime)
+          oscillate(voice, length, offsetTime)
           
         } else {
           playSample(voice, randomSound)
@@ -132,13 +131,13 @@ function App() {
     }, offsetTime)
   }
 
-  const oscillate = (voice: voice, duration: number, offsetTime: number) => {
+  const oscillate = (voice: voice, length: number, offsetTime: number) => {
 
     generateFrequency(voice)
 
-    const noteLength = generateNoteLength(voice, duration)
+    const noteLength = generateNoteLength(voice, length)
     
-    if (noteLength < duration) {
+    if (noteLength < length) {
       scheduleNoteEnd(voice, noteLength)
     }
 
@@ -151,7 +150,7 @@ function App() {
     samples[sound as keyof typeof samples].play()
   }
 
-  const getFadeDuration = (percentage: number, noteLength: number) => noteLength * percentage / 100
+  const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
   const shapeNote = (voice: voice, noteLength: number) => {
 
@@ -163,11 +162,11 @@ function App() {
     const fadeInPercentage  = getRangeValue('FadeIn', voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
 
-    const fadeInDuration  = getFadeDuration(fadeInPercentage , noteLength)
-    const fadeOutDuration = getFadeDuration(fadeOutPercentage, noteLength)
+    const fadeInLength  = getFadeLength(fadeInPercentage , noteLength)
+    const fadeOutLength = getFadeLength(fadeOutPercentage, noteLength)
 
-    const endOfFadeIn    = thisInterval + fadeInDuration
-    const startOfFadeOut = thisInterval + noteLength - fadeOutDuration
+    const endOfFadeIn    = thisInterval + fadeInLength
+    const startOfFadeOut = thisInterval + noteLength - fadeOutLength
 
     const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
 
@@ -192,11 +191,11 @@ function App() {
     return balancedLevel
   }
 
-  const generateNoteLength = (voice: voice, duration: number) => {
+  const generateNoteLength = (voice: voice, intervalLength: number) => {
 
     const { minLength, maxLength } = voice
     const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
-    const noteLength = duration / 100 * noteLengthPercentage
+    const noteLength = intervalLength / 100 * noteLengthPercentage
 
     return noteLength
   }
