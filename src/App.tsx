@@ -138,7 +138,7 @@ function App() {
       scheduleNoteEnd(voice, noteLength)
     }
 
-    manageLevel(voice, noteLength)
+    shapeNote(voice, noteLength)
   }
 
   const playSample = (voice: voice, sound: string) => {
@@ -147,7 +147,7 @@ function App() {
     samples[sound as keyof typeof samples].play()
   }
 
-  const manageLevel = (voice: voice, noteLength: number) => {
+  const shapeNote = (voice: voice, noteLength: number) => {
     
     const gain = voice.gain!.gain
     const { thisInterval, nextInterval } = voice
@@ -159,6 +159,7 @@ function App() {
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
     const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
     const startOfFadeOut  = thisInterval! + noteLength - fadeOutDuration
+
     const peakPercentage  = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100
     const peakPoint       = thisInterval! + noteLength * peakPercentage / 100
 
