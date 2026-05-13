@@ -152,6 +152,7 @@ function App() {
   const shapeNote = (voice: voice, noteLength: number) => {
 
     const gain = voice.gain!.gain
+
     const thisInterval = voice.thisInterval!
     const nextInterval = voice.nextInterval
 
@@ -164,8 +165,8 @@ function App() {
     const endOfFadeIn    = thisInterval + fadeInDuration
     const startOfFadeOut = thisInterval + noteLength - fadeOutDuration
 
-    const peakPoint = thisInterval + noteLength * ((fadeInPercentage / (fadeInPercentage + fadeOutPercentage)) * 100) / 100
-
+    const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
+    
     const overlap = endOfFadeIn >= startOfFadeOut
 
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
