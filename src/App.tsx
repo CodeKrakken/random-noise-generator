@@ -184,6 +184,7 @@ function App() {
   const manageLevel = (voice: voice, noteLength: number, offsetTime: number) => {
     
     const level = generateLevel(voice)
+    const gain = voice.gain!.gain
 
     const fadeInPercentage  = getRangeValue('FadeIn' , voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
@@ -198,18 +199,23 @@ function App() {
                             voice.thisInterval + noteLength * peakPercentage / 100 : 
                             noteLength * peakPercentage / 100
 
+    let startOfPeak: number
+    let endOfPeak: number
+
     if (endOfFadeIn >= startOfFadeOut) {
-      voice.gain?.gain.setValueAtTime(voice.gain.gain.value, 0)
-      voice.gain?.gain.linearRampToValueAtTime(level, peakPoint)
-      voice.gain?.gain.setValueAtTime(level, peakPoint)
-      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
-      
+      startOfPeak = peakPoint
+      endOfPeak = peakPoint
+            
     } else {
 
-      voice.gain?.gain.linearRampToValueAtTime(level, endOfFadeIn)
-      voice.gain?.gain.setValueAtTime(level, startOfFadeOut)
-      voice.gain?.gain.linearRampToValueAtTime(0, voice.nextInterval)
+      startOfPeak = endOfFadeIn
+      endOfPeak = startOfFadeOut
     }
+
+    gain.linearRampToValueAtTime(level, startOfPeak + offsetTime)
+    gain.setValueAtTime(level, endOfPeak)
+    gain.linearRampToValueAtTime(0, voice.nextInterval)
+    gain.setValueAtTime(gain.value, 0)
   }
 
   const generateLevel = (voice: voice) => {
