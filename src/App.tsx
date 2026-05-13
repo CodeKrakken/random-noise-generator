@@ -19,7 +19,10 @@ function App() {
   const voicesRef = useRef(voices)
 
   useEffect(() => { runningRef.current = running }, [running])
-  useEffect(() => { voicesRef.current   = voices }, [voices])
+  useEffect(() => { 
+    voicesRef.current   = voices
+    !voices.length && setRunning(false)
+  }, [voices])
 
 
   const addVoice = () => {
@@ -173,7 +176,7 @@ function App() {
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
     const endOfPeak   = overlap ? peakPoint : startOfFadeOut
 
-    const level = generateLevel(voice)
+    const level = generateLevel(voice, voicesRef.current)
 
     gain.linearRampToValueAtTime(level, startOfPeak)
     gain.setValueAtTime(level, endOfPeak)
@@ -181,11 +184,11 @@ function App() {
     gain.setValueAtTime(gain.value, 0)
   }
 
-  const generateLevel = (voice: voice) => {
+  const generateLevel = (voice: voice, voices: voice[]) => {
     const { minLevel, maxLevel } = voice
 
-    const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voicesRef.current.length
-    console.log(balancedLevel)
+    const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.length
+
     return balancedLevel
   }
 
