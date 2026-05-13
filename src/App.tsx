@@ -238,21 +238,32 @@ function App() {
   const isRest = (voice: voice) => {
     const restChance  = voice.restChance/100
     const diceRoll = Math.random()
-    return diceRoll < restChance
+    const result = diceRoll < restChance
+    return result
   }
 
   const getRangeValue = (key: string, voice: voice) => {
+
     const minEl = voice[`min${key}` as keyof voice]
     const maxEl = voice[`max${key}` as keyof voice]
 
-    return minEl as number + (Math.random() * (maxEl as number - (minEl as number)))
+    const rangeValue = (
+      minEl as number + (Math.random() * (
+      maxEl as number - (minEl as number)))
+    )
+
+    return rangeValue
   }
 
   const detune = (frequency: number, voice: voice) => {
-    const detune = getRangeValue('Detune', voice)
-    const semitoneUp = frequency / 100 * noteRatio
+
+    // Refactor to use real values, not computed ones
+
+    const cents = getRangeValue('Detune', voice)
+    const semitoneUp = frequency * noteRatio
     const hzDiff = semitoneUp - frequency
-    return frequency + hzDiff / 100 * detune
+
+    return frequency + hzDiff / 100 * cents
   }
 
   const getRandomFrequency = (voice: voice) => {
@@ -269,18 +280,22 @@ function App() {
     const activeOctaves = voice.activeOctaves
     const activeNotes   = voice.activeNotes
 
-    let currentFrequencies = allFrequencies.filter((octave, j) => activeOctaves.includes(j.toString()))
+    let allFrequenciesInOctaves = allFrequencies.filter(
+      (octave, j) => activeOctaves.includes(j.toString())
+    )
     
-    let filteredFrequencies = currentFrequencies.map(octave =>
+    let activeFrequencies = allFrequenciesInOctaves.map(octave =>
       octave.filter((note, j) => activeNotes.includes((j+1).toString()))
     )
 
-    return filteredFrequencies.flat(Infinity)
+    return activeFrequencies.flat(Infinity)
   }
 
   const handleDelete = (i: number) => {
-    voices[i].gain?.gain.setValueAtTime(0, 0)
-    voices[i].oscillator?.stop()
+    const voice = voices[i]
+    
+    voice.gain?.gain.setValueAtTime(0, 0)
+    voice.oscillator?.stop()
 
     setVoices([voices.slice(0,i), voices.slice(i+1)].flat())
   }
