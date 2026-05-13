@@ -149,22 +149,19 @@ function App() {
 
   const manageLevel = (voice: voice, noteLength: number) => {
     
-
-    const level = generateLevel(voice)
     const gain = voice.gain!.gain
+    const { thisInterval, nextInterval } = voice
 
     const fadeInPercentage  = getRangeValue('FadeIn' , voice)
-    const fadeOutPercentage = getRangeValue('FadeOut', voice)
-    const peakPercentage    = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100 ||  0
-    
     const fadeInDuration  = noteLength  / 100 * fadeInPercentage
-    const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
-    const endOfFadeIn     = voice.thisInterval! + fadeInDuration
-    const startOfFadeOut  = voice.nextInterval - fadeOutDuration
+    const endOfFadeIn     = thisInterval! + fadeInDuration
 
-    const peakPoint       = voice.thisInterval ? 
-                            voice.thisInterval + noteLength * peakPercentage / 100 : 
-                            noteLength * peakPercentage / 100
+    const fadeOutPercentage = getRangeValue('FadeOut', voice)
+    const fadeOutDuration = noteLength  / 100 * fadeOutPercentage
+    const startOfFadeOut  = nextInterval - fadeOutDuration
+
+    const peakPercentage  = (fadeInPercentage/(fadeInPercentage+fadeOutPercentage)) * 100
+    const peakPoint       = thisInterval! + noteLength * peakPercentage / 100
 
     let startOfPeak: number
     let endOfPeak: number
@@ -179,9 +176,11 @@ function App() {
       endOfPeak = startOfFadeOut
     }
 
+    const level = generateLevel(voice)
+
     gain.linearRampToValueAtTime(level, startOfPeak)
     gain.setValueAtTime(level, endOfPeak)
-    gain.linearRampToValueAtTime(0, voice.nextInterval)
+    gain.linearRampToValueAtTime(0, nextInterval)
     gain.setValueAtTime(gain.value, 0)
   }
 
