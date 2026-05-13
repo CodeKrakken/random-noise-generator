@@ -119,7 +119,7 @@ function App() {
         if (waveforms.includes(randomSound)) {
 
           voice.oscillator!.type = randomSound
-          oscillate(voice, length, offsetTime)
+          oscillate(voice, length)
           
         } else {
           playSample(voice, randomSound)
@@ -131,9 +131,9 @@ function App() {
     }, offsetTime)
   }
 
-  const oscillate = (voice: voice, length: number, offsetTime: number) => {
+  const oscillate = (voice: voice, length: number) => {
 
-    generateFrequency(voice)
+    voice.oscillator!.frequency.value = generateFrequency(voice)
 
     const noteLength = generateNoteLength(voice, length)
     
@@ -201,14 +201,16 @@ function App() {
   }
 
   const scheduleNoteEnd = (voice: voice, noteLength: number) => {
-    setTimeout(() => {voice.gain?.gain.setValueAtTime(0, context.currentTime)}, noteLength*1000)
+    setTimeout(() => {
+      voice.gain?.gain.setValueAtTime(0, context.currentTime)
+    }, noteLength*1000)
   }
 
 
   const generateFrequency = (voice: voice) => {
     const randomFrequency = getRandomFrequency(voice)
     const frequency   = detune(randomFrequency as number, voice)
-    voice.oscillator!.frequency.value = frequency
+    return frequency
   }
 
   const randomOneFrom = (array: any[]) => {
