@@ -16,10 +16,11 @@ function App() {
   const [running, setRunning] = useState<boolean>(false)
 
   const runningRef = useRef(false)
+  const voicesRef = useRef(voices)
 
-  useEffect(() => {
-    runningRef.current = running
-  }, [running])
+  useEffect(() => { runningRef.current = running }, [running])
+  useEffect(() => { voicesRef.current   = voices }, [voices])
+
 
   const addVoice = () => {
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
@@ -166,7 +167,7 @@ function App() {
     const startOfFadeOut = thisInterval + noteLength - fadeOutDuration
 
     const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
-    
+
     const overlap = endOfFadeIn >= startOfFadeOut
 
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
@@ -181,12 +182,11 @@ function App() {
   }
 
   const generateLevel = (voice: voice) => {
-    const {
-      minLevel,
-      maxLevel
-    } = voice
+    const { minLevel, maxLevel } = voice
 
-    return ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.filter(voice => voice.nextInterval).length
+    const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voicesRef.current.length
+    console.log(balancedLevel)
+    return balancedLevel
   }
 
   const generateNoteLength = (voice: voice, duration: number) => {
