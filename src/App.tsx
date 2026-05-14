@@ -89,7 +89,7 @@ function App() {
           if (isRest(voice)) {
             voice.gain?.gain.setValueAtTime(0,0)
           } else {
-            playNote(voice, intervalLength)
+            makeSound(voice, intervalLength)
           }
         } 
 
@@ -106,7 +106,7 @@ function App() {
     return context.currentTime >= timeCode
   }
 
-  const playNote = (voice: voice, length: number) => {
+  const makeSound = (voice: voice, length: number) => {
 
     const offsetTime = getOffsetTime(voice, length)
     setTimeout(() => {
@@ -114,14 +114,15 @@ function App() {
       try {
         const activeSounds = voice.activeSounds
         const randomSound = randomOneFrom(activeSounds)
+        const level = generateLevel(voice, voicesRef.current)
 
         if (waveforms.includes(randomSound)) {
           setUpOscillator(voice)
           voice.oscillator!.type = randomSound
-          oscillate(voice, length, offsetTime)
+          oscillate(voice, length, offsetTime, level)
           
         } else {
-          playSample(voice, randomSound)
+          playSample(voice, randomSound, level)
         }
 
       } catch (error) {
@@ -130,7 +131,7 @@ function App() {
     }, offsetTime*1000)
   }
 
-  const oscillate = (voice: voice, length: number, offsetTime: number) => {
+  const oscillate = (voice: voice, length: number, offsetTime: number, level: number) => {
 
     voice.oscillator!.frequency.value = generateFrequency(voice)
 
@@ -140,19 +141,18 @@ function App() {
       scheduleNoteEnd(voice, noteLength, offsetTime)
     }
 
-    shapeNote(voice, noteLength, offsetTime)
+    shapeNote(voice, noteLength, offsetTime, level)
   }
 
-  const playSample = (voice: voice, name: string) => {
-    console.log('playing sample')
+  const playSample = (voice: voice, name: string, level: number) => {
 
-    const sample = setUpSample(samples[name as keyof typeof samples], context)
+    const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
     sample.play()
   }
 
   const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-  const shapeNote = (voice: voice, noteLength: number, offsetTime: number) => {
+  const shapeNote = (voice: voice, noteLength: number, offsetTime: number, level: number) => {
 
     const gain = voice.gain!.gain
 
@@ -169,7 +169,6 @@ function App() {
     const overlap = endOfFadeIn >= startOfFadeOut
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
     const endOfPeak   = overlap ? peakPoint : startOfFadeOut
-    const level = generateLevel(voice, voicesRef.current)
 
     gain.setValueAtTime(0, thisInterval)
     gain.linearRampToValueAtTime(level, startOfPeak)
@@ -217,9 +216,8 @@ function App() {
   }
 
   const nextInterval = (voice: voice) => {
-    console.log('outside setTimeout')
     setTimeout(
-      () => {console.log('inside set timeout'); runInterval(voice)}, 
+      () => {runInterval(voice)}, 
       (voice.nextInterval - context.currentTime)*1000
     )    
   }

@@ -25,9 +25,15 @@ export const setUpVoice = (template: voice | null = null) => {
   }
 }
 
-export const setUpSample = (file: string, context: AudioContext) => {
+export const setUpSample = (voice: voice, file: string, context: AudioContext, level: number) => {
   const sample = new Audio(file)
   const sound = context.createMediaElementSource(sample);
-  sound.connect(context.destination)
+  const gain  = context.createGain()
+
+  sound.connect(gain)
+  gain.gain.setValueAtTime(level, 0)
+  gain.connect(context.destination)
+
+  voice.gain = gain
   return sample
 }
