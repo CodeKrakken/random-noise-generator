@@ -26,6 +26,8 @@ export type voice = {
   oscillator?     : OscillatorNode
   gain?           : GainNode
   source?         : SoundSource
+  sample?         : HTMLAudioElement
+  sound?          : MediaElementAudioSourceNode
 }
 
 

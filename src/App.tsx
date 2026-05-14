@@ -38,16 +38,14 @@ function App() {
   }
 
   const setUpOscillator = (voice: voice) => {
-    const oscillator  = context.createOscillator()
-    const gain        = context.createGain()
+    voice.oscillator  = context.createOscillator()
+    voice.gain        = context.createGain()
 
+    const {oscillator, gain} = voice
     oscillator.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
-
-    voice.oscillator = oscillator
-    voice.gain       = gain
   }
 
   const start = async () => {
@@ -109,6 +107,7 @@ function App() {
   const makeSound = (voice: voice, length: number) => {
 
     const offsetTime = getOffsetTime(voice, length)
+
     setTimeout(() => {
  
       try {
@@ -120,7 +119,7 @@ function App() {
           setUpOscillator(voice)
           voice.oscillator!.type = randomSound
           oscillate(voice, length, offsetTime, level)
-          
+          setTimeout(() => {removeOscillator(voice)}, length*1000)
         } else {
           playSample(voice, randomSound, level)
         }
@@ -142,6 +141,13 @@ function App() {
     }
 
     shapeNote(voice, noteLength, offsetTime, level)
+  }
+
+  const removeOscillator = (voice: voice) => {
+    const { oscillator, gain } = voice
+    oscillator!.stop()
+    oscillator!.disconnect()
+    gain!.disconnect()
   }
 
   const playSample = (voice: voice, name: string, level: number) => {
