@@ -24,10 +24,14 @@ function App() {
 
   useEffect(() => { 
     voicesRef.current   = voices
-    !voices.length && setRunning(false)
+    if (!voices.length) { 
+      setRunning(false)
+      runningRef.current = false
+    }      
   }, [voices])
 
   const addVoice = () => {
+    console.log(running)
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
   }
 
@@ -57,6 +61,7 @@ function App() {
 
     voices.forEach((voice, i) => {
       voice.nextInterval = context.currentTime
+      voice.isActive = true
       runInterval(voice, i)
     })
   }
@@ -73,6 +78,7 @@ function App() {
   const stopOne = (voice: voice) => {
     voice.gain?.gain.setValueAtTime(0, context.currentTime)
     voice.oscillator?.stop()
+    voice.isActive = false
   }
 
 
@@ -226,8 +232,14 @@ function App() {
   }
 
   const nextInterval = (voice: voice, i: number) => {
+
+    if (!voice.isActive) return
+
     setTimeout(
-      () => {runInterval(voice, i)}, 
+      () => {
+        if (!voice.isActive) return
+        runInterval(voice, i)
+      }, 
       (voice.nextInterval - context.currentTime)*1000
     )    
   }
@@ -296,11 +308,21 @@ function App() {
   }
 
   const handleDelete = (i: number) => {
-    
-    activeOscillators[i].gain?.gain.setValueAtTime(0, 0)
-    activeOscillators[i].oscillator?.stop()
-    
-    setVoices([voices.slice(0,i), voices.slice(i+1)].flat())
+
+    const voice = voices[i]
+
+    voice.isActive = false
+
+    activeOscillators[i]?.gain.gain.setValueAtTime(
+      0,
+      context.currentTime
+    )
+
+    activeOscillators[i]?.oscillator.stop()
+
+    setVoices(voices =>
+      voices.filter((_, j) => j !== i)
+    )
   }
 
   return <>

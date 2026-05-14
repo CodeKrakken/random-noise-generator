@@ -2,6 +2,7 @@ import { voice } from "./types/voice"
 
 export const setUpVoice = (template: voice | null = null) => {
   return {
+    isActive        : false,
     label           : template?.label!+1          ||  1,
     nextInterval    : 0,
     bpm             : template?.bpm              ??  60,

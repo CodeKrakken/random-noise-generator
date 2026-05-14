@@ -2,6 +2,7 @@ import { SoundSource } from '../types'
 import { ranges } from '../content/data'
 
 export type voice = {
+  isActive        : boolean
   label           : number
   thisInterval?   : number
   nextInterval    : number
