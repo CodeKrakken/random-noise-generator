@@ -77,18 +77,17 @@ function App() {
   const runInterval = (voice: voice) => {
     try {    
       if (isRunning()) {
-
-        const interval = voice.nextInterval
+        const thisInterval = voice.nextInterval
+        voice.thisInterval = voice.nextInterval
     
-        if (isTimeForScheduled(interval)) {
+        if (isTimeFor(thisInterval)) {
           const intervalLength = getIntervalLength(voice)
 
-          voice.thisInterval = voice.nextInterval
           voice.nextInterval += intervalLength
                     
           if (isRest(voice)) {
             voice.gain?.gain.setValueAtTime(0,0)
-          } else {          
+          } else {
             playNote(voice, intervalLength)
           }
         } 
@@ -102,14 +101,14 @@ function App() {
     return runningRef.current
   }
 
-  const isTimeForScheduled = (timeCode: number) => {
+  const isTimeFor = (timeCode: number) => {
     return context.currentTime >= timeCode
   }
 
   const playNote = (voice: voice, length: number) => {
 
     const offsetTime = getOffsetTime(voice, length)
-
+    console.log(offsetTime)
     setTimeout(() => {
  
       try {
@@ -119,7 +118,7 @@ function App() {
         if (waveforms.includes(randomSound)) {
 
           voice.oscillator!.type = randomSound
-          oscillate(voice, length)
+          oscillate(voice, length, offsetTime)
           
         } else {
           playSample(voice, randomSound)
@@ -128,20 +127,20 @@ function App() {
       } catch (error) {
         console.error(error instanceof Error ? error.message : "Unknown error", error)
       }            
-    }, offsetTime)
+    }, offsetTime*1000)
   }
 
-  const oscillate = (voice: voice, length: number) => {
+  const oscillate = (voice: voice, length: number, offsetTime: number) => {
 
     voice.oscillator!.frequency.value = generateFrequency(voice)
 
     const noteLength = generateNoteLength(voice, length)
     
     if (noteLength < length) {
-      scheduleNoteEnd(voice, noteLength)
+      scheduleNoteEnd(voice, noteLength, offsetTime)
     }
 
-    shapeNote(voice, noteLength)
+    shapeNote(voice, noteLength, offsetTime)
   }
 
   const playSample = (voice: voice, sound: string) => {
@@ -152,13 +151,12 @@ function App() {
 
   const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-  const shapeNote = (voice: voice, noteLength: number) => {
+  const shapeNote = (voice: voice, noteLength: number, offsetTime: number) => {
 
     const gain = voice.gain!.gain
 
-    const thisInterval = voice.thisInterval!
-    const nextInterval = voice.nextInterval
-
+    const thisInterval = voice.thisInterval! + offsetTime
+    console.log(thisInterval)
     const fadeInPercentage  = getRangeValue('FadeIn', voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
 
@@ -166,20 +164,21 @@ function App() {
     const fadeOutLength = getFadeLength(fadeOutPercentage, noteLength)
 
     const endOfFadeIn    = thisInterval + fadeInLength
+    console.log(endOfFadeIn)
     const startOfFadeOut = thisInterval + noteLength - fadeOutLength
-
+    console.log(startOfFadeOut)
     const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
-
+    console.log(peakPoint)
     const overlap = endOfFadeIn >= startOfFadeOut
-
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
+    console.log(startOfPeak)
     const endOfPeak   = overlap ? peakPoint : startOfFadeOut
-
+    console.log(endOfPeak)
     const level = generateLevel(voice, voicesRef.current)
 
     gain.linearRampToValueAtTime(level, startOfPeak)
     gain.setValueAtTime(level, endOfPeak)
-    gain.linearRampToValueAtTime(0, nextInterval)
+    gain.linearRampToValueAtTime(0, thisInterval + noteLength)
     gain.setValueAtTime(gain.value, 0)
   }
 
@@ -200,10 +199,10 @@ function App() {
     return noteLength
   }
 
-  const scheduleNoteEnd = (voice: voice, noteLength: number) => {
+  const scheduleNoteEnd = (voice: voice, noteLength: number, offsetTime: number) => {
     setTimeout(() => {
       voice.gain?.gain.setValueAtTime(0, context.currentTime)
-    }, noteLength*1000)
+    }, (offsetTime + noteLength)*1000)
   }
 
 
@@ -218,7 +217,8 @@ function App() {
   }
 
   const getOffsetTime = (voice: voice, intervalLength: number) => {
-    return getRangeValue('Offset', voice) * 10 * intervalLength
+    console.log(getRangeValue('Offset', voice))
+    return getRangeValue('Offset', voice) / 100 * intervalLength
   }
 
   const nextInterval = (voice: voice) => {
