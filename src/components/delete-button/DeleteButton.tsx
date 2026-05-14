@@ -9,7 +9,6 @@ export default function DeleteButton ({...props}: any) {
     <button 
       id="delete-voice"
       onClick={() => handleDelete(i)}
-      data-testid={`delete-voice-${i}`}
     >
       X
     </button>
