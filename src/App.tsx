@@ -8,6 +8,9 @@ import Header from './components/header/Header';
 import { voice } from './types/voice'
 import { setUpVoice, setUpSample } from './functions';
 
+type OscGain = {oscillator: OscillatorNode, gain: GainNode}
+const activeOscillators: OscGain[] = []
+
 function App() {
 
   const [context] = useState(() => new AudioContext())
@@ -38,23 +41,23 @@ function App() {
   }
 
   const setUpOscillator = (voice: voice) => {
-    voice.oscillator  = context.createOscillator()
-    voice.gain        = context.createGain()
+    const oscillator  = context.createOscillator()
+    const gain        = context.createGain()
 
-    const {oscillator, gain} = voice
     oscillator.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
+    return {oscillator, gain}
   }
 
   const start = async () => {
     runningRef.current = true
     setRunning(true)
 
-    voices.forEach((voice) => {
+    voices.forEach((voice, i) => {
       voice.nextInterval = context.currentTime
-      runInterval(voice)
+      runInterval(voice, i)
     })
   }
 
@@ -73,7 +76,7 @@ function App() {
   }
 
 
-  const runInterval = (voice: voice) => {
+  const runInterval = (voice: voice, i: number) => {
     try {    
       if (isRunning()) {
         const thisInterval = voice.nextInterval
@@ -87,11 +90,11 @@ function App() {
           if (isRest(voice)) {
             voice.gain?.gain.setValueAtTime(0,0)
           } else {
-            makeSound(voice, intervalLength)
+            makeSound(voice, i, intervalLength)
           }
         } 
 
-        nextInterval(voice)
+        nextInterval(voice, i)
       }
     } catch (error) {}
   }
@@ -104,7 +107,7 @@ function App() {
     return context.currentTime >= timeCode
   }
 
-  const makeSound = (voice: voice, length: number) => {
+  const makeSound = (voice: voice, i: number, length: number) => {
 
     const offsetTime = getOffsetTime(voice, length)
 
@@ -116,10 +119,11 @@ function App() {
         const level = generateLevel(voice, voicesRef.current)
 
         if (waveforms.includes(randomSound)) {
-          setUpOscillator(voice)
-          voice.oscillator!.type = randomSound
-          oscillate(voice, length, offsetTime, level)
-          setTimeout(() => {removeOscillator(voice)}, length*1000)
+          const oscGain = setUpOscillator(voice)
+          oscGain.oscillator.type = randomSound
+          activeOscillators[i] = oscGain
+          oscillate(voice, length, offsetTime, level, oscGain)
+          setTimeout(() => {removeOscillator(oscGain, i)}, length*1000)
         } else {
           playSample(voice, randomSound, level)
         }
@@ -130,21 +134,21 @@ function App() {
     }, offsetTime*1000)
   }
 
-  const oscillate = (voice: voice, length: number, offsetTime: number, level: number) => {
+  const oscillate = (voice: voice, length: number, offsetTime: number, level: number, oscGain: OscGain) => {
 
-    voice.oscillator!.frequency.value = generateFrequency(voice)
+    oscGain.oscillator!.frequency.value = generateFrequency(voice)
 
     const noteLength = generateNoteLength(voice, length)
     
     if (noteLength < length) {
-      scheduleNoteEnd(voice, noteLength, offsetTime)
+      scheduleNoteEnd(oscGain, noteLength, offsetTime)
     }
 
-    shapeNote(voice, noteLength, offsetTime, level)
+    shapeNote(voice, oscGain, noteLength, offsetTime, level)
   }
 
-  const removeOscillator = (voice: voice) => {
-    const { oscillator, gain } = voice
+  const removeOscillator = (oscGain: OscGain, i: number) => {
+    const { oscillator, gain } = oscGain
     oscillator!.stop()
     oscillator!.disconnect()
     gain!.disconnect()
@@ -158,9 +162,9 @@ function App() {
 
   const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-  const shapeNote = (voice: voice, noteLength: number, offsetTime: number, level: number) => {
+  const shapeNote = (voice: voice, oscGain: OscGain, noteLength: number, offsetTime: number, level: number) => {
 
-    const gain = voice.gain!.gain
+    const gain = oscGain.gain!.gain
 
     const thisInterval = voice.thisInterval! + offsetTime
     const fadeInPercentage  = getRangeValue('FadeIn', voice)
@@ -200,9 +204,9 @@ function App() {
     return noteLength
   }
 
-  const scheduleNoteEnd = (voice: voice, noteLength: number, offsetTime: number) => {
+  const scheduleNoteEnd = (oscGain: OscGain, noteLength: number, offsetTime: number) => {
     setTimeout(() => {
-      voice.gain?.gain.setValueAtTime(0, context.currentTime)
+      oscGain.gain?.gain.setValueAtTime(0, context.currentTime)
     }, (offsetTime + noteLength)*1000)
   }
 
@@ -221,9 +225,9 @@ function App() {
     return getRangeValue('Offset', voice) / 100 * intervalLength
   }
 
-  const nextInterval = (voice: voice) => {
+  const nextInterval = (voice: voice, i: number) => {
     setTimeout(
-      () => {runInterval(voice)}, 
+      () => {runInterval(voice, i)}, 
       (voice.nextInterval - context.currentTime)*1000
     )    
   }
@@ -292,11 +296,10 @@ function App() {
   }
 
   const handleDelete = (i: number) => {
-    const voice = voices[i]
     
-    voice.gain?.gain.setValueAtTime(0, 0)
-    voice.oscillator?.stop()
-
+    activeOscillators[i].gain?.gain.setValueAtTime(0, 0)
+    activeOscillators[i].oscillator?.stop()
+    
     setVoices([voices.slice(0,i), voices.slice(i+1)].flat())
   }
 
