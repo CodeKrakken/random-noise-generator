@@ -55,7 +55,6 @@ function App() {
     await setRunning(true)
     voices.forEach((voice) => {
 
-      setUpOscillator(voice)
       runInterval(voice)
     })
   }
@@ -108,7 +107,6 @@ function App() {
   const playNote = (voice: voice, length: number) => {
 
     const offsetTime = getOffsetTime(voice, length)
-    console.log(offsetTime)
     setTimeout(() => {
  
       try {
@@ -116,7 +114,7 @@ function App() {
         const randomSound = randomOneFrom(activeSounds)
 
         if (waveforms.includes(randomSound)) {
-
+          setUpOscillator(voice)
           voice.oscillator!.type = randomSound
           oscillate(voice, length, offsetTime)
           
@@ -212,7 +210,6 @@ function App() {
   }
 
   const getOffsetTime = (voice: voice, intervalLength: number) => {
-    console.log(getRangeValue('Offset', voice))
     return getRangeValue('Offset', voice) / 100 * intervalLength
   }
 
