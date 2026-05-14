@@ -156,7 +156,6 @@ function App() {
     const gain = voice.gain!.gain
 
     const thisInterval = voice.thisInterval! + offsetTime
-    console.log(thisInterval)
     const fadeInPercentage  = getRangeValue('FadeIn', voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
 
@@ -164,18 +163,14 @@ function App() {
     const fadeOutLength = getFadeLength(fadeOutPercentage, noteLength)
 
     const endOfFadeIn    = thisInterval + fadeInLength
-    console.log(endOfFadeIn)
     const startOfFadeOut = thisInterval + noteLength - fadeOutLength
-    console.log(startOfFadeOut)
     const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
-    console.log(peakPoint)
     const overlap = endOfFadeIn >= startOfFadeOut
     const startOfPeak = overlap ? peakPoint : endOfFadeIn
-    console.log(startOfPeak)
     const endOfPeak   = overlap ? peakPoint : startOfFadeOut
-    console.log(endOfPeak)
     const level = generateLevel(voice, voicesRef.current)
 
+    gain.setValueAtTime(0, thisInterval)
     gain.linearRampToValueAtTime(level, startOfPeak)
     gain.setValueAtTime(level, endOfPeak)
     gain.linearRampToValueAtTime(0, thisInterval + noteLength)
