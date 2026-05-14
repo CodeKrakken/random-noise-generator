@@ -17,7 +17,7 @@ function App() {
   const runningRef = useRef(false)
   const voicesRef = useRef(voices)
 
-  useEffect(() => { runningRef.current = running }, [running])
+  // useEffect(() => { runningRef.current = running }, [running])
 
   useEffect(() => { 
     voicesRef.current   = voices
@@ -29,8 +29,8 @@ function App() {
   }
 
   const samples = {
-    snare: setUpSample(snareFile, context),
-    kick: setUpSample(kickFile, context)
+    snare: snareFile,
+    kick: kickFile
   }
 
   const handleStartStop = () => {
@@ -48,18 +48,20 @@ function App() {
 
     voice.oscillator = oscillator
     voice.gain       = gain
-    voice.nextInterval = context.currentTime
   }
 
   const start = async () => {
-    await setRunning(true)
-    voices.forEach((voice) => {
+    runningRef.current = true
+    setRunning(true)
 
+    voices.forEach((voice) => {
+      voice.nextInterval = context.currentTime
       runInterval(voice)
     })
   }
 
   const stopAll = (voices: voice[]) => {
+    runningRef.current = false
     setRunning(false)
     
     voices.forEach(voice => {
@@ -141,10 +143,11 @@ function App() {
     shapeNote(voice, noteLength, offsetTime)
   }
 
-  const playSample = (voice: voice, sound: string) => {
-    voice.oscillator!.frequency.value = 0
+  const playSample = (voice: voice, name: string) => {
+    console.log('playing sample')
 
-    samples[sound as keyof typeof samples].play()
+    const sample = setUpSample(samples[name as keyof typeof samples], context)
+    sample.play()
   }
 
   const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
@@ -214,8 +217,9 @@ function App() {
   }
 
   const nextInterval = (voice: voice) => {
+    console.log('outside setTimeout')
     setTimeout(
-      () => {runInterval(voice)}, 
+      () => {console.log('inside set timeout'); runInterval(voice)}, 
       (voice.nextInterval - context.currentTime)*1000
     )    
   }
