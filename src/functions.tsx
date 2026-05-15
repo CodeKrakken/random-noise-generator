@@ -4,7 +4,7 @@ export const setUpVoice = (template: voice | null = null) => {
   return {
     isActive        : false,
     label           : template?.label!+1          ||  1,
-    nextInterval    : template?.nextInterval     ??  0,
+    nextInterval    : 0,
     bpm             : template?.bpm              ??  60,
     minLevel        : template?.minLevel         ??  100,
     maxLevel        : template?.maxLevel         ??  100,

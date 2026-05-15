@@ -31,17 +31,8 @@ function App() {
   }, [voices])
 
   const addVoice = () => {
-
-    const voice = setUpVoice(
-      voices[voices.length - 1]
-    )
-
-    setVoices(voices => [...voices, voice])
-
-    if (runningRef.current) {
-      console.log(voices[voices.length - 1].nextInterval)
-      runInterval(voice, voices.length - 1)
-    }
+    console.log(running)
+    setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
   }
 
   const samples = {
@@ -96,7 +87,7 @@ function App() {
       if (isRunning()) {
         const thisInterval = voice.nextInterval
         voice.thisInterval = voice.nextInterval
-        
+    
         if (isTimeFor(thisInterval)) {
           const intervalLength = getIntervalLength(voice)
 
@@ -152,8 +143,6 @@ function App() {
   const oscillate = (voice: voice, length: number, offsetTime: number, level: number, oscGain: OscGain) => {
 
     oscGain.oscillator!.frequency.value = generateFrequency(voice)
-
-    console.log(oscGain.oscillator!.frequency.value)
 
     const noteLength = generateNoteLength(voice, length)
     
