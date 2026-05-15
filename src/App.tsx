@@ -46,9 +46,7 @@ function App() {
     runInterval(voice)
   }
 
-  const handleStartStop = () => {
-    runningRef.current ? stopAll(voices) : start()
-  }
+  const handleStartStop = () => runningRef.current ? stopAll(voices) : start()
 
   const setUpOscillator = () => {
     const oscillator  = context.createOscillator()
@@ -67,12 +65,8 @@ function App() {
   }
 
   const stopAll = (voices: voice[]) => {
-
     toggleRunning(false)
-    
-    voices.forEach(voice => {
-      stopOne(voice)
-    })
+    voices.forEach(voice => stopOne(voice))
   }
 
   const toggleRunning = (state: boolean) => {
@@ -95,14 +89,9 @@ function App() {
     
         if (isTimeFor(thisInterval)) {
           const intervalLength = getIntervalLength(voice)
-
           voice.nextInterval += intervalLength
-                    
-          if (isRest(voice)) {
-            voice.gain?.gain.setValueAtTime(0,0)
-          } else {
-            makeSound(voice, intervalLength)
-          }
+       
+          if (!isRest(voice)) makeSound(voice, intervalLength)
         } 
 
         nextInterval(voice)
@@ -239,13 +228,10 @@ function App() {
 
     if (!voice.isActive) return
 
-    setTimeout(
-      () => {
-        if (!voice.isActive) return
-        runInterval(voice)
-      }, 
-      (voice.nextInterval - context.currentTime)*1000
-    )    
+    setTimeout(() => {
+      if (!voice.isActive) return
+      runInterval(voice)
+    }, (voice.nextInterval - context.currentTime)*1000)    
   }
 
   const getIntervalLength = (voice: voice) => {
