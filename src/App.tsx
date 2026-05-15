@@ -99,9 +99,7 @@ function App() {
     } catch (error) {}
   }
 
-  const isRunning = () => {
-    return runningRef.current
-  }
+  const isRunning = () => runningRef.current
 
   const isTimeFor = (timeCode: number) => {
     return context.currentTime >= timeCode
