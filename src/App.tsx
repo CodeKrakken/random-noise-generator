@@ -101,9 +101,7 @@ function App() {
 
   const isRunning = () => runningRef.current
 
-  const isTimeFor = (timeCode: number) => {
-    return context.currentTime >= timeCode
-  }
+  const isTimeFor = (timeCode: number) => context.currentTime >= timeCode
 
   const makeSound = (voice: voice, length: number) => {
 
