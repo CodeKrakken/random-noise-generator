@@ -11,3 +11,8 @@ type SampleSource = {
 
 export type SoundSource = OscillatorSource | SampleSource
 
+export type OscGain = {
+  oscillator: OscillatorNode, 
+  gain: GainNode, 
+  i: number
+}

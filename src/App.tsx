@@ -7,9 +7,9 @@ import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
 import { setUpVoice, setUpSample } from './functions';
+import { OscGain } from './types';
 
-type OscGain = {oscillator: OscillatorNode, gain: GainNode}
-const activeOscillators: OscGain[] = []
+let activeOscillators: OscGain[] = []
 
 function App() {
 
@@ -19,8 +19,6 @@ function App() {
 
   const runningRef = useRef(false)
   const voicesRef = useRef(voices)
-
-  // useEffect(() => { runningRef.current = running }, [running])
 
   useEffect(() => { 
     voicesRef.current   = voices
@@ -55,7 +53,7 @@ function App() {
     runningRef.current ? stopAll(voices) : start()
   }
 
-  const setUpOscillator = (voice: voice) => {
+  const setUpOscillator = (i: number) => {
     const oscillator  = context.createOscillator()
     const gain        = context.createGain()
 
@@ -63,7 +61,7 @@ function App() {
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
     oscillator.start(0);
-    return {oscillator, gain}
+    return {oscillator, gain, i}
   }
 
   const start = async () => {
@@ -135,9 +133,9 @@ function App() {
         const level = generateLevel(voice, voicesRef.current)
 
         if (waveforms.includes(randomSound)) {
-          const oscGain = setUpOscillator(voice)
+          const oscGain = setUpOscillator(i)
           oscGain.oscillator.type = randomSound
-          activeOscillators[i] = oscGain
+          activeOscillators.push(oscGain)
           oscillate(voice, length, offsetTime, level, oscGain)
           setTimeout(() => {removeOscillator(oscGain, i)}, length*1000)
         } else {
@@ -168,6 +166,8 @@ function App() {
     oscillator!.stop()
     oscillator!.disconnect()
     gain!.disconnect()
+    activeOscillators = activeOscillators.filter(osc => osc.i !== i)
+    console.log(activeOscillators)
   }
 
   const playSample = (voice: voice, name: string, level: number) => {
@@ -328,7 +328,8 @@ function App() {
       context.currentTime
     )
 
-    activeOscillators[i]?.oscillator.stop()
+    activeOscillators = activeOscillators.filter(osc => osc.i !== i)
+    console.log(activeOscillators)
 
     setVoices(voices =>
       voices.filter((_, j) => j !== i)
