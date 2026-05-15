@@ -9,7 +9,6 @@ import { voice } from './types/voice'
 import { setUpVoice, setUpSample } from './functions';
 import { OscGain } from './types';
 
-let activeOscillators: OscGain[] = []
 
 function App() {
 
@@ -135,7 +134,6 @@ function App() {
         if (waveforms.includes(randomSound)) {
           const oscGain = setUpOscillator(i)
           oscGain.oscillator.type = randomSound
-          activeOscillators.push(oscGain)
           oscillate(voice, length, offsetTime, level, oscGain)
           setTimeout(() => {removeOscillator(oscGain, i)}, length*1000)
         } else {
@@ -166,8 +164,6 @@ function App() {
     oscillator!.stop()
     oscillator!.disconnect()
     gain!.disconnect()
-    activeOscillators = activeOscillators.filter(osc => osc.i !== i)
-    console.log(activeOscillators)
   }
 
   const playSample = (voice: voice, name: string, level: number) => {
@@ -322,14 +318,6 @@ function App() {
     const voice = voices[i]
 
     voice.isActive = false
-
-    activeOscillators[i]?.gain.gain.setValueAtTime(
-      0,
-      context.currentTime
-    )
-
-    activeOscillators = activeOscillators.filter(osc => osc.i !== i)
-    console.log(activeOscillators)
 
     setVoices(voices =>
       voices.filter((_, j) => j !== i)
