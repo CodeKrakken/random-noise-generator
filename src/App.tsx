@@ -48,11 +48,10 @@ function App() {
 
   const handleStartStop = () => runningRef.current ? stopAll(voices) : start()
 
-  const setUpOscillator = (randomSound: OscillatorType) => {
+  const setUpOscillator = () => {
     const oscillator  = context.createOscillator()
     const gain        = context.createGain()
 
-    oscillator.type = randomSound
     oscillator.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
@@ -116,8 +115,8 @@ function App() {
         const level = generateLevel(voice, voicesRef.current)
 
         if (waveforms.includes(randomSound)) {
-          const oscGain = setUpOscillator(randomSound)
-          oscillate(voice, length, offsetTime, level, oscGain)
+          const oscGain = setUpOscillator()
+          oscillate(voice, length, offsetTime, level, oscGain, randomSound)
           setTimeout(() => removeOscillator(oscGain), length*1000)
         } else {
           playSample(voice, randomSound, level)
@@ -129,35 +128,21 @@ function App() {
     }, offsetTime*1000)
   }
 
-  const oscillate = (voice: voice, length: number, offsetTime: number, level: number, oscGain: OscGain) => {
+  const oscillate = (
+    voice: voice, 
+    length: number, 
+    offsetTime: number, 
+    level: number, 
+    oscGain: OscGain,
+    sound: OscillatorType
+  ) => {
 
-    oscGain.oscillator!.frequency.value = generateFrequency(voice)
+    oscGain.oscillator.frequency.value = generateFrequency(voice)
+    oscGain.oscillator.type = sound
 
     const noteLength = generateNoteLength(voice, length)
     
-    if (noteLength < length) {
-      scheduleNoteEnd(oscGain, noteLength, offsetTime)
-    }
-
-    shapeNote(voice, oscGain, noteLength, offsetTime, level)
-  }
-
-  const removeOscillator = (oscGain: OscGain) => {
-    const { oscillator, gain } = oscGain
-    oscillator!.stop()
-    oscillator!.disconnect()
-    gain!.disconnect()
-  }
-
-  const playSample = (voice: voice, name: string, level: number) => {
-
-    const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
-    sample.play()
-  }
-
-  const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
-
-  const shapeNote = (voice: voice, oscGain: OscGain, noteLength: number, offsetTime: number, level: number) => {
+    if (noteLength < length) scheduleNoteEnd(oscGain, noteLength, offsetTime)
 
     const gain = oscGain.gain!.gain
 
@@ -179,7 +164,27 @@ function App() {
     gain.linearRampToValueAtTime(level, startOfPeak)
     gain.setValueAtTime(level, endOfPeak)
     gain.linearRampToValueAtTime(0, thisInterval + noteLength)
-    gain.setValueAtTime(gain.value, 0)
+    gain.setValueAtTime(gain.value, 0)  
+  }
+
+  const removeOscillator = (oscGain: OscGain) => {
+    const { oscillator, gain } = oscGain
+    oscillator!.stop()
+    oscillator!.disconnect()
+    gain!.disconnect()
+  }
+
+  const playSample = (voice: voice, name: string, level: number) => {
+
+    const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
+    sample.play()
+  }
+
+  const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+
+  const shapeNote = (voice: voice, oscGain: OscGain, noteLength: number, offsetTime: number, level: number) => {
+
+    
   }
 
   const generateLevel = (voice: voice, voices: voice[]) => {
