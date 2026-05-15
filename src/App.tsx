@@ -31,8 +31,15 @@ function App() {
   }, [voices])
 
   const handleAddVoice = () => {
-    console.log(running)
-    setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
+    const newVoice = setUpVoice(voices[voices.length - 1])
+
+    if (running) {
+      newVoice.nextInterval = context.currentTime
+      newVoice.isActive = true
+      runInterval(newVoice, voices.length)
+    }
+
+    setVoices(voices => [voices, newVoice].flat())
   }
 
   const samples = {
