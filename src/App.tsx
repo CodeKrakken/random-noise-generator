@@ -144,9 +144,9 @@ function App() {
     
     if (noteLength < length) scheduleNoteEnd(oscGain, noteLength, offsetTime)
 
-    const gain = oscGain.gain!.gain
-
+    const gain         = oscGain.gain!.gain
     const thisInterval = voice.thisInterval! + offsetTime
+
     const fadeInPercentage  = getRangeValue('FadeIn', voice)
     const fadeOutPercentage = getRangeValue('FadeOut', voice)
 
@@ -155,10 +155,10 @@ function App() {
 
     const endOfFadeIn    = thisInterval + fadeInLength
     const startOfFadeOut = thisInterval + noteLength - fadeOutLength
-    const peakPoint = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
-    const overlap = endOfFadeIn >= startOfFadeOut
-    const startOfPeak = overlap ? peakPoint : endOfFadeIn
-    const endOfPeak   = overlap ? peakPoint : startOfFadeOut
+    const peakPoint      = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
+    const overlap        = endOfFadeIn >= startOfFadeOut
+    const startOfPeak    = overlap ? peakPoint : endOfFadeIn
+    const endOfPeak      = overlap ? peakPoint : startOfFadeOut
 
     gain.setValueAtTime(0, thisInterval)
     gain.linearRampToValueAtTime(level, startOfPeak)
@@ -169,29 +169,25 @@ function App() {
 
   const removeOscillator = (oscGain: OscGain) => {
     const { oscillator, gain } = oscGain
-    oscillator!.stop()
-    oscillator!.disconnect()
-    gain!.disconnect()
+    oscillator.stop()
+    oscillator.disconnect()
+    gain.disconnect()
   }
 
-  const playSample = (voice: voice, name: string, level: number) => {
-
+  const playSample = (
+    voice: voice, 
+    name: string, 
+    level: number
+  ) => {
     const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
     sample.play()
   }
 
   const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-  const shapeNote = (voice: voice, oscGain: OscGain, noteLength: number, offsetTime: number, level: number) => {
-
-    
-  }
-
   const generateLevel = (voice: voice, voices: voice[]) => {
     const { minLevel, maxLevel } = voice
-
     const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.length
-
     return balancedLevel
   }
 
@@ -204,7 +200,11 @@ function App() {
     return noteLength
   }
 
-  const scheduleNoteEnd = (oscGain: OscGain, noteLength: number, offsetTime: number) => {
+  const scheduleNoteEnd = (
+    oscGain: OscGain, 
+    noteLength: number, 
+    offsetTime: number
+  ) => {
     setTimeout(() => {
       oscGain.gain?.gain.setValueAtTime(0, context.currentTime)
     }, (offsetTime + noteLength)*1000)
@@ -221,10 +221,12 @@ function App() {
     return array[Math.floor(Math.random() * array.length)]
   }
 
-  const getOffsetTime = (voice: voice, intervalLength: number) => {
-    return getRangeValue('Offset', voice) / 100 * intervalLength
-  }
+  const getOffsetTime = (
+    voice: voice, 
+    intervalLength: number
+  ) => getRangeValue('Offset', voice) / 100 * intervalLength
 
+  
   const nextInterval = (voice: voice) => {
 
     if (!voice.isActive) return
