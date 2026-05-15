@@ -10,20 +10,26 @@ import { setUpVoice, setUpSample } from './functions';
 import { OscGain } from './types';
 
 
+
 function App() {
 
+  // state
+
   const [context] = useState(() => new AudioContext())
-  const [voices,  setVoices ] = useState<voice[]>([])
+  const [voices,  setVoices] = useState<voice[]>([])
   const [running, setRunning] = useState<boolean>(false)
+
+  // refs
 
   const runningRef = useRef(false)
   const voicesRef = useRef(voices)
 
   useEffect(() => { 
-    voicesRef.current   = voices
+
+    voicesRef.current = voices
+    
     if (!voices.length) { 
-      setRunning(false)
-      runningRef.current = false
+      toggleRunning(false)
     }      
   }, [voices])
 
@@ -64,8 +70,7 @@ function App() {
   }
 
   const start = async () => {
-    runningRef.current = true
-    setRunning(true)
+    toggleRunning(true)
 
     voices.forEach((voice, i) => {
       prepareToRun(voice, context.currentTime)
@@ -74,12 +79,17 @@ function App() {
   }
 
   const stopAll = (voices: voice[]) => {
-    runningRef.current = false
-    setRunning(false)
+
+    toggleRunning(false)
     
     voices.forEach(voice => {
       stopOne(voice)
     })
+  }
+
+  const toggleRunning = (state: boolean) => {
+    runningRef.current = state
+    setRunning(state)
   }
 
   const stopOne = (voice: voice) => {
