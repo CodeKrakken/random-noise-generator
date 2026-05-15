@@ -37,19 +37,17 @@ function App() {
     const newVoice = setUpVoice(voices[voices.length - 1])
 
     if (running) {
-      prepareToRun(newVoice, voices[voices.length -1].nextInterval)
-      runInterval(newVoice)
+      firstInterval(newVoice, voices[voices.length -1].nextInterval)
     }
 
     setVoices(voices => [voices, newVoice].flat())
   }
 
-  const prepareToRun = (voice: voice, time: number) => {
-    voice.nextInterval = time
+  const firstInterval = (voice: voice, nextInterval: number) => {
+    voice.nextInterval = nextInterval
     voice.isActive = true
+    runInterval(voice)
   }
-
-  
 
   const handleStartStop = () => {
     runningRef.current ? stopAll(voices) : start()
@@ -68,11 +66,7 @@ function App() {
 
   const start = async () => {
     toggleRunning(true)
-
-    voices.forEach((voice, i) => {
-      prepareToRun(voice, context.currentTime)
-      runInterval(voice)
-    })
+    voices.forEach(voice => firstInterval(voice, context.currentTime))
   }
 
   const stopAll = (voices: voice[]) => {
