@@ -1,5 +1,5 @@
 type props = {
-  addVoice         : React.MouseEventHandler<HTMLButtonElement>
+  handleAddVoice         : React.MouseEventHandler<HTMLButtonElement>
   handleStartStop : React.MouseEventHandler<HTMLButtonElement>
   showStart       : Boolean
   cycleButtonLabel: Boolean
@@ -8,7 +8,7 @@ type props = {
 export default function Header(props: props) {
 
   const { 
-    addVoice,
+    handleAddVoice,
     handleStartStop,
     showStart,
     cycleButtonLabel
@@ -20,7 +20,7 @@ export default function Header(props: props) {
     <br />
     <button 
       value="Add Voice"
-      onClick={addVoice}
+      onClick={handleAddVoice}
     >
       Add Voice
     </button>

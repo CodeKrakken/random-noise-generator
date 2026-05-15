@@ -30,7 +30,7 @@ function App() {
     }      
   }, [voices])
 
-  const addVoice = () => {
+  const handleAddVoice = () => {
     console.log(running)
     setVoices(voices => [voices, setUpVoice(voices[voices.length - 1])].flat())
   }
@@ -330,7 +330,7 @@ function App() {
     <Header 
       handleStartStop   = {handleStartStop}
       cycleButtonLabel  = {running}
-      addVoice          = {addVoice}
+      handleAddVoice    = {handleAddVoice}
       showStart         = {Boolean(voices.length)}
     />
 
