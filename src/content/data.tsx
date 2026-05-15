@@ -1,3 +1,6 @@
+import snareFile  from '../sounds/snare.wav';
+import kickFile   from '../sounds/kick.wav';
+
 export const allFrequencies = [
   [   16.35,    17.32,    18.35,    19.45,    20.60,    21.83,    23.12,    24.50,    25.96,    27.50,    29.14,    30.87,    32.70],
   [   32.70,    34.65,    36.71,    38.89,    41.20,    43.65,    46.25,    49.00,    51.91,    55.00,    58.27,    61.74,    65.41],
@@ -106,3 +109,8 @@ export const extrema = ['min', 'max']
 export const noteRatio = 1.0594630943592953
 
 export const oneMinute = 60
+
+export const samples = {
+    snare: snareFile,
+    kick: kickFile
+  }

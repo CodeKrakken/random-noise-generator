@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { allFrequencies, noteRatio, waveforms, oneMinute } from './content/data'
-import snareFile  from './sounds/snare.wav';
-import kickFile   from './sounds/kick.wav';
 import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
 import { setUpVoice, setUpSample } from './functions';
 import { OscGain } from './types';
-
+import { samples } from './content/data';
 
 
 function App() {
@@ -24,13 +22,16 @@ function App() {
   const runningRef = useRef(false)
   const voicesRef = useRef(voices)
 
+  // useEffect
+
   useEffect(() => { 
+
     voicesRef.current = voices
-    
-    if (!voices.length) { 
-      toggleRunning(false)
-    }      
+    if (!voices.length) toggleRunning(false)   
+
   }, [voices])
+
+  // functions
 
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices[voices.length - 1])
@@ -48,10 +49,7 @@ function App() {
     voice.isActive = true
   }
 
-  const samples = {
-    snare: snareFile,
-    kick: kickFile
-  }
+  
 
   const handleStartStop = () => {
     runningRef.current ? stopAll(voices) : start()
