@@ -35,11 +35,8 @@ function App() {
 
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices[voices.length - 1])
-
-    if (running) {
-      firstInterval(newVoice, voices[voices.length -1].nextInterval)
-    }
-
+    const nextInterval = voices[voices.length -1]?.nextInterval
+    if (running) firstInterval(newVoice, nextInterval)
     setVoices(voices => [voices, newVoice].flat())
   }
 
