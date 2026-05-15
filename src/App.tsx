@@ -34,12 +34,16 @@ function App() {
     const newVoice = setUpVoice(voices[voices.length - 1])
 
     if (running) {
-      newVoice.nextInterval = context.currentTime
-      newVoice.isActive = true
+      prepareToRun(newVoice, voices[voices.length -1].nextInterval)
       runInterval(newVoice, voices.length)
     }
 
     setVoices(voices => [voices, newVoice].flat())
+  }
+
+  const prepareToRun = (voice: voice, time: number) => {
+    voice.nextInterval = time
+    voice.isActive = true
   }
 
   const samples = {
@@ -67,8 +71,7 @@ function App() {
     setRunning(true)
 
     voices.forEach((voice, i) => {
-      voice.nextInterval = context.currentTime
-      voice.isActive = true
+      prepareToRun(voice, context.currentTime)
       runInterval(voice, i)
     })
   }
