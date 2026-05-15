@@ -48,10 +48,11 @@ function App() {
 
   const handleStartStop = () => runningRef.current ? stopAll(voices) : start()
 
-  const setUpOscillator = () => {
+  const setUpOscillator = (randomSound: OscillatorType) => {
     const oscillator  = context.createOscillator()
     const gain        = context.createGain()
 
+    oscillator.type = randomSound
     oscillator.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, 0)
@@ -115,10 +116,9 @@ function App() {
         const level = generateLevel(voice, voicesRef.current)
 
         if (waveforms.includes(randomSound)) {
-          const oscGain = setUpOscillator()
-          oscGain.oscillator.type = randomSound
+          const oscGain = setUpOscillator(randomSound)
           oscillate(voice, length, offsetTime, level, oscGain)
-          setTimeout(() => {removeOscillator(oscGain)}, length*1000)
+          setTimeout(() => removeOscillator(oscGain), length*1000)
         } else {
           playSample(voice, randomSound, level)
         }
