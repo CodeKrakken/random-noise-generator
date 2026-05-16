@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { allFrequencies, noteRatio, waveforms, oneMinute } from './content/data'
+import { allFrequencies, noteRatio, waveforms, oneMinute, extrema } from './content/data'
 import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
@@ -252,13 +252,12 @@ function App() {
   }
 
   const getRangeValue = (key: string, voice: voice) => {
-
-    const minEl = voice[`min${key}` as keyof voice]
-    const maxEl = voice[`max${key}` as keyof voice]
+    
+    const [min, max] = extrema.map(prefix => voice[prefix + key as keyof voice])
 
     const rangeValue = (
-      minEl as number + (Math.random() * (
-      maxEl as number - (minEl as number)))
+      min as number + (Math.random() * (
+      max as number - (min as number)))
     )
 
     return rangeValue
