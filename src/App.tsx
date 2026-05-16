@@ -268,7 +268,15 @@ function App() {
     // Refactor to use real values, not computed ones
 
     const cents = getRangeValue('Detune', voice)
-    const semitoneUp = frequency * noteRatio
+    // if (!cents) return frequency
+    
+    const modifier = cents < 0 ? -1 : 1
+    const freqArray = [...new Set(allFrequencies.flat())]
+    const modIndex = freqArray.indexOf(frequency) + modifier
+    console.log(freqArray[modIndex])
+
+
+    let semitoneUp = 1
     const hzDiff = semitoneUp - frequency
 
     return frequency + hzDiff / 100 * cents
