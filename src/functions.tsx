@@ -1,4 +1,8 @@
+import { OscGain, runningRef, voicesRef, waveform } from "./types"
 import { voice } from "./types/voice"
+import { allFrequencies, extrema, oneMinute, samples } from './content/data';
+import { RefObject } from "react";
+
 
 export const setUpVoice = (template: voice | null = null) => {
   return {
@@ -26,7 +30,12 @@ export const setUpVoice = (template: voice | null = null) => {
   }
 }
 
-export const setUpSample = (voice: voice, file: string, context: AudioContext, level: number) => {
+export const setUpSample = (
+  voice: voice, 
+  file: string, 
+  context: AudioContext, 
+  level: number
+) => {
   voice.sample = new Audio(file)
   voice.sound = context.createMediaElementSource(voice.sample);
   voice.gain  = context.createGain()
@@ -39,3 +48,271 @@ export const setUpSample = (voice: voice, file: string, context: AudioContext, l
 
   return sample
 }
+
+export const setUpOscillator = (context: AudioContext) => {
+  const oscillator  = context.createOscillator()
+  const gain        = context.createGain()
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+  gain.gain.setValueAtTime(0, 0)
+  oscillator.start(0);
+  return {oscillator, gain}
+}
+
+export const removeOscillator = (oscGain: OscGain) => {
+  const { oscillator, gain } = oscGain
+  oscillator.stop()
+  oscillator.disconnect()
+  gain.disconnect()
+}
+
+export const playSample = (
+  voice: voice, 
+  name: string, 
+  level: number,
+  context: AudioContext
+) => {
+  const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
+  sample.play()
+}
+
+export const scheduleNoteEnd = (
+  oscGain: OscGain, 
+  noteLength: number, 
+  offsetTime: number,
+  context: AudioContext
+) => {
+  setTimeout(() => {
+    oscGain.gain?.gain.setValueAtTime(0, context.currentTime)
+  }, (offsetTime + noteLength)*1000)
+}
+
+export const oscillate = (
+  voice: voice, 
+  length: number, 
+  offsetTime: number, 
+  level: number, 
+  oscGain: OscGain,
+  sound: OscillatorType,
+  context: AudioContext
+) => {
+
+  oscGain.oscillator.frequency.value = generateFrequency(voice)
+  oscGain.oscillator.type = sound
+
+  const noteLength = generateNoteLength(voice, length)
+  
+  if (noteLength < length) scheduleNoteEnd(oscGain, noteLength, offsetTime, context)
+
+  const gain         = oscGain.gain!.gain
+  const thisInterval = voice.thisInterval! + offsetTime
+
+  const fadeInPercentage  = getRangeValue('FadeIn', voice)
+  const fadeOutPercentage = getRangeValue('FadeOut', voice)
+
+  const fadeInLength  = getFadeLength(fadeInPercentage , noteLength)
+  const fadeOutLength = getFadeLength(fadeOutPercentage, noteLength)
+
+  const endOfFadeIn    = thisInterval + fadeInLength
+  const startOfFadeOut = thisInterval + noteLength - fadeOutLength
+  const peakPoint      = thisInterval + noteLength * fadeInPercentage / (fadeInPercentage + fadeOutPercentage)
+  const overlap        = endOfFadeIn >= startOfFadeOut
+  const startOfPeak    = overlap ? peakPoint : endOfFadeIn
+  const endOfPeak      = overlap ? peakPoint : startOfFadeOut
+
+  gain.setValueAtTime(0, thisInterval)
+  gain.linearRampToValueAtTime(level, startOfPeak)
+  gain.setValueAtTime(level, endOfPeak)
+  gain.linearRampToValueAtTime(0, thisInterval + noteLength)
+  gain.setValueAtTime(gain.value, 0)  
+}
+
+export const makeSound = (
+  voice: voice, 
+  length: number, 
+  voicesRef: voicesRef, 
+  waveforms: string[], 
+  context: AudioContext
+) => {
+
+  const offsetTime = getOffsetTime(voice, length)
+
+  setTimeout(() => {
+
+    try {
+      const activeSounds = voice.activeSounds
+      const randomSound = randomOneFrom(activeSounds)
+      const level = generateLevel(voice, voicesRef.current)
+
+      if (waveforms.includes(randomSound)) {
+        const oscGain = setUpOscillator(context)
+        oscillate(voice, length, offsetTime, level, oscGain, randomSound, context)
+        setTimeout(() => removeOscillator(oscGain), length*1000)
+      } else {
+        playSample(voice, randomSound, level, context)
+      }
+
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : "Unknown error", error)
+    }            
+  }, offsetTime*1000)
+}
+
+export const randomOneFrom = (array: any[]) => {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+export const isRest = (voice: voice) => {
+  const restChance  = voice.restChance/100
+  const diceRoll = Math.random()
+  const result = diceRoll < restChance
+  return result
+}
+
+export const generateLevel = (voice: voice, voices: voice[]) => {
+  const { minLevel, maxLevel } = voice
+  const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.length
+  return balancedLevel
+}
+
+export const generateNoteLength = (voice: voice, intervalLength: number) => {
+
+  const { minLength, maxLength } = voice
+  const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
+  const noteLength = intervalLength / 100 * noteLengthPercentage
+
+  return noteLength
+}
+
+export const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+
+export const generateFrequency = (voice: voice) => {
+  const randomFrequency = getRandomFrequency(voice)
+  const frequency   = detune(randomFrequency as number, voice)
+  return frequency
+}
+
+const detune = (frequency: number, voice: voice) => {
+
+  const cents = getRangeValue('Detune', voice)
+  if (!cents) return frequency
+  
+  const freqArray = [...new Set(allFrequencies.flat())]
+  
+  const modifier = cents < 0 ? -1 : 1
+  const nextFreq = freqArray[freqArray.indexOf(frequency) + modifier]
+  const hzDiff = Math.max(nextFreq, frequency) - Math.min(nextFreq, frequency)
+  const detunedFrequency = frequency + hzDiff / 100 * cents
+  
+  return detunedFrequency
+}
+
+const getRandomFrequency = (voice: voice) => {
+    
+  const activeFrequencies = getActiveFrequencies(voice) 
+  const randomIndex = Math.floor(Math.random()*activeFrequencies.length)
+  const randomFrequency = activeFrequencies[randomIndex]
+  
+  return randomFrequency
+}
+
+
+export const getActiveFrequencies = (voice: voice) => {
+    
+  const activeOctaves = voice.activeOctaves
+  const activeNotes   = voice.activeNotes
+
+  let allFrequenciesInOctaves = allFrequencies.filter(
+    (octave, j) => activeOctaves.includes(j.toString())
+  )
+  
+  let activeFrequencies = allFrequenciesInOctaves.map(octave =>
+    octave.filter((note, j) => activeNotes.includes((j+1).toString()))
+  )
+
+  return activeFrequencies.flat(Infinity)
+}
+
+export const getIntervalLength = (voice: voice) => {
+  const {activeIntervals, bpm} = voice
+  const interval = randomOneFrom(activeIntervals) || '0'
+  const intervalLength  = oneMinute / bpm * parseFloat(interval)
+  return intervalLength
+}
+
+export const getOffsetTime = (
+  voice: voice, 
+  intervalLength: number
+) => getRangeValue('Offset', voice) / 100 * intervalLength
+
+export const getRangeValue = (key: string, voice: voice) => {
+    
+  const [min, max] = extrema.map(prefix => voice[prefix + key as keyof voice])
+
+  const rangeValue = (
+    min as number + (Math.random() * (
+    max as number - (min as number)))
+  )
+
+  return rangeValue
+}
+
+export const runInterval = (
+  voice: voice, 
+  runningRef: runningRef, 
+  voicesRef: voicesRef, 
+  waveforms: waveform[], 
+  context: AudioContext
+) => {
+  try {    
+    if (isRunning(runningRef.current)) {
+      const thisInterval = voice.nextInterval
+      voice.thisInterval = voice.nextInterval
+  
+      if (isTimeFor(thisInterval, context)) {
+        const intervalLength = getIntervalLength(voice)
+        voice.nextInterval += intervalLength
+      
+        if (!isRest(voice)) makeSound(voice, intervalLength, voicesRef, waveforms, context)
+      } 
+
+      nextInterval(voice, context, runningRef, voicesRef, waveforms)
+    }
+  } catch (error) {}
+}
+
+export const nextInterval = (
+  voice: voice, 
+  context: AudioContext, 
+  runningRef: runningRef, 
+  voicesRef: voicesRef, 
+  waveforms: waveform[]
+) => {
+
+  if (!voice.isActive) return
+
+  setTimeout(() => {
+    if (!voice.isActive) return
+    runInterval(voice, runningRef, voicesRef, waveforms, context)
+  }, (voice.nextInterval - context.currentTime)*1000)    
+}
+
+export const firstInterval = (
+  voice: voice, 
+  nextInterval: number, 
+  runningRef: runningRef, 
+  voicesRef: voicesRef, 
+  waveforms: waveform[], 
+  context: AudioContext
+) => {
+  voice.nextInterval = nextInterval
+  voice.isActive = true
+  runInterval(voice, runningRef, voicesRef, waveforms, context)
+}
+
+export const stopOne = (voice: voice) => voice.isActive = false
+
+const isRunning = (running: boolean) => running
+
+const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
