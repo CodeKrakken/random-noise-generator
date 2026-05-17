@@ -1,17 +1,26 @@
 import { voice } from "./types/voice"
 
+type OscillatorSource = {
+  kind: "oscillator"
+  wave: OscillatorType
+}
+
+type SampleSource = {
+  kind: "sample"
+  name: "kick" | "snare"
+  buffer: AudioBuffer
+}
+
+ type SoundSource = OscillatorSource | SampleSource
+
  type OscGain = {
   oscillator: OscillatorNode, 
   gain: GainNode
 }
 
- type voicesRef = {
-  current: voice[]
-}
+ type voicesRef = { current: voice[] }
 
- type runningRef = {
-  current: boolean
-}
+ type runningRef = { current: boolean }
 
  type waveform =
   'sine'
@@ -23,5 +32,6 @@ export type {
   waveform,
   OscGain,
   runningRef, 
-  voicesRef
+  voicesRef,
+  SoundSource
 }
