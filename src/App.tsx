@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { allFrequencies, noteRatio, waveforms, oneMinute, extrema } from './content/data'
+import { waveforms } from './content/data'
 import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
 import { voice } from './types/voice'
-import { setUpVoice, setUpSample, setUpOscillator, removeOscillator, playSample, scheduleNoteEnd, firstInterval, getRangeValue, getActiveFrequencies, stopOne } from './functions';
-import { OscGain, waveform } from './types';
+import { setUpVoice, firstInterval, stopOne } from './functions';
+import { waveform } from './types';
 
 
 function App() {

@@ -1,10 +1,8 @@
 import { OscGain, runningRef, voicesRef, waveform } from "./types"
 import { voice } from "./types/voice"
 import { allFrequencies, extrema, oneMinute, samples } from './content/data';
-import { RefObject } from "react";
 
-
-export const setUpVoice = (template: voice | null = null) => {
+const setUpVoice = (template: voice | null = null) => {
   return {
     isActive        : false,
     label           : template?.label!+1          ||  1,
@@ -30,7 +28,7 @@ export const setUpVoice = (template: voice | null = null) => {
   }
 }
 
-export const setUpSample = (
+const setUpSample = (
   voice: voice, 
   file: string, 
   context: AudioContext, 
@@ -49,7 +47,7 @@ export const setUpSample = (
   return sample
 }
 
-export const setUpOscillator = (context: AudioContext) => {
+const setUpOscillator = (context: AudioContext) => {
   const oscillator  = context.createOscillator()
   const gain        = context.createGain()
 
@@ -60,14 +58,14 @@ export const setUpOscillator = (context: AudioContext) => {
   return {oscillator, gain}
 }
 
-export const removeOscillator = (oscGain: OscGain) => {
+const removeOscillator = (oscGain: OscGain) => {
   const { oscillator, gain } = oscGain
   oscillator.stop()
   oscillator.disconnect()
   gain.disconnect()
 }
 
-export const playSample = (
+const playSample = (
   voice: voice, 
   name: string, 
   level: number,
@@ -77,7 +75,7 @@ export const playSample = (
   sample.play()
 }
 
-export const scheduleNoteEnd = (
+const scheduleNoteEnd = (
   oscGain: OscGain, 
   noteLength: number, 
   offsetTime: number,
@@ -88,7 +86,7 @@ export const scheduleNoteEnd = (
   }, (offsetTime + noteLength)*1000)
 }
 
-export const oscillate = (
+const oscillate = (
   voice: voice, 
   length: number, 
   offsetTime: number, 
@@ -128,7 +126,7 @@ export const oscillate = (
   gain.setValueAtTime(gain.value, 0)  
 }
 
-export const makeSound = (
+const makeSound = (
   voice: voice, 
   length: number, 
   voicesRef: voicesRef, 
@@ -159,24 +157,24 @@ export const makeSound = (
   }, offsetTime*1000)
 }
 
-export const randomOneFrom = (array: any[]) => {
+const randomOneFrom = (array: any[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export const isRest = (voice: voice) => {
+const isRest = (voice: voice) => {
   const restChance  = voice.restChance/100
   const diceRoll = Math.random()
   const result = diceRoll < restChance
   return result
 }
 
-export const generateLevel = (voice: voice, voices: voice[]) => {
+const generateLevel = (voice: voice, voices: voice[]) => {
   const { minLevel, maxLevel } = voice
   const balancedLevel = ((minLevel + Math.random() * (maxLevel - minLevel))/100)/voices.length
   return balancedLevel
 }
 
-export const generateNoteLength = (voice: voice, intervalLength: number) => {
+const generateNoteLength = (voice: voice, intervalLength: number) => {
 
   const { minLength, maxLength } = voice
   const noteLengthPercentage  = (minLength + Math.random() * (maxLength - minLength))
@@ -185,9 +183,9 @@ export const generateNoteLength = (voice: voice, intervalLength: number) => {
   return noteLength
 }
 
-export const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-export const generateFrequency = (voice: voice) => {
+const generateFrequency = (voice: voice) => {
   const randomFrequency = getRandomFrequency(voice)
   const frequency   = detune(randomFrequency as number, voice)
   return frequency
@@ -218,7 +216,7 @@ const getRandomFrequency = (voice: voice) => {
 }
 
 
-export const getActiveFrequencies = (voice: voice) => {
+const getActiveFrequencies = (voice: voice) => {
     
   const activeOctaves = voice.activeOctaves
   const activeNotes   = voice.activeNotes
@@ -234,19 +232,19 @@ export const getActiveFrequencies = (voice: voice) => {
   return activeFrequencies.flat(Infinity)
 }
 
-export const getIntervalLength = (voice: voice) => {
+const getIntervalLength = (voice: voice) => {
   const {activeIntervals, bpm} = voice
   const interval = randomOneFrom(activeIntervals) || '0'
   const intervalLength  = oneMinute / bpm * parseFloat(interval)
   return intervalLength
 }
 
-export const getOffsetTime = (
+const getOffsetTime = (
   voice: voice, 
   intervalLength: number
 ) => getRangeValue('Offset', voice) / 100 * intervalLength
 
-export const getRangeValue = (key: string, voice: voice) => {
+const getRangeValue = (key: string, voice: voice) => {
     
   const [min, max] = extrema.map(prefix => voice[prefix + key as keyof voice])
 
@@ -258,7 +256,7 @@ export const getRangeValue = (key: string, voice: voice) => {
   return rangeValue
 }
 
-export const runInterval = (
+const runInterval = (
   voice: voice, 
   runningRef: runningRef, 
   voicesRef: voicesRef, 
@@ -282,7 +280,7 @@ export const runInterval = (
   } catch (error) {}
 }
 
-export const nextInterval = (
+const nextInterval = (
   voice: voice, 
   context: AudioContext, 
   runningRef: runningRef, 
@@ -298,7 +296,7 @@ export const nextInterval = (
   }, (voice.nextInterval - context.currentTime)*1000)    
 }
 
-export const firstInterval = (
+const firstInterval = (
   voice: voice, 
   nextInterval: number, 
   runningRef: runningRef, 
@@ -311,8 +309,14 @@ export const firstInterval = (
   runInterval(voice, runningRef, voicesRef, waveforms, context)
 }
 
-export const stopOne = (voice: voice) => voice.isActive = false
+const stopOne = (voice: voice) => voice.isActive = false
 
 const isRunning = (running: boolean) => running
 
 const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
+
+export { 
+  setUpVoice,
+  firstInterval,
+  stopOne
+}
