@@ -1,4 +1,4 @@
-import { VoiceProps } from '../../types/voice'
+import { VoiceProps } from './types'
 import DeleteButton from '../delete-button/DeleteButton'
 import Inputs from '../inputs/Inputs'
 

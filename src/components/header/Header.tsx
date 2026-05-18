@@ -1,11 +1,6 @@
-type props = {
-  handleAddVoice         : React.MouseEventHandler<HTMLButtonElement>
-  handleStartStop : React.MouseEventHandler<HTMLButtonElement>
-  showStart       : Boolean
-  cycleButtonLabel: Boolean
-}
+import { HeaderProps } from "./types"
 
-export default function Header(props: props) {
+export default function Header(props: HeaderProps) {
 
   const { 
     handleAddVoice,

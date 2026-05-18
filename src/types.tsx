@@ -1,4 +1,4 @@
-import { voice } from "./types/voice"
+import { voice } from "./components/voice/types"
 
 type OscillatorSource = {
   kind: "oscillator"

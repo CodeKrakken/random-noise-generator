@@ -1,10 +1,11 @@
 import { checkboxGroups, extrema, fields } from "../../content/data";
-import { InputsProps } from "../../types/inputs";
-import { Atom, CheckboxGroup } from "../../types/voice";
+import { InputsProps } from "./types";
+import { Atom, CheckboxGroup } from "../voice/types";
 import Input from "../input/Input";
 import { updateCheckbox, updateField } from "../voice/functions";
+import { InputProps } from "../input/types";
 
-const input = ((props: any) => {
+const input = ((props: InputProps) => {
   return <>
     <Input
       {...props}

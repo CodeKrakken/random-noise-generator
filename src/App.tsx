@@ -3,7 +3,7 @@ import './App.css';
 import { waveforms } from './content/data'
 import Voice from './components/voice/Voice';
 import Header from './components/header/Header';
-import { voice } from './types/voice'
+import { voice } from './components/voice/types'
 import { setUpVoice, firstInterval, stopOne } from './functions';
 import { waveform } from './types';
 

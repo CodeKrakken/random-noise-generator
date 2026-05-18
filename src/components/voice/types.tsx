@@ -1,5 +1,5 @@
-import { SoundSource } from '../types'
-import { ranges } from '../content/data'
+import { SoundSource } from '../../types'
+import { ranges } from '../../content/data'
 
 export type voice = {
   isActive        : boolean

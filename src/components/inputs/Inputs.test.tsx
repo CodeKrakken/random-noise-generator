@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Inputs from './Inputs';
+import { updateField, updateCheckbox } from '../voice/functions';
 
 jest.mock('../../content/data', () => ({
   fields: {
@@ -25,7 +26,6 @@ jest.mock('../voice/functions', () => ({
   updateCheckbox: jest.fn()
 }));
 
-import { updateField, updateCheckbox } from '../voice/functions';
 
 describe('Inputs', () => {
 
