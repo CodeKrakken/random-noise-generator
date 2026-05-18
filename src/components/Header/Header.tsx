@@ -1,4 +1,4 @@
-import { HeaderProps } from "./types"
+import { HeaderProps } from "./Header.types"
 
 export default function Header(props: HeaderProps) {
 

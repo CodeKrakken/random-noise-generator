@@ -21,7 +21,7 @@ jest.mock('../../content/data', () => ({
   }
 }));
 
-jest.mock('../voice/functions', () => ({
+jest.mock('../Voice/functions', () => ({
   updateField: jest.fn(),
   updateCheckbox: jest.fn()
 }));

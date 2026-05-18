@@ -1,4 +1,4 @@
-import { DeleteButtonProps } from "./types"
+import { DeleteButtonProps } from "./DeleteButton.types"
 
 export default function DeleteButton ({...props}: DeleteButtonProps) {
   
