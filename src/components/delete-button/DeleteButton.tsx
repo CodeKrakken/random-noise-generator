@@ -1,4 +1,6 @@
-export default function DeleteButton ({...props}: any) {
+import { DeleteButtonProps } from "./types"
+
+export default function DeleteButton ({...props}: DeleteButtonProps) {
   
   const {
     handleDelete,
