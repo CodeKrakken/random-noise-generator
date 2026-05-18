@@ -1,6 +1,6 @@
 import { checkboxGroups, extrema, fields } from "../../content/data";
 import { InputsProps } from "./types";
-import { Atom, CheckboxGroup } from "../voice/types";
+import { Atom, CheckboxGroup } from "./types";
 import Input from "../input/Input";
 import { updateCheckbox, updateField } from "../voice/functions";
 import { InputProps } from "../input/types";
