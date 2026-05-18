@@ -9,8 +9,6 @@ type SampleSource = {
   buffer: AudioBuffer
 }
 
-type SoundSource = OscillatorSource | SampleSource
-
 type voice = {
   isActive        : boolean
   label           : number
@@ -36,7 +34,7 @@ type voice = {
   maxFadeOut      : number
   oscillator?     : OscillatorNode
   gain?           : GainNode
-  source?         : SoundSource
+  source?         : OscillatorSource | SampleSource
   sample?         : HTMLAudioElement
   sound?          : MediaElementAudioSourceNode
 }
