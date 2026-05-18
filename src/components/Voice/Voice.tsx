@@ -1,6 +1,6 @@
-import { VoiceProps } from './types'
-import DeleteButton from '../delete-button/DeleteButton'
-import Inputs from '../inputs/Inputs'
+import { VoiceProps } from './Voice.types'
+import DeleteButton from '../DeleteButton/DeleteButton'
+import Inputs from '../Inputs/Inputs'
 
 export default function Voice(
   {

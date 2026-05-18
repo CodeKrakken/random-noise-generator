@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { waveforms } from './content/data'
-import Voice from './components/voice/Voice';
-import Header from './components/header/Header';
-import { voice } from './components/voice/types'
+import Voice from './components/Voice/Voice';
+import Header from './components/Header/Header';
+import { voice } from './components/Voice/Voice.types'
 import { setUpVoice, firstInterval, stopOne } from './functions';
-import { waveform } from './types';
+import { waveform } from './App.types';
 
 
 function App() {

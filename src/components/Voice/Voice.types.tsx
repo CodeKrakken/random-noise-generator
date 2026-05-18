@@ -1,4 +1,4 @@
-import { SoundSource } from '../../types'
+import { SoundSource } from '../../App.types'
 import { ranges } from '../../content/data'
 
 export type voice = {
@@ -50,10 +50,6 @@ export type Atom =
 | `min${Range}`
 | `max${Range}`
 
-export type AtomicField =
-  'label' 
-| 'bpm' 
-| 'restChance'
 
 export type Compound = 
   'activeNotes'

@@ -1,4 +1,4 @@
-import { voice } from "../voice/types"
+import { voice } from "../Voice/Voice.types"
 
 export type InputsProps = {
   i: number

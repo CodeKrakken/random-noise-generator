@@ -1,5 +1,5 @@
-import { OscGain, runningRef, voicesRef, waveform } from "./types"
-import { voice } from "./components/voice/types"
+import { OscGain, runningRef, voicesRef, waveform } from "./App.types"
+import { voice } from "./components/Voice/Voice.types"
 import { allFrequencies, extrema, oneMinute, samples } from './content/data';
 
 const setUpVoice = (template: voice | null = null) => {
