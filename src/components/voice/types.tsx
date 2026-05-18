@@ -39,11 +39,6 @@ export type VoiceProps = {
   dataAttribute? : string
 }
 
-export type AtomicField =
-  'label' 
-| 'bpm' 
-| 'restChance'
-
 export type Compound = 
   'activeNotes'
 | 'activeOctaves'
