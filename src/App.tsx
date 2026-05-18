@@ -4,7 +4,7 @@ import { waveforms } from './content/data'
 import Voice from './components/Voice/Voice';
 import Header from './components/Header/Header';
 import { voice } from './components/Voice/Voice.types'
-import { setUpVoice, firstInterval, stopOne } from './functions';
+import { setUpVoice, firstInterval, stopOne } from './App.functions';
 import { waveform } from './App.types';
 
 

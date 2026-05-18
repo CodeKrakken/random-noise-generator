@@ -1,4 +1,6 @@
-import { Compound, Atom, voice } from "./Voice.types"
+import { Compound, voice } from "./Voice.types"
+import { Atom } from "../shared.types"
+
 
 export const updateField = (
   e: any, 

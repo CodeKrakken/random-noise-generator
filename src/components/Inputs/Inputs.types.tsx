@@ -1,7 +1,11 @@
 import { voice } from "../Voice/Voice.types"
 
-export type InputsProps = {
+type InputsProps = {
   i: number
   voices: voice[]
   setVoices: Function
+}
+
+export type {
+  InputsProps
 }

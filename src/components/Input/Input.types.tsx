@@ -1,6 +1,6 @@
 import { ChangeEventHandler } from "react"
 
-export type InputProps = {
+type InputProps = {
   className         : string  
   title             : string
   label?            : string
@@ -15,4 +15,8 @@ export type InputProps = {
   checked?          : boolean | undefined
   'data-voice'?     : number
   'data-attribute'? : string
+}
+
+export type { 
+  InputProps 
 }

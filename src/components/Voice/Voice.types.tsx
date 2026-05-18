@@ -1,7 +1,17 @@
-import { SoundSource } from '../../App.types'
-import { ranges } from '../../content/data'
+type OscillatorSource = {
+  kind: "oscillator"
+  wave: OscillatorType
+}
 
-export type voice = {
+type SampleSource = {
+  kind: "sample"
+  name: "kick" | "snare"
+  buffer: AudioBuffer
+}
+
+type SoundSource = OscillatorSource | SampleSource
+
+type voice = {
   isActive        : boolean
   label           : number
   thisInterval?   : number
@@ -31,8 +41,7 @@ export type voice = {
   sound?          : MediaElementAudioSourceNode
 }
 
-
-export type VoiceProps = {
+type VoiceProps = {
   i           : number, 
   setVoices   : Function, 
   voices      : voice[], 
@@ -41,24 +50,14 @@ export type VoiceProps = {
   dataAttribute? : string
 }
 
-type Range = typeof ranges[number]
-
-export type Atom = 
-  'label'
-| 'bpm'
-| 'restChance'
-| `min${Range}`
-| `max${Range}`
-
-
-export type Compound = 
+type Compound = 
   'activeNotes'
 | 'activeOctaves'
 | 'activeIntervals'
 | 'activeSounds'
 
-export type CheckboxGroup = 
-  'Octaves' 
-| 'Notes' 
-| 'Sounds' 
-| 'Intervals'
+export type {
+  voice,
+  VoiceProps,
+  Compound
+}
