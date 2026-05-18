@@ -6,7 +6,7 @@ export default function Header(props: HeaderProps) {
     handleAddVoice,
     handleStartStop,
     showStart,
-    cycleButtonLabel
+    running
   } = props
 
   return <>
@@ -26,7 +26,7 @@ export default function Header(props: HeaderProps) {
         value="Start/Stop" 
         onClick={handleStartStop}
       >
-        {cycleButtonLabel ? 'Stop' : 'Start'}
+        {running ? 'Stop' : 'Start'}
       </button>
     }
   </>

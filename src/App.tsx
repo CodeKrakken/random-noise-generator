@@ -71,10 +71,10 @@ function App() {
   return <>
     <br />
     <Header 
-      handleStartStop   = {handleStartStop}
-      cycleButtonLabel  = {running}
-      handleAddVoice    = {handleAddVoice}
-      showStart         = {Boolean(voices.length)}
+      handleStartStop = {handleStartStop}
+      running         = {running}
+      handleAddVoice  = {handleAddVoice}
+      showStart       = {Boolean(voices.length)}
     />
 
     <br />
