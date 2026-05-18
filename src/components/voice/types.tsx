@@ -1,4 +1,5 @@
 import { SoundSource } from '../../types'
+import { ranges } from '../../content/data'
 
 export type voice = {
   isActive        : boolean
@@ -30,6 +31,7 @@ export type voice = {
   sound?          : MediaElementAudioSourceNode
 }
 
+
 export type VoiceProps = {
   i           : number, 
   setVoices   : Function, 
@@ -39,8 +41,28 @@ export type VoiceProps = {
   dataAttribute? : string
 }
 
+type Range = typeof ranges[number]
+
+export type Atom = 
+  'label'
+| 'bpm'
+| 'restChance'
+| `min${Range}`
+| `max${Range}`
+
+export type AtomicField =
+  'label' 
+| 'bpm' 
+| 'restChance'
+
 export type Compound = 
   'activeNotes'
 | 'activeOctaves'
 | 'activeIntervals'
 | 'activeSounds'
+
+export type CheckboxGroup = 
+  'Octaves' 
+| 'Notes' 
+| 'Sounds' 
+| 'Intervals'
