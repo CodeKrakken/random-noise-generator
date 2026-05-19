@@ -92,7 +92,7 @@ export default function Inputs(
                       type: "checkbox",
                       value: checkbox,
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox),
-                      onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)
+                      onChange: (e: React.ChangeEvent) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)
                     };
 
                     return input(props)
