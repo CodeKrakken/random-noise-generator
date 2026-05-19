@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Inputs from './Inputs';
 import { updateField, updateCheckbox } from '../Voice/functions';
+import { setUpVoice } from '../../App.functions';
+import { VoiceType } from '../Voice/Voice.types';
 
 jest.mock('../../content/data', () => ({
   fields: {
@@ -17,7 +19,7 @@ jest.mock('../../content/data', () => ({
   },
   extrema: ['min', 'max'],
   checkboxGroups: {
-    Waves: ['sine', 'square']
+    Sounds: ['sine', 'square']
   }
 }));
 
@@ -27,16 +29,16 @@ jest.mock('../Voice/functions', () => ({
 }));
 
 
+
 describe('Inputs', () => {
 
   const setVoices = jest.fn();
 
-  const voices: any = [{
-    bpm: 120,
-    minLevel: 10,
-    maxLevel: 90,
-    activeWaves: ['sine']
-  }];
+  const voices: VoiceType[] = [setUpVoice()]
+
+  voices[0].bpm = 120
+  voices[0].minLevel = 10
+  voices[0].maxLevel = 90
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -186,7 +188,7 @@ describe('Inputs', () => {
 
     expect(updateCheckbox).toHaveBeenCalledWith(
       expect.any(Object),
-      'activeWaves',
+      'activeSounds',
       voices,
       0,
       setVoices
@@ -200,13 +202,13 @@ describe('Inputs', () => {
         bpm: 120,
         minLevel: 10,
         maxLevel: 90,
-        activeWaves: ['sine']
+        activeSounds: ['sine']
       },
       {
         bpm: 200,
         minLevel: 30,
         maxLevel: 60,
-        activeWaves: ['square']
+        activeSounds: ['square']
       }
     ];
 

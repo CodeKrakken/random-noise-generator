@@ -82,6 +82,9 @@ export default function Inputs(
                 <div className="label">{checkboxGroup}</div>
                 {
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
+
+                    console.log(checkboxGroup)
+                    
                     const props: any = {
                       className: 'checkbox',
                       'data-attribute': checkboxGroup,
@@ -91,6 +94,7 @@ export default function Inputs(
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox),
                       onChange: (e: any) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)
                     };
+
                     return input(props)
                   })
                 }
