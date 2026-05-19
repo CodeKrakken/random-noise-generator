@@ -215,7 +215,7 @@ describe('Inputs', () => {
     render(
       <Inputs
         i={1}
-        voices={multiVoices as any}
+        voices={multiVoices as VoiceType[]}
         setVoices={setVoices}
       />
     );
