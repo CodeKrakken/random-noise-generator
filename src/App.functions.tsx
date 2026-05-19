@@ -140,7 +140,7 @@ const makeSound = (
 
     try {
       const activeSounds = voice.activeSounds
-      const randomSound = randomOneFrom(activeSounds)
+      const randomSound = randomOneFrom(activeSounds) as OscillatorType
       const level = generateLevel(voice, voicesRef.current)
 
       if (waveforms.includes(randomSound)) {
@@ -157,7 +157,7 @@ const makeSound = (
   }, offsetTime*1000)
 }
 
-const randomOneFrom = (array: any[]) => {
+const randomOneFrom = (array: (OscillatorType | String)[]) => {
   return array[Math.floor(Math.random() * array.length)]
 }
 
@@ -234,7 +234,7 @@ const getActiveFrequencies = (voice: VoiceType) => {
 
 const getIntervalLength = (voice: VoiceType) => {
   const {activeIntervals, bpm} = voice
-  const interval = randomOneFrom(activeIntervals) || '0'
+  const interval = (randomOneFrom(activeIntervals) || '0') as string
   const intervalLength  = oneMinute / bpm * parseFloat(interval)
   return intervalLength
 }
