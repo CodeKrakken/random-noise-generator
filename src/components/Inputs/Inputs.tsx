@@ -36,7 +36,7 @@ export default function Inputs(
               'data-attribute': `${f.value}`,
               type: 'number',
               value: voice[`${f.value}` as Atom],
-              onChange: (e: any) => updateField(e, `${f.value}` as Atom, voices, i, setVoices)
+              onChange: (e: React.ChangeEvent) => updateField(e, f.value as Atom, voices, i, setVoices)
             }
 
             return <>
@@ -52,7 +52,7 @@ export default function Inputs(
 
                         props['data-attribute'] = `${ex}${f.value}`;
                         props.value = voice[`${ex}${f.value}` as Atom] // populates field
-                        props.onChange = (e: any) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
+                        props.onChange = (e: React.ChangeEvent) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
                         
                         return <>
                           <div key={ex}>
