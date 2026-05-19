@@ -1,4 +1,4 @@
-import { Voice } from "./components/Voice/Voice.types"
+import { VoiceType } from "./components/Voice/Voice.types"
 
 
 type OscGain = {
@@ -6,7 +6,7 @@ type OscGain = {
   gain: GainNode
 }
 
-type VoicesRef = { current: Voice[] }
+type VoicesRef = { current: VoiceType[] }
 
 type RunningRef = { current: boolean }
 

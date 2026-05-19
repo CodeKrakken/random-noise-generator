@@ -1,11 +1,11 @@
-import { Compound, Voice } from "./Voice.types"
+import { Compound, VoiceType } from "./Voice.types"
 import { Atom } from "../shared.types"
 
 
 export const updateField = (
   e: any, 
   attribute: Atom,
-  voices: Voice[], 
+  voices: VoiceType[], 
   i: number,
   callback: Function
 ) => {
@@ -16,7 +16,7 @@ export const updateField = (
 export const updateCheckbox = (
   e: any, 
   attribute: Compound, 
-  voices: Voice[], 
+  voices: VoiceType[], 
   i: number, 
   callback: Function
 ) => {
@@ -30,6 +30,6 @@ export const updateCheckbox = (
   updateVoice(voices, i, callback)
 }
 
-export  const updateVoice = (array: Voice[], i: number, callback: Function) => {
+export  const updateVoice = (array: VoiceType[], i: number, callback: Function) => {
   callback([array.slice(0,i), array[i], array.slice(i+1)].flat())
 }

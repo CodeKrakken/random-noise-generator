@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { waveforms } from './content/data'
 import Voice from './components/Voice/Voice';
+import { VoiceType } from './components/Voice/Voice.types'
 import Header from './components/Header/Header';
-import { Voice } from './components/Voice/Voice.types'
 import { setUpVoice, firstInterval, stopOne } from './App.functions';
 import { Waveform } from './App.types';
 
@@ -13,7 +13,7 @@ function App() {
   // state
 
   const [context] = useState(() => new AudioContext())
-  const [voices,  setVoices] = useState<Voice[]>([])
+  const [voices,  setVoices] = useState<VoiceType[]>([])
   const [running, setRunning] = useState<boolean>(false)
 
   // refs
@@ -57,7 +57,7 @@ function App() {
     voices.forEach(voice => firstInterval(voice, context.currentTime, runningRef, voicesRef, waveforms as Waveform[], context))
   }
 
-  const stopAll = (voices: Voice[]) => {
+  const stopAll = (voices: VoiceType[]) => {
     toggleRunning(false)
     voices.forEach(voice => stopOne(voice))
   }
@@ -82,7 +82,7 @@ function App() {
     {
       voices.map((voice, i) => 
         <div key={i}>
-          <Voice 
+          <Voice
             i             = {i} 
             setVoices     = {setVoices} 
             voices        = {voices}
