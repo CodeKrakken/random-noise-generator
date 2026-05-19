@@ -1,8 +1,8 @@
-import { voice } from "../Voice/Voice.types"
+import { Voice } from "../Voice/Voice.types"
 
 type InputsProps = {
   i: number
-  voices: voice[]
+  voices: Voice[]
   setVoices: Function
 }
 

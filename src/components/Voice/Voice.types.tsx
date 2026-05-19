@@ -9,7 +9,7 @@ type SampleSource = {
   buffer: AudioBuffer
 }
 
-type voice = {
+type Voice = {
   isActive        : boolean
   label           : number
   thisInterval?   : number
@@ -42,7 +42,7 @@ type voice = {
 type VoiceProps = {
   i           : number, 
   setVoices   : Function, 
-  voices      : voice[], 
+  voices      : Voice[], 
   handleDelete: Function
   dataVoice?     : number,
   dataAttribute? : string
@@ -55,7 +55,7 @@ type Compound =
 | 'activeSounds'
 
 export type {
-  voice,
+  Voice,
   VoiceProps,
   Compound
 }

@@ -1,4 +1,4 @@
-import { voice } from "./components/Voice/Voice.types"
+import { Voice } from "./components/Voice/Voice.types"
 
 
 type OscGain = {
@@ -6,19 +6,19 @@ type OscGain = {
   gain: GainNode
 }
 
-type voicesRef = { current: voice[] }
+type VoicesRef = { current: Voice[] }
 
-type runningRef = { current: boolean }
+type RunningRef = { current: boolean }
 
-type waveform =
+type Waveform =
   'sine'
 | 'triangle'
 | 'sawtooth'
 | 'square'
 
 export type {
-  waveform,
+  Waveform,
   OscGain,
-  runningRef, 
-  voicesRef
+  RunningRef, 
+  VoicesRef
 }

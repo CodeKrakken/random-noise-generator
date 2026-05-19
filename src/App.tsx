@@ -3,9 +3,9 @@ import './App.css';
 import { waveforms } from './content/data'
 import Voice from './components/Voice/Voice';
 import Header from './components/Header/Header';
-import { voice } from './components/Voice/Voice.types'
+import { Voice } from './components/Voice/Voice.types'
 import { setUpVoice, firstInterval, stopOne } from './App.functions';
-import { waveform } from './App.types';
+import { Waveform } from './App.types';
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   // state
 
   const [context] = useState(() => new AudioContext())
-  const [voices,  setVoices] = useState<voice[]>([])
+  const [voices,  setVoices] = useState<Voice[]>([])
   const [running, setRunning] = useState<boolean>(false)
 
   // refs
@@ -35,7 +35,7 @@ function App() {
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices[voices.length - 1])
     const nextInterval = voices[voices.length -1]?.nextInterval
-    if (running) firstInterval(newVoice, nextInterval, runningRef, voicesRef, waveforms as waveform[], context)
+    if (running) firstInterval(newVoice, nextInterval, runningRef, voicesRef, waveforms as Waveform[], context)
     setVoices(voices => [voices, newVoice].flat())
   }
 
@@ -54,10 +54,10 @@ function App() {
 
   const start = async () => {
     toggleRunning(true)
-    voices.forEach(voice => firstInterval(voice, context.currentTime, runningRef, voicesRef, waveforms as waveform[], context))
+    voices.forEach(voice => firstInterval(voice, context.currentTime, runningRef, voicesRef, waveforms as Waveform[], context))
   }
 
-  const stopAll = (voices: voice[]) => {
+  const stopAll = (voices: Voice[]) => {
     toggleRunning(false)
     voices.forEach(voice => stopOne(voice))
   }
