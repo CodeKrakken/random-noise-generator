@@ -3,7 +3,7 @@ import { Atom } from "../shared.types"
 
 
 export const updateField = (
-  e: any, 
+  e: React.ChangeEvent<HTMLInputElement>, 
   attribute: Atom,
   voices: VoiceType[], 
   i: number,
@@ -14,7 +14,7 @@ export const updateField = (
 } 
 
 export const updateCheckbox = (
-  e: any, 
+  e: React.ChangeEvent<HTMLInputElement>, 
   attribute: Compound, 
   voices: VoiceType[], 
   i: number, 
