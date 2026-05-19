@@ -30,7 +30,7 @@ export default function Inputs(
 
             const f = fields[field as keyof typeof fields]
 
-            const props: any = {
+            const props: InputProps = {
               className: 'textbox',
               'data-voice': i,
               'data-attribute': `${f.value}`,
