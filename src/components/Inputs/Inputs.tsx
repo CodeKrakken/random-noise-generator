@@ -84,8 +84,8 @@ export default function Inputs(
                   checkboxGroups[checkboxGroup as CheckboxGroup].map((checkbox: string) => {
 
                     console.log(checkboxGroup)
-                    
-                    const props: any = {
+
+                    const props: InputProps = {
                       className: 'checkbox',
                       'data-attribute': checkboxGroup,
                       'data-voice': i,
