@@ -6,6 +6,9 @@ type InputsProps = {
   setVoices: Function
 }
 
+type InputsType = {}
+
 export type {
-  InputsProps
+  InputsProps,
+  InputsType
 }

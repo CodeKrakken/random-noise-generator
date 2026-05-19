@@ -1,5 +1,5 @@
 import { checkboxGroups, extrema, fields } from "../../content/data";
-import { InputsProps } from "./Inputs.types";
+import { InputsProps, InputsType } from "./Inputs.types";
 import { Atom, CheckboxGroup } from "../shared.types";
 import Input from "../Input/Input";
 import { updateCheckbox, updateField } from "../Voice/functions";
@@ -22,7 +22,7 @@ export default function Inputs(
 
   const voice = voices[i]
 
-  const inputs: any = {
+  const inputs: InputsType = {
     fields: <>
       <div className="column">
         {
@@ -113,7 +113,7 @@ export default function Inputs(
       {
         Object.keys(inputs).map(input => 
           <div className="row">
-            {inputs[input]}
+            {inputs[input as keyof InputsType]}
           </div>
         )
       }
