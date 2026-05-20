@@ -1,4 +1,3 @@
-
 type VoiceType = {
   isActive        : boolean
   label           : number
@@ -22,7 +21,6 @@ type VoiceType = {
   maxFadeIn       : number
   minFadeOut      : number
   maxFadeOut      : number
-  gain?           : GainNode
   source?         : {}
   sample?         : HTMLAudioElement
   sound?          : MediaElementAudioSourceNode

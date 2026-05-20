@@ -29,17 +29,14 @@ const setUpVoice = (template: VoiceType | null = null) => {
 }
 
 const setUpSample = (
-  voice: VoiceType, 
   file: string, 
   context: AudioContext, 
   level: number
 ) => {
 
-  voice.sample = new Audio(file)
-  voice.sound = context.createMediaElementSource(voice.sample);
-  voice.gain  = context.createGain()
-
-  const { sample, sound, gain } = voice
+  const sample = new Audio(file)
+  const sound = context.createMediaElementSource(sample);
+  const gain  = context.createGain()
   
   sound.connect(gain)
   gain.gain.setValueAtTime(level, 0)
@@ -72,7 +69,7 @@ const playSample = (
   level: number,
   context: AudioContext
 ) => {
-  const sample = setUpSample(voice, samples[name as keyof typeof samples], context, level)
+  const sample = setUpSample(samples[name as keyof typeof samples], context, level)
   sample.play()
 }
 
