@@ -33,6 +33,7 @@ function App() {
   // functions
 
   const handleAddVoice = () => {
+    
     const newVoice = setUpVoice(voices[voices.length - 1])
     const nextInterval = newVoice.nextInterval
     if (running) firstInterval(newVoice, nextInterval, runningRef, voicesRef, waveforms as Waveform[], context)
