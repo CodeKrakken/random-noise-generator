@@ -1,5 +1,5 @@
-import snareFile  from '../sounds/snare.wav';
-import kickFile   from '../sounds/kick.wav';
+import snareFile  from './sounds/snare.wav';
+import kickFile   from './sounds/kick.wav';
 
 export const allFrequencies = [
   [   16.35,    17.32,    18.35,    19.45,    20.60,    21.83,    23.12,    24.50,    25.96,    27.50,    29.14,    30.87,    32.70],
