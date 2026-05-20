@@ -21,9 +21,6 @@ type VoiceType = {
   maxFadeIn       : number
   minFadeOut      : number
   maxFadeOut      : number
-  source?         : {}
-  sample?         : HTMLAudioElement
-  sound?          : MediaElementAudioSourceNode
 }
 
 type VoiceProps = {
