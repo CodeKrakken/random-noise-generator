@@ -1,5 +1,5 @@
-import { Atom } from "../shared.types"
-import { Compound, VoiceType } from "../Voice/Voice.types"
+import { Atom }                 from "../shared.types"
+import { Compound, VoiceType }  from "../Voice/Voice.types"
 
 
 const updateField = (
