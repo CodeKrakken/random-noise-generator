@@ -50,9 +50,10 @@ const setUpOscillator = (context: AudioContext) => {
   const gain        = context.createGain()
 
   oscillator.connect(gain);
-  gain.connect(context.destination);
   gain.gain.setValueAtTime(0, 0)
+  gain.connect(context.destination);
   oscillator.start(0);
+
   return {oscillator, gain}
 }
 
@@ -64,7 +65,6 @@ const removeOscillator = (oscGain: OscGain) => {
 }
 
 const playSample = (
-  voice: VoiceType, 
   name: string, 
   level: number,
   context: AudioContext
@@ -146,7 +146,7 @@ const makeSound = (
         oscillate(voice, length, offsetTime, level, oscGain, randomSound, context)
         setTimeout(() => removeOscillator(oscGain), length*1000)
       } else {
-        playSample(voice, randomSound, level, context)
+        playSample(randomSound, level, context)
       }
 
     } catch (error) {
