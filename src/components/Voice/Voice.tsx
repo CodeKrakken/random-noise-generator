@@ -1,6 +1,6 @@
 import { VoiceProps } from './Voice.types'
-import DeleteButton from '../DeleteButton/DeleteButton'
-import Inputs from '../Inputs/Inputs'
+import DeleteButton   from '../DeleteButton/DeleteButton'
+import Inputs         from '../Inputs/Inputs'
 
 export default function Voice(
   {
@@ -20,9 +20,9 @@ export default function Voice(
     <div className="row">
 
       <Inputs 
-        i={i}
-        voices={voices}
-        setVoices={setVoices}
+        i         = {i}
+        voices    = {voices}
+        setVoices = {setVoices}
       />   
 
       <DeleteButton
