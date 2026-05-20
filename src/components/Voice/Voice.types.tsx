@@ -1,13 +1,3 @@
-type OscillatorSource = {
-  kind: "oscillator"
-  wave: OscillatorType
-}
-
-type SampleSource = {
-  kind: "sample"
-  name: string
-  buffer: AudioBuffer
-}
 
 type VoiceType = {
   isActive        : boolean
@@ -34,7 +24,7 @@ type VoiceType = {
   maxFadeOut      : number
   oscillator?     : OscillatorNode
   gain?           : GainNode
-  source?         : OscillatorSource | SampleSource
+  source?         : {}
   sample?         : HTMLAudioElement
   sound?          : MediaElementAudioSourceNode
 }
