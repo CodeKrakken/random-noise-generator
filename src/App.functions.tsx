@@ -248,7 +248,8 @@ const getRangeValue = (key: string, voice: VoiceType) => {
 
   const rangeValue = (
     min as number + (Math.random() * (
-    max as number - (min as number)))
+      max as number - (min as number)
+    ))
   )
 
   return rangeValue
