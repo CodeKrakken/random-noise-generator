@@ -10,8 +10,8 @@ type VoiceType = {
   activeNotes     : string[]
   activeOctaves   : string[]
   activeSounds    : string[]
-  restChance      : number
   activeIntervals : string[]
+  restChance      : number
   minLength       : number
   maxLength       : number
   minOffset       : number
@@ -22,7 +22,7 @@ type VoiceType = {
   maxFadeIn       : number
   minFadeOut      : number
   maxFadeOut      : number
-  oscillator?     : OscillatorNode
+  // oscillator?     : OscillatorNode
   gain?           : GainNode
   source?         : {}
   sample?         : HTMLAudioElement

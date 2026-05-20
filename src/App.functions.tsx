@@ -34,6 +34,7 @@ const setUpSample = (
   context: AudioContext, 
   level: number
 ) => {
+
   voice.sample = new Audio(file)
   voice.sound = context.createMediaElementSource(voice.sample);
   voice.gain  = context.createGain()
