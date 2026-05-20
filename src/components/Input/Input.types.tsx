@@ -7,7 +7,7 @@ type InputProps = {
   type              : string
   value             : string | number
   onChange          : ChangeEventHandler
-  checked?          : boolean | undefined
+  checked?          : boolean
 }
 
 export type { 
