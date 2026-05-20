@@ -22,7 +22,6 @@ type VoiceType = {
   maxFadeIn       : number
   minFadeOut      : number
   maxFadeOut      : number
-  // oscillator?     : OscillatorNode
   gain?           : GainNode
   source?         : {}
   sample?         : HTMLAudioElement
