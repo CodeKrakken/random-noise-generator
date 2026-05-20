@@ -5,7 +5,7 @@ type OscillatorSource = {
 
 type SampleSource = {
   kind: "sample"
-  name: "kick" | "snare"
+  name: string
   buffer: AudioBuffer
 }
 
