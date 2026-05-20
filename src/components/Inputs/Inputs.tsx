@@ -1,17 +1,11 @@
-import { checkboxGroups, extrema, fields } from "../../content/data";
-import { InputsProps, InputsType } from "./Inputs.types";
-import { Atom, CheckboxGroup } from "../shared.types";
-import Input from "../Input/Input";
-import { updateCheckbox, updateField } from "../Voice/functions";
-import { InputProps } from "../Input/Input.types";
+import { checkboxGroups, extrema, fields }  from "../../content/data";
+import { InputsProps, InputsType }          from "./Inputs.types";
+import { Atom, CheckboxGroup }              from "../shared.types";
+import Input                                from "../Input/Input";
+import { updateCheckbox, updateField }      from "./functions";
+import { InputProps }                       from "../Input/Input.types";
 
-const input = ((props: InputProps) => {
-  return <>
-    <Input
-      {...props}
-    />
-  </>
-})
+const input = ((props: InputProps) => <Input {...props} />)
 
 export default function Inputs(
   { 
