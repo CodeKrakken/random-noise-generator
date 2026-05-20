@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Inputs from './Inputs';
-import { updateField, updateCheckbox } from '../Voice/functions';
+import { updateField, updateCheckbox } from './functions';
 import { setUpVoice } from '../../App.functions';
 import { VoiceType } from '../Voice/Voice.types';
 
