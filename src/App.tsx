@@ -34,7 +34,7 @@ function App() {
 
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices[voices.length - 1])
-    const nextInterval = newVoice.nextInterval
+    const nextInterval = voices[voices.length -1]?.nextInterval
     if (running) firstInterval(newVoice, nextInterval, runningRef, voicesRef, waveforms as Waveform[], context)
     setVoices(voices => [voices, newVoice].flat())
   }
