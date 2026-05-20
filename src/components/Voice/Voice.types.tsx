@@ -28,7 +28,6 @@ type VoiceProps = {
   setVoices   : Function, 
   voices      : VoiceType[], 
   handleDelete: Function
-  dataVoice?     : number,
   dataAttribute? : string
 }
 
