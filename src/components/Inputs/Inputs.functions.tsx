@@ -31,6 +31,7 @@ const updateCheckbox = (
   updateVoice(voices, i, setVoices)
 }
 
+// private
 
 const updateVoice = (array: VoiceType[], i: number, setVoices: Function) => {
   setVoices([array.slice(0,i), array[i], array.slice(i+1)].flat())
