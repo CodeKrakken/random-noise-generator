@@ -8,8 +8,8 @@ type VoiceType = {
   maxLevel        : number
   activeNotes     : string[]
   activeOctaves   : string[]
-  activeSounds    : string[]
   activeIntervals : string[]
+  activeSounds    : string[]
   restChance      : number
   minLength       : number
   maxLength       : number
@@ -24,11 +24,11 @@ type VoiceType = {
 }
 
 type VoiceProps = {
-  i           : number, 
-  setVoices   : Function, 
-  voices      : VoiceType[], 
-  handleDelete: Function
-  dataAttribute? : string
+  i             : number, 
+  setVoices     : Function, 
+  voices        : VoiceType[], 
+  handleDelete  : Function
+  dataAttribute : string
 }
 
 type Compound = 
