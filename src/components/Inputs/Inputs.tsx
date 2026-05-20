@@ -36,7 +36,7 @@ export default function Inputs(
               'data-attribute': `${f.value}`,
               type: 'number',
               value: voice[`${f.value}` as Atom],
-              onChange: (e: React.ChangeEvent) => updateField(e, f.value as Atom, voices, i, setVoices)
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateField(e, f.value as Atom, voices, i, setVoices)
             }
 
             return <>
@@ -52,7 +52,7 @@ export default function Inputs(
 
                         props['data-attribute'] = `${ex}${f.value}`;
                         props.value = voice[`${ex}${f.value}` as Atom] // populates field
-                        props.onChange = (e: React.ChangeEvent) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
+                        props.onChange = (e: React.ChangeEvent<HTMLInputElement>) => updateField(e, `${ex}${f.value}` as Atom, voices, i, setVoices) // updates field
                         
                         return <>
                           <div key={ex}>
@@ -92,7 +92,7 @@ export default function Inputs(
                       type: "checkbox",
                       value: checkbox,
                       checked: voice[`active${checkboxGroup as CheckboxGroup}`].includes(checkbox),
-                      onChange: (e: React.ChangeEvent) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateCheckbox(e, `active${checkboxGroup as CheckboxGroup}`, voices, i, setVoices)
                     };
 
                     return input(props)
