@@ -1,6 +1,8 @@
 import { ranges } from "../content/data"
 
+
 type Range = typeof ranges[number]
+
 
 type Atom = 
   'label'
@@ -11,10 +13,11 @@ type Atom =
 
 
 type CheckboxGroup = 
-  'Octaves' 
-| 'Notes' 
-| 'Sounds' 
+  'Notes' 
+| 'Octaves' 
 | 'Intervals'
+| 'Sounds' 
+
 
 export type {
   Atom,
