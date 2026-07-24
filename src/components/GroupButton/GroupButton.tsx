@@ -1,25 +1,14 @@
-import { useState }   from "react";
-import { Group, VoiceType }      from "../shared.types";
-import Button         from "../Button/Button";
-import ButtonGrid     from "../ButtonGrid/ButtonGrid";
-import Piano          from "../Piano/Piano";
+import { Group }  from "../shared.types";
+import Button     from "../Button/Button";
 
 export default function GroupButton({
 
   group, 
-  component, 
-  voices, 
-  i, 
-  setVoices,
   onToggle 
 
 } : {  
   
   group     : Group
-  voices    : VoiceType[]  
-  i         : number  
-  setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>  
-  component : typeof ButtonGrid | typeof Piano
   onToggle  : (groupId: string) => void  
 
 }) {  
@@ -34,15 +23,12 @@ export default function GroupButton({
     onClick   : handleClick
   }
 
-  console.log(group)
   return <>  
 
     <Button
       props   = {props}
       label   = {group.label}
       imgPath = {group.id}
-    />
-      
-      
+    />     
   </>  
 }
