@@ -37,13 +37,14 @@ export default function Piano ({
 
             const colour = blackKeys.includes(key) ? 'black' : 'white'
             const active = voice.activeNotes.includes(key) ? 'active' : ''
+            const checked = Boolean(active)
 
             const props = {
               className         : `${active} ${colour} key`,
               'data-attribute'  : 'Notes',
               'data-voice'      : i,
               value             : key,
-              checked           : voice.activeNotes.includes(key),
+              checked           : checked,
               onClick           : handleClick
             };
 
