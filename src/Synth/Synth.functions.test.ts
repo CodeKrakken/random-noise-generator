@@ -1,6 +1,6 @@
-import { getContext, runInterval } from './Synth.functions';
-import { setUpVoice } from '../components/Interface/Interface.functions';
-import { createMockContext, runOneInterval } from './Synth.test.functions';
+import { getContext, runInterval }            from './Synth.functions';
+import { setUpVoice }                         from '../components/Interface/Interface.functions';
+import { createMockContext, runOneInterval }  from './Synth.test.functions';
 
 
 jest.mock('../content/data', () => ({

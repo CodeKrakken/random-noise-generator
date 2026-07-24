@@ -1,7 +1,6 @@
-import { VoiceType }                                                              from '../components/shared.types'
+import { VoiceType, RangeKey }                                                    from '../components/shared.types'
 import { VoicesRef }                                                              from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }  from '../content/data';
-import { RangeKey }                                                                  from '../components/shared.types';
 
 type OscGain = {
   oscillator  : OscillatorNode, 

@@ -1,7 +1,6 @@
 import { useState }   from "react";
-import { Group }      from "../shared.types";
+import { Group, VoiceType }      from "../shared.types";
 import Button         from "../Button/Button";
-import { VoiceType }  from "../shared.types";
 import ButtonGrid     from "../ButtonGrid/ButtonGrid";
 import Piano          from "../Piano/Piano";
 

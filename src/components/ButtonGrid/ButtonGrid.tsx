@@ -1,6 +1,6 @@
-import Button                                 from "../Button/Button";
-import { updateButton }                       from "../shared.functions";
-import { ButtonGroupKey, Group, VoiceType }  from "../shared.types";
+import Button                               from "../Button/Button";
+import { updateButton }                     from "../shared.functions";
+import { ButtonGroupKey, Group, VoiceType } from "../shared.types";
 
 export default function ButtonGrid({
 

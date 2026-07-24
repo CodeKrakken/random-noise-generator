@@ -1,4 +1,4 @@
-import { NumericAttributeKey, Slider, VoiceType }    from "../shared.types";  
+import { NumericAttributeKey, Slider, VoiceType } from "../shared.types";  
 import RangeSlider, { ReactRangeSliderInputRef }  from 'react-range-slider-input';  
 import { useEffect, useRef }                      from "react";
 import 'react-range-slider-input/dist/style.css';  

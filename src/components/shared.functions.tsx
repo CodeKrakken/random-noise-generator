@@ -1,5 +1,5 @@
-import { allFrequencies }       from "../content/data"
-import { Synth }                from "../Synth/Synth"
+import { allFrequencies }                   from "../content/data"
+import { Synth }                            from "../Synth/Synth"
 import { ActiveButtonGroupKey, VoiceType }  from "./shared.types"
 
 const getActiveFrequencies = (voice: VoiceType) => {
