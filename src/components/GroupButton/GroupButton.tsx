@@ -10,7 +10,8 @@ export default function GroupButton({
   component, 
   voices, 
   i, 
-  setVoices 
+  setVoices,
+  onToggle 
 
 } : {  
   
@@ -19,15 +20,13 @@ export default function GroupButton({
   i         : number  
   setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>  
   component : typeof ButtonGrid | typeof Piano
+  onToggle  : (groupId: string) => void  
 
 }) {  
 
-  const [hidden, setHidden] = useState(true)  
-    
-  const handleClick = () => {
-    
-    setHidden((prev) => !prev)
-  }
+  const handleClick = () => {  
+    onToggle(group.id)  
+  }  
 
   const props = {
 
@@ -35,8 +34,7 @@ export default function GroupButton({
     onClick   : handleClick
   }
 
-  const ComponentToRender = component;  
-  
+  console.log(group)
   return <>  
 
     <Button
@@ -45,18 +43,6 @@ export default function GroupButton({
       imgPath = {group.id}
     />
       
-    {
-      !hidden && ComponentToRender ? (  
-
-        <ComponentToRender   
-          group     = {group as Group}  
-          voices    = {voices}  
-          i         = {i}  
-          setVoices = {setVoices}  
-        />  
-      ) 
-        : 
-      <></>
-    }  
+      
   </>  
 }

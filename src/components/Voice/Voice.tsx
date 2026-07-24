@@ -1,10 +1,11 @@
-import { VoiceType, Slider }      from '../shared.types'
+import { VoiceType, Slider, Group }      from '../shared.types'
 import TextField                  from '../TextField/TextField'
 import { buttonGroups, sliders }  from '../../content/data'
 import DoubleSlider               from '../DoubleSlider/DoubleSlider'
 import SingleSlider               from '../SingleSlider/SingleSlider'
 import GroupButton                from '../GroupButton/GroupButton'
 import Button                     from '../Button/Button'
+import { useState } from 'react'
 
 export default function Voice({
 
@@ -23,6 +24,17 @@ export default function Voice({
     dataAttribute : string
 
   }) {
+
+  const [hiddenStates, setHiddenStates] = useState<Record<string, boolean>>({  
+    piano: true,  
+    octaves: true,  
+    intervals: true,  
+    sounds: true  
+  })
+
+  const handleToggleGroup = (groupId: string) => {  
+    setHiddenStates(prev => ({ ...prev, [groupId]: !prev[groupId] }))  
+  }
 
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
@@ -80,16 +92,36 @@ export default function Voice({
 
       <div className="centred row">
         {
-          buttonGroups.map(group =>
-            <GroupButton 
-              group={group}
-              voices={voices}
-              i={i}
-              setVoices={setVoices}
-              key={group.label}
-              component={group.component}
-            />
-          )
+          buttonGroups.map(group => {
+
+            const ComponentToRender = group.component;  
+            
+            return <>
+              <GroupButton 
+                group={group}
+                voices={voices}
+                i={i}
+                setVoices={setVoices}
+                key={group.label}
+                component={group.component}
+                onToggle={handleToggleGroup}
+              />
+
+              {
+                !hiddenStates[group.id] && ComponentToRender ? (  
+                  
+                  <ComponentToRender   
+                    group     = {group as Group}  
+                    voices    = {voices}  
+                    i         = {i}  
+                    setVoices = {setVoices}  
+                  />  
+                ) 
+                  : 
+                <></>
+              }
+            </>
+          })
         }
       </div>
     </div>
