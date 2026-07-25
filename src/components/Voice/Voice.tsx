@@ -32,10 +32,6 @@ export default function Voice({
     sounds    : true  
   })
 
-  const handleToggleGroup = (groupId: string) => {  
-    setHiddenStates(prev => ({ ...prev, [groupId]: !prev[groupId] }))  
-  }
-
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
     label: "X"
@@ -96,11 +92,26 @@ export default function Voice({
 
             const ComponentToRender = group.component;  
             
+            const handleToggleGroup = () => {  
+              setHiddenStates(prev => ({ ...prev, [group.id]: !prev[group.id] }))  
+            }
+            
+            const props = {
+              className : "group-button",  
+              onClick   : handleToggleGroup
+            }
+
             return <>
-              <GroupButton 
+
+              <Button
+                props   = {props}
+                label   = {group.label}
+                imgPath = {group.id}
+              />
+              {/* <GroupButton 
                 group={group}
                 onToggle={handleToggleGroup}
-              />
+              /> */}
 
               {
                 !hiddenStates[group.id] && ComponentToRender ? (  
