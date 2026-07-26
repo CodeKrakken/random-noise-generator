@@ -402,9 +402,9 @@ const playSample = (
 
 ) => {  
   
-  let targetNote: number | null = null  
-  let targetOctave: number | null = null
-  let targetInterval: number | null = null  
+  let targetNote      : number | null = null  
+  let targetOctave    : number | null = null
+  let targetInterval  : number | null = null  
   
   if (
     voice.activeNotes.length > 0 && 

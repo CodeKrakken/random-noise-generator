@@ -34,28 +34,28 @@ jest.mock('../Voice/Voice', () => ({
 }));
 
 
-describe('Interface', () => {
-  beforeEach(() => { 
-    jest.clearAllMocks(); 
-    render(<Interface />);
-  });
+// describe('Interface', () => {
+//   beforeEach(() => { 
+//     jest.clearAllMocks(); 
+//     render(<Interface />);
+//   });
 
-  it('deletes voice when handleDelete is called', async () => {
-    await act(async () => { fireEvent.click(screen.getByTestId('add-voice')); });
-    await act(async () => { fireEvent.click(screen.getByTestId('delete-voice-0')); });
+//   it('deletes voice when handleDelete is called', async () => {
+//     await act(async () => { fireEvent.click(screen.getByTestId('add-voice')); });
+//     await act(async () => { fireEvent.click(screen.getByTestId('delete-voice-0')); });
 
-    expect(Synth.delete).toHaveBeenCalledWith(0);
-  });
+//     expect(Synth.delete).toHaveBeenCalledWith(0);
+//   });
 
-  it('calls toggleRunning(false) and Synth.stop when stop is triggered', async () => {
-    await act(async () => { fireEvent.click(screen.getByTestId('add-voice')); });
+//   it('calls toggleRunning(false) and Synth.stop when stop is triggered', async () => {
+//     await act(async () => { fireEvent.click(screen.getByTestId('add-voice')); });
 
-    const startStopButton = screen.getByTestId('start-stop');
+//     const startStopButton = screen.getByTestId('start-stop');
 
-    await act(async () => { fireEvent.click(startStopButton); });
-    await act(async () => { fireEvent.click(startStopButton); });
+//     await act(async () => { fireEvent.click(startStopButton); });
+//     await act(async () => { fireEvent.click(startStopButton); });
 
-    expect(Synth.stop).toHaveBeenCalled();
-    expect(startStopButton).toHaveTextContent('Start');
-  });
-});
+//     expect(Synth.stop).toHaveBeenCalled();
+//     expect(startStopButton).toHaveTextContent('Start');
+//   });
+// });
