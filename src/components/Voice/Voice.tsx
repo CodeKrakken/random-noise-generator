@@ -3,7 +3,6 @@ import TextField                    from '../TextField/TextField'
 import { buttonGroups, sliders }    from '../../content/data'
 import DoubleSlider                 from '../DoubleSlider/DoubleSlider'
 import SingleSlider                 from '../SingleSlider/SingleSlider'
-import GroupButton                  from '../GroupButton/GroupButton'
 import Button                       from '../Button/Button'
 import { useState }                 from 'react'
 
@@ -35,6 +34,11 @@ export default function Voice({
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
     label: "X"
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {  
+    const value = e.currentTarget.value
+    setHiddenStates(prev => ({ ...prev, [value]: !prev[value] }))  
   }
 
   const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
@@ -91,11 +95,7 @@ export default function Voice({
           buttonGroups.map(group => {
 
             const ComponentToRender = group.component;  
-            
-            const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {  
-              setHiddenStates(prev => ({ ...prev, [e.currentTarget.value]: !prev[e.currentTarget.value] }))  
-            }
-            
+                        
             const props = {
               className : "group-button",  
               onClick   : handleClick,
@@ -109,10 +109,6 @@ export default function Voice({
                 label   = {group.label}
                 imgPath = {group.id}
               />
-              {/* <GroupButton 
-                group={group}
-                onToggle={handleToggleGroup}
-              /> */}
 
               {
                 !hiddenStates[group.id] && ComponentToRender ? (  
