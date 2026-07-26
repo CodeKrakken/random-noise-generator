@@ -27,6 +27,8 @@ const updateButton = (
 
 ) => {
 
+  console.log(e.currentTarget.value)
+
   voices[i][attribute].includes(e.currentTarget.value as any) 
   ? voices[i][attribute] = voices[i][attribute].filter(value => value !== e.currentTarget.value)
   : voices[i][attribute] = [voices[i][attribute], e.currentTarget.value].flat()

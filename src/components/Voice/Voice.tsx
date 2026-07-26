@@ -92,13 +92,14 @@ export default function Voice({
 
             const ComponentToRender = group.component;  
             
-            const handleToggleGroup = () => {  
-              setHiddenStates(prev => ({ ...prev, [group.id]: !prev[group.id] }))  
+            const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {  
+              setHiddenStates(prev => ({ ...prev, [e.currentTarget.value]: !prev[e.currentTarget.value] }))  
             }
             
             const props = {
               className : "group-button",  
-              onClick   : handleToggleGroup
+              onClick   : handleClick,
+              value     : group.id
             }
 
             return <>
