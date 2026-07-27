@@ -1,16 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';  
 import Voice from './Voice';  
 import { VoiceType } from '../shared.types';  
-  
+
 jest.mock('../../content/data', () => ({  
   sliders:      [],  
-  buttonGroups: []  
-}));  
+  buttonGroups: [],  
+  buttonImages: {}  
+}));
   
 jest.mock('../Piano/Piano',             () => () => <div data-testid="piano" />);  
 jest.mock('../SingleSlider/SingleSlider', () => () => <div />);  
 jest.mock('../DoubleSlider/DoubleSlider', () => () => <div />);  
-jest.mock('../GroupButton/GroupButton',   () => () => <div />);  
   
 const makeVoice = (): VoiceType => ({  
   id:               'test-id',  
