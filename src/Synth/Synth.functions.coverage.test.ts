@@ -1,7 +1,6 @@
-import { getContext, runInterval } from './Synth.functions'  
 import { VoiceType } from '../components/shared.types'  
 import { createMockContext } from './Synth.test.functions'  
-  
+
 // No jest.mock needed — moduleNameMapper handles it globally  
   
 const makeVoice = (): VoiceType => ({  
@@ -38,10 +37,10 @@ describe('Synth.functions coverage', () => {
   let runInterval: any  
   
   beforeAll(async () => {  
-    // Reset module state so samplesLoading = false  
+    // Reset BEFORE any imports  
     jest.resetModules()  
       
-    // Re-import after reset to get fresh module instance  
+    // Dynamic import after reset  
     const mod = await import('./Synth.functions')  
     getContext = mod.getContext  
     runInterval = mod.runInterval  
@@ -67,15 +66,19 @@ describe('Synth.functions coverage', () => {
       })  
     } as unknown as AudioContext  
   
-    // This triggers loadSamples, which calls fetch  
     getContext(mockContext)  
-      
-    // Wait for async work to complete  
     await new Promise(resolve => setTimeout(resolve, 200))  
   })  
   
   it('fetches and decodes every sample', () => {  
     expect(global.fetch).toHaveBeenCalledTimes(2)  
     expect(mockContext.decodeAudioData as jest.Mock).toHaveBeenCalledTimes(2)  
+  })  
+  
+  it('plays a folder sample via findNearestSampleInFolder', () => {  
+    const voice = makeVoice()  
+    const voicesRef = { current: [voice] }  
+    runInterval(voice, voicesRef, mockContext)  
+    expect(mockContext.createBufferSource as jest.Mock).toHaveBeenCalled()  
   })  
 })
