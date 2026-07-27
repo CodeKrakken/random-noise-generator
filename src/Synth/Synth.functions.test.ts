@@ -17,8 +17,16 @@ jest.mock('../content/data', () => ({
   waveforms:    ['sine', 'square', 'sawtooth', 'triangle']  
 }))  
   
-const MockAudioContext = jest.fn().mockImplementation(() => createMockContext())  
-  
+const MockAudioContext = jest.fn().mockImplementation(function(this: any) {  
+  Object.assign(this, createMockContext())  
+})  
+
+Object.defineProperty(global, 'AudioContext', {  
+  writable: true,  
+  configurable: true,  
+  value: MockAudioContext  
+})
+
 global.AudioContext = MockAudioContext  
   
 global.Audio = jest.fn().mockImplementation(() => ({ play: jest.fn() })) as typeof Audio  
