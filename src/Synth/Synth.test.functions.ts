@@ -1,6 +1,6 @@
-import { VoiceType } from "../components/shared.types";  
-import { runInterval } from "./Synth.functions";  
-  
+import { VoiceType } from "../components/shared.types";
+import { runInterval } from "./Synth.functions";
+
 const createMockContext = (state = 'running', currentTime = 0) => (  
   {  
     state,  
@@ -45,26 +45,26 @@ const createMockContext = (state = 'running', currentTime = 0) => (
     createMediaElementSource: jest.fn().mockReturnValue({ connect: jest.fn() }),  
     decodeAudioData: jest.fn().mockResolvedValue({})  
   } as unknown as Partial<AudioContext>  
-)  
-  
-const runOneInterval = (  
-  voice: VoiceType,  
-  context: Partial<AudioContext>  
-) => {  
-  
-  const voicesRef = { current: [voice] }  
-  
-  runInterval(  
-    voice,  
-    voicesRef,  
-    context as AudioContext  
-  )  
-  
-  voice.isActive = false  
-  jest.runAllTimers()  
-}  
-  
-export {   
-  createMockContext,  
-  runOneInterval  
+)
+
+const runOneInterval = (
+  voice: VoiceType,
+  context: Partial<AudioContext>
+) => {
+
+  const voicesRef = { current: [voice] }
+
+  runInterval(
+    voice,
+    voicesRef,
+    context as AudioContext
+  )
+
+  voice.isActive = false
+  jest.runAllTimers()
+}
+
+export { 
+  createMockContext,
+  runOneInterval
 }

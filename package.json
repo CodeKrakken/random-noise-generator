@@ -56,7 +56,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "../content/data": "<rootDir>/src/content/__mocks__/data.ts"
     },
     "collectCoverageFrom": [
       "src/components/**/*.{ts,tsx}",

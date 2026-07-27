@@ -1,0 +1,12 @@
+export const allFrequencies = [[261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880.00]]  
+export const extrema = ['min', 'max']  
+export const oneMinute = 60  
+export const samples = { '/piano_A1.wav': 'piano_A1.wav', 'snare': 'snare.wav' }  
+export const sampleFolders = { 'piano': ['/piano_A1.wav'] }  
+export const waveforms = ['sine', 'square', 'sawtooth', 'triangle']  
+export const title = 'OCTOPUS'  
+export const addLabel = 'Add Voice'  
+export const buttonImages = {}  
+export const buttonGroups = []  
+export const sliders = []  
+export const demoVoices = []
