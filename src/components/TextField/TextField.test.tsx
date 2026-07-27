@@ -1,116 +1,59 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import TextField from './TextField';
-// import { setUpVoice } from '../Interface/Interface.functions';
-import { VoiceType } from '../shared.types';
-
-jest.mock('../../content/data', () => ({
-  fields: {
-    level: {
-      value: 'Level',
-      input: 'range'
-    }
-  },
-  extrema: ['min', 'max']
-}));
-
-jest.mock('../shared.functions', () => ({
-  updateTextField: jest.fn()
-}));
-
-describe('TextField', () => {
-
-  const mockSetVoices = jest.fn();
-  // const voices: VoiceType[] = [setUpVoice([])];
-
-  // voices[0].maxLevel = 80;
-
-  beforeEach(() => { jest.clearAllMocks(); });
+import { render, screen, fireEvent } from '@testing-library/react';  
+import TextField from './TextField';  
+import { VoiceType } from '../shared.types';  
+import { updateVoice } from '../shared.functions';  
   
+jest.mock('../shared.functions', () => ({  
+  updateVoice: jest.fn()  
+}));  
   
-
-  // import { render, screen, fireEvent }    from '@testing-library/react';
-  // import Inputs                           from './Inputs';
-  // import { updateTextField, updateButton }  from './Inputs.functions';
-  // import { setUpVoice }                   from '../../components/Interface/Interface.functions';
-  // import { VoiceType }                    from '../shared.types';
+const makeVoice = (): VoiceType => ({  
+  id:                'test-id',  
+  isActive:          false,  
+  label:             'Voice 1',  
+  nextInterval:      0,  
+  thisInterval:      0,  
+  offsetInterval:    0,  
+  bpm:               120,  
+  minLevel:          100,  
+  maxLevel:          100,  
+  activeNotes:       ['1','3','5','6','8','10','12','13'],  
+  activeOctaves:     ['4'],  
+  activeFrequencies: [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25],  
+  activeIntervals:   ['1'],  
+  activeSounds:      ['sine'],  
+  restChance:        0,  
+  minLength:         100,  
+  maxLength:         100,  
+  minOffset:         0,  
+  maxOffset:         0,  
+  minDetune:         0,  
+  maxDetune:         0,  
+  minAttack:         100,  
+  maxAttack:         100,  
+  minDecay:          100,  
+  maxDecay:          100,  
+})  
   
+describe('TextField', () => {  
+  const mockSetVoices = jest.fn();  
   
-  // jest.mock('./Inputs.functions', () => ({
-  //   updateTextField: jest.fn(),
-  //   updateButton: jest.fn()
-  // }));
+  beforeEach(() => { jest.clearAllMocks(); });  
   
+  it('renders an input displaying the voice label', () => {  
+    const voices = [makeVoice()];  
+    render(  
+      <TextField attrName="label" i={0} voices={voices} setVoices={mockSetVoices} />  
+    );  
+    expect(screen.getByDisplayValue('Voice 1')).toBeInTheDocument();  
+  });  
   
-  // describe('Inputs', () => {
-  
-  //   const setVoices = jest.fn();
-  //   const voices: VoiceType[] = [setUpVoice()]
-  
-  //   const renderInputs = () => render(
-  //     <Inputs
-  //       i         = {0}
-  //       voices    = {voices}
-  //       setVoices = {setVoices}
-  //     />
-  //   );
-  
-  //   voices[0].bpm = 120
-  
-  //   beforeEach(() => { jest.clearAllMocks();});
-  
-    
-  //   it('calls updateTextField when a numeric TextField changes', () => {
-  
-  //     renderInputs();
-  
-  //     fireEvent.change(
-  //       screen.getByDisplayValue('120'), { target: { value: '140'} }
-  //     );
-  
-  //     expect(updateTextField).toHaveBeenCalledTimes(1);
-  
-  //     expect(updateTextField).toHaveBeenCalledWith(
-  //       expect.any(Object),
-  //       'bpm',
-  //       voices,
-  //       0,
-  //       setVoices
-  //     );
-  //   });
-  // });
-
-  // import { updateTextField, updateButton } from './Inputs.functions';
-  // import { setUpVoice } from '../Interface/Interface.functions';
-  // import { VoiceType } from '../shared.types';
-  // import { ChangeEvent } from 'react';
-  
-  
-  // describe('Inputs.functions', () => {
-  //   let voices: VoiceType[];
-  //   let setVoices: jest.Mock;
-  
-  //   beforeEach(() => {
-  //     voices = [setUpVoice(), setUpVoice()];
-  //     voices[0].label = 1;
-  //     voices[0].bpm = 120;
-  //     voices[1].label = 2;
-  //     voices[1].bpm = 100;
-  //     setVoices = jest.fn();
-  //     jest.clearAllMocks();
-  //   });
-  
-  //   const createEvent = (value: string) => (
-  //     { target: { value: value }} as ChangeEvent<HTMLInputElement, Element>
-  //   )
-  
-  //   describe('updateTextField', () => {
-  
-  //     it('handles range TextField updates (maxLevel)', () => {
-  //       const event = createEvent('99')
-  
-  //       updateTextField(event, 'maxLevel', voices, 0, setVoices);
-  
-  //       expect(voices[0].maxLevel).toBe(99);
-  //     });
-  //   });
+  it('calls updateVoice when the input value changes', () => {  
+    const voices = [makeVoice()];  
+    render(  
+      <TextField attrName="label" i={0} voices={voices} setVoices={mockSetVoices} />  
+    );  
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'New Name' } });  
+    expect(updateVoice).toHaveBeenCalledWith(voices, 0, mockSetVoices);  
+  });  
 });
