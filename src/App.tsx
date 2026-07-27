@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import Interface from './components/Interface/Interface';
 import { Synth } from './Synth/Synth';
-import { setUpVoice } from './components/Interface/Interface.functions';
 import { VoiceType } from './components/shared.types';
 import { demoVoices } from './content/data';
+import Voice from './components/Voice/Voice';
+import Header from './components/Header/Header';
 
 function App() {
 
@@ -65,17 +65,88 @@ function App() {
     })
   }
 
+  const handleStartStop = () => running ? stopAll() : start()
+
+  const setUpVoice = (voices: VoiceType[]) => {
+
+    const template = voices[voices.length - 1]
+    
+    return {
+      id                : crypto.randomUUID(),
+      isActive          : false,
+      label             : generateNewLabel(template, voices),
+      nextInterval      : template?.nextInterval      ||  0,
+      bpm               : template?.bpm               ??  120,
+      minLevel          : template?.minLevel          ??  100,
+      maxLevel          : template?.maxLevel          ??  100,
+      activeNotes       : template?.activeNotes       ??  ['1','3','5','6','8','10','12','13'],
+      activeOctaves     : template?.activeOctaves     ??  ['4'],
+      activeFrequencies : template?.activeFrequencies ??  [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25],
+      activeIntervals   : template?.activeIntervals   ??  ['1'],
+      activeSounds      : template?.activeSounds      ??  ['sine'],
+      restChance        : template?.restChance        ??  0,
+      minLength         : template?.minLength         ??  100,
+      maxLength         : template?.maxLength         ??  100,
+      minOffset         : template?.minOffset         ??  0,  
+      maxOffset         : template?.maxOffset         ??  0,
+      minDetune         : template?.minDetune         ??  0,
+      maxDetune         : template?.maxDetune         ??  0,
+      minAttack         : template?.minAttack         ??  100,
+      maxAttack         : template?.maxAttack         ??  100,
+      minDecay          : template?.minDecay          ??  100,
+      maxDecay          : template?.maxDecay          ??  100
+    }
+  }
+
+  const generateNewLabel = (
+    template: VoiceType | null, 
+    voices: VoiceType[]
+  ) => {
+
+    let newLabel: string
+
+    if (!template) {
+      newLabel = '1'
+    } else if (+template.label) {
+      newLabel = String(+template.label+1)  
+    } else {
+      newLabel = String(
+        voices.map(voice => +voice.label).filter(
+          label => !isNaN(label)
+        ).sort((a, b) => b - a)[0] + 1 || 1
+      )
+    }
+
+    return newLabel
+  }
+
   return <>
-    <Interface 
-      running         = {running}
-      stopAll         = {stopAll}
-      start           = {start}
-      handleAddVoice  = {handleAddVoice}
-      voices          = {voices}
-      loadVoices      = {loadVoices}
-      setVoices       = {setVoices}
-      handleDelete    = {handleDelete}
+    <Header 
+      handleStartStop   = {handleStartStop}
+      running           = {running}
+      handleAddVoice    = {handleAddVoice}
+      voices            = {voices}
+      loadVoices        = {loadVoices}
     />
+    
+    <div 
+      className="row section" 
+      id="voices"
+    >
+      {
+        voices.map((voice, i) => 
+
+          <Voice
+            i             = {i} 
+            setVoices     = {setVoices} 
+            voices        = {voices}
+            handleDelete  = {handleDelete}
+            dataAttribute = "Voices"
+            key           = {voice.id}
+          />
+        )
+      }
+    </div>
   </>
 }
 
