@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import TextField from './TextField';
-import { setUpVoice } from '../Interface/Interface.functions';
+// import { setUpVoice } from '../Interface/Interface.functions';
 import { VoiceType } from '../shared.types';
 
 jest.mock('../../content/data', () => ({
@@ -20,9 +20,9 @@ jest.mock('../shared.functions', () => ({
 describe('TextField', () => {
 
   const mockSetVoices = jest.fn();
-  const voices: VoiceType[] = [setUpVoice([])];
+  // const voices: VoiceType[] = [setUpVoice([])];
 
-  voices[0].maxLevel = 80;
+  // voices[0].maxLevel = 80;
 
   beforeEach(() => { jest.clearAllMocks(); });
   

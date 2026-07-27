@@ -7,6 +7,55 @@ type OscGain = {
   gainNode    : GainNode
 }
 
+let masterCompressor: DynamicsCompressorNode
+  
+const getContext = (context: AudioContext = new AudioContext()) => {  
+
+  if (context.state === 'suspended') { context.resume() }  
+  
+  if (!masterCompressor) {  
+    masterCompressor = context.createDynamicsCompressor()  
+    masterCompressor.threshold.value  = -6   // dBFS — starts compressing at -6 dB  
+    masterCompressor.knee.value       = 3   // soft knee  
+    masterCompressor.ratio.value      = 20  // 20:1 ≈ hard limiter  
+    masterCompressor.attack.value     = 0.001  
+    masterCompressor.release.value    = 0.1  
+    masterCompressor.connect(context.destination)  
+  }  
+  
+  loadSamples(context)  
+  
+  return context  
+}
+
+const runInterval = (
+
+  voice     : VoiceType, 
+  voicesRef : VoicesRef, 
+  context   : AudioContext
+
+) => {
+
+  voice.thisInterval = voice.nextInterval
+  const thisInterval = voice.thisInterval
+
+  if (isTimeFor(thisInterval, context)) {
+    
+    const intervalLength = getIntervalLength(voice)
+    voice.nextInterval += intervalLength
+  
+    if (!isRest(voice)) makeSound(voice, intervalLength, context)
+  } 
+
+  if (!voice.isActive) return
+
+  setTimeout(() => {
+    runInterval(voice, voicesRef, context)
+  }, (voice.nextInterval - context.currentTime)*1000)    
+}
+
+// private functions
+
 const buffers: Record<string, { 
 
   buffer            : AudioBuffer; 
@@ -269,54 +318,6 @@ const loadSamples = (context: AudioContext) => {
   )  
 }
 
-let masterCompressor: DynamicsCompressorNode
-  
-const getContext = (context: AudioContext = new AudioContext()) => {  
-
-  if (context.state === 'suspended') { context.resume() }  
-  
-  if (!masterCompressor) {  
-    masterCompressor = context.createDynamicsCompressor()  
-    masterCompressor.threshold.value  = -6   // dBFS — starts compressing at -6 dB  
-    masterCompressor.knee.value       = 3   // soft knee  
-    masterCompressor.ratio.value      = 20  // 20:1 ≈ hard limiter  
-    masterCompressor.attack.value     = 0.001  
-    masterCompressor.release.value    = 0.1  
-    masterCompressor.connect(context.destination)  
-  }  
-  
-  loadSamples(context)  
-  
-  return context  
-}
-
-const runInterval = (
-
-  voice     : VoiceType, 
-  voicesRef : VoicesRef, 
-  context   : AudioContext
-
-) => {
-
-  voice.thisInterval = voice.nextInterval
-  const thisInterval = voice.thisInterval
-
-  if (isTimeFor(thisInterval, context)) {
-    
-    const intervalLength = getIntervalLength(voice)
-    voice.nextInterval += intervalLength
-  
-    if (!isRest(voice)) makeSound(voice, intervalLength, context)
-  } 
-
-  if (!voice.isActive) return
-
-  setTimeout(() => {
-    runInterval(voice, voicesRef, context)
-  }, (voice.nextInterval - context.currentTime)*1000)    
-}
-
-// private functions
 
 const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
 

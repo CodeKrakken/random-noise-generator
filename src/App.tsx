@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState }  from 'react';
+import { Synth }                        from './Synth/Synth';
+import { VoiceType }                    from './components/shared.types';
+import { demoVoices }                   from './content/data';
+import Voice                            from './components/Voice/Voice';
+import Header                           from './components/Header/Header';
 import './App.css';
-import { Synth } from './Synth/Synth';
-import { VoiceType } from './components/shared.types';
-import { demoVoices } from './content/data';
-import Voice from './components/Voice/Voice';
-import Header from './components/Header/Header';
 
 function App() {
 
