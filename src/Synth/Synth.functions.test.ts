@@ -16,19 +16,7 @@ jest.mock('../content/data', () => ({
   sampleFolders: {},  
   waveforms:    ['sine', 'square', 'sawtooth', 'triangle']  
 }))  
-  
-const MockAudioContext = jest.fn().mockImplementation(function(this: any) {  
-  Object.assign(this, createMockContext())  
-})  
-
-Object.defineProperty(global, 'AudioContext', {  
-  writable: true,  
-  configurable: true,  
-  value: MockAudioContext  
-})
-
-global.AudioContext = MockAudioContext  
-  
+    
 global.Audio = jest.fn().mockImplementation(() => ({ play: jest.fn() })) as typeof Audio  
   
 const makeVoice = (): VoiceType => ({  
@@ -62,17 +50,18 @@ const makeVoice = (): VoiceType => ({
   
 describe('getContext', () => {  
   
-  it('creates a new AudioContext when passed null', () => {  
-    getContext()  
-    expect(MockAudioContext).toHaveBeenCalledTimes(1)  
+  it('sets up a dynamics compressor on a new context', () => {  
+    const mockContext = createMockContext() as AudioContext  
+    getContext(mockContext)  
+    expect(mockContext.createDynamicsCompressor).toHaveBeenCalled()  
   })  
   
   it('resumes a suspended context', () => {  
-    const mockContext = createMockContext('suspended')  
-    getContext(mockContext as AudioContext)  
+    const mockContext = createMockContext('suspended') as AudioContext  
+    getContext(mockContext)  
     expect(mockContext.resume).toHaveBeenCalledTimes(1)  
   })  
-})  
+})
   
   
 describe('runInterval', () => {  
