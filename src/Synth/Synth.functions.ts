@@ -585,5 +585,6 @@ export {
   getDetectedFrequency,
   findNearestNote,
   findNearestSampleInFolder,
-  buffers
+  buffers,
+  loadSamples
 }
