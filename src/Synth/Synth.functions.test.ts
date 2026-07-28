@@ -1,9 +1,10 @@
 import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, shouldUseFFTFallback }  from './Synth.functions';  
 import { VoiceType }                from '../components/shared.types';  
 import { runOneInterval }           from './Synth.test.functions';  
-import { allFrequencies } from '../content/data';
-  
-  
+import { allFrequencies }           from '../content/data';
+import { getDetectedFrequency, detectPitchFFT } from './Synth.functions';  
+import cabasaFile                   from '../content/sounds/Cabasa.wav';  
+
 jest.mock('../content/data', () => ({  
   allFrequencies: [  
     [  
@@ -330,5 +331,28 @@ describe('refineFundamental', () => {
       bestOffset: 2,
       bestCorrelation: 0.95,
     });
+  });
+});
+
+describe('getDetectedFrequency', () => {
+  it('uses the FFT fallback when requested', () => {
+    const slice = Float32Array.from([1, 0, -1, 0]);
+
+    const expected = detectPitchFFT(slice, 44100);
+
+    expect(
+      getDetectedFrequency(slice, 44100, -1, 0.8)
+    ).toBe(expected);
+  });
+
+  it('returns the autocorrelation frequency when no fallback is needed', () => {
+    expect(
+      getDetectedFrequency(
+        Float32Array.from([1]),
+        44100,
+        100,
+        0.8
+      )
+    ).toBe(441);
   });
 });

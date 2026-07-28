@@ -172,12 +172,26 @@ const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {
     ));
   }  
 
+  return getDetectedFrequency(
+    slice,
+    sampleRate,
+    bestOffset,
+    bestCorrelation
+  );
+}
+
+const getDetectedFrequency = (
+  slice: Float32Array,
+  sampleRate: number,
+  bestOffset: number,
+  bestCorrelation: number
+) => {
   if (shouldUseFFTFallback(bestOffset, bestCorrelation)) {
     return detectPitchFFT(slice, sampleRate);
   }
-  
-  return sampleRate / bestOffset 
-}
+
+  return sampleRate / bestOffset;
+};
 
 const refineFundamental = (
   correlations: number[],
@@ -567,5 +581,6 @@ export {
   detectPitch,
   refineFundamental,
   shouldUseFFTFallback,
-  detectPitchFFT
+  detectPitchFFT,
+  getDetectedFrequency
 }
