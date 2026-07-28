@@ -318,10 +318,10 @@ const findNearestSampleInFolder = (
   
 const loadSamples = (context: AudioContext) => {  
 
-  if (samplesLoading) return  
+  if (samplesLoading) return  Promise.resolve();
   samplesLoading = true  
 
-  Promise.all(  
+  return Promise.all(  
     Object.entries(samples).map(async ([name, url]) => {  
 
       try {  
