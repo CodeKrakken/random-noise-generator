@@ -1,6 +1,7 @@
-import { getContext, runInterval }  from './Synth.functions';  
+import { getContext, parseNoteFromKey, runInterval }  from './Synth.functions';  
 import { VoiceType }                from '../components/shared.types';  
 import { runOneInterval }           from './Synth.test.functions';  
+import { allFrequencies } from '../content/data';
   
   
 jest.mock('../content/data', () => ({  
@@ -46,34 +47,6 @@ const makeVoice = (): VoiceType => ({
   minDecay:         100,  
   maxDecay:         100,  
 })  
-
-const makeThisVoice = (): VoiceType => ({  
-  id: 'test-id',  
-  isActive: false,  
-  label: '1',  
-  nextInterval: 0,  
-  thisInterval: 0,  
-  offsetInterval: 0,  
-  bpm: 120,  
-  minLevel: 100,  
-  maxLevel: 100,  
-  activeNotes: ['9'],  
-  activeOctaves: ['1'],  
-  activeFrequencies: [880.00],  
-  activeIntervals: ['1'],  
-  activeSounds: ['piano'],  
-  restChance: 0,  
-  minLength: 100,  
-  maxLength: 100,  
-  minOffset: 0,  
-  maxOffset: 0,  
-  minDetune: 0,  
-  maxDetune: 0,  
-  minAttack: 100,  
-  maxAttack: 100,  
-  minDecay: 100,  
-  maxDecay: 100,  
-})
 
 const createMockContext = (state = 'running', currentTime = 0) => (  
   {  
@@ -267,3 +240,28 @@ describe('runInterval', () => {
     expect(mockOscillator.detune.value).toBe(-50)  
   })
 })
+
+describe('parseNoteFromKey', () => {
+  it('returns the parsed note information', () => {
+    console.log(allFrequencies)
+    expect(parseNoteFromKey('foo/C0_bar')).toEqual({
+      octave: 0,
+      note: 0, // C
+      frequency: allFrequencies[0][0],
+    });
+  });
+
+  it('returns null when the string does not contain a note', () => {
+    expect(parseNoteFromKey('not-a-note')).toBeNull();
+  });
+
+  it('returns null for an unknown note name', () => {
+    expect(parseNoteFromKey('foo/H4_bar')).toBeNull();
+  });
+
+  it('returns null when the octave is out of range', () => {
+    expect(
+      parseNoteFromKey(`foo/C${allFrequencies.length}_bar`)
+    ).toBeNull();
+  });
+});
