@@ -1,16 +1,18 @@
-import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, shouldUseFFTFallback }  from './Synth.functions';  
+import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote }  from './Synth.functions';  
 import { VoiceType }                from '../components/shared.types';  
 import { runOneInterval }           from './Synth.test.functions';  
 import { allFrequencies }           from '../content/data';
-import { getDetectedFrequency, detectPitchFFT } from './Synth.functions';  
+
 
 jest.mock('../content/data', () => ({  
-  allFrequencies: [  
+  allFrequencies: [
     [  
-      261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88,  
-      523.25, 587.33, 659.25, 698.46, 783.99, 880.00  
-    ],  
-  ],  
+      261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 369.99, 392.00, 415.30, 440.00, 466.16, 493.88, 523.25
+    ],
+    [  
+      523.25, 554.37, 587.33, 622.25, 659.25, 698.46, 739.99, 783.99, 830.61, 880.00, 932.33, 987.77, 1046.50
+    ],
+  ],
   extrema:      ['min', 'max'],  
   oneMinute:    60,  
   samples:      { snare: 'snare.wav' },  
@@ -384,5 +386,37 @@ describe('getDetectedFrequency', () => {
         0.8
       )
     ).toBe(441);
+  });
+});
+
+describe('findNearestNote', () => {
+  it('returns an exact note match', () => {
+    expect(
+      findNearestNote(allFrequencies[1][0]) // C4
+    ).toEqual({
+      octave: 1,
+      note: 0,
+      frequency: allFrequencies[1][0],
+    });
+  });
+
+  it('returns the nearest note for an inexact frequency', () => {
+    const result = findNearestNote(445);
+
+    expect(result).toEqual({
+      octave: 0,
+      note: 9, // A4
+      frequency: allFrequencies[0][9],
+    });
+  });
+
+  it('does not return the duplicate boundary note', () => {
+    const result = findNearestNote(allFrequencies[0][12]);
+
+    expect(result).toEqual({
+      octave: 1,
+      note: 0,
+      frequency: allFrequencies[1][0],
+    });
   });
 });

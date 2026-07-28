@@ -582,5 +582,6 @@ export {
   refineFundamental,
   shouldUseFFTFallback,
   detectPitchFFT,
-  getDetectedFrequency
+  getDetectedFrequency,
+  findNearestNote
 }
