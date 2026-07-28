@@ -3,7 +3,6 @@ import { VoiceType }                from '../components/shared.types';
 import { runOneInterval }           from './Synth.test.functions';  
 import { allFrequencies }           from '../content/data';
 import { getDetectedFrequency, detectPitchFFT } from './Synth.functions';  
-import cabasaFile                   from '../content/sounds/Cabasa.wav';  
 
 jest.mock('../content/data', () => ({  
   allFrequencies: [  
@@ -304,6 +303,37 @@ describe('detectPitch', () => {
     const result = detectPitch(makeBuffer(samples), 44100);
 
     expect(result).not.toBeNull();
+  });
+})
+
+describe('detectPitchFFT', () => {
+  it('detects a sine wave frequency', () => {
+    const sampleRate = 44100;
+    const N = 4096;
+    const frequency = 440;
+
+    const slice = Float32Array.from(
+      { length: N },
+      (_, i) => Math.sin(2 * Math.PI * frequency * i / sampleRate)
+    );
+
+    const result = detectPitchFFT(slice, sampleRate);
+
+    expect(result).not.toBeNull();
+    expect(result!).toBeGreaterThan(430);
+    expect(result!).toBeLessThan(450);
+  });
+
+  it('returns null for an empty slice', () => {
+    expect(
+      detectPitchFFT(new Float32Array(), 44100)
+    ).toBeNull();
+  });
+
+  it('returns a frequency for a constant signal', () => {
+    const slice = new Float32Array(4096).fill(1);
+
+    expect(detectPitchFFT(slice, 44100)).not.toBeNull();
   });
 })
 

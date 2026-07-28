@@ -229,7 +229,7 @@ const detectPitchFFT = (slice: Float32Array, sampleRate: number) => {
   const N = slice.length  
   let bestFreq = -1  
   let bestMag = 0  
-  const minBin = Math.floor(27 * N / sampleRate)   // 60 Hz floor  
+  const minBin = Math.floor(27 * N / sampleRate)   // 27 Hz floor  
   const maxBin = Math.floor(8000 * N / sampleRate) // 8000 Hz ceiling  
   
   for (let k = minBin; k < maxBin; k++) {  
