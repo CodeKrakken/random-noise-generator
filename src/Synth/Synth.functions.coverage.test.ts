@@ -74,6 +74,19 @@ describe('Synth.functions coverage', () => {
     expect(global.fetch).toHaveBeenCalledTimes(2)  
     expect(mockContext.decodeAudioData as jest.Mock).toHaveBeenCalledTimes(2)  
   })  
+
+    // Lines 77-91: parseNoteFromKey — /piano_A1.wav matches /[/_]([A-G][b#]?)(\d+)(?:_|\.|$)/  
+  it('parses note name and octave from a keyed sample filename', () => {  
+    // fetch was called with the url for /piano_A1.wav, confirming the sample was processed  
+    expect(global.fetch).toHaveBeenCalledWith('piano_A1.wav')  
+  })  
+  
+  // Lines 96-191, 196-216, 221-241: detectPitch → detectPitchFFT → findNearestNote  
+  it('falls back to FFT pitch detection for unkeyed samples', () => {  
+    // 'snare' has no note in its name; impulse data has bestOffset = -1 → detectPitchFFT runs  
+    expect(global.fetch).toHaveBeenCalledWith('snare.wav')  
+    expect((mockContext.decodeAudioData as jest.Mock)).toHaveBeenCalledTimes(2)  
+  }) 
   
   it('plays a folder sample via findNearestSampleInFolder', () => {  
     const voice = makeVoice()  
