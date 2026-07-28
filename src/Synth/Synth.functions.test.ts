@@ -1,8 +1,8 @@
-import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote }  from './Synth.functions';  
-import { VoiceType }                from '../components/shared.types';  
-import { runOneInterval }           from './Synth.test.functions';  
-import { allFrequencies }           from '../content/data';
-
+import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder }  from './Synth.functions';  
+import { VoiceType }                      from '../components/shared.types';  
+import { runOneInterval }                 from './Synth.test.functions';  
+import { allFrequencies, sampleFolders }  from '../content/data';
+import { buffers }                        from './Synth.functions';
 
 jest.mock('../content/data', () => ({  
   allFrequencies: [
@@ -418,5 +418,60 @@ describe('findNearestNote', () => {
       note: 0,
       frequency: allFrequencies[1][0],
     });
+  });
+});
+
+describe('findNearestSampleInFolder', () => {
+  beforeEach(() => {
+    Object.keys(sampleFolders).forEach(k => delete sampleFolders[k]);
+    Object.keys(buffers).forEach(k => delete buffers[k]);
+  });
+
+  it('returns null when the folder has no samples', () => {
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBeNull();
+  });
+
+  it('ignores missing buffers', () => {
+    sampleFolders.drums = ['kick'];
+
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBeNull();
+  });
+
+  it('ignores buffers with a null octave', () => {
+    sampleFolders.drums = ['kick'];
+
+    buffers.kick = {
+      octave: null,
+      note: 0,
+    } as any;
+
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBeNull();
+  });
+
+  it('ignores buffers with a null note', () => {
+    sampleFolders.drums = ['kick'];
+
+    buffers.kick = {
+      octave: 4,
+      note: null,
+    } as any;
+
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBeNull();
+  });
+
+  it('returns the nearest sample', () => {
+    sampleFolders.drums = ['far', 'near'];
+
+    buffers.far = {
+      octave: 2,
+      note: 0,
+    } as any;
+
+    buffers.near = {
+      octave: 4,
+      note: 1,
+    } as any;
+
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBe('near');
   });
 });

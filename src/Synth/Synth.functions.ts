@@ -583,5 +583,7 @@ export {
   shouldUseFFTFallback,
   detectPitchFFT,
   getDetectedFrequency,
-  findNearestNote
+  findNearestNote,
+  findNearestSampleInFolder,
+  buffers
 }
