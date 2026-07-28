@@ -1,4 +1,4 @@
-import { detectPitch, getContext, parseNoteFromKey, runInterval }  from './Synth.functions';  
+import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, shouldUseFFTFallback }  from './Synth.functions';  
 import { VoiceType }                from '../components/shared.types';  
 import { runOneInterval }           from './Synth.test.functions';  
 import { allFrequencies } from '../content/data';
@@ -248,7 +248,6 @@ describe('runInterval', () => {
 
 describe('parseNoteFromKey', () => {
   it('returns the parsed note information', () => {
-    console.log(allFrequencies)
     expect(parseNoteFromKey('foo/C0_bar')).toEqual({
       octave: 0,
       note: 0, // C
@@ -306,3 +305,30 @@ describe('detectPitch', () => {
     expect(result).not.toBeNull();
   });
 })
+
+describe('refineFundamental', () => {
+  it('prefers a lower harmonic when it is a strong local peak', () => {
+    const correlations = [
+      1.0,   // 0
+      0.0,   // 1 = firstZeroCrossing
+      0.95,  // 2 = candidate (local peak)
+      0.1,   // 3
+      0.2,   // 4
+      0.1,   // 5
+      0.94,  // 6 = original bestOffset
+      0.1,   // 7
+    ];
+
+    const result = refineFundamental(
+      correlations,
+      1,      // firstZeroCrossing
+      6,      // bestOffset
+      0.94    // bestCorrelation
+    );
+
+    expect(result).toEqual({
+      bestOffset: 2,
+      bestCorrelation: 0.95,
+    });
+  });
+});

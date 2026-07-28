@@ -163,33 +163,52 @@ const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {
     }  
   }
 
-  if (bestOffset !== -1) {  
-    const originalCorrelation = bestCorrelation  
-
-    for (const divisor of [2, 3, 4, 5, 6, 7, 8, 10, 12, 16]) {  
-
-      const candidateOffset = Math.round(bestOffset / divisor)  
-      if (candidateOffset <= firstZeroCrossing) break  
-
-      const c     = correlations[candidateOffset]     ?? -Infinity  
-      const cPrev = correlations[candidateOffset - 1] ?? -Infinity  
-      const cNext = correlations[candidateOffset + 1] ?? -Infinity  
-      
-      // Only accept if it's a genuine local peak AND close in strength  
-
-      if (c > cPrev && c > cNext && c >= 0.9 * originalCorrelation) {  
-        bestOffset      = candidateOffset  
-        bestCorrelation = c  
-      }  
-    }  
-  }
-  
-  if (bestCorrelation < 0.3 || bestOffset === -1) {  
-    return detectPitchFFT(slice, sampleRate)  
+  if (bestOffset !== -1) {
+    ({ bestOffset, bestCorrelation } = refineFundamental(
+      correlations,
+      firstZeroCrossing,
+      bestOffset,
+      bestCorrelation
+    ));
   }  
+
+  if (shouldUseFFTFallback(bestOffset, bestCorrelation)) {
+    return detectPitchFFT(slice, sampleRate);
+  }
   
   return sampleRate / bestOffset 
 }
+
+const refineFundamental = (
+  correlations: number[],
+  firstZeroCrossing: number,
+  bestOffset: number,
+  bestCorrelation: number
+) => {
+
+  const originalCorrelation = bestCorrelation;
+
+  for (const divisor of [2, 3, 4, 5, 6, 7, 8, 10, 12, 16]) {
+
+    const candidateOffset = Math.round(bestOffset / divisor);
+    if (candidateOffset <= firstZeroCrossing) break;
+
+    const c     = correlations[candidateOffset]     ?? -Infinity;
+    const cPrev = correlations[candidateOffset - 1] ?? -Infinity;
+    const cNext = correlations[candidateOffset + 1] ?? -Infinity;
+
+    if (
+      c > cPrev &&
+      c > cNext &&
+      c >= 0.9 * originalCorrelation
+    ) {
+      bestOffset      = candidateOffset;
+      bestCorrelation = c;
+    }
+  }
+
+  return { bestOffset, bestCorrelation };
+};
 
 const detectPitchFFT = (slice: Float32Array, sampleRate: number) => {  
 
@@ -215,6 +234,11 @@ const detectPitchFFT = (slice: Float32Array, sampleRate: number) => {
   }  
   return bestFreq > 0 ? bestFreq : null  
 }
+
+const shouldUseFFTFallback = (
+  bestOffset: number,
+  bestCorrelation: number
+) => bestOffset === -1 || bestCorrelation < 0.3;
 
 const findNearestNote = (frequency: number) => {  
 
@@ -540,5 +564,8 @@ export {
   getContext,
   runInterval,
   parseNoteFromKey,
-  detectPitch
+  detectPitch,
+  refineFundamental,
+  shouldUseFFTFallback,
+  detectPitchFFT
 }
