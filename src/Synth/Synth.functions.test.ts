@@ -1,4 +1,4 @@
-import { getContext, parseNoteFromKey, runInterval }  from './Synth.functions';  
+import { detectPitch, getContext, parseNoteFromKey, runInterval }  from './Synth.functions';  
 import { VoiceType }                from '../components/shared.types';  
 import { runOneInterval }           from './Synth.test.functions';  
 import { allFrequencies } from '../content/data';
@@ -47,6 +47,11 @@ const makeVoice = (): VoiceType => ({
   minDecay:         100,  
   maxDecay:         100,  
 })  
+
+const makeBuffer = (samples: number[]): AudioBuffer =>
+  ({
+    getChannelData: jest.fn().mockReturnValue(Float32Array.from(samples)),
+  } as unknown as AudioBuffer);
 
 const createMockContext = (state = 'running', currentTime = 0) => (  
   {  
@@ -265,3 +270,39 @@ describe('parseNoteFromKey', () => {
     ).toBeNull();
   });
 });
+
+describe('detectPitch', () => {
+  it('returns null for a silent buffer', () => {
+    const samples = new Array(5000).fill(0);
+
+    expect(detectPitch(makeBuffer(samples), 44100)).toBeNull();
+  });
+
+  it('returns null when there is no zero crossing', () => {
+    const samples = new Array(5000).fill(1);
+
+    expect(detectPitch(makeBuffer(samples), 44100)).toBeNull();
+  });
+
+  it('skips leading silence', () => {
+    const samples = [
+      ...new Array(100).fill(0),
+      ...Array.from({ length: 5000 }, (_, i) =>
+        Math.sin((2 * Math.PI * 440 * i) / 44100)
+      ),
+    ];
+
+    expect(detectPitch(makeBuffer(samples), 44100)).not.toBeNull();
+  });
+
+  it('detects the pitch of a sine wave', () => {
+    const samples = Array.from(
+      { length: 5000 },
+      (_, i) => Math.sin((2 * Math.PI * 440 * i) / 44100)
+    );
+
+    const result = detectPitch(makeBuffer(samples), 44100);
+
+    expect(result).not.toBeNull();
+  });
+})
