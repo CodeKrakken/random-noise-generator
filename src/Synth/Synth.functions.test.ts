@@ -47,6 +47,34 @@ const makeVoice = (): VoiceType => ({
   maxDecay:         100,  
 })  
 
+const makeThisVoice = (): VoiceType => ({  
+  id: 'test-id',  
+  isActive: false,  
+  label: '1',  
+  nextInterval: 0,  
+  thisInterval: 0,  
+  offsetInterval: 0,  
+  bpm: 120,  
+  minLevel: 100,  
+  maxLevel: 100,  
+  activeNotes: ['9'],  
+  activeOctaves: ['1'],  
+  activeFrequencies: [880.00],  
+  activeIntervals: ['1'],  
+  activeSounds: ['piano'],  
+  restChance: 0,  
+  minLength: 100,  
+  maxLength: 100,  
+  minOffset: 0,  
+  maxOffset: 0,  
+  minDetune: 0,  
+  maxDetune: 0,  
+  minAttack: 100,  
+  maxAttack: 100,  
+  minDecay: 100,  
+  maxDecay: 100,  
+})
+
 const createMockContext = (state = 'running', currentTime = 0) => (  
   {  
     state,  
@@ -237,5 +265,5 @@ describe('runInterval', () => {
     runOneInterval(voice, mockContext)  
     const mockOscillator = mockContext.createOscillator()  
     expect(mockOscillator.detune.value).toBe(-50)  
-  })  
+  })
 })
