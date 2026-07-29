@@ -2,6 +2,7 @@ import { VoiceType, RangeKey }                                                  
 import { VoicesRef }                                                              from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }  from '../content/data';
 
+
 type OscGain = {
   oscillator  : OscillatorNode, 
   gainNode    : GainNode
@@ -54,6 +55,12 @@ const runInterval = (
   }, (voice.nextInterval - context.currentTime)*1000)    
 }
 
+// test helper
+
+const resetSampleState = () => {
+  samplesLoading = false;
+};
+
 // private functions
 
 const buffers: Record<string, { 
@@ -67,10 +74,6 @@ const buffers: Record<string, {
 }> = {}  
 
 let samplesLoading = false  
-
-const resetSampleState = () => {
-  samplesLoading = false;
-};
 
 const noteNameToIndex: Record<string, number> = {  
   C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
@@ -592,5 +595,6 @@ export {
   findNearestSampleInFolder,
   buffers,
   loadSamples,
-  resetSampleState, // just for testing
+  resetSampleState,
+  playSample
 }

@@ -1,9 +1,8 @@
-import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder, loadSamples, resetSampleState }  from './Synth.functions';  
+import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder, loadSamples, resetSampleState, playSample }  from './Synth.functions';  
 import { VoiceType }                      from '../components/shared.types';  
 import { runOneInterval }                 from './Synth.test.functions';  
 import { allFrequencies, sampleFolders }  from '../content/data';
 import { buffers }                        from './Synth.functions';
-import * as SynthFunctions                from './Synth.functions';
 
 jest.mock('../content/data', () => ({  
   allFrequencies: [
@@ -599,5 +598,50 @@ describe('loadSamples', () => {
     );
 
     errorSpy.mockRestore();
+  });
+})
+
+describe('playSample', () => {
+  
+  it('plays the nearest sample from a sample folder', () => {
+    sampleFolders.drums = ['near'];
+
+    buffers.near = {
+      buffer: {} as AudioBuffer,
+      note: 0,
+      octave: 0,
+    } as any;
+
+    const source = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      start: jest.fn(),
+      detune: { value: 0 },
+    };
+
+    const gain = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      gain: {
+        setValueAtTime: jest.fn(),
+        linearRampToValueAtTime: jest.fn()
+      },
+    };
+
+    const context = {
+      createBufferSource: jest.fn(() => source),
+      createGain: jest.fn(() => gain),
+    } as any;
+
+    const voice = {
+      activeNotes: ['1'],
+      activeOctaves: ['0'],
+      activeIntervals: ['0'],
+    } as VoiceType;
+
+    playSample('drums', 1, context, 0, voice);
+
+    expect(context.createBufferSource).toHaveBeenCalled();
+    expect(source.start).toHaveBeenCalled();
   });
 })
