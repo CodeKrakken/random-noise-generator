@@ -81,6 +81,13 @@ describe('Synth', () => {
       expect(runInterval).toHaveBeenCalledWith(voice2, ...args);  
     });  
   });  
+
+  describe('resumeContext', () => {
+    it('calls getContext', () => {
+      Synth.resumeContext()
+      expect(getContext).toHaveBeenCalled()
+    })
+  })
   
   
   describe('integration', () => {  
