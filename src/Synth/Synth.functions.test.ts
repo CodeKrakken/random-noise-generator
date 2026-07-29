@@ -1,8 +1,9 @@
 import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder, loadSamples, resetSampleState }  from './Synth.functions';  
 import { VoiceType }                      from '../components/shared.types';  
 import { runOneInterval }                 from './Synth.test.functions';  
-import { allFrequencies, sampleFolders, samples }  from '../content/data';
+import { allFrequencies, sampleFolders }  from '../content/data';
 import { buffers }                        from './Synth.functions';
+import * as SynthFunctions                from './Synth.functions';
 
 jest.mock('../content/data', () => ({  
   allFrequencies: [
@@ -514,5 +515,89 @@ describe('loadSamples', () => {
       octave: 0,
       note: 0,
     });
+  });
+
+  it('loads a sample by detecting its pitch', async () => {
+    resetSampleState();
+
+    const samples = Array.from(
+      { length: 5000 },
+      (_, i) => Math.sin(2 * Math.PI * 440 * i / 44100)
+    );
+
+    const decoded = makeBuffer(samples);
+
+    global.fetch = jest.fn().mockResolvedValue({
+      arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+    });
+
+    const context = {
+      sampleRate: 44100,
+      decodeAudioData: jest.fn().mockResolvedValue(decoded),
+    } as unknown as AudioContext;
+
+    await loadSamples(context);
+
+    expect(context.decodeAudioData).toHaveBeenCalled();
+
+    expect(buffers.snare).toEqual({
+      buffer: decoded,
+      detectedFrequency: expect.any(Number),
+      nearestFrequency: expect.any(Number),
+      octave: expect.any(Number),
+      note: expect.any(Number),
+    });
+  });
+
+  it('stores null note information when no pitch is detected', async () => {
+    resetSampleState();
+
+    const decoded = {
+      getChannelData: () => new Float32Array(5000),
+    } as unknown as AudioBuffer;
+
+    global.fetch = jest.fn().mockResolvedValue({
+      arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+    });
+
+    const context = {
+      sampleRate: 44100,
+      decodeAudioData: jest.fn().mockResolvedValue(decoded),
+    } as unknown as AudioContext;
+
+    await loadSamples(context);
+
+    expect(buffers.snare).toEqual({
+      buffer: decoded,
+      detectedFrequency: null,
+      nearestFrequency: null,
+      octave: null,
+      note: null,
+    });
+  });
+
+  it('logs an error when a sample cannot be loaded', async () => {
+    resetSampleState();
+
+    global.fetch = jest.fn().mockRejectedValue(new Error('boom'));
+
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const context = {
+      sampleRate: 44100,
+      decodeAudioData: jest.fn(),
+    } as unknown as AudioContext;
+
+    await loadSamples(context);
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Failed to load sample:',
+      'snare',
+      expect.any(Error)
+    );
+
+    errorSpy.mockRestore();
   });
 })
