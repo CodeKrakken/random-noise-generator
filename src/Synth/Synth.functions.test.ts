@@ -644,4 +644,46 @@ describe('playSample', () => {
     expect(context.createBufferSource).toHaveBeenCalled();
     expect(source.start).toHaveBeenCalled();
   });
+
+  it('plays a random sample when no target note is available', () => {
+    sampleFolders.drums = ['sample1'];
+
+    buffers.sample1 = {
+      buffer: {} as AudioBuffer,
+      note: 0,
+      octave: 0,
+    } as any;
+
+    const source = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      start: jest.fn(),
+      detune: { value: 0 },
+    };
+
+    const gain = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      gain: {
+        setValueAtTime: jest.fn(),
+        linearRampToValueAtTime: jest.fn()
+      },
+    };
+
+    const context = {
+      createBufferSource: jest.fn(() => source),
+      createGain: jest.fn(() => gain),
+    } as any;
+
+    const voice = {
+      activeNotes: [],
+      activeOctaves: [],
+      activeIntervals: [],
+    } as unknown as VoiceType;
+
+    playSample('drums', 1, context, 0, voice);
+
+    expect(context.createBufferSource).toHaveBeenCalled();
+    expect(source.start).toHaveBeenCalled();
+  });
 })
