@@ -686,4 +686,49 @@ describe('playSample', () => {
     expect(context.createBufferSource).toHaveBeenCalled();
     expect(source.start).toHaveBeenCalled();
   });
+
+  it('disconnects the source and gain when playback ends', () => {
+    const source = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      start: jest.fn(),
+      detune: { value: 0 },
+      onended: undefined as (() => void) | undefined,
+    };
+
+    const gain = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      gain: {
+        setValueAtTime: jest.fn(),
+        linearRampToValueAtTime: jest.fn()
+      },
+    };
+
+    const context = {
+      createBufferSource: jest.fn(() => source),
+      createGain: jest.fn(() => gain),
+    } as any;
+
+    buffers.snare = {
+      buffer: {} as AudioBuffer,
+      note: 0,
+      octave: 0,
+    } as any;
+
+    const voice = {
+      activeNotes: ['1'],
+      activeOctaves: ['0'],
+      activeIntervals: ['0'],
+    } as VoiceType;
+
+    playSample('snare', 1, context, 0, voice);
+
+    expect(source.onended).toBeDefined();
+
+    source.onended!();
+
+    expect(source.disconnect).toHaveBeenCalledTimes(1);
+    expect(gain.disconnect).toHaveBeenCalledTimes(1);
+  });
 })
