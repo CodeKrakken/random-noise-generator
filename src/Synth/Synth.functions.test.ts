@@ -3,7 +3,7 @@ import { VoiceType }                      from '../components/shared.types';
 import { runOneInterval }                 from './Synth.test.functions';  
 import { allFrequencies, sampleFolders }  from '../content/data';
 import { buffers }                        from './Synth.functions';
-import { makeVoice } from '../shared.test.functions';
+import { makeVoice }                      from '../shared.test.functions';
 
 jest.mock('../content/data', () => ({  
   allFrequencies: [
