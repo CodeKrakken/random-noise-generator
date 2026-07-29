@@ -50,5 +50,6 @@ const updateVoice = (
 
 export {
   updateVoice,
-  updateButton
+  updateButton,
+  getActiveFrequencies
 }
