@@ -498,12 +498,21 @@ describe('loadSamples', () => {
     } as unknown as AudioContext;
 
     await loadSamples(context);
-    console.log(buffers)    
+
     expect(context.decodeAudioData).toHaveBeenCalled();
+    
     expect(parseNoteFromKey('piano_C0')).toEqual({
       octave: 0,
       note: 0,
       frequency: allFrequencies[0][0],
+    });
+
+    expect(buffers.piano_C0).toEqual({
+      buffer: decoded,
+      detectedFrequency: allFrequencies[0][0], // adjust to your mock
+      nearestFrequency: allFrequencies[0][0],
+      octave: 0,
+      note: 0,
     });
   });
 })
