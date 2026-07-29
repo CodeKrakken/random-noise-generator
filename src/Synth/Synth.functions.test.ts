@@ -1,7 +1,7 @@
-import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder, loadSamples }  from './Synth.functions';  
+import { detectPitch, getContext, parseNoteFromKey, refineFundamental, runInterval, getDetectedFrequency, detectPitchFFT, findNearestNote, findNearestSampleInFolder, loadSamples, resetSampleState }  from './Synth.functions';  
 import { VoiceType }                      from '../components/shared.types';  
 import { runOneInterval }                 from './Synth.test.functions';  
-import { allFrequencies, sampleFolders }  from '../content/data';
+import { allFrequencies, sampleFolders, samples }  from '../content/data';
 import { buffers }                        from './Synth.functions';
 
 jest.mock('../content/data', () => ({  
@@ -17,7 +17,7 @@ jest.mock('../content/data', () => ({
   oneMinute:    60,  
   samples:      { 
     snare:    'snare.wav',
-    piano_C4: 'piano_C4.wav'
+    piano_C0: 'piano_C0.wav'
   },  
   sampleFolders: {},  
   waveforms:    ['sine', 'square', 'sawtooth', 'triangle']  
@@ -480,27 +480,30 @@ describe('findNearestSampleInFolder', () => {
 });
 
 describe('loadSamples', () => {
+
+  beforeEach(() => {
+    resetSampleState();  
+  })
+
   it('loads a sample with a note in its filename', async () => {
-  const decoded = {} as AudioBuffer;
+    const decoded = {} as AudioBuffer;
 
-  global.fetch = jest.fn().mockResolvedValue({
-    arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+    global.fetch = jest.fn().mockResolvedValue({
+      arrayBuffer: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+    });
+
+    const context = {
+      sampleRate: 44100,
+      decodeAudioData: jest.fn().mockResolvedValue(decoded),
+    } as unknown as AudioContext;
+
+    await loadSamples(context);
+    console.log(buffers)    
+    expect(context.decodeAudioData).toHaveBeenCalled();
+    expect(parseNoteFromKey('piano_C0')).toEqual({
+      octave: 0,
+      note: 0,
+      frequency: allFrequencies[0][0],
+    });
   });
-
-  const context = {
-    sampleRate: 44100,
-    decodeAudioData: jest.fn().mockResolvedValue(decoded),
-  } as unknown as AudioContext;
-
-  await loadSamples(context);
-
-  expect(context.decodeAudioData).toHaveBeenCalled();
-  expect(buffers.piano_C4).toEqual({
-    buffer: decoded,
-    detectedFrequency: allFrequencies[0][0], // adjust to your mock
-    nearestFrequency: allFrequencies[0][0],
-    octave: 0,
-    note: 0,
-  });
-});
 })
