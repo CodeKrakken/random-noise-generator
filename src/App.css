@@ -199,6 +199,9 @@ button:disabled {
   margin-bottom: calc(var(--u) * (-0.2));
 
   z-index: 1;
+
+  position: relative;
+  left: 40%
 }
 
 .active {
