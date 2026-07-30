@@ -1,4 +1,5 @@
-import { getActiveFrequencies, updateVoice } from "./shared.functions"
+import { Synth } from "../Synth/Synth"
+import { getActiveFrequencies, updateButton, updateVoice } from "./shared.functions"
 import { VoiceType } from "./shared.types"
 
 
@@ -32,8 +33,44 @@ describe('getActiveFrequencies', () => {
 
 describe('updateButton', () => {
 
-  it('removes an entry from a button group', () => {
-    const updateVoiceSpy = jest.fn()
-    expect(updateVoice).toHaveBeenCalledWith([{ activeNotes: ['1', '3']}])
-  })
+  let voices: VoiceType[];
+
+  beforeEach(() => {
+    voices = [{
+      activeNotes: ['1', '2', '3'],
+      activeOctaves: ['0']
+    }] as unknown as VoiceType[];
+
+    Synth.voices = JSON.parse(JSON.stringify(voices));
+  });
+
+  it('removes a value that is already selected', () => {
+    const setVoices = jest.fn();
+
+    const e = {
+      currentTarget: {
+        value: '2',
+      },
+    } as React.MouseEvent<HTMLButtonElement>;
+    
+    expect(voices[0].activeNotes).toEqual(['1', '2', '3']);
+    updateButton(e, 'activeNotes', voices, 0, setVoices);
+    expect(voices[0].activeNotes).toEqual(['1', '3']);
+    expect(setVoices).toHaveBeenCalled();
+  });
+
+  it('adds a value that is not already selected', () => {
+    const setVoices = jest.fn();
+
+    const e = {
+      currentTarget: {
+        value: '4',
+      },
+    } as React.MouseEvent<HTMLButtonElement>;
+    
+    expect(voices[0].activeNotes).toEqual(['1', '2', '3']);
+    updateButton(e, 'activeNotes', voices, 0, setVoices);
+    expect(voices[0].activeNotes).toEqual(['1', '2', '3', '4']);
+    expect(setVoices).toHaveBeenCalled();
+  });
 })
