@@ -23,9 +23,8 @@ describe('Piano', () => {
       />
     )
 
-    const buttons = screen.getAllByRole('button')
-    console.log(buttons[0])
-    // fireEvent.click(screen.getByRole('button', { value: '1'}));  
+    const button = document.querySelector('#voice-0-note-1') as HTMLButtonElement;
+    fireEvent.click(button);  
     expect(updateButtonSpy).toHaveBeenCalled();  
   })
 })

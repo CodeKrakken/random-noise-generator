@@ -45,7 +45,8 @@ export default function Piano ({
               'data-voice'      : i,
               value             : key,
               checked           : checked,
-              onClick           : handleClick
+              onClick           : handleClick,
+              id              : `voice-${i}-note-${key}`
             };
 
             return <button {...props} key={key} />
