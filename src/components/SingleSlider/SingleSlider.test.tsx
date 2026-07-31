@@ -8,7 +8,7 @@ describe('SingleSlider', () => {
             <SingleSlider 
                 slider={{ 
                     min: 0, 
-                    max: 100, 
+                    max: 500, 
                     attrName: 'bpm', 
                     label: 'BPM', 
                     value: '120' 
@@ -20,7 +20,11 @@ describe('SingleSlider', () => {
         )
 
         const sliders = screen.getAllByRole('slider');
-        console.log(sliders);
-        expect(sliders[1]).toBeInTheDocument();
+        const slider = sliders[1]
+        expect(slider).toBeInTheDocument();
+        console.log(slider.outerHTML)
+        expect(slider).toHaveValue(120);
+        fireEvent.keyDown(slider, { which: 39 });
+        expect(slider).toHaveAttribute('aria-valuenow', '121');    
     })
 })
