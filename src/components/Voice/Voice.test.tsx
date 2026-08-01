@@ -4,7 +4,13 @@ import { VoiceType } from '../shared.types';
 
 jest.mock('../../content/data', () => ({  
   sliders:      [],  
-  buttonGroups: [],  
+  buttonGroups: [
+    { 
+      label: 'Piano' as const, 
+      id: 'piano' as const,
+      // component: Piano
+    }
+  ],  
   buttonImages: {}  
 }));
   
@@ -43,6 +49,8 @@ const makeVoice = (): VoiceType => ({
 describe('Voice', () => {  
   const mockHandleDelete = jest.fn();  
   const mockSetVoices    = jest.fn();  
+  const voices = [makeVoice(), makeVoice()];  
+
   
   beforeEach(() => { jest.clearAllMocks(); });  
   
@@ -57,7 +65,25 @@ describe('Voice', () => {
         dataAttribute="Voices"  
       />  
     );  
-    fireEvent.click(screen.getByRole('button'));  
+    fireEvent.click(screen.getByText('X'));  
     expect(mockHandleDelete).toHaveBeenCalledWith(0);  
   });  
+
+  it('shows Piano controls when Piano button is clicked', () => {
+    render(
+      <Voice
+        i={0}
+        voices={voices}
+        setVoices={mockSetVoices}
+        handleDelete={jest.fn()}
+        dataAttribute="test"
+      />
+    )
+
+    expect(document.querySelector('#piano')).not.toBeInTheDocument()
+    console.log(screen.getByRole('button', { name: 'Piano' }).outerHTML)
+    fireEvent.click(screen.getByRole('button', { name: 'Piano' }))
+    // console.log(document.querySelector('#voice')!.innerHTML)
+    expect(document.querySelector('#piano')).toBeInTheDocument()
+  })
 });
