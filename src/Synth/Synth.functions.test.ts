@@ -471,6 +471,27 @@ describe('findNearestSampleInFolder', () => {
 
     expect(findNearestSampleInFolder('drums', 4, 0)).toBe('near');
   });
+
+  it('returns the nearest sample', () => {
+    sampleFolders.drums = ['far', 'near', 'further'];
+
+    buffers.far = {
+      octave: 4,
+      note: 5,
+    } as any;
+
+    buffers.near = {
+      octave: 4,
+      note: 1,
+    } as any;
+
+    buffers.further = {
+      octave: 5,
+      note: 5,
+    } as any;
+
+    expect(findNearestSampleInFolder('drums', 4, 0)).toBe('near');
+  });
 });
 
 describe('loadSamples', () => {
