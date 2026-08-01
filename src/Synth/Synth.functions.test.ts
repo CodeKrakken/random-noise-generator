@@ -90,7 +90,19 @@ describe('getContext', () => {
     const mockContext = createMockContext('suspended') as AudioContext  
     getContext(mockContext)  
     expect(mockContext.resume).toHaveBeenCalledTimes(1)  
-  })  
+  })
+
+  it('creates a new AudioContext when none is provided', () => {
+    const mockContext = {} as AudioContext;
+    const AudioContextMock = jest.fn(() => mockContext);
+
+    global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
+
+    const result = getContext();
+
+    expect(AudioContextMock).toHaveBeenCalledTimes(1);
+    expect(result).toBe(mockContext);
+  });
 })
   
   
