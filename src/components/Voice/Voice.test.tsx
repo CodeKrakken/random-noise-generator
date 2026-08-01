@@ -1,22 +1,29 @@
-import { fireEvent, render, screen } from '@testing-library/react';  
-import Voice from './Voice';  
-import { VoiceType } from '../shared.types';  
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import Voice from './Voice'
+import { VoiceType } from '../shared.types'
 
-jest.mock('../../content/data', () => ({  
-  sliders:      [],  
-  buttonGroups: [
-    { 
-      label: 'Piano' as const, 
-      id: 'piano' as const,
-      // component: Piano
-    }
-  ],  
-  buttonImages: {}  
-}));
-  
-jest.mock('../Piano/Piano',             () => () => <div data-testid="piano" />);  
-jest.mock('../SingleSlider/SingleSlider', () => () => <div />);  
-jest.mock('../DoubleSlider/DoubleSlider', () => () => <div />);  
+
+jest.mock('../../content/data', () => {
+
+  const MockPiano = () => <div className="keyboard" />
+
+  return {
+    sliders: [],
+    buttonGroups: [
+      {
+        label: 'Piano',
+        id: 'piano',
+        component: MockPiano
+      }
+    ],
+    buttonImages: {}
+  }
+})
+
+jest.mock('../SingleSlider/SingleSlider', () => () => <div />)
+jest.mock('../DoubleSlider/DoubleSlider', () => () => <div />) 
+
+
   
 const makeVoice = (): VoiceType => ({  
   id:               'test-id',  
@@ -69,7 +76,7 @@ describe('Voice', () => {
     expect(mockHandleDelete).toHaveBeenCalledWith(0);  
   });  
 
-  it('shows Piano controls when Piano button is clicked', () => {
+  it('shows Piano controls when Piano button is clicked', async () => {
     render(
       <Voice
         i={0}
@@ -80,10 +87,12 @@ describe('Voice', () => {
       />
     )
 
-    expect(document.querySelector('#piano')).not.toBeInTheDocument()
-    console.log(screen.getByRole('button', { name: 'Piano' }).outerHTML)
+    expect(document.querySelector('.keyboard')).not.toBeInTheDocument()
+
     fireEvent.click(screen.getByRole('button', { name: 'Piano' }))
-    // console.log(document.querySelector('#voice')!.innerHTML)
-    expect(document.querySelector('#piano')).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(document.querySelector('.keyboard')).toBeInTheDocument()
+    })
   })
 });
