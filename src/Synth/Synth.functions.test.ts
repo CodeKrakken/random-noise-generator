@@ -294,6 +294,13 @@ describe('detectPitch', () => {
 
     expect(result).not.toBeNull();
   });
+
+  it('handles a single pulse', () => {
+    const samples = new Array(5000).fill(0);
+    samples[0] = 1;
+
+    expect(detectPitch(makeBuffer(samples), 44100)).toBe(21.533203125);
+  });
 })
 
 describe('detectPitchFFT', () => {
@@ -352,6 +359,8 @@ describe('refineFundamental', () => {
       bestCorrelation: 0.95,
     });
   });
+
+  
 });
 
 describe('getDetectedFrequency', () => {

@@ -171,7 +171,11 @@ const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {
     }  
   }
 
+  console.log({ bestOffset, bestCorrelation });
+
   if (bestOffset !== -1) {
+
+    console.log('REFINING');
     ({ bestOffset, bestCorrelation } = refineFundamental(
       correlations,
       firstZeroCrossing,
