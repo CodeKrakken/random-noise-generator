@@ -187,6 +187,14 @@ describe('runInterval', () => {
     jest.runAllTimers()  
     expect(mockContext.createOscillator).toHaveBeenCalled()  
   })  
+
+  it('has a rest when isRest returns true', () => {  
+    const voice = { ...makeVoice(), restChance: 0, activeOctaves: [] }  
+    const mockContext = createMockContext('running')  
+    runOneInterval(voice, mockContext)  
+    jest.runAllTimers()  
+    expect(mockContext.createOscillator).not.toHaveBeenCalled()  
+  })  
   
   it('uses "0.5" as fallback interval when activeIntervals is empty', () => {  
     const voice = { ...makeVoice(), activeIntervals: [], restChance: 0 }  
