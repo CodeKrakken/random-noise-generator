@@ -726,3 +726,21 @@ describe('playSample', () => {
     expect(gain.disconnect).toHaveBeenCalledTimes(1);
   });
 })
+
+describe('refineFundamental', () => {
+  it('handles missing correlation values', () => {
+    const correlations = new Array(20);
+
+    const result = refineFundamental(
+      correlations,
+      0,
+      10,
+      1
+    );
+
+    expect(result).toEqual({
+      bestOffset: 10,
+      bestCorrelation: 1,
+    });
+  });
+})
