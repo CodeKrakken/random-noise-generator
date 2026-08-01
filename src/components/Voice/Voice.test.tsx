@@ -8,7 +8,17 @@ jest.mock('../../content/data', () => {
   const MockPiano = () => <div className="keyboard" />
 
   return {
-    sliders: [],
+    sliders: [
+      {
+        label: 'BPM',
+        value: 'bpm',
+        attrName: 'bpm',
+        min: 1,
+        max: 480,
+        className: 'single',
+        row: 0
+      }
+    ],
     buttonGroups: [
       {
         label: 'Piano',
