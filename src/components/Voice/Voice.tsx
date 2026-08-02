@@ -92,7 +92,7 @@ export default function Voice({
 
       <div className="centred row">
         {
-          buttonGroups.map(group => {
+          buttonGroups.map((group, i) => {
 
             const ComponentToRender = group.component;  
                         
@@ -102,7 +102,7 @@ export default function Voice({
               value     : group.id
             }
 
-            return <>
+            return <div key={`${group.id}-${i}`}>
 
               <Button
                 props   = {props}
@@ -123,7 +123,7 @@ export default function Voice({
                   : 
                 <></>
               }
-            </>
+            </div>
           })
         }
       </div>
