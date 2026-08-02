@@ -473,7 +473,6 @@ const playSample = (
     if (targetNote !== null && targetOctave !== null) {  
       bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
     } else {  
-            console.log('Tested')
       bufferKey = randomOneFrom(sampleFolders[name])  
     }  
   }  
