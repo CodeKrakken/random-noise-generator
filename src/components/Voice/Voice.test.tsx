@@ -17,6 +17,15 @@ jest.mock('../../content/data', () => {
         max: 480,
         className: 'single',
         row: 0
+      },
+      {
+        label: 'Level',
+        value: 'level',
+        attrName: 'minLevel',
+        min: 0,
+        max: 100,
+        className: 'double',
+        row: 0
       }
     ],
     buttonGroups: [
