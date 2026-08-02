@@ -27,4 +27,27 @@ describe('Piano', () => {
     fireEvent.click(button);  
     expect(updateButtonSpy).toHaveBeenCalled();  
   })
+
+  it('marks active piano keys', () => {
+    const voices = [{
+      activeNotes: ['1'],
+      activeOctaves: ['1'],
+    }] as any;
+
+    const setVoices = jest.fn();
+
+    render(
+      <Piano
+        voices={voices}
+        i={0}
+        setVoices={setVoices}
+      />
+    );
+
+    const activeKey = document.querySelector(
+      '#voice-0-note-1'
+    );
+
+    expect(activeKey).toHaveClass('active');
+  });
 })
