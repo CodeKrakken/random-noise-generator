@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';  
-import Header from './Header';  
+import Header, { letterImages } from './Header';  
 import { makeVoice } from '../../shared.test.functions';
   
 jest.mock('../../content/data', () => ({  
-  title:    'OCTOPUS',  
+  title:    'OCTOPUS!',  
   addLabel: 'Add Voice',  
 }));  
   
@@ -46,4 +46,18 @@ describe('Header', () => {
     fireEvent.click(screen.getByRole('button', { name: 'S a v e'}));  
     expect(loadButton).toBeEnabled();
   })
+
+  it('renders non-alphanumeric characters as text', () => {
+    render(header(false));
+
+    expect(screen.getByText('!')).toBeInTheDocument();
+  });
+
+  it('uses the default letter image height', () => {
+    const result = letterImages('A');
+
+    const image = result.props.children[0];
+
+    expect(image.props.height).toBe('40px');
+  });
 });

@@ -2,6 +2,25 @@ import { MouseEventHandler, useEffect, useState } from 'react'
 import { title, addLabel }                        from '../../content/data'
 import { VoiceType }                              from '../shared.types'
 
+const letterImages = (string: string, height: string = "40px") => {
+
+  const letterArray = string.split('').map((letter, i) => 
+
+    /^[A-Z0-9]*$/.test(letter.toUpperCase()) ? (
+      <img 
+        alt     = {letter} 
+        src     = {require(`../../content/letter-images/${letter.toUpperCase()}.png`)} 
+        height  = {height} 
+        key     = {`${letter}-${i}`} 
+      />
+    )
+      : 
+    letter
+  )
+
+  return <div className="centred">{letterArray.map(letter => letter)}</div>
+}
+
 export default function Header ({
 
   handleAddVoice,
@@ -23,24 +42,7 @@ export default function Header ({
 
   useEffect(() => { setDisableLoad(localStorage.voices ? false : true) }, [])
 
-  const letterImages = (string: string, height: string = "40px") => {
-
-    const letterArray = string.split('').map((letter, i) => 
-
-      /^[A-Z0-9]*$/.test(letter.toUpperCase()) ? (
-        <img 
-          alt     = {letter} 
-          src     = {require(`../../content/letter-images/${letter.toUpperCase()}.png`)} 
-          height  = {height} 
-          key     = {`${letter}-${i}`} 
-        />
-      )
-        : 
-      letter
-    )
-
-    return <div className="centred">{letterArray.map(letter => letter)}</div>
-  }
+  
 
   const handleSave = () => {
     setDisableLoad(false)
@@ -106,4 +108,8 @@ export default function Header ({
       </div>
     </div>
   )
+}
+
+export {
+  letterImages
 }
