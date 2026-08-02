@@ -171,11 +171,8 @@ const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {
     }  
   }
 
-  console.log({ bestOffset, bestCorrelation });
-
   if (bestOffset !== -1) {
 
-    console.log('REFINING');
     ({ bestOffset, bestCorrelation } = refineFundamental(
       correlations,
       firstZeroCrossing,
@@ -476,6 +473,7 @@ const playSample = (
     if (targetNote !== null && targetOctave !== null) {  
       bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
     } else {  
+            console.log('Tested')
       bufferKey = randomOneFrom(sampleFolders[name])  
     }  
   }  

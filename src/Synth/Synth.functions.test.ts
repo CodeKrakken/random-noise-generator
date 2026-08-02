@@ -754,6 +754,49 @@ describe('playSample', () => {
     expect(source.disconnect).toHaveBeenCalledTimes(1);
     expect(gain.disconnect).toHaveBeenCalledTimes(1);
   });
+
+  it('falls back to the folder name when no nearest sample is found', () => {
+    sampleFolders.drums = ['missing'];
+
+    buffers.drums = {
+      buffer: {} as AudioBuffer,
+      note: 0,
+      octave: 0,
+    } as any;
+
+    const source = {
+      buffer: undefined as AudioBuffer | undefined,
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      start: jest.fn(),
+      detune: { value: 0 },
+    };
+
+    const gain = {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      gain: {
+        setValueAtTime: jest.fn(),
+        linearRampToValueAtTime: jest.fn(),
+      },
+    };
+
+    const context = {
+      createBufferSource: jest.fn(() => source),
+      createGain: jest.fn(() => gain),
+    } as any;
+
+    const voice = {
+      activeNotes: ['1'],
+      activeOctaves: ['0'],
+      activeIntervals: ['0'],
+    } as VoiceType;
+
+    playSample('drums', 1, context, 0, voice);
+
+    expect(source.buffer).toBe(buffers.drums.buffer);
+    expect(source.start).toHaveBeenCalled();
+  });
 })
 
 describe('refineFundamental', () => {
