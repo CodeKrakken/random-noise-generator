@@ -15,7 +15,6 @@ export default function Button({
 }) {
 
   const imgSrc = buttonImages[imgPath!] || ""
-  console.log(buttonImages)
   return <>  
     <button {...props}>  
 
