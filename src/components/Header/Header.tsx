@@ -96,7 +96,7 @@ export default function Header ({
       <div id="title">
         {letterImages(title, '50px')}
       </div>
-
+    
       <div className="centred section">
         {
           buttons.map((button, i) => 
