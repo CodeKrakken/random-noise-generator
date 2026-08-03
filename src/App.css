@@ -215,3 +215,7 @@ button:disabled {
 #voices {
   margin-top: calc(var(--u) * 0.5)
 }
+
+#stave {
+  background: white
+}
