@@ -5,6 +5,7 @@ import { demoVoices }                   from './content/data';
 import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
+import Timeline from './components/Timeline/Timeline';
 
 function App() {
 
@@ -146,6 +147,10 @@ function App() {
           />
         )
       }
+    </div>
+
+    <div className="section">
+      <Timeline />
     </div>
   </>
 }
