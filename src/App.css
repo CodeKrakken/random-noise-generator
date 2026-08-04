@@ -215,7 +215,3 @@ button:disabled {
 #voices {
   margin-top: calc(var(--u) * 0.5)
 }
-
-#timeline {
-  background: white
-}
