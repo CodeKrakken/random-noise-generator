@@ -102,7 +102,7 @@ export default function Voice({
               value     : group.id
             }
 
-            return <div key={`${group.id}-${i}`}>
+            return <>
 
               <Button
                 props   = {props}
@@ -123,7 +123,7 @@ export default function Voice({
                   : 
                 <></>
               }
-            </div>
+            </>
           })
         }
       </div>
