@@ -216,6 +216,6 @@ button:disabled {
   margin-top: calc(var(--u) * 0.5)
 }
 
-#stave {
+#timeline {
   background: white
 }

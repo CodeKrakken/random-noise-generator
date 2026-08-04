@@ -1,8 +1,30 @@
-import { allFrequencies } from "../../content/data"
+import { useEffect, useRef } from 'react'
+import { Renderer, Stave } from 'vexflow'
 
-export default function Timeline() {
+const Timeline = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  const grid = Array.from(new Set(allFrequencies.flat()))
+  useEffect(() => {
+    if (!containerRef.current) return
 
-  return <div className="column">{grid.map(freq => <div>{freq}</div>)}</div>
+    const renderer = new Renderer(
+      containerRef.current,
+      Renderer.Backends.SVG
+    )
+
+    renderer.resize(500, 200)
+
+    const context = renderer.getContext()
+
+    const stave = new Stave(10, 40, 400)
+
+    stave
+      .addClef('treble')
+      .setContext(context)
+      .draw()
+  }, [])
+
+  return <div ref={containerRef} />
 }
+
+export default Timeline

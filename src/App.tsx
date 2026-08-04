@@ -5,7 +5,6 @@ import { demoVoices }                   from './content/data';
 import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
-import MusicStave                       from './components/MusicStave/MusicStave';
 import Timeline from './components/Timeline/Timeline';
 
 function App() {
