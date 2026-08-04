@@ -17,7 +17,7 @@ button {
   --u: 40px;
 
   /* --name-w: calc(var(--u) * 2); */
-  --slider-w: calc(var(--u) * 4);
+  --slider-w: calc(var(--u) * 3);
   --label-w: calc(var(--u) * 1.5);
 
   /* --notes-w: calc(var(--u) * 9); */
@@ -79,11 +79,7 @@ button {
 }
 
 .slider-label {
-  text-align: right;
-  width: calc(var(--u) * 1.25);
-  display: flex;  
-  align-items: center;  
-  justify-content: right;  
+  text-align: center;
 }
 
 .range-slider .range-slider__thumb {  
