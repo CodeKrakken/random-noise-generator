@@ -41,7 +41,7 @@ export default function Voice({
     setHiddenStates(prev => ({ ...prev, [value]: !prev[value] }))  
   }
 
-  const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
+  // const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
   
   return (
     <div 
@@ -49,45 +49,44 @@ export default function Voice({
       data-voice={i}
       data-attribute={dataAttribute}
     >
-      <div id="sliders">
-        <div className="justified row">
 
-          <TextField 
-            attrName  = {'label'}
-            i         = {i}
-            voices    = {voices}
-            setVoices = {setVoices}
-          />
+      <div className="justified row">
 
-          <Button {...deleteButtonProps} />
-          
-        </div>
+        <TextField 
+          attrName  = {'label'}
+          i         = {i}
+          voices    = {voices}
+          setVoices = {setVoices}
+        />
+
+        <Button {...deleteButtonProps} />
         
-        {
-          sliderRows.map(row => 
-            <div className="row" key={row}>
-              {
-                sliders.filter(slider => slider.row === row).map((slider: Slider) => {
-                  
-                  const Component = slider.className === 'single' ? SingleSlider : DoubleSlider
-                  return (
-                    <div key={slider.attrName}>
-                      <div className="slider-label">{slider.label}</div>
-                      <div className={`${slider.className} slider`}>
-                        <Component 
-                          slider={slider}
-                          i={i}
-                          voices={voices}
-                          setVoices={setVoices}
-                        />
-                      </div>
-                    </div>
-                  )}
-                )
-              }
-            </div>
-          )
-        }
+      </div>       
+        
+      <div id="sliders">
+        <div className="column">
+          {
+            sliders.map((slider: Slider) => {
+              
+              const Component = slider.className === 'single' ? SingleSlider : DoubleSlider
+
+              return (
+
+                <div key={slider.attrName} className="row">
+                  <div className="slider-label">{slider.label}</div>
+                  <div className={`${slider.className} slider`}>
+                    <Component 
+                      slider={slider}
+                      i={i}
+                      voices={voices}
+                      setVoices={setVoices}
+                    />
+                  </div>
+                </div>
+              )}
+            )
+          }
+        </div>
       </div>
 
       <div className="centred row">
