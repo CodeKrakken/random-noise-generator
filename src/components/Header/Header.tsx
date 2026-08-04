@@ -100,7 +100,7 @@ export default function Header ({
       <div className="centred section">
         {
           buttons.map((button, i) => 
-            <button {...button.props} key={`${button.label}-${i}`}>
+            <button {...button.props} key={`${button.label} ${i}`}>
               {button.label}
             </button>
           )
