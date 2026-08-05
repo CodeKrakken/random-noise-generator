@@ -662,7 +662,7 @@ describe('playSample', () => {
       activeIntervals: ['0'],
     } as VoiceType;
 
-    playSample('drums', 1, context, 0, voice);
+    playSample('drums', 1, context, 0, {}, voice);
 
     expect(context.createBufferSource).toHaveBeenCalled();
     expect(source.start).toHaveBeenCalled();
@@ -704,7 +704,7 @@ describe('playSample', () => {
       activeIntervals: [],
     } as unknown as VoiceType;
 
-    playSample('drums', 1, context, 0, voice);
+    playSample('drums', 1, context, 0, {}, voice);
 
     expect(context.createBufferSource).toHaveBeenCalled();
     expect(source.start).toHaveBeenCalled();
@@ -745,7 +745,7 @@ describe('playSample', () => {
       activeIntervals: ['0'],
     } as VoiceType;
 
-    playSample('snare', 1, context, 0, voice);
+    playSample('snare', 1, context, 0, {}, voice);
 
     expect(source.onended).toBeDefined();
 
@@ -792,7 +792,7 @@ describe('playSample', () => {
       activeIntervals: ['0'],
     } as VoiceType;
 
-    playSample('drums', 1, context, 0, voice);
+    playSample('drums', 1, context, 0, {}, voice);
 
     expect(source.buffer).toBe(buffers.drums.buffer);
     expect(source.start).toHaveBeenCalled();
