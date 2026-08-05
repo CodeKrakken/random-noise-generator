@@ -32,6 +32,8 @@ export const Synth = {
 
   start: (voicesRef: VoicesRef) => {
 
+    Synth.resumeContext()
+    
     Synth.voices.forEach(voice => {
 
       voice.nextInterval = context.currentTime

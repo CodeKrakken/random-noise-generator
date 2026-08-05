@@ -9,9 +9,9 @@ import Timeline from './components/Timeline/Timeline';
 
 function App() {
 
-  useEffect(() => {
-    Synth.resumeContext()
-  }, [])
+  // useEffect(() => {
+  //   Synth.resumeContext()
+  // }, [])
 
   const [voices,  setVoices] = useState<VoiceType[]>(demoVoices)
   const [running, setRunning] = useState<boolean>(false)
