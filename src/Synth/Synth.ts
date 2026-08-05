@@ -24,7 +24,6 @@ export const Synth = {
   ) => {
 
     Synth.voices.push(voice)
-    setup = getContext(setup)
 
     if (running) {
       voice.isActive = true
@@ -37,8 +36,6 @@ export const Synth = {
   update: (voice: VoiceType, i: number) => Synth.voices[i] = voice,
 
   start: (voicesRef: VoicesRef) => {
-
-    Synth.resumeContext()
 
     const context = setup.context as AudioContext
 

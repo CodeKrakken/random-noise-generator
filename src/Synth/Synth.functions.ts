@@ -19,8 +19,8 @@ const getContext = (
 
   let { context, masterGain } = setup
 
-  context = new AudioContext()
-  masterGain = context.createGain()
+  if (!context) { context = new AudioContext() }
+  if (!masterGain) { masterGain = context.createGain() }
 
   if (context.state === 'suspended') { context.resume() }  
   
