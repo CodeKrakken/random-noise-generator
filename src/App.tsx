@@ -59,7 +59,7 @@ function App() {
 
   const startPlayback = () => {
     toggleReplaying(true)
-    Synth.replay()
+    Synth.replay(setReplaying)
   }
 
   const toggleReplaying = (state: boolean) => {

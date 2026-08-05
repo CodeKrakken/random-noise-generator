@@ -606,6 +606,8 @@ const shapeNote = (
   gain.setValueAtTime(level, peakEnd)
   gain.linearRampToValueAtTime(0, thisInterval + noteLength)
 
+  
+
   hitToPopulate.startTime = thisInterval
   hitToPopulate.endTime   = thisInterval + noteLength
   hitToPopulate.level     = level

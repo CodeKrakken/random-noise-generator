@@ -1,5 +1,5 @@
 import { VoiceType }                          from '../components/shared.types'
-import { VoicesRef }                          from './Synth.types'
+import { Hit, VoicesRef }                          from './Synth.types'
 import { getContext, runInterval, playBack }  from './Synth.functions'
 import { demoVoices }                         from '../content/data'
 
@@ -15,7 +15,7 @@ export const Synth = {
 
   voices: demoVoices as VoiceType[],
 
-  recordedHits: [],
+  recordedHits: [] as Hit[],
 
   add: (
     voice     : VoiceType, 
@@ -58,10 +58,14 @@ export const Synth = {
     })
   },
 
-  replay: () => Synth.recordedHits.forEach(hit => {
-    setup.masterGain!.gain.setValueAtTime(1, 0)
-    playBack(hit, setup.context as AudioContext)
-  }),
+  replay: async (setReplaying: React.Dispatch<React.SetStateAction<boolean>>) => { 
+
+    Synth.recordedHits.forEach(hit => {
+      setup.masterGain!.gain.setValueAtTime(1, 0)
+      playBack(hit, setup.context as AudioContext)
+    })
+    setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit as Hit) => hit.endTime)) * 1000)
+  },
 
   resumeContext: () => setup = getContext(setup)
 }
