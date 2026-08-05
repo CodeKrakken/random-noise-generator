@@ -43,7 +43,6 @@ export const Synth = {
 
   stop: () => Synth.voices.forEach(voice => {
     voice.isActive = false
-    console.log(Synth.recordedHits)
   }),
 
   replay: () => Synth.recordedHits.forEach(hit => {

@@ -58,28 +58,28 @@ const runInterval = (
 
 const playBack = (hitToPlay: Hit, context: AudioContext) => {
 
+  const currentTime = context.currentTime
+
   const sound     = hitToPlay.sound as OscillatorType
-  const octave    = hitToPlay.octave as number
-  const note      = hitToPlay.note as number
-  const detune    = hitToPlay.detune as number
   const level     = hitToPlay.level as number
-  const time      = hitToPlay.startTime as number
-  const peakStart = hitToPlay.peakStart as number
-  const peakEnd   = hitToPlay.peakEnd as number
-  const endTime   = hitToPlay.endTime as number
+  const frequency = hitToPlay.frequency as number
+
+  const startTime = hitToPlay.startTime as number + currentTime
+  const peakStart = hitToPlay.peakStart as number + currentTime
+  const peakEnd   = hitToPlay.peakEnd   as number + currentTime
+  const endTime   = hitToPlay.endTime   as number + currentTime
 
   if (waveforms.includes(sound)) {
     const oscGain = setUpOscillator(context)
     oscGain.oscillator.type = sound
-    oscGain.oscillator.frequency.value = allFrequencies[octave][note-1]
-    oscGain.oscillator.detune.value = detune
+    oscGain.oscillator.frequency.value = frequency
 
     const gain = oscGain.gainNode.gain
-
-    gain.setValueAtTime(0, time)
+    gain.setValueAtTime(0, startTime)
     gain.linearRampToValueAtTime(level, peakStart)
     gain.setValueAtTime(level, peakEnd)
     gain.linearRampToValueAtTime(0, endTime)
+
   } else {
     
   }
@@ -457,7 +457,6 @@ const makeSound = (
     }
 
     recordedHits.push(hitToPopulate)
-    console.log(hitToPopulate)
 
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error", error)
