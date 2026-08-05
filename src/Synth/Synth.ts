@@ -1,13 +1,15 @@
-import { VoiceType }                from '../components/shared.types'
-import { VoicesRef }                from './Synth.types'
-import { getContext, runInterval }  from './Synth.functions'
-import { demoVoices }               from '../content/data'
+import { VoiceType }                          from '../components/shared.types'
+import { VoicesRef }                          from './Synth.types'
+import { getContext, runInterval, playBack }  from './Synth.functions'
+import { demoVoices }                         from '../content/data'
 
 let context: AudioContext
 
 export const Synth = {
 
   voices: demoVoices as VoiceType[],
+
+  recordedHits: [],
 
   add: (
     voice     : VoiceType, 
@@ -20,7 +22,7 @@ export const Synth = {
 
     if (running) {
       voice.isActive = true
-      runInterval(voice, voicesRef, context)
+      runInterval(voice, voicesRef, context, Synth.recordedHits)
     }
   },
 
@@ -29,16 +31,24 @@ export const Synth = {
   update: (voice: VoiceType, i: number) => Synth.voices[i] = voice,
 
   start: (voicesRef: VoicesRef) => {
+
     Synth.voices.forEach(voice => {
 
       voice.nextInterval = context.currentTime
       voice.isActive = true
 
-      runInterval(voice, voicesRef, context)
+      runInterval(voice, voicesRef, context, Synth.recordedHits)
     })
   },
 
-  stop: () => Synth.voices.forEach(voice => voice.isActive = false),
+  stop: () => Synth.voices.forEach(voice => {
+    voice.isActive = false
+    console.log(Synth.recordedHits)
+  }),
+
+  replay: () => Synth.recordedHits.forEach(hit => {
+    playBack(hit, context)
+  }),
 
   resumeContext: () => context = getContext(context)
 }
