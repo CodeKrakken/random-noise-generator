@@ -57,7 +57,8 @@ const runOneInterval = (
   runInterval(
     voice,
     voicesRef,
-    context as AudioContext
+    context as AudioContext,
+    []
   )
 
   voice.isActive = false

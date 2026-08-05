@@ -221,7 +221,7 @@ describe('runInterval', () => {
     const voice = { ...makeVoice(), isActive: true }  
     const voicesRef = { current: [voice] }  
     const context = createMockContext('running', 0)  
-    runInterval(voice, voicesRef, context as unknown as AudioContext)  
+    runInterval(voice, voicesRef, context as unknown as AudioContext, [])  
     calledFunctions[1]()  
     expect(calledFunctions.length).toBeGreaterThan(2)  
     jest.spyOn(global, 'setTimeout').mockRestore()  

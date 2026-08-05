@@ -68,6 +68,10 @@ function App() {
 
   const handleStartStop = () => running ? stopAll() : start()
 
+  const handleReplay = () => {
+    Synth.replay()
+  }
+  
   const setUpVoice = (voices: VoiceType[]) => {
 
     const template = voices[voices.length - 1]
@@ -128,6 +132,7 @@ function App() {
       handleAddVoice    = {handleAddVoice}
       voices            = {voices}
       loadVoices        = {loadVoices}
+      handleReplay      = {handleReplay}
     />
     
     <div 

@@ -27,7 +27,8 @@ export default function Header ({
   handleStartStop,
   running,
   voices,
-  loadVoices
+  loadVoices,
+  handleReplay
 
 } : {
 
@@ -35,7 +36,8 @@ export default function Header ({
   handleStartStop : React.MouseEventHandler<HTMLButtonElement>
   running         : Boolean
   voices          : VoiceType[]
-  loadVoices      : MouseEventHandler<HTMLButtonElement>
+  loadVoices      : MouseEventHandler<HTMLButtonElement>,
+  handleReplay    : MouseEventHandler<HTMLButtonElement>
 }) {
 
   const [disableLoad, setDisableLoad] = useState(false)
@@ -85,6 +87,14 @@ export default function Header ({
         className : "header-button"
       },
       label: letterImages('Load', buttonLabelHeight)
+    },
+    {
+      props: {
+        onClick: handleReplay,
+        className : "header-button"
+
+      },
+      label: letterImages('Replay', buttonLabelHeight)
     }
   ]
 

@@ -64,12 +64,22 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
   const detune    = hitToPlay.detune as number
   const level     = hitToPlay.level as number
   const time      = hitToPlay.startTime as number
+  const peakStart = hitToPlay.peakStart as number
+  const peakEnd   = hitToPlay.peakEnd as number
+  const endTime   = hitToPlay.endTime as number
 
   if (waveforms.includes(sound)) {
     const oscGain = setUpOscillator(context)
     oscGain.oscillator.type = sound
     oscGain.oscillator.frequency.value = allFrequencies[octave][note-1]
     oscGain.oscillator.detune.value = detune
+
+    const gain = oscGain.gainNode.gain
+
+    gain.setValueAtTime(0, time)
+    gain.linearRampToValueAtTime(level, peakStart)
+    gain.setValueAtTime(level, peakEnd)
+    gain.linearRampToValueAtTime(0, endTime)
   } else {
     
   }
