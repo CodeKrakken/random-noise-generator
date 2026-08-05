@@ -4,21 +4,8 @@ import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }
 
 
 type OscGain = {
-  oscillator  : OscillatorNode
+  oscillator  : OscillatorNode, 
   gainNode    : GainNode
-}
-
-type Hit = {
-  sound?     : string
-  frequency? : number
-  startTime? : number
-  endTime?   : number
-  peakStart? : number
-  peakEnd?   : number
-  level?     : number
-  note?      : number | null
-  octave?    : number | null
-  detune?    : number
 }
 
 let masterCompressor: DynamicsCompressorNode
@@ -44,10 +31,9 @@ const getContext = (context: AudioContext = new AudioContext()) => {
 
 const runInterval = (
 
-  voice         : VoiceType, 
-  voicesRef     : VoicesRef, 
-  context       : AudioContext,
-  recordedHits  : Hit[]
+  voice     : VoiceType, 
+  voicesRef : VoicesRef, 
+  context   : AudioContext
 
 ) => {
 
@@ -59,36 +45,14 @@ const runInterval = (
     const intervalLength = getIntervalLength(voice)
     voice.nextInterval += intervalLength
   
-    if (!isRest(voice)) makeSound(voice, intervalLength, context, recordedHits)
+    if (!isRest(voice)) makeSound(voice, intervalLength, context)
   } 
 
   if (!voice.isActive) return
 
   setTimeout(() => {
-    runInterval(voice, voicesRef, context, recordedHits)
+    runInterval(voice, voicesRef, context)
   }, (voice.nextInterval - context.currentTime)*1000)    
-}
-
-const playBack = (hitToPlay: Hit, context: AudioContext) => {
-
-  const sound     = hitToPlay.sound as OscillatorType
-  const octave    = hitToPlay.octave as number
-  const note      = hitToPlay.note as number
-  const detune    = hitToPlay.detune as number
-  const level     = hitToPlay.level as number
-  const time      = hitToPlay.startTime as number
-  const recording = false
-
-  if (waveforms.includes(sound)) {
-    const oscGain = setUpOscillator(context)
-    oscGain.oscillator.type = sound
-    oscGain.oscillator.frequency.value = allFrequencies[octave][note-1]
-    oscGain.oscillator.detune.value = detune
-  } else {
-    playSample(sound, level, context, time, recording)
-  }
-
-
 }
 
 // test helper
@@ -423,16 +387,10 @@ const isRest = (voice: VoiceType) => {
 }
 
 const makeSound = (
-
   voice           : VoiceType, 
   intervalLength  : number, 
-  context         : AudioContext,
-  recordedHits    : Hit[],
-  hitToPlay       : Hit | null = null
-
+  context         : AudioContext
 ) => {
-
-  const recording = Boolean(!hitToPlay)
 
   const { activeSounds, thisInterval } = voice
 
@@ -443,10 +401,6 @@ const makeSound = (
     const level = calculateLevel(voice)
     voice.offsetInterval = thisInterval! + offsetTime
 
-    const hitToPopulate: Hit = {
-      sound: randomSound
-    }
-
     if (waveforms.includes(randomSound)) {
 
       const oscGain = setUpOscillator(context)
@@ -454,16 +408,11 @@ const makeSound = (
       oscGain.oscillator.frequency.value = randomOneFrom(voice.activeFrequencies)
       oscGain.oscillator.detune.value = getRangeValue('Detune', voice)
       
-      if (recording) hitToPopulate.frequency = oscGain.oscillator.frequency.value + oscGain.oscillator.detune.value
-            
-      shapeNote(oscGain.gainNode, voice, intervalLength, level, hitToPopulate, recording)
+      shapeNote(oscGain.gainNode, voice, intervalLength, level)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
     } else {
-      playSample(randomSound, level, context, voice.offsetInterval, recording, hitToPopulate, voice)
+      playSample(randomSound, level, context, voice.offsetInterval, voice)
     }
-
-    recordedHits.push(hitToPopulate)
-    console.log(hitToPopulate)
 
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error", error)
@@ -493,35 +442,27 @@ const removeOscillator = (oscGain: OscGain) => {
 
 const playSample = (  
 
-  name          : string,  
-  level         : number,  
-  context       : AudioContext,  
-  time          : number,  
-  recording     : Boolean,
-  hitToPopulate : Hit | null = null,
-  hitToPlay     : Hit | null = null,
-  voice         : VoiceType | null = null,
+  name    : string,  
+  level   : number,  
+  context : AudioContext,  
+  time    : number,  
+  voice   : VoiceType
+
 ) => {  
   
   let targetNote      : number | null = null  
   let targetOctave    : number | null = null
   let targetInterval  : number | null = null  
   
-  if (recording && voice) {
-    if (
-      voice.activeNotes.length > 0 && 
-      voice.activeOctaves.length > 0 && 
-      voice.activeIntervals.length > 0
-    ) {  
-      targetNote     = +randomOneFrom(voice.activeNotes)  
-      targetOctave   = +randomOneFrom(voice.activeOctaves)  
-      targetInterval = +randomOneFrom(voice.activeIntervals)
-    }
-  } else if (hitToPlay) {
-    targetNote = hitToPlay.note!
-    targetOctave = hitToPlay.octave!
-  }
-  
+  if (
+    voice.activeNotes.length > 0 && 
+    voice.activeOctaves.length > 0 && 
+    voice.activeIntervals.length > 0
+  ) {  
+    targetNote     = +randomOneFrom(voice.activeNotes)  
+    targetOctave   = +randomOneFrom(voice.activeOctaves)  
+    targetInterval = +randomOneFrom(voice.activeIntervals)
+  }  
   
   // Resolve which buffer to actually play  
 
@@ -547,27 +488,16 @@ const playSample = (
   source.buffer = buf.buffer  
   const gain = context.createGain()  
 
-  if (recording) {
-    shapeNote(gain, voice, targetInterval!, level, hitToPopulate, recording)
-  } else {
-
-  }
-  
+  shapeNote(gain, voice, targetInterval!, level)
   source.connect(gain)  
   gain.connect(masterCompressor!)  
   
-  const detune = recording ? getRangeValue('Detune', voice!) : hitToPlay!.detune
+  const detune = getRangeValue('Detune', voice)
 
-  source.detune.value = detune! +
+  source.detune.value = detune +
   (targetNote! - 1 - buf.note!) * 100 +  
   (targetOctave! - buf.octave!) * 1200
-
-  if (recording) {
-    hitToPopulate!.note = targetNote
-    hitToPopulate!.octave = targetOctave
-    hitToPopulate!.detune = detune  
-  }
-
+    
   source.start(time)  
 
   source.onended = () => {  
@@ -581,9 +511,7 @@ const shapeNote = (
   gainNode        : GainNode, 
   voice           : VoiceType, 
   intervalLength  : number, 
-  level           : number,
-  hitToPopulate   : Hit,
-  recording       : Boolean
+  level           : number
 
 ) => {
   
@@ -606,23 +534,13 @@ const shapeNote = (
   )
 
   const overlap     = endOfAttack >= startOfDecay
-  const peakStart = overlap ? peakPoint : endOfAttack
-  const peakEnd   = overlap ? peakPoint : startOfDecay
+  const startOfPeak = overlap ? peakPoint : endOfAttack
+  const endOfPeak   = overlap ? peakPoint : startOfDecay
 
   gain.setValueAtTime(0, thisInterval)
-  gain.linearRampToValueAtTime(level, peakStart)
-  gain.setValueAtTime(level, peakEnd)
+  gain.linearRampToValueAtTime(level, startOfPeak)
+  gain.setValueAtTime(level, endOfPeak)
   gain.linearRampToValueAtTime(0, thisInterval + noteLength)
-
-  if (recording) {
-    hitToPopulate.startTime = thisInterval
-    hitToPopulate.endTime   = thisInterval + noteLength
-    hitToPopulate.level     = level
-    hitToPopulate.peakStart = peakStart
-    hitToPopulate.peakEnd   = peakEnd
-  }
-
-  
 }
 
 const randomOneFrom = <T>(array: T[]): T => {
@@ -679,6 +597,5 @@ export {
   buffers,
   loadSamples,
   resetSampleState,
-  playSample,
-  playBack
+  playSample
 }
