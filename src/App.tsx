@@ -13,16 +13,18 @@ function App() {
   //   Synth.resumeContext()
   // }, [])
 
-  const [voices,  setVoices] = useState<VoiceType[]>(demoVoices)
-  const [running, setRunning] = useState<boolean>(false)
+  const [voices,           setVoices] = useState<VoiceType[]>(demoVoices)
+  const [improvising, setImprovising] = useState<boolean>(false)
+  const [replaying,     setReplaying] = useState<boolean>(false)
 
-  const runningRef = useRef(running)
+
+  const improvisingRef = useRef(improvising)
   const voicesRef = useRef(voices)
 
   useEffect(() => { 
 
     voicesRef.current = voices
-    if (!voices.length) toggleRunning(false)   
+    if (!voices.length) toggleImprovising(false)   
 
   }, [voices])
 
@@ -30,7 +32,7 @@ function App() {
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices)
     setVoices(voices => [voices, newVoice].flat())
-    Synth.add(newVoice, running, voicesRef)
+    Synth.add(newVoice, improvising, voicesRef)
   }
 
   const handleDelete = (i: number) => {  
@@ -40,19 +42,33 @@ function App() {
     Synth.delete(i)  
   }
 
-  const start = () => {
-    toggleRunning(true)
+  const startImprovising = () => {
+    toggleImprovising(true)
     Synth.start(voicesRef)
   }
 
-  const stopAll = () => {
-    toggleRunning(false)
+  const stopImprovising = () => {
+    toggleImprovising(false)
     Synth.stop()
   }
 
-  const toggleRunning = (state: boolean) => {
-    runningRef.current = state
-    setRunning(state)
+  const stopPlayback = () => {
+    toggleReplaying(false)
+    Synth.stop()
+  }
+
+  const startPlayback = () => {
+    toggleReplaying(true)
+    Synth.replay()
+  }
+
+  const toggleReplaying = (state: boolean) => {
+    setReplaying(state)
+  }
+
+  const toggleImprovising = (state: boolean) => {
+    improvisingRef.current = state
+    setImprovising(state)
   }
 
   const loadVoices = () => {
@@ -62,15 +78,13 @@ function App() {
     Synth.voices = []
 
     loadedVoices.forEach((voice: VoiceType) => {
-      Synth.add(voice, running, voicesRef)
+      Synth.add(voice, improvising, voicesRef)
     })
   }
 
-  const handleStartStop = () => running ? stopAll() : start()
+  const handleImprov = () => improvising ? stopImprovising() : startImprovising()
 
-  const handleReplay = () => {
-    Synth.replay()
-  }
+  const handlePlayback = () => replaying ? stopPlayback() : startPlayback()
   
   const setUpVoice = (voices: VoiceType[]) => {
 
@@ -126,13 +140,16 @@ function App() {
   }
 
   return <>
+
     <Header 
-      handleStartStop   = {handleStartStop}
-      running           = {running}
-      handleAddVoice    = {handleAddVoice}
-      voices            = {voices}
-      loadVoices        = {loadVoices}
-      handleReplay      = {handleReplay}
+      handleImprov    = {handleImprov}
+      improvising     = {improvising}
+      replaying       = {replaying}
+      handleAddVoice  = {handleAddVoice}
+      voices          = {voices}
+      loadVoices      = {loadVoices}
+      handlePlayback  = {handlePlayback}
+      recordedHits    = {Synth.recordedHits}
     />
     
     <div 

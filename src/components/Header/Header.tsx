@@ -1,6 +1,7 @@
 import { MouseEventHandler, useEffect, useState } from 'react'
 import { title, addLabel }                        from '../../content/data'
 import { VoiceType }                              from '../shared.types'
+import { Hit } from '../../Synth/Synth.types'
 
 const letterImages = (string: string, height: string = "40px") => {
 
@@ -24,27 +25,29 @@ const letterImages = (string: string, height: string = "40px") => {
 export default function Header ({
 
   handleAddVoice,
-  handleStartStop,
-  running,
+  handleImprov,
+  improvising,
+  replaying,
   voices,
   loadVoices,
-  handleReplay
+  handlePlayback,
+  recordedHits
 
 } : {
 
   handleAddVoice  : React.MouseEventHandler<HTMLButtonElement>
-  handleStartStop : React.MouseEventHandler<HTMLButtonElement>
-  running         : Boolean
+  handleImprov    : React.MouseEventHandler<HTMLButtonElement>
+  improvising     : Boolean
+  replaying       : Boolean
   voices          : VoiceType[]
   loadVoices      : MouseEventHandler<HTMLButtonElement>,
-  handleReplay    : MouseEventHandler<HTMLButtonElement>
+  handlePlayback  : MouseEventHandler<HTMLButtonElement>
+  recordedHits    : Hit[]
 }) {
 
   const [disableLoad, setDisableLoad] = useState(false)
 
   useEffect(() => { setDisableLoad(localStorage.voices ? false : true) }, [])
-
-  
 
   const handleSave = () => {
     setDisableLoad(false)
@@ -58,11 +61,11 @@ export default function Header ({
   const buttons = [
     { 
       props: {
-        onClick   : handleStartStop,
-        disabled  : disableButtons as boolean,
+        onClick   : handleImprov,
+        disabled  : disableButtons as boolean || replaying,
         className : "header-button"
       },
-      label: letterImages(running ? 'Stop' : 'Start', buttonLabelHeight)
+      label: letterImages(improvising ? 'Stop' : 'Start', buttonLabelHeight)
     },
     {
       props: {
@@ -90,11 +93,11 @@ export default function Header ({
     },
     {
       props: {
-        onClick: handleReplay,
-        className : "header-button"
-
+        onClick   : handlePlayback,
+        className : "header-button",
+        disabled  : improvising || !recordedHits.length
       },
-      label: letterImages('Replay', buttonLabelHeight)
+      label: letterImages(replaying ? 'Stop' : 'Replay', buttonLabelHeight)
     }
   ]
 
