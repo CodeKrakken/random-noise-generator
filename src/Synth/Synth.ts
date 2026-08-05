@@ -3,7 +3,13 @@ import { VoicesRef }                          from './Synth.types'
 import { getContext, runInterval, playBack }  from './Synth.functions'
 import { demoVoices }                         from '../content/data'
 
-let context: AudioContext
+let setup: {
+  context: AudioContext | undefined
+  masterGain: GainNode | undefined
+} = {
+  context:  undefined,
+  masterGain: undefined
+}
 
 export const Synth = {
 
@@ -18,11 +24,11 @@ export const Synth = {
   ) => {
 
     Synth.voices.push(voice)
-    context = getContext(context)
+    setup = getContext(setup)
 
     if (running) {
       voice.isActive = true
-      runInterval(voice, voicesRef, context, Synth.recordedHits)
+      runInterval(voice, voicesRef, setup.context as AudioContext, Synth.recordedHits)
     }
   },
 
@@ -33,7 +39,11 @@ export const Synth = {
   start: (voicesRef: VoicesRef) => {
 
     Synth.resumeContext()
-    
+
+    const context = setup.context as AudioContext
+
+    setup.masterGain!.gain.setValueAtTime(1, 0)
+
     Synth.voices.forEach(voice => {
 
       voice.nextInterval = context.currentTime
@@ -43,13 +53,18 @@ export const Synth = {
     })
   },
 
-  stop: () => Synth.voices.forEach(voice => {
-    voice.isActive = false
-  }),
+  stop: () => {
+    setup.masterGain!.gain.setValueAtTime(0, 0)
+
+    Synth.voices.forEach(voice => {
+      voice.isActive = false;
+    })
+  },
 
   replay: () => Synth.recordedHits.forEach(hit => {
-    playBack(hit, context)
+    setup.masterGain!.gain.setValueAtTime(1, 0)
+    playBack(hit, setup.context as AudioContext)
   }),
 
-  resumeContext: () => context = getContext(context)
+  resumeContext: () => setup = getContext(setup)
 }

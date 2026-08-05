@@ -10,7 +10,17 @@ type OscGain = {
 
 let masterCompressor: DynamicsCompressorNode
   
-const getContext = (context: AudioContext = new AudioContext()) => {  
+const getContext = (
+  setup: {
+    context: undefined | AudioContext,
+    masterGain: undefined | GainNode
+  }
+) => {  
+
+  let { context, masterGain } = setup
+
+  context = new AudioContext()
+  masterGain = context.createGain()
 
   if (context.state === 'suspended') { context.resume() }  
   
@@ -21,12 +31,12 @@ const getContext = (context: AudioContext = new AudioContext()) => {
     masterCompressor.ratio.value      = 20  // 20:1 ≈ hard limiter  
     masterCompressor.attack.value     = 0.001  
     masterCompressor.release.value    = 0.1  
-    masterCompressor.connect(context.destination)  
+    masterCompressor.connect(masterGain).connect(context.destination)  
   }  
   
   loadSamples(context)  
   
-  return context  
+  return {masterGain, context}  
 }
 
 const runInterval = (
