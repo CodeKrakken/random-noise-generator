@@ -64,7 +64,7 @@ export const Synth = {
       setup.masterGain!.gain.setValueAtTime(1, 0)
       playBack(hit, setup.context as AudioContext)
     })
-    setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit as Hit) => hit.endTime)) * 1000)
+    setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit: Hit) => hit.endTime as number)) * 1000)
   },
 
   resumeContext: () => setup = getContext(setup)
