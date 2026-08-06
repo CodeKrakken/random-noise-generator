@@ -468,7 +468,6 @@ const makeSound = (
 
 ) => {
 
-
   const { activeSounds, thisInterval } = voice
 
   const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
@@ -554,14 +553,15 @@ const playSample = (
 
   let bufferKey = name  
 
-  if (sampleFolders[name]) {  
+  if (
+    sampleFolders[name] &&
+    targetNote !== null && 
+    targetOctave !== null
+  ) {  
+    bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
+  }
+  
 
-    if (targetNote !== null && targetOctave !== null) {  
-      bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
-    } else {  
-      bufferKey = randomOneFrom(sampleFolders[name])  
-    }  
-  }  
 
   const buf = buffers[bufferKey]  
 
