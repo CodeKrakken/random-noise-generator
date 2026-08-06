@@ -16,11 +16,13 @@ describe('Header', () => {
   const header = (state: Boolean) => (  
     <Header  
       handleAddVoice={mockHandleAddVoice}  
-      handleStartStop={mockHandleStartStop}  
-      running={state}  
+      handleImprov={mockHandleStartStop}  
+      improvising={state}  
+      replaying={false}
       voices={[makeVoice()]}  
       loadVoices={mockLoadVoices}  
-      handleReplay={mockHandleReplay}
+      handlePlayback={mockHandleReplay}
+      recordedHits={[]}
     />  
   )  
   

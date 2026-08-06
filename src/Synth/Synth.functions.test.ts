@@ -81,15 +81,28 @@ const createMockContext = (state = 'running', currentTime = 0) => (
 describe('getContext', () => {  
   
   it('sets up a dynamics compressor on a new context', () => {  
-    const mockContext = createMockContext() as AudioContext  
-    getContext(mockContext)  
-    expect(mockContext.createDynamicsCompressor).toHaveBeenCalled()  
+
+    const context = createMockContext() as AudioContext  
+
+    const setup = {
+      context: context,
+      masterGain: undefined
+    }
+
+    getContext(setup)  
+    expect(context.createDynamicsCompressor).toHaveBeenCalled()  
   })  
   
   it('resumes a suspended context', () => {  
-    const mockContext = createMockContext('suspended') as AudioContext  
-    getContext(mockContext)  
-    expect(mockContext.resume).toHaveBeenCalledTimes(1)  
+    const context = createMockContext('suspended') as AudioContext  
+
+    const setup = {
+      context: context,
+      masterGain: undefined
+    }
+
+    getContext(setup)  
+    expect(context.resume).toHaveBeenCalledTimes(1)  
   })
 
   it('creates a new AudioContext when none is provided', () => {
@@ -98,7 +111,12 @@ describe('getContext', () => {
 
     global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
 
-    const result = getContext();
+    const setup = {
+      context: undefined,
+      masterGain: undefined
+    }
+
+    const result = getContext(setup);
 
     expect(AudioContextMock).toHaveBeenCalledTimes(1);
     expect(result).toBe(mockContext);

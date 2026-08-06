@@ -1,5 +1,5 @@
 import { VoiceType, RangeKey }                                                    from '../components/shared.types'
-import { Hit, VoicesRef }                                                              from './Synth.types'
+import { Hit, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }  from '../content/data';
 
 
