@@ -93,29 +93,14 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
 
   } else {
 
-    const buf = buffers[sound]  
-
-    if (!buf?.buffer) {  
-      console.warn('Buffer not ready for:', sound)  
-      return  
-    }  
-
-    const source = context.createBufferSource()  
-    source.buffer = buf.buffer  
-    gainNode = context.createGain()  
-    source.connect(gainNode)  
-    gainNode.connect(masterCompressor!)  
-
-    source.detune.value = detune! +
-    (note! - 1 - buf.note!) * 100 +  
-    (octave! - buf.octave!) * 1200
-
-    source.start(startTime)  
-
-    source.onended = () => {  
-      source.disconnect()  
-      gainNode.disconnect()  
-    } 
+    gainNode = setUpSample(
+      sound,
+      context,
+      detune,
+      note,
+      octave,
+      startTime
+    ) as GainNode
   }
 
   scheduleGainEvents(
@@ -560,44 +545,58 @@ const playSample = (
   ) {  
     bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
   }
+
+  const detune = getRangeValue('Detune', voice!)
+ 
+  const gain = setUpSample(
+    bufferKey,
+    context,
+    detune,
+    targetNote!,
+    targetOctave!,
+    time
+  ) as GainNode
+
+  shapeNote(gain, voice, targetInterval!, level, hitToPopulate)
   
+  hitToPopulate!.note = targetNote
+  hitToPopulate!.octave = targetOctave
+  hitToPopulate!.detune = detune  
+}
 
-
-  const buf = buffers[bufferKey]  
+const setUpSample = (
+  key: string,
+  context: AudioContext,
+  detune: number,
+  note: number,
+  octave: number,
+  time: number
+) => {
+  const buf = buffers[key]  
 
   if (!buf?.buffer) {  
-    console.warn('Buffer not ready for:', bufferKey)  
+    console.warn('Buffer not ready for:', key)  
     return  
   }  
   
   const source = context.createBufferSource()  
   source.buffer = buf.buffer  
   const gain = context.createGain()  
-
-  shapeNote(gain, voice, targetInterval!, level, hitToPopulate)
-  
-  
   source.connect(gain)  
   gain.connect(masterCompressor!)  
-  
-  const detune = getRangeValue('Detune', voice!)
 
   source.detune.value = detune! +
-  (targetNote! - 1 - buf.note!) * 100 +  
-  (targetOctave! - buf.octave!) * 1200
-
-
-  hitToPopulate!.note = targetNote
-  hitToPopulate!.octave = targetOctave
-  hitToPopulate!.detune = detune  
-  
+  (note! - 1 - buf.note!) * 100 +  
+  (octave! - buf.octave!) * 1200
 
   source.start(time)  
-
+  
   source.onended = () => {  
     source.disconnect()  
     gain.disconnect()  
   }  
+
+  return gain
 }
 
 const shapeNote = (
