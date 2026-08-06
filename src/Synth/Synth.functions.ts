@@ -458,27 +458,67 @@ const makeSound = (
   const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
 
   try {
-    const randomSound = randomOneFrom(activeSounds) as OscillatorType
-    const level = calculateLevel(voice)
-    voice.offsetInterval = thisInterval! + offsetTime
 
     const hitToPopulate: Hit = {
-      sound: randomSound
+      sound     : randomOneFrom(activeSounds) as string,
+      level     : calculateLevel(voice),
+      frequency : randomOneFrom(voice.activeFrequencies),
+      detune    : getRangeValue('Detune', voice),
+      note      : +randomOneFrom(voice.activeNotes),
+      octave    : +randomOneFrom(voice.activeOctaves),
     }
 
-    if (waveforms.includes(randomSound)) {
+    const { 
+      sound, 
+      level, 
+      frequency, 
+      detune,
+      note, 
+      octave
+    
+    } = hitToPopulate
+
+    voice.offsetInterval = thisInterval! + offsetTime
+
+
+
+    // DRY out this section
+
+    if (waveforms.includes(sound!)) {
 
       const oscGain = setUpOscillator(context)
-      oscGain.oscillator.type = randomSound
-      oscGain.oscillator.frequency.value = randomOneFrom(voice.activeFrequencies)
-      oscGain.oscillator.detune.value = getRangeValue('Detune', voice)
-      
-      hitToPopulate.frequency = oscGain.oscillator.frequency.value + oscGain.oscillator.detune.value
-            
-      shapeNote(oscGain.gainNode, voice, intervalLength, level, hitToPopulate)
+      oscGain.oscillator.type = sound as OscillatorType
+      oscGain.oscillator.frequency.value = frequency as number
+      oscGain.oscillator.detune.value = detune as number
+                  
+      shapeNote(oscGain.gainNode, voice, intervalLength, level!, hitToPopulate)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
     } else {
-      playSample(randomSound, level, context, voice.offsetInterval, hitToPopulate, voice)
+    
+      const interval = +randomOneFrom(voice.activeIntervals)
+              
+      // Resolve which buffer to actually play  
+
+      let bufferKey = sound  
+
+      if (
+        sampleFolders[sound!] &&
+        note !== null && 
+        octave !== null
+      ) {  
+        bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
+      }
+
+      const gain = setUpSample(
+        bufferKey!,
+        context,
+        detune!,
+        note!,
+        octave!,
+        voice.offsetInterval
+      ) as GainNode
+
+      shapeNote(gain, voice, interval!, level!, hitToPopulate)
     }
 
     recordedHits.push(hitToPopulate)
@@ -509,60 +549,60 @@ const removeOscillator = (oscGain: OscGain) => {
   gainNode.disconnect()
 }
 
-const playSample = (  
+// const playSample = (  
 
-  name          : string,  
-  level         : number,  
-  context       : AudioContext,  
-  time          : number,  
-  hitToPopulate : Hit,
-  voice         : VoiceType,
-) => {  
+//   name          : string,  
+//   level         : number,  
+//   context       : AudioContext,  
+//   time          : number,  
+//   hitToPopulate : Hit,
+//   voice         : VoiceType,
+// ) => {  
   
-  let targetNote      : number | null = null  
-  let targetOctave    : number | null = null
-  let targetInterval  : number | null = null  
+//   let targetNote      : number | null = null  
+//   let targetOctave    : number | null = null
+//   let targetInterval  : number | null = null  
   
-  if (
-    voice.activeNotes.length > 0 && 
-    voice.activeOctaves.length > 0 && 
-    voice.activeIntervals.length > 0
-  ) {  
-    targetNote     = +randomOneFrom(voice.activeNotes)  
-    targetOctave   = +randomOneFrom(voice.activeOctaves)  
-    targetInterval = +randomOneFrom(voice.activeIntervals)
-  }
+//   if (
+//     voice.activeNotes.length > 0 && 
+//     voice.activeOctaves.length > 0 && 
+//     voice.activeIntervals.length > 0
+//   ) {  
+//     targetNote     = +randomOneFrom(voice.activeNotes)  
+//     targetOctave   = +randomOneFrom(voice.activeOctaves)  
+//     targetInterval = +randomOneFrom(voice.activeIntervals)
+//   }
   
     
-  // Resolve which buffer to actually play  
+//   // Resolve which buffer to actually play  
 
-  let bufferKey = name  
+//   let bufferKey = name  
 
-  if (
-    sampleFolders[name] &&
-    targetNote !== null && 
-    targetOctave !== null
-  ) {  
-    bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
-  }
+//   if (
+//     sampleFolders[name] &&
+//     targetNote !== null && 
+//     targetOctave !== null
+//   ) {  
+//     bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
+//   }
 
-  const detune = getRangeValue('Detune', voice!)
+//   const detune = getRangeValue('Detune', voice!)
  
-  const gain = setUpSample(
-    bufferKey,
-    context,
-    detune,
-    targetNote!,
-    targetOctave!,
-    time
-  ) as GainNode
+//   const gain = setUpSample(
+//     bufferKey,
+//     context,
+//     detune,
+//     targetNote!,
+//     targetOctave!,
+//     time
+//   ) as GainNode
 
-  shapeNote(gain, voice, targetInterval!, level, hitToPopulate)
+//   shapeNote(gain, voice, targetInterval!, level, hitToPopulate)
   
-  hitToPopulate!.note = targetNote
-  hitToPopulate!.octave = targetOctave
-  hitToPopulate!.detune = detune  
-}
+//   hitToPopulate!.note = targetNote
+//   hitToPopulate!.octave = targetOctave
+//   hitToPopulate!.detune = detune  
+// }
 
 const setUpSample = (
   key: string,
@@ -720,6 +760,6 @@ export {
   buffers,
   loadSamples,
   resetSampleState,
-  playSample,
+  // playSample,
   playBack
 }
