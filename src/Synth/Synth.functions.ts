@@ -73,6 +73,9 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
   const sound     = hitToPlay.sound as OscillatorType
   const level     = hitToPlay.level as number
   const frequency = hitToPlay.frequency as number
+  const detune    = hitToPlay.detune as number
+  const note      = hitToPlay.note as number
+  const octave    = hitToPlay.octave as number
 
   const startTime = hitToPlay.startTime as number + currentTime
   const peakStart = hitToPlay.peakStart as number + currentTime
@@ -91,10 +94,37 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
     gain.linearRampToValueAtTime(0, endTime)
 
   } else {
-    
+
+    const buf = buffers[sound]  
+
+    if (!buf?.buffer) {  
+      console.warn('Buffer not ready for:', sound)  
+      return  
+    }  
+
+    const source = context.createBufferSource()  
+    source.buffer = buf.buffer  
+    const gainNode = context.createGain()  
+    const gain = gainNode.gain
+    source.connect(gainNode)  
+    gainNode.connect(masterCompressor!)  
+
+    source.detune.value = detune! +
+    (note! - 1 - buf.note!) * 100 +  
+    (octave! - buf.octave!) * 1200
+
+    source.start(startTime)  
+
+    gain.setValueAtTime(0, startTime)
+    gain.linearRampToValueAtTime(level, peakStart)
+    gain.setValueAtTime(level, peakEnd)
+    gain.linearRampToValueAtTime(0, endTime)
+
+    source.onended = () => {  
+      source.disconnect()  
+      gainNode.disconnect()  
+    } 
   }
-
-
 }
 
 // test helper
