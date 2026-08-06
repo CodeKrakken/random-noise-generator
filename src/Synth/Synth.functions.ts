@@ -609,7 +609,6 @@ const shapeNote = (
 
 ) => {
   
-  const gain = gainNode.gain
   const noteLength = generateNoteLength(voice, intervalLength)
 
   const thisInterval = voice.offsetInterval!
@@ -630,20 +629,41 @@ const shapeNote = (
   const overlap     = endOfAttack >= startOfDecay
   const peakStart = overlap ? peakPoint : endOfAttack
   const peakEnd   = overlap ? peakPoint : startOfDecay
+  const endTime = thisInterval + noteLength
 
-  gain.setValueAtTime(0, thisInterval)
-  gain.linearRampToValueAtTime(level, peakStart)
-  gain.setValueAtTime(level, peakEnd)
-  gain.linearRampToValueAtTime(0, thisInterval + noteLength)
-
-  
+  scheduleGainEvents(
+    gainNode,
+    level,
+    thisInterval,
+    endTime,
+    peakStart,
+    peakEnd
+  )
 
   hitToPopulate.startTime = thisInterval
-  hitToPopulate.endTime   = thisInterval + noteLength
+  hitToPopulate.endTime   = endTime
   hitToPopulate.level     = level
   hitToPopulate.peakStart = peakStart
   hitToPopulate.peakEnd   = peakEnd
 
+}
+
+const scheduleGainEvents = (
+
+  gainNode: GainNode,
+  level: number,
+  start: number,
+  end: number,
+  peakStart: number, 
+  peakEnd: number,
+
+) => {
+  const gain = gainNode.gain
+
+  gain.setValueAtTime(0, start)
+  gain.linearRampToValueAtTime(level, peakStart)
+  gain.setValueAtTime(level, peakEnd)
+  gain.linearRampToValueAtTime(0, end)
 }
 
 const randomOneFrom = <T>(array: T[]): T => {
