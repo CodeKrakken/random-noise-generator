@@ -82,16 +82,14 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
   const peakEnd   = hitToPlay.peakEnd   as number + currentTime
   const endTime   = hitToPlay.endTime   as number + currentTime
 
+  let gainNode: GainNode
+
   if (waveforms.includes(sound)) {
     const oscGain = setUpOscillator(context)
     oscGain.oscillator.type = sound
     oscGain.oscillator.frequency.value = frequency
 
-    const gain = oscGain.gainNode.gain
-    gain.setValueAtTime(0, startTime)
-    gain.linearRampToValueAtTime(level, peakStart)
-    gain.setValueAtTime(level, peakEnd)
-    gain.linearRampToValueAtTime(0, endTime)
+    gainNode = oscGain.gainNode
 
   } else {
 
@@ -104,8 +102,7 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
 
     const source = context.createBufferSource()  
     source.buffer = buf.buffer  
-    const gainNode = context.createGain()  
-    const gain = gainNode.gain
+    gainNode = context.createGain()  
     source.connect(gainNode)  
     gainNode.connect(masterCompressor!)  
 
@@ -115,16 +112,20 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
 
     source.start(startTime)  
 
-    gain.setValueAtTime(0, startTime)
-    gain.linearRampToValueAtTime(level, peakStart)
-    gain.setValueAtTime(level, peakEnd)
-    gain.linearRampToValueAtTime(0, endTime)
-
     source.onended = () => {  
       source.disconnect()  
       gainNode.disconnect()  
     } 
   }
+
+  scheduleGainEvents(
+    gainNode,
+    level,
+    startTime,
+    endTime,
+    peakStart,
+    peakEnd
+  )
 }
 
 // test helper
