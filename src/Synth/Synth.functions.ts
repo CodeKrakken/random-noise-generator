@@ -69,19 +69,16 @@ const runInterval = (
 
 const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) => {
 
-  const currentTime = context.currentTime
-
-  const sound     = hitToPlay.sound as OscillatorType
-  const frequency = hitToPlay.frequency as number
-  const startTime = hitToPlay.startTime as number + currentTime
+  const sound     = hitToPlay.sound 
+  const frequency = hitToPlay.frequency 
   const detune    = hitToPlay.detune as number
   
   let gainNode: GainNode
 
-  if (waveforms.includes(sound)) {
+  if (waveforms.includes(sound!)) {
     const oscGain = setUpOscillator(context)
-    oscGain.oscillator.type = sound
-    oscGain.oscillator.frequency.value = frequency
+    oscGain.oscillator.type = sound as OscillatorType
+    oscGain.oscillator.frequency.value = frequency as number
     oscGain.oscillator.detune.value = detune
 
     gainNode = oscGain.gainNode
@@ -91,7 +88,7 @@ const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) =
     gainNode = setUpSample(
       hitToPlay,
       context,
-      startTime
+      runStartTime
     ) as GainNode
   }
 
