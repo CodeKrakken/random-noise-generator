@@ -71,17 +71,9 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
   const currentTime = context.currentTime
 
   const sound     = hitToPlay.sound as OscillatorType
-  const level     = hitToPlay.level as number
   const frequency = hitToPlay.frequency as number
-  const detune    = hitToPlay.detune as number
-  const note      = hitToPlay.note as number
-  const octave    = hitToPlay.octave as number
-
   const startTime = hitToPlay.startTime as number + currentTime
-  const peakStart = hitToPlay.peakStart as number + currentTime
-  const peakEnd   = hitToPlay.peakEnd   as number + currentTime
-  const endTime   = hitToPlay.endTime   as number + currentTime
-
+  
   let gainNode: GainNode
 
   if (waveforms.includes(sound)) {
@@ -94,22 +86,15 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
   } else {
 
     gainNode = setUpSample(
-      sound,
+      hitToPlay,
       context,
-      detune,
-      note,
-      octave,
       startTime
     ) as GainNode
   }
 
   scheduleGainEvents(
     gainNode,
-    level,
-    startTime,
-    endTime,
-    peakStart,
-    peakEnd
+    hitToPlay
   )
 }
 
@@ -480,8 +465,6 @@ const makeSound = (
 
     voice.offsetInterval = thisInterval! + offsetTime
 
-
-
     // DRY out this section
 
     if (waveforms.includes(sound!)) {
@@ -510,11 +493,8 @@ const makeSound = (
       }
 
       const gain = setUpSample(
-        bufferKey!,
+        hitToPopulate,
         context,
-        detune!,
-        note!,
-        octave!,
         voice.offsetInterval
       ) as GainNode
 
@@ -605,17 +585,16 @@ const removeOscillator = (oscGain: OscGain) => {
 // }
 
 const setUpSample = (
-  key: string,
+  hit: Hit,
   context: AudioContext,
-  detune: number,
-  note: number,
-  octave: number,
   time: number
 ) => {
-  const buf = buffers[key]  
+
+  const { sound, detune, note, octave } = hit
+  const buf = buffers[sound!]  
 
   if (!buf?.buffer) {  
-    console.warn('Buffer not ready for:', key)  
+    console.warn('Buffer not ready for:', sound)  
     return  
   }  
   
@@ -666,44 +645,38 @@ const shapeNote = (
     (attackPercentage + decayPercentage)
   )
 
-  const overlap     = endOfAttack >= startOfDecay
+  const overlap   = endOfAttack >= startOfDecay
   const peakStart = overlap ? peakPoint : endOfAttack
   const peakEnd   = overlap ? peakPoint : startOfDecay
-  const endTime = thisInterval + noteLength
-
-  scheduleGainEvents(
-    gainNode,
-    level,
-    thisInterval,
-    endTime,
-    peakStart,
-    peakEnd
-  )
+  const endTime   = thisInterval + noteLength
 
   hitToPopulate.startTime = thisInterval
   hitToPopulate.endTime   = endTime
-  hitToPopulate.level     = level
   hitToPopulate.peakStart = peakStart
   hitToPopulate.peakEnd   = peakEnd
+
+  scheduleGainEvents(
+    gainNode,
+    hitToPopulate
+  )
+
+  
 
 }
 
 const scheduleGainEvents = (
 
   gainNode: GainNode,
-  level: number,
-  start: number,
-  end: number,
-  peakStart: number, 
-  peakEnd: number,
+  hit: Hit,
 
 ) => {
   const gain = gainNode.gain
-
-  gain.setValueAtTime(0, start)
-  gain.linearRampToValueAtTime(level, peakStart)
-  gain.setValueAtTime(level, peakEnd)
-  gain.linearRampToValueAtTime(0, end)
+  const { startTime, endTime, peakStart, peakEnd, level } = hit
+  console.log('Scheduling gain events for hit:', hit)
+  gain.setValueAtTime(0, startTime!)
+  gain.linearRampToValueAtTime(level!, peakStart!)
+  gain.setValueAtTime(level!, peakEnd!)
+  gain.linearRampToValueAtTime(0, endTime!)
 }
 
 const randomOneFrom = <T>(array: T[]): T => {
