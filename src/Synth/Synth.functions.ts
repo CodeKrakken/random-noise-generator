@@ -44,7 +44,8 @@ const runInterval = (
   voice         : VoiceType, 
   voicesRef     : VoicesRef, 
   context       : AudioContext,
-  recordedHits  : Hit[]
+  recordedHits  : Hit[],
+  runStartTime  : number
 
 ) => {
 
@@ -56,17 +57,17 @@ const runInterval = (
     const intervalLength = getIntervalLength(voice)
     voice.nextInterval += intervalLength
   
-    if (!isRest(voice)) makeSound(voice, intervalLength, context, recordedHits)
+    if (!isRest(voice)) makeSound(voice, intervalLength, context, recordedHits, runStartTime)
   } 
 
   if (!voice.isActive) return
 
   setTimeout(() => {
-    runInterval(voice, voicesRef, context, recordedHits)
+    runInterval(voice, voicesRef, context, recordedHits, runStartTime)
   }, (voice.nextInterval - context.currentTime)*1000)    
 }
 
-const playBack = (hitToPlay: Hit, context: AudioContext) => {
+const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) => {
 
   const currentTime = context.currentTime
 
@@ -94,7 +95,8 @@ const playBack = (hitToPlay: Hit, context: AudioContext) => {
 
   scheduleGainEvents(
     gainNode,
-    hitToPlay
+    hitToPlay,
+    runStartTime
   )
 }
 
@@ -435,6 +437,7 @@ const makeSound = (
   intervalLength  : number, 
   context         : AudioContext,
   recordedHits    : Hit[],
+  runStartTime    : number
 
 ) => {
 
@@ -474,7 +477,7 @@ const makeSound = (
       oscGain.oscillator.frequency.value = frequency as number
       oscGain.oscillator.detune.value = detune as number
                   
-      shapeNote(oscGain.gainNode, voice, intervalLength, level!, hitToPopulate)
+      shapeNote(oscGain.gainNode, voice, intervalLength, level!, hitToPopulate, runStartTime)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
     } else {
     
@@ -498,7 +501,7 @@ const makeSound = (
         voice.offsetInterval
       ) as GainNode
 
-      shapeNote(gain, voice, interval!, level!, hitToPopulate)
+      shapeNote(gain, voice, interval!, level!, hitToPopulate, runStartTime)
     }
 
     recordedHits.push(hitToPopulate)
@@ -625,6 +628,7 @@ const shapeNote = (
   intervalLength  : number, 
   level           : number,
   hitToPopulate   : Hit,
+  runStartTime    : number
 
 ) => {
   
@@ -650,33 +654,32 @@ const shapeNote = (
   const peakEnd   = overlap ? peakPoint : startOfDecay
   const endTime   = thisInterval + noteLength
 
-  hitToPopulate.startTime = thisInterval
-  hitToPopulate.endTime   = endTime
-  hitToPopulate.peakStart = peakStart
-  hitToPopulate.peakEnd   = peakEnd
+  hitToPopulate.startTime = thisInterval - runStartTime
+  hitToPopulate.endTime   = endTime - runStartTime
+  hitToPopulate.peakStart = peakStart - runStartTime
+  hitToPopulate.peakEnd   = peakEnd - runStartTime
 
   scheduleGainEvents(
     gainNode,
-    hitToPopulate
+    hitToPopulate,
+    runStartTime
   )
-
-  
-
 }
 
 const scheduleGainEvents = (
 
   gainNode: GainNode,
   hit: Hit,
+  runStartTime: number
 
 ) => {
   const gain = gainNode.gain
   const { startTime, endTime, peakStart, peakEnd, level } = hit
   console.log('Scheduling gain events for hit:', hit)
-  gain.setValueAtTime(0, startTime!)
-  gain.linearRampToValueAtTime(level!, peakStart!)
-  gain.setValueAtTime(level!, peakEnd!)
-  gain.linearRampToValueAtTime(0, endTime!)
+  gain.setValueAtTime(0, startTime! + runStartTime)
+  gain.linearRampToValueAtTime(level!, peakStart! + runStartTime)
+  gain.setValueAtTime(level!, peakEnd! + runStartTime)
+  gain.linearRampToValueAtTime(0, endTime! + runStartTime)
 }
 
 const randomOneFrom = <T>(array: T[]): T => {

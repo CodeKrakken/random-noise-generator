@@ -11,6 +11,8 @@ let setup: {
   masterGain: undefined
 }
 
+let runStartTime: number
+
 export const Synth = {
 
   voices: demoVoices as VoiceType[],
@@ -27,7 +29,7 @@ export const Synth = {
 
     if (running) {
       voice.isActive = true
-      runInterval(voice, voicesRef, setup.context as AudioContext, Synth.recordedHits)
+      runInterval(voice, voicesRef, setup.context as AudioContext, Synth.recordedHits, runStartTime)
     }
   },
 
@@ -41,12 +43,14 @@ export const Synth = {
 
     setup.masterGain!.gain.setValueAtTime(1, 0)
 
+    runStartTime = context.currentTime
+
     Synth.voices.forEach(voice => {
 
       voice.nextInterval = context.currentTime
       voice.isActive = true
 
-      runInterval(voice, voicesRef, context, Synth.recordedHits)
+      runInterval(voice, voicesRef, context, Synth.recordedHits, runStartTime)
     })
   },
 
@@ -60,9 +64,13 @@ export const Synth = {
 
   replay: async (setReplaying: React.Dispatch<React.SetStateAction<boolean>>) => { 
 
+    const context = setup.context
+
+    runStartTime = context!.currentTime
+
     Synth.recordedHits.forEach(hit => {
       setup.masterGain!.gain.setValueAtTime(1, 0)
-      playBack(hit, setup.context as AudioContext)
+      playBack(hit, context as AudioContext, runStartTime)
     })
     setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit: Hit) => hit.endTime as number)) * 1000)
   },
