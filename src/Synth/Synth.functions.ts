@@ -74,6 +74,7 @@ const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) =
   const sound     = hitToPlay.sound as OscillatorType
   const frequency = hitToPlay.frequency as number
   const startTime = hitToPlay.startTime as number + currentTime
+  const detune    = hitToPlay.detune as number
   
   let gainNode: GainNode
 
@@ -81,6 +82,7 @@ const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) =
     const oscGain = setUpOscillator(context)
     oscGain.oscillator.type = sound
     oscGain.oscillator.frequency.value = frequency
+    oscGain.oscillator.detune.value = detune
 
     gainNode = oscGain.gainNode
 
