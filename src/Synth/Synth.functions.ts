@@ -39,6 +39,9 @@ const getContext = (
   return {masterGain, context}  
 }
 
+// runs on improv - picks random values, 
+// schedules next interval
+
 const runInterval = (
 
   voice         : VoiceType, 
@@ -57,7 +60,19 @@ const runInterval = (
     const intervalLength = getIntervalLength(voice)
     voice.nextInterval += intervalLength
   
-    if (!isRest(voice)) makeSound(voice, intervalLength, context, recordedHits, runStartTime)
+    if (!isRest(voice)) {
+
+      recordedHits.push({
+        sound     : randomOneFrom(voice.activeSounds) as string,
+        level     : calculateLevel(voice),
+        frequency : randomOneFrom(voice.activeFrequencies),
+        detune    : getRangeValue('Detune', voice),
+        note      : +randomOneFrom(voice.activeNotes),
+        octave    : +randomOneFrom(voice.activeOctaves),
+      })
+
+      makeSound(voice, intervalLength, context, recordedHits, runStartTime)
+    }
   } 
 
   if (!voice.isActive) return
@@ -424,42 +439,36 @@ const isRest = (voice: VoiceType) => {
   return diceRoll < restChance / 100  
 }
 
+// runs on improv - picks random values,
+// sets up oscillator or sample,
+// saves hit to array
+
 const makeSound = (
 
   voice           : VoiceType, 
   intervalLength  : number, 
   context         : AudioContext,
   recordedHits    : Hit[],
-  runStartTime    : number
+  runStartTime    : number,
 
 ) => {
 
-  const { activeSounds, thisInterval } = voice
-
   const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
+  const hit = recordedHits[recordedHits.length-1]
 
   try {
 
-    const hitToPopulate: Hit = {
-      sound     : randomOneFrom(activeSounds) as string,
-      level     : calculateLevel(voice),
-      frequency : randomOneFrom(voice.activeFrequencies),
-      detune    : getRangeValue('Detune', voice),
-      note      : +randomOneFrom(voice.activeNotes),
-      octave    : +randomOneFrom(voice.activeOctaves),
-    }
+    const { sound, level, note, octave } = hit
 
-    const { sound, level, note, octave } = hitToPopulate
-
-    voice.offsetInterval = thisInterval! + offsetTime
+    voice.offsetInterval = voice.thisInterval! + offsetTime
 
     // DRY out this section
 
     if (waveforms.includes(sound!)) {
 
-      const oscGain = setUpOscillator(context, hitToPopulate)
+      const oscGain = setUpOscillator(context, hit)
                   
-      shapeNote(oscGain.gainNode, voice, intervalLength, level!, hitToPopulate, runStartTime)
+      shapeNote(oscGain.gainNode, voice, intervalLength, hit, runStartTime)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
     } else {
     
@@ -478,15 +487,13 @@ const makeSound = (
       }
 
       const gain = setUpSample(
-        hitToPopulate,
+        hit,
         context,
         voice.offsetInterval
       ) as GainNode
 
-      shapeNote(gain, voice, interval!, level!, hitToPopulate, runStartTime)
+      shapeNote(gain, voice, interval!, hit, runStartTime)
     }
-
-    recordedHits.push(hitToPopulate)
 
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error", error)
@@ -607,13 +614,14 @@ const setUpSample = (
   return gain
 }
 
+// runs on improv - randomises gain changes
+
 const shapeNote = (
 
   gainNode        : GainNode, 
   voice           : VoiceType, 
   intervalLength  : number, 
-  level           : number,
-  hitToPopulate   : Hit,
+  hit             : Hit,
   runStartTime    : number
 
 ) => {
@@ -640,14 +648,14 @@ const shapeNote = (
   const peakEnd   = overlap ? peakPoint : startOfDecay
   const endTime   = thisInterval + noteLength
 
-  hitToPopulate.startTime = thisInterval - runStartTime
-  hitToPopulate.endTime   = endTime - runStartTime
-  hitToPopulate.peakStart = peakStart - runStartTime
-  hitToPopulate.peakEnd   = peakEnd - runStartTime
+  hit.startTime = thisInterval - runStartTime
+  hit.endTime   = endTime - runStartTime
+  hit.peakStart = peakStart - runStartTime
+  hit.peakEnd   = peakEnd - runStartTime
 
   scheduleGainEvents(
     gainNode,
-    hitToPopulate,
+    hit,
     runStartTime
   )
 }
