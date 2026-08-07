@@ -69,18 +69,12 @@ const runInterval = (
 
 const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) => {
 
-  const sound     = hitToPlay.sound 
-  const frequency = hitToPlay.frequency 
-  const detune    = hitToPlay.detune as number
   
   let gainNode: GainNode
 
-  if (waveforms.includes(sound!)) {
-    const oscGain = setUpOscillator(context)
-    oscGain.oscillator.type = sound as OscillatorType
-    oscGain.oscillator.frequency.value = frequency as number
-    oscGain.oscillator.detune.value = detune
+  if (waveforms.includes(hitToPlay.sound as string)) {
 
+    const oscGain = setUpOscillator(context, hitToPlay)
     gainNode = oscGain.gainNode
 
   } else {
@@ -88,7 +82,7 @@ const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) =
     gainNode = setUpSample(
       hitToPlay,
       context,
-      runStartTime
+      runStartTime + hitToPlay.startTime!
     ) as GainNode
   }
 
@@ -455,15 +449,7 @@ const makeSound = (
       octave    : +randomOneFrom(voice.activeOctaves),
     }
 
-    const { 
-      sound, 
-      level, 
-      frequency, 
-      detune,
-      note, 
-      octave
-    
-    } = hitToPopulate
+    const { sound, level, note, octave } = hitToPopulate
 
     voice.offsetInterval = thisInterval! + offsetTime
 
@@ -471,10 +457,7 @@ const makeSound = (
 
     if (waveforms.includes(sound!)) {
 
-      const oscGain = setUpOscillator(context)
-      oscGain.oscillator.type = sound as OscillatorType
-      oscGain.oscillator.frequency.value = frequency as number
-      oscGain.oscillator.detune.value = detune as number
+      const oscGain = setUpOscillator(context, hitToPopulate)
                   
       shapeNote(oscGain.gainNode, voice, intervalLength, level!, hitToPopulate, runStartTime)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
@@ -510,15 +493,19 @@ const makeSound = (
   }            
 }
 
-const setUpOscillator = (context: AudioContext) => {
+const setUpOscillator = (context: AudioContext, hit: Hit) => {
 
   const oscillator  = context.createOscillator()
   const gain        = context.createGain()
+  const { sound, frequency, detune } = hit
 
   oscillator.connect(gain);
   gain.gain.setValueAtTime(0, 0)
   gain.connect(masterCompressor!)  
   oscillator.start(0);
+  oscillator.type = sound as OscillatorType
+  oscillator.frequency.value = frequency as number
+  oscillator.detune.value = detune as number
 
   return {oscillator, gainNode: gain}
 }
