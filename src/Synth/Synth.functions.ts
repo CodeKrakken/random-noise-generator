@@ -62,6 +62,10 @@ const runInterval = (
   
     if (!isRest(voice)) {
 
+      const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
+      voice.offsetInterval = voice.thisInterval! + offsetTime
+
+
       recordedHits.push({
         sound     : randomOneFrom(voice.activeSounds) as string,
         level     : calculateLevel(voice),
@@ -71,7 +75,7 @@ const runInterval = (
         octave    : +randomOneFrom(voice.activeOctaves),
       })
 
-      makeSound(voice, intervalLength, context, recordedHits, runStartTime)
+      makeSound(voice, intervalLength, context, recordedHits, runStartTime, offsetTime)
     }
   } 
 
@@ -450,31 +454,24 @@ const makeSound = (
   context         : AudioContext,
   recordedHits    : Hit[],
   runStartTime    : number,
+  offsetTime      : number
 
 ) => {
 
-  const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
-  const hit = recordedHits[recordedHits.length-1]
-
   try {
-
-    const { sound, level, note, octave } = hit
-
-    voice.offsetInterval = voice.thisInterval! + offsetTime
-
-    // DRY out this section
+    
+    const hit = recordedHits[recordedHits.length-1]
+    const { sound, note, octave } = hit
 
     if (waveforms.includes(sound!)) {
 
-      const oscGain = setUpOscillator(context, hit)
-                  
+      const oscGain = setUpOscillator(context, hit)                  
       shapeNote(oscGain.gainNode, voice, intervalLength, hit, runStartTime)
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
+    
     } else {
     
       const interval = +randomOneFrom(voice.activeIntervals)
-              
-      // Resolve which buffer to actually play  
 
       let bufferKey = sound  
 
