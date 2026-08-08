@@ -349,37 +349,7 @@ const runInterval = (
 
       try {
         
-        const { sound, note, octave } = hit
-
-        let gainNode: GainNode
-
-        if (isWaveform(sound!)) {
-
-          const oscGain = setUpOscGain(context, hit)                  
-          gainNode = oscGain.gainNode
-          setTimeout(() => removeOscGain(oscGain), (intervalLength+offsetTime)*1000)
-        
-        } else {
-        
-          let bufferKey = sound  
-
-          if (
-            sampleFolders[sound!] &&
-            note !== null && 
-            octave !== null
-          ) {  
-            bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
-          }
-
-          gainNode = setUpGainNode(context)
-          
-          setUpSample(
-            hit,
-            context,
-            voice.offsetInterval!,
-            gainNode
-          )
-        }
+        // const { sound, note, octave } = hit
 
         const noteLength = generateNoteLength(voice, intervalLength)
 
@@ -408,11 +378,33 @@ const runInterval = (
         hit.peakStart = peakStart - runStartTime
         hit.peakEnd   = peakEnd - runStartTime
       
-        scheduleGainEvents(
-          gainNode!,
-          hit,
-          runStartTime
-        )
+        playHit(hit, context, runStartTime)
+
+        // let gainNode: GainNode
+
+        // if (isWaveform(sound!)) {
+
+          // const oscGain = setUpOscGain(context, hit)                  
+          // gainNode = oscGain.gainNode
+          // setTimeout(() => removeOscGain(oscGain), (intervalLength + offsetTime)*1000)
+        
+        // } else {
+           
+          // gainNode = setUpGainNode(context)
+          
+          // setUpSample(
+          //   hit,
+          //   context,
+          //   voice.offsetInterval!,
+          //   gainNode
+          // )
+        // }
+
+        // scheduleGainEvents(
+        //   gainNode!,
+        //   hit,
+        //   runStartTime
+        // )
       } catch (error) {
         console.error(error instanceof Error ? error.message : "Unknown error", error)
       }            
@@ -550,7 +542,19 @@ const setUpSample = (
   gainNode: GainNode
 ) => {
 
-  const { sound, detune, note, octave } = hit
+
+  const { detune, note, octave } = hit
+
+  let sound = hit.sound
+
+  if (
+    sampleFolders[sound!] &&
+    note !== null && 
+    octave !== null
+  ) {  
+    sound = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
+  }
+
   const buf = buffers[sound!]  
 
   if (!buf?.buffer) {  
@@ -600,16 +604,18 @@ const scheduleGainEvents = (
 }
 
 
-const playBack = (hit: Hit, context: AudioContext, runStartTime: number) => {
+const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
   
+  const { sound, endTime, startTime, note, octave } = hit
+
   let gainNode: GainNode
 
-  if (isWaveform(hit.sound!)) {
+  if (isWaveform(sound!)) {
 
     const oscGain = setUpOscGain(context, hit)
     gainNode = oscGain.gainNode
-    const noteLength = hit.endTime! - hit.startTime!
-    setTimeout(() => removeOscGain(oscGain), (runStartTime + hit.startTime! + noteLength) * 1000)
+    const noteLength = endTime! - startTime!
+    setTimeout(() => removeOscGain(oscGain), (runStartTime + startTime! + noteLength) * 1000)
 
   } else {
 
@@ -653,5 +659,5 @@ export {
   buffers,
   loadSamples,
   resetSampleState,
-  playBack
+  playHit
 }

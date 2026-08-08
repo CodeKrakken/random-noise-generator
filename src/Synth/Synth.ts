@@ -1,7 +1,7 @@
-import { VoiceType }                          from '../components/shared.types'
-import { Hit, VoicesRef }                     from './Synth.types'
-import { getContext, runInterval, playBack }  from './Synth.functions'
-import { demoVoices }                         from '../content/data'
+import { VoiceType }                        from '../components/shared.types'
+import { Hit, VoicesRef }                   from './Synth.types'
+import { getContext, runInterval, playHit } from './Synth.functions'
+import { demoVoices }                       from '../content/data'
 
 let setup: {
   context: AudioContext | undefined
@@ -72,7 +72,7 @@ export const Synth = {
 
     Synth.recordedHits.forEach(hit => {
       setup.masterGain!.gain.setValueAtTime(1, 0)
-      playBack(hit, context as AudioContext, runStartTime)
+      playHit(hit, context as AudioContext, runStartTime)
     })
     setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit: Hit) => hit.endTime as number)) * 1000)
   },
