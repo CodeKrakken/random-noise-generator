@@ -16,8 +16,7 @@ type Hit = {
   level?     : number
 }
 
-
 export type {
   VoicesRef,
-  Hit
+  Hit,
 }

@@ -2,13 +2,34 @@ import { VoiceType, RangeKey }                                                  
 import { Hit, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }  from '../content/data';
 
+// type
 
 type OscGain = {
   oscillator  : OscillatorNode
   gainNode    : GainNode
 }
 
+// variables
+
 let masterCompressor: DynamicsCompressorNode
+
+const buffers: Record<string, { 
+
+  buffer            : AudioBuffer; 
+  detectedFrequency : number | null 
+  nearestFrequency  : number | null
+  octave            : number | null
+  note              : number | null
+
+}> = {}  
+
+let samplesLoading = false  
+
+const noteNameToIndex: Record<string, number> = {  
+  C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
+}  
+
+// functions
   
 const getContext = (
   setup: {
@@ -315,7 +336,7 @@ const runInterval = (
       const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
       voice.offsetInterval = voice.thisInterval! + offsetTime
 
-      const hit = {
+      const hit: Hit = {
         sound     : randomOneFrom(voice.activeSounds) as string,
         level     : calculateLevel(voice),
         frequency : randomOneFrom(voice.activeFrequencies),
@@ -328,15 +349,15 @@ const runInterval = (
 
       try {
         
-        const hit = recordedHits[recordedHits.length-1]
         const { sound, note, octave } = hit
+
         let gainNode: GainNode
 
-        if (waveforms.includes(sound!)) {
+        if (isWaveform(sound!)) {
 
-          const oscGain = setUpOscillator(context, hit)                  
+          const oscGain = setUpOscGain(context, hit)                  
           gainNode = oscGain.gainNode
-          setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
+          setTimeout(() => removeOscGain(oscGain), (intervalLength+offsetTime)*1000)
         
         } else {
         
@@ -350,11 +371,14 @@ const runInterval = (
             bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
           }
 
-          gainNode = setUpSample(
+          gainNode = setUpGainNode(context)
+          
+          setUpSample(
             hit,
             context,
-            voice.offsetInterval!
-          ) as GainNode
+            voice.offsetInterval!,
+            gainNode
+          )
         }
 
         const noteLength = generateNoteLength(voice, intervalLength)
@@ -402,68 +426,89 @@ const runInterval = (
   }, (voice.nextInterval - context.currentTime)*1000)    
 }
 
-const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) => {
-  
-  let gainNode: GainNode
+const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
 
-  if (waveforms.includes(hitToPlay.sound as string)) {
+const getIntervalLength = (voice: VoiceType) => {
 
-    const oscGain = setUpOscillator(context, hitToPlay)
-    gainNode = oscGain.gainNode
+  const { activeIntervals, bpm } = voice
 
-  } else {
+  const interval = randomOneFrom(activeIntervals) || '0.5'
+  const intervalLength  = oneMinute / bpm * parseFloat(interval)
 
-    gainNode = setUpSample(
-      hitToPlay,
-      context,
-      runStartTime + hitToPlay.startTime!
-    ) as GainNode
-  }
-
-  scheduleGainEvents(
-    gainNode,
-    hitToPlay,
-    runStartTime
-  )
+  return intervalLength
 }
 
-// test helper
+const isRest = (voice: VoiceType) => {  
+  const { restChance, activeOctaves, activeNotes, activeSounds } = voice    
+  if (!activeOctaves.length || !activeNotes.length || !activeSounds.length) return true    
+  const diceRoll = Math.random()  
 
-const resetSampleState = () => {
-  samplesLoading = false;
-};
+  return diceRoll < restChance / 100  
+}
 
-// private functions
+const getRangeValue = (key: RangeKey, voice: VoiceType) => {
+    
+  const [min, max] = extrema.map(
+    prefix => voice[prefix + key as keyof VoiceType]
+  )
 
-const buffers: Record<string, { 
+  const rangeValue = (
+    min as number + 
+    (
+      Math.random() * 
+      (max as number - (min as number))
+    )
+  )
 
-  buffer            : AudioBuffer; 
-  detectedFrequency : number | null 
-  nearestFrequency  : number | null
-  octave            : number | null
-  note              : number | null
+  return rangeValue
+}
 
-}> = {}  
+const randomOneFrom = <T>(array: T[]): T => {
+  return array[Math.floor(Math.random() * array.length)]
+}
 
-let samplesLoading = false  
+const calculateLevel = (voice: VoiceType) => {
 
-const noteNameToIndex: Record<string, number> = {  
-  C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
-}  
+  const { minLevel, maxLevel } = voice
+
+  const balancedLevel = (
+    (minLevel + Math.random() * (maxLevel - minLevel))/100
+  )
   
+  return balancedLevel
+}
 
+const setUpOscGain = (context: AudioContext, hit: Hit) => {
 
+  const oscillator  = context.createOscillator()
+  const gainNode    = setUpGainNode(context)
+  const { sound, frequency, detune } = hit
 
+  oscillator.connect(gainNode);
+  oscillator.start(0);
+  oscillator.type = sound as OscillatorType
+  oscillator.frequency.value = frequency as number
+  oscillator.detune.value = detune as number
 
+  return {oscillator, gainNode}
+}
 
+const setUpGainNode = (context: AudioContext) => {
 
+  const gainNode = context.createGain()
+  gainNode.gain.setValueAtTime(0, 0)
+  gainNode.connect(masterCompressor!)  
 
+  return gainNode
+}
 
+const removeOscGain = (oscGain: OscGain) => {
+  const { oscillator, gainNode } = oscGain
 
-
-
-
-
+  oscillator.stop()
+  oscillator.disconnect()
+  gainNode.disconnect()
+}
 
 const findNearestSampleInFolder = ( 
 
@@ -497,59 +542,12 @@ const findNearestSampleInFolder = (
   
   return bestKey  
 }
-  
-
-
-
-const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
-
-const getIntervalLength = (voice: VoiceType) => {
-
-  const { activeIntervals, bpm } = voice
-
-  const interval = randomOneFrom(activeIntervals) || '0.5'
-  const intervalLength  = oneMinute / bpm * parseFloat(interval)
-
-  return intervalLength
-}
-
-const isRest = (voice: VoiceType) => {  
-  const { restChance, activeOctaves, activeNotes, activeSounds } = voice    
-  if (!activeOctaves.length || !activeNotes.length || !activeSounds.length) return true    
-  const diceRoll = Math.random()  
-
-  return diceRoll < restChance / 100  
-}
-
-const setUpOscillator = (context: AudioContext, hit: Hit) => {
-
-  const oscillator  = context.createOscillator()
-  const gain        = context.createGain()
-  const { sound, frequency, detune } = hit
-
-  oscillator.connect(gain);
-  gain.gain.setValueAtTime(0, 0)
-  gain.connect(masterCompressor!)  
-  oscillator.start(0);
-  oscillator.type = sound as OscillatorType
-  oscillator.frequency.value = frequency as number
-  oscillator.detune.value = detune as number
-
-  return {oscillator, gainNode: gain}
-}
-
-const removeOscillator = (oscGain: OscGain) => {
-  const { oscillator, gainNode } = oscGain
-
-  oscillator.stop()
-  oscillator.disconnect()
-  gainNode.disconnect()
-}
 
 const setUpSample = (
   hit: Hit,
   context: AudioContext,
-  time: number
+  time: number,
+  gainNode: GainNode
 ) => {
 
   const { sound, detune, note, octave } = hit
@@ -562,9 +560,7 @@ const setUpSample = (
   
   const source = context.createBufferSource()  
   source.buffer = buf.buffer  
-  const gain = context.createGain()  
-  source.connect(gain)  
-  gain.connect(masterCompressor!)  
+  source.connect(gainNode)  
 
   source.detune.value = detune! +
   (note! - 1 - buf.note!) * 100 +  
@@ -574,12 +570,17 @@ const setUpSample = (
   
   source.onended = () => {  
     source.disconnect()  
-    gain.disconnect()  
+    gainNode.disconnect()  
   }  
 
-  return gain
 }
 
+const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
+  const noteLengthPercentage  = getRangeValue('Length', voice)
+  return intervalLength / 100 * noteLengthPercentage
+}
+
+const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
 const scheduleGainEvents = (
 
@@ -598,45 +599,45 @@ const scheduleGainEvents = (
   gain.linearRampToValueAtTime(0, endTime! + runStartTime)
 }
 
-const randomOneFrom = <T>(array: T[]): T => {
-  return array[Math.floor(Math.random() * array.length)]
-}
 
-const calculateLevel = (voice: VoiceType) => {
-
-  const { minLevel, maxLevel } = voice
-
-  const balancedLevel = (
-    (minLevel + Math.random() * (maxLevel - minLevel))/100
-  )
+const playBack = (hit: Hit, context: AudioContext, runStartTime: number) => {
   
-  return balancedLevel
-}
+  let gainNode: GainNode
 
+  if (isWaveform(hit.sound!)) {
 
-const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
-  const noteLengthPercentage  = getRangeValue('Length', voice)
-  return intervalLength / 100 * noteLengthPercentage
-}
+    const oscGain = setUpOscGain(context, hit)
+    gainNode = oscGain.gainNode
+    const noteLength = hit.endTime! - hit.startTime!
+    setTimeout(() => removeOscGain(oscGain), (runStartTime + hit.startTime! + noteLength) * 1000)
 
-const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+  } else {
 
-const getRangeValue = (key: RangeKey, voice: VoiceType) => {
+    gainNode = setUpGainNode(context)
     
-  const [min, max] = extrema.map(
-    prefix => voice[prefix + key as keyof VoiceType]
-  )
-
-  const rangeValue = (
-    min as number + 
-    (
-      Math.random() * 
-      (max as number - (min as number))
+    setUpSample(
+      hit,
+      context,
+      runStartTime + hit.startTime!,
+      gainNode
     )
-  )
+  }
 
-  return rangeValue
+  scheduleGainEvents(
+    gainNode,
+    hit,
+    runStartTime
+  )
 }
+
+const isWaveform = (sound: string) => waveforms.includes(sound as string)
+
+
+// test helper
+
+const resetSampleState = () => {
+  samplesLoading = false;
+};
 
 export {
   getContext,
@@ -652,6 +653,5 @@ export {
   buffers,
   loadSamples,
   resetSampleState,
-  // playSample,
   playBack
 }
