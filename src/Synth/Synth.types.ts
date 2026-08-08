@@ -14,9 +14,16 @@ type Hit = {
   peakStart? : number
   peakEnd?   : number
   level?     : number
+  source?    : SourceGain
 }
+
+type SourceGain = {
+    source: OscillatorNode | AudioBufferSourceNode, 
+    gainNode: GainNode 
+  }
 
 export type {
   VoicesRef,
+  SourceGain,
   Hit,
 }

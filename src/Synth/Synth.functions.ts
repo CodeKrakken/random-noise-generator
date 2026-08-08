@@ -1,13 +1,7 @@
 import { VoiceType, RangeKey }                                                    from '../components/shared.types'
-import { Hit, VoicesRef }                                                         from './Synth.types'
+import { Hit, SourceGain, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms }  from '../content/data';
 
-// type
-
-type OscGain = {
-  oscillator  : OscillatorNode
-  gainNode    : GainNode
-}
 
 // variables
 
@@ -468,9 +462,9 @@ const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
 
   if (isWaveform(sound!)) {
 
-    const oscGain = setUpOscGain(context, hit)
-    gainNode = oscGain.gainNode
-    setTimeout(() => removeOscGain(oscGain), (runStartTime + endTime!) * 1000)
+    hit.source = setUpSource(context, hit)
+    gainNode = hit.source.gainNode
+    setTimeout(() => removeSource(hit.source!), (runStartTime + endTime!) * 1000)
 
   } else {
 
@@ -494,19 +488,19 @@ const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
 const isWaveform = (sound: string) => waveforms.includes(sound as string)
 
 
-const setUpOscGain = (context: AudioContext, hit: Hit) => {
+const setUpSource = (context: AudioContext, hit: Hit) => {
 
-  const oscillator  = context.createOscillator()
+  const source  = context.createOscillator()
   const gainNode    = setUpGainNode(context)
   const { sound, frequency, detune } = hit
 
-  oscillator.connect(gainNode);
-  oscillator.start(0);
-  oscillator.type = sound as OscillatorType
-  oscillator.frequency.value = frequency as number
-  oscillator.detune.value = detune as number
+  source.connect(gainNode);
+  source.start(0);
+  source.type = sound as OscillatorType
+  source.frequency.value = frequency as number
+  source.detune.value = detune as number
 
-  return {oscillator, gainNode}
+  return {source, gainNode}
 }
 
 const setUpGainNode = (context: AudioContext) => {
@@ -518,11 +512,11 @@ const setUpGainNode = (context: AudioContext) => {
   return gainNode
 }
 
-const removeOscGain = (oscGain: OscGain) => {
-  const { oscillator, gainNode } = oscGain
+const removeSource = (sourceGain: SourceGain) => {
+  const { source, gainNode } = sourceGain
 
-  oscillator.stop()
-  oscillator.disconnect()
+  source.stop()
+  source.disconnect()
   gainNode.disconnect()
 }
 
@@ -560,12 +554,13 @@ const setUpSample = (
   (note! - 1 - buf.note!) * 100 +  
   (octave! - buf.octave!) * 1200
 
+  const sourceGain = { source, gainNode }
+
+  hit.source = sourceGain
+
   source.start(time)  
   
-  source.onended = () => {  
-    source.disconnect()  
-    gainNode.disconnect()  
-  }  
+  removeSource(sourceGain)
 
 }
 
@@ -640,5 +635,6 @@ export {
   buffers,
   loadSamples,
   resetSampleState,
-  playHit
+  playHit,
+  removeSource
 }

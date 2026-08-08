@@ -1,6 +1,6 @@
 import { VoiceType }                        from '../components/shared.types'
 import { Hit, VoicesRef }                   from './Synth.types'
-import { getContext, runInterval, playHit } from './Synth.functions'
+import { getContext, runInterval, playHit, removeSource } from './Synth.functions'
 import { demoVoices }                       from '../content/data'
 
 let setup: {
@@ -58,7 +58,7 @@ export const Synth = {
 
   stop: () => {
     setup.masterGain!.gain.setValueAtTime(0, 0)
-
+    Synth.recordedHits.map(hit => hit.source && removeSource(hit.source))
     Synth.voices.forEach(voice => {
       voice.isActive = false;
     })
