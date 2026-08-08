@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react'
+import { ButtonHTMLAttributes, DetailedHTMLProps, MouseEventHandler, useEffect, useState } from 'react'
 import { title, addLabel }                        from '../../content/data'
 import { VoiceType }                              from '../shared.types'
 import { Hit } from '../../Synth/Synth.types'
@@ -113,7 +113,14 @@ export default function Header ({
       <div className="centred section">
         {
           buttons.map((button, i) => 
-            <button {...button.props} key={`${button.label} ${i}`}>
+            <button 
+              {
+                ...button.props as DetailedHTMLProps<
+                  ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement
+                >
+              } 
+              key={`${button.label} ${i}`}
+            >
               {button.label}
             </button>
           )
