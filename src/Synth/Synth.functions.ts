@@ -342,7 +342,7 @@ const runInterval = (
         detune    : getRangeValue('Detune', voice),
         note      : +randomOneFrom(activeNotes),
         octave    : +randomOneFrom(activeOctaves),
-        ...gainEvents(voice, intervalLength, runStartTime)
+        ...getGainEvents(voice, intervalLength, runStartTime)
       }
 
       recordedHits.push(hit)
@@ -384,6 +384,22 @@ const isRest = (voice: VoiceType) => {
   return diceRoll < restChance / 100  
 }
 
+const randomOneFrom = <T>(array: T[]): T => {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+
+const calculateLevel = (voice: VoiceType) => {
+
+  const { minLevel, maxLevel } = voice
+
+  const balancedLevel = (
+    (minLevel + Math.random() * (maxLevel - minLevel))/100
+  )
+  
+  return balancedLevel
+}
+
 const getRangeValue = (key: RangeKey, voice: VoiceType) => {
     
   const [min, max] = extrema.map(
@@ -401,20 +417,82 @@ const getRangeValue = (key: RangeKey, voice: VoiceType) => {
   return rangeValue
 }
 
-const randomOneFrom = <T>(array: T[]): T => {
-  return array[Math.floor(Math.random() * array.length)]
-}
+const getGainEvents = (voice: VoiceType, intervalLength: number, runStartTime: number) => {
 
-const calculateLevel = (voice: VoiceType) => {
+  // start
 
-  const { minLevel, maxLevel } = voice
+  const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
+  const startTime = voice.thisInterval! + offsetTime - runStartTime
 
-  const balancedLevel = (
-    (minLevel + Math.random() * (maxLevel - minLevel))/100
-  )
+  // end
+
+  const noteLength = generateNoteLength(voice, intervalLength)
+  const endTime   = startTime + noteLength
+
+  // peak points
   
-  return balancedLevel
+  const attackPercentage = getRangeValue('Attack', voice)
+  const decayPercentage  = getRangeValue('Decay', voice)
+
+  const attackLength = getFadeLength(attackPercentage , noteLength)
+  const decayLength  = getFadeLength(decayPercentage, noteLength)
+
+  const endOfAttack  = startTime + attackLength
+  const startOfDecay = endTime - decayLength
+
+  const peakPoint = (
+    startTime + noteLength * attackPercentage / 
+    (attackPercentage + decayPercentage)
+  )
+
+  const overlap   = endOfAttack >= startOfDecay
+
+  const peakStart = overlap ? peakPoint : endOfAttack
+  const peakEnd   = overlap ? peakPoint : startOfDecay
+
+  return { startTime, endTime, peakStart, peakEnd }
 }
+
+const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
+  const noteLengthPercentage  = getRangeValue('Length', voice)
+  return intervalLength / 100 * noteLengthPercentage
+}
+
+const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+
+const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
+  
+  const { sound, endTime } = hit
+
+  let gainNode: GainNode
+
+  if (isWaveform(sound!)) {
+
+    const oscGain = setUpOscGain(context, hit)
+    gainNode = oscGain.gainNode
+    setTimeout(() => removeOscGain(oscGain), (runStartTime + endTime!) * 1000)
+
+  } else {
+
+    gainNode = setUpGainNode(context)
+    
+    setUpSample(
+      hit,
+      context,
+      runStartTime + hit.startTime!,
+      gainNode
+    )
+  }
+
+  scheduleGainEvents(
+    gainNode,
+    hit,
+    runStartTime
+  )
+}
+
+const isWaveform = (sound: string) => waveforms.includes(sound as string)
+
 
 const setUpOscGain = (context: AudioContext, hit: Hit) => {
 
@@ -448,46 +526,12 @@ const removeOscGain = (oscGain: OscGain) => {
   gainNode.disconnect()
 }
 
-const findNearestSampleInFolder = ( 
-
-  folder: string,  
-  targetOctave: number,  
-  targetNote: number  
-
-) => {  
-
-  const keys = sampleFolders[folder]  
-  if (!keys?.length) return null  
-  
-  let bestKey = null  
-  let bestDistance = Infinity  
-  
-  for (const key of keys) {  
-
-    const buf = buffers[key]  
-    if (!buf || buf.octave === null || buf.note === null) continue  
-
-    const distance = (
-      Math.abs(targetNote - buf.note) + 
-      Math.abs(targetOctave - buf.octave) * 12  
-    )
-
-    if (distance < bestDistance) {  
-      bestDistance = distance  
-      bestKey = key  
-    }  
-  }  
-  
-  return bestKey  
-}
-
 const setUpSample = (
   hit: Hit,
   context: AudioContext,
   time: number,
   gainNode: GainNode
 ) => {
-
 
   const { detune, note, octave } = hit
 
@@ -525,47 +569,37 @@ const setUpSample = (
 
 }
 
-const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
-  const noteLengthPercentage  = getRangeValue('Length', voice)
-  return intervalLength / 100 * noteLengthPercentage
-}
+const findNearestSampleInFolder = ( 
 
-const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
+  folder: string,  
+  targetOctave: number,  
+  targetNote: number  
 
-const gainEvents = (voice: VoiceType, intervalLength: number, runStartTime: number) => {
+) => {  
 
-  // start
-
-  const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
-  const startTime = voice.thisInterval! + offsetTime - runStartTime
-
-  // end
-
-  const noteLength = generateNoteLength(voice, intervalLength)
-  const endTime   = startTime + noteLength
-
-  // peak points
+  const keys = sampleFolders[folder]  
+  if (!keys?.length) return null  
   
-  const attackPercentage = getRangeValue('Attack', voice)
-  const decayPercentage  = getRangeValue('Decay', voice)
+  let bestKey = null  
+  let bestDistance = Infinity  
+  
+  for (const key of keys) {  
 
-  const attackLength = getFadeLength(attackPercentage , noteLength)
-  const decayLength  = getFadeLength(decayPercentage, noteLength)
+    const buf = buffers[key]  
+    if (!buf || buf.octave === null || buf.note === null) continue  
 
-  const endOfAttack  = startTime + attackLength
-  const startOfDecay = endTime - decayLength
+    const distance = (
+      Math.abs(targetNote - buf.note) + 
+      Math.abs(targetOctave - buf.octave) * 12  
+    )
 
-  const peakPoint = (
-    startTime + noteLength * attackPercentage / 
-    (attackPercentage + decayPercentage)
-  )
-
-  const overlap   = endOfAttack >= startOfDecay
-
-  const peakStart = overlap ? peakPoint : endOfAttack
-  const peakEnd   = overlap ? peakPoint : startOfDecay
-
-  return { startTime, endTime, peakStart, peakEnd }
+    if (distance < bestDistance) {  
+      bestDistance = distance  
+      bestKey = key  
+    }  
+  }  
+  
+  return bestKey  
 }
 
 const scheduleGainEvents = (
@@ -584,40 +618,6 @@ const scheduleGainEvents = (
   gain.setValueAtTime(level!, peakEnd! + runStartTime)
   gain.linearRampToValueAtTime(0, endTime! + runStartTime)
 }
-
-
-const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
-  
-  const { sound, endTime } = hit
-
-  let gainNode: GainNode
-
-  if (isWaveform(sound!)) {
-
-    const oscGain = setUpOscGain(context, hit)
-    gainNode = oscGain.gainNode
-    setTimeout(() => removeOscGain(oscGain), (runStartTime + endTime!) * 1000)
-
-  } else {
-
-    gainNode = setUpGainNode(context)
-    
-    setUpSample(
-      hit,
-      context,
-      runStartTime + hit.startTime!,
-      gainNode
-    )
-  }
-
-  scheduleGainEvents(
-    gainNode,
-    hit,
-    runStartTime
-  )
-}
-
-const isWaveform = (sound: string) => waveforms.includes(sound as string)
 
 
 // test helper
