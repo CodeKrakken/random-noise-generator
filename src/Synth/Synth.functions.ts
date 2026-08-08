@@ -560,7 +560,9 @@ const setUpSample = (
 
   source.start(time)  
   
-  removeSource(sourceGain)
+  source.onended = () => {
+    removeSource(sourceGain)
+  }
 
 }
 
