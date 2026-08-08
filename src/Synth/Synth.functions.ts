@@ -39,9 +39,6 @@ const getContext = (
   return {masterGain, context}  
 }
 
-// runs on improv - picks random values, 
-// schedules next interval
-
 const runInterval = (
 
   voice         : VoiceType, 
@@ -65,17 +62,24 @@ const runInterval = (
       const offsetTime = getRangeValue('Offset', voice) / 100 * intervalLength
       voice.offsetInterval = voice.thisInterval! + offsetTime
 
-
-      recordedHits.push({
+      const hit = {
         sound     : randomOneFrom(voice.activeSounds) as string,
         level     : calculateLevel(voice),
         frequency : randomOneFrom(voice.activeFrequencies),
         detune    : getRangeValue('Detune', voice),
         note      : +randomOneFrom(voice.activeNotes),
         octave    : +randomOneFrom(voice.activeOctaves),
-      })
+      }
 
-      makeSound(voice, intervalLength, context, recordedHits, runStartTime, offsetTime)
+      recordedHits.push(hit)
+
+      const gainNode = setUpSound(voice, intervalLength, context, recordedHits, runStartTime, offsetTime)
+      
+      scheduleGainEvents(
+        gainNode!,
+        hit,
+        runStartTime
+      )
     }
   } 
 
@@ -443,11 +447,7 @@ const isRest = (voice: VoiceType) => {
   return diceRoll < restChance / 100  
 }
 
-// runs on improv - picks random values,
-// sets up oscillator or sample,
-// saves hit to array
-
-const makeSound = (
+const setUpSound = (
 
   voice           : VoiceType, 
   intervalLength  : number, 
@@ -462,16 +462,16 @@ const makeSound = (
     
     const hit = recordedHits[recordedHits.length-1]
     const { sound, note, octave } = hit
+    let gainNode: GainNode
 
     if (waveforms.includes(sound!)) {
 
       const oscGain = setUpOscillator(context, hit)                  
-      shapeNote(oscGain.gainNode, voice, intervalLength, hit, runStartTime)
+      gainNode = oscGain.gainNode
       setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
     
     } else {
     
-
       let bufferKey = sound  
 
       if (
@@ -482,14 +482,41 @@ const makeSound = (
         bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
       }
 
-      const gain = setUpSample(
+      gainNode = setUpSample(
         hit,
         context,
         voice.offsetInterval!
       ) as GainNode
-
-      shapeNote(gain, voice, intervalLength!, hit, runStartTime)
     }
+
+    const noteLength = generateNoteLength(voice, intervalLength)
+
+    const thisInterval = voice.offsetInterval!
+    const attackPercentage = getRangeValue('Attack', voice)
+    const decayPercentage  = getRangeValue('Decay', voice)
+
+    const attackLength = getFadeLength(attackPercentage , noteLength)
+    const decayLength  = getFadeLength(decayPercentage, noteLength)
+
+    const endOfAttack  = thisInterval + attackLength
+    const startOfDecay = thisInterval + noteLength - decayLength
+
+    const peakPoint = (
+      thisInterval + noteLength * attackPercentage / 
+      (attackPercentage + decayPercentage)
+    )
+
+    const overlap   = endOfAttack >= startOfDecay
+    const peakStart = overlap ? peakPoint : endOfAttack
+    const peakEnd   = overlap ? peakPoint : startOfDecay
+    const endTime   = thisInterval + noteLength
+
+    hit.startTime = thisInterval - runStartTime
+    hit.endTime   = endTime - runStartTime
+    hit.peakStart = peakStart - runStartTime
+    hit.peakEnd   = peakEnd - runStartTime
+  
+    return gainNode
 
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error", error)
@@ -610,53 +637,6 @@ const setUpSample = (
   return gain
 }
 
-// runs on improv - randomises gain changes
-
-const shapeNote = (
-
-  gainNode        : GainNode, 
-  voice           : VoiceType, 
-  intervalLength  : number, 
-  hit             : Hit,
-  runStartTime    : number
-
-) => {
-  console.log(hit)
-  console.log(intervalLength)
-
-  const noteLength = generateNoteLength(voice, intervalLength)
-
-  const thisInterval = voice.offsetInterval!
-  const attackPercentage = getRangeValue('Attack', voice)
-  const decayPercentage  = getRangeValue('Decay', voice)
-
-  const attackLength = getFadeLength(attackPercentage , noteLength)
-  const decayLength  = getFadeLength(decayPercentage, noteLength)
-
-  const endOfAttack  = thisInterval + attackLength
-  const startOfDecay = thisInterval + noteLength - decayLength
-
-  const peakPoint = (
-    thisInterval + noteLength * attackPercentage / 
-    (attackPercentage + decayPercentage)
-  )
-
-  const overlap   = endOfAttack >= startOfDecay
-  const peakStart = overlap ? peakPoint : endOfAttack
-  const peakEnd   = overlap ? peakPoint : startOfDecay
-  const endTime   = thisInterval + noteLength
-
-  hit.startTime = thisInterval - runStartTime
-  hit.endTime   = endTime - runStartTime
-  hit.peakStart = peakStart - runStartTime
-  hit.peakEnd   = peakEnd - runStartTime
-
-  scheduleGainEvents(
-    gainNode,
-    hit,
-    runStartTime
-  )
-}
 
 const scheduleGainEvents = (
 
@@ -665,8 +645,10 @@ const scheduleGainEvents = (
   runStartTime: number
 
 ) => {
+  
   const gain = gainNode.gain
   const { startTime, endTime, peakStart, peakEnd, level } = hit
+  
   gain.setValueAtTime(0, startTime! + runStartTime)
   gain.linearRampToValueAtTime(level!, peakStart! + runStartTime)
   gain.setValueAtTime(level!, peakEnd! + runStartTime)
