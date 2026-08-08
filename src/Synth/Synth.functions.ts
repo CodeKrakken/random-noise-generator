@@ -348,7 +348,7 @@ const runInterval = (
       recordedHits.push(hit)
 
       try {
-        voice.sourceGain = setUpOscGain(context, hit)
+              
         playHit(hit, context, runStartTime)
 
       } catch (error) {
@@ -460,7 +460,7 @@ const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
 
 const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-const playHit = (hit: Hit, context: AudioContext, runStartTime: number, sourceGain: any) => {
+const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
   
   const { sound, endTime } = hit
 
@@ -468,8 +468,9 @@ const playHit = (hit: Hit, context: AudioContext, runStartTime: number, sourceGa
 
   if (isWaveform(sound!)) {
 
-    gainNode = sourceGain.gainNode
-    setTimeout(() => removeOscGain(sourceGain), (runStartTime + endTime!) * 1000)
+    const oscGain = setUpOscGain(context, hit)
+    gainNode = oscGain.gainNode
+    setTimeout(() => removeOscGain(oscGain), (runStartTime + endTime!) * 1000)
 
   } else {
 
@@ -495,17 +496,17 @@ const isWaveform = (sound: string) => waveforms.includes(sound as string)
 
 const setUpOscGain = (context: AudioContext, hit: Hit) => {
 
-  const source  = context.createOscillator()
+  const oscillator  = context.createOscillator()
   const gainNode    = setUpGainNode(context)
   const { sound, frequency, detune } = hit
 
-  source.connect(gainNode);
-  source.start(0);
-  source.type = sound as OscillatorType
-  source.frequency.value = frequency as number
-  source.detune.value = detune as number
+  oscillator.connect(gainNode);
+  oscillator.start(0);
+  oscillator.type = sound as OscillatorType
+  oscillator.frequency.value = frequency as number
+  oscillator.detune.value = detune as number
 
-  return {source, gainNode}
+  return {oscillator, gainNode}
 }
 
 const setUpGainNode = (context: AudioContext) => {
