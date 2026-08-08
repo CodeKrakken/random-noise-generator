@@ -39,6 +39,259 @@ const getContext = (
   return {masterGain, context}  
 }
 
+const loadSamples = (context: AudioContext) => {  
+
+  if (samplesLoading) return  Promise.resolve();
+  samplesLoading = true  
+
+  return Promise.all(  
+    Object.entries(samples).map(async ([name, url]) => {  
+
+      try {  
+        const response    = await fetch(url as string)  
+        const arrayBuffer = await response.arrayBuffer()  
+        const decoded     = await context.decodeAudioData(arrayBuffer)  
+
+        const parsed = parseNoteFromKey(name)
+        let detected = null  
+        let nearest
+          
+        if (parsed) {  
+          detected = parsed.frequency  
+          nearest  = parsed  
+        } else {  
+          detected = detectPitch(decoded, context.sampleRate)  
+          nearest  = detected ? findNearestNote(detected) : null  
+        }
+  
+        buffers[name] = {  
+          buffer            : decoded,  
+          detectedFrequency : detected,  
+          nearestFrequency  : nearest?.frequency ?? null,  
+          octave            : nearest?.octave ?? null,  
+          note              : nearest?.note ?? null,  
+        }
+      } catch (e) {  
+
+        console.error('Failed to load sample:', name, e)  
+      }  
+    })  
+  )  
+}
+
+const parseNoteFromKey = (key: string) => {  
+  
+  const match = key.match(/[/_]([A-G][b#]?)(\d+)(?:_|\.|$)/)
+  
+  if (!match) return null  
+
+  const noteName = match[1]  
+  const octave   = parseInt(match[2], 10)  
+  const note     = noteNameToIndex[noteName]  
+
+  if (
+    note === undefined || 
+    octave < 0 || 
+    octave >= allFrequencies.length
+  ) return null  
+
+  return { octave, note, frequency: allFrequencies[octave][note] }  
+}
+
+const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {  
+
+  const data = buffer.getChannelData(0);
+  const size = 4096;
+
+  let startSample = 0;
+
+  for (let i = 0; i < data.length - size; i++) {
+    if (Math.abs(data[i]) > 0.05) {
+      startSample = i;
+      break;
+    }
+  }
+
+  const slice = data.slice(startSample, startSample + size);
+  const halfSize = size / 2  
+  
+  // Compute autocorrelation for all offsets up to halfSize  
+
+  const r0 = slice.slice(0, halfSize).reduce((sum, x) => sum + x * x, 0)  
+  if (r0 === 0) return null  
+  
+  const correlations = []  
+
+  for (let offset = 0; offset < halfSize; offset++) {  
+    let sum = 0  
+    for (let i = 0; i < halfSize; i++) sum += slice[i] * slice[i + offset]  
+    correlations.push(sum / r0)  
+  }  
+  
+  // Find the first zero crossing (autocorrelation goes negative)  
+
+  let firstZeroCrossing = -1  
+  
+  for (let i = 1; i < halfSize; i++) {  
+    if (correlations[i - 1] > 0 && correlations[i] <= 0) {  
+      firstZeroCrossing = i  
+      break  
+    }  
+  }  
+
+  if (firstZeroCrossing === -1) return null  // no zero crossing = no clear pitch  
+  
+  const maxOffset = Math.floor(sampleRate / 27)  // min ~27 Hz, covers full piano range  
+  const searchEnd = Math.min(maxOffset, halfSize - 1)  
+    
+  // Pass 1: find the global max correlation in the search range  
+
+  let globalMax = 0  
+
+  for (let offset = firstZeroCrossing; offset < searchEnd; offset++) {  
+    if (correlations[offset] > globalMax) globalMax = correlations[offset]  
+  }  
+    
+  // Pass 2: find the FIRST local peak above the threshold  
+
+  const threshold = 0.5  // tune between 0.85–0.93 if needed  
+  let bestOffset = -1  
+  let bestCorrelation = 0  
+
+  for (let offset = firstZeroCrossing; offset < searchEnd; offset++) {  
+
+    if (  
+      correlations[offset] > correlations[offset - 1] &&  
+      correlations[offset] > correlations[offset + 1] &&  
+      correlations[offset] >= threshold * globalMax  
+    ) {  
+      bestCorrelation = correlations[offset]  
+      bestOffset = offset  
+      break  // first significant peak = fundamental  
+    }  
+  }
+
+  if (bestOffset !== -1) {
+
+    ({ bestOffset, bestCorrelation } = refineFundamental(
+      correlations,
+      firstZeroCrossing,
+      bestOffset,
+      bestCorrelation
+    ));
+  }  
+
+  return getDetectedFrequency(
+    slice,
+    sampleRate,
+    bestOffset,
+    bestCorrelation
+  );
+}
+
+const refineFundamental = (
+  correlations: number[],
+  firstZeroCrossing: number,
+  bestOffset: number,
+  bestCorrelation: number
+) => {
+
+  const originalCorrelation = bestCorrelation;
+
+  for (const divisor of [2, 3, 4, 5, 6, 7, 8, 10, 12, 16]) {
+
+    const candidateOffset = Math.round(bestOffset / divisor);
+    if (candidateOffset <= firstZeroCrossing) break;
+
+    const c     = correlations[candidateOffset]     ?? -Infinity;
+    const cPrev = correlations[candidateOffset - 1] ?? -Infinity;
+    const cNext = correlations[candidateOffset + 1] ?? -Infinity;
+
+    if (
+      c > cPrev &&
+      c > cNext &&
+      c >= 0.9 * originalCorrelation
+    ) {
+      bestOffset      = candidateOffset;
+      bestCorrelation = c;
+    }
+  }
+
+  return { bestOffset, bestCorrelation };
+};
+
+const getDetectedFrequency = (
+  slice: Float32Array,
+  sampleRate: number,
+  bestOffset: number,
+  bestCorrelation: number
+) => {
+  if (shouldUseFFTFallback(bestOffset, bestCorrelation)) {
+    return detectPitchFFT(slice, sampleRate);
+  }
+
+  return sampleRate / bestOffset;
+};
+
+const shouldUseFFTFallback = (
+  bestOffset: number,
+  bestCorrelation: number
+) => bestOffset === -1 || bestCorrelation < 0.3;
+
+const detectPitchFFT = (slice: Float32Array, sampleRate: number) => {  
+
+  const N = slice.length  
+  let bestFreq = -1  
+  let bestMag = 0  
+  const minBin = Math.floor(27 * N / sampleRate)   // 27 Hz floor  
+  const maxBin = Math.floor(8000 * N / sampleRate) // 8000 Hz ceiling  
+  
+  for (let k = minBin; k < maxBin; k++) {  
+
+    let re = 0, im = 0  
+
+    for (let n = 0; n < N; n++) {  
+
+      const angle = (2 * Math.PI * k * n) / N  
+      re += slice[n] * Math.cos(angle)  
+      im -= slice[n] * Math.sin(angle)  
+    }  
+
+    const mag = Math.sqrt(re * re + im * im)  
+    if (mag > bestMag) { bestMag = mag; bestFreq = k * sampleRate / N }  
+  }  
+  return bestFreq > 0 ? bestFreq : null  
+}
+
+const findNearestNote = (frequency: number) => {  
+
+  let bestOctave = 0  
+  let bestNote = 0  
+  let bestCentsDiff = Infinity  
+  
+  allFrequencies.forEach((octave, octaveIndex) => {  
+    octave.forEach((noteFreq, noteIndex) => {  
+
+      if (noteIndex === 12) return  // skip duplicate boundary note  
+
+      const centsDiff = Math.abs(1200 * Math.log2(frequency / noteFreq))  
+
+      if (centsDiff < bestCentsDiff) {  
+
+        bestCentsDiff = centsDiff  
+        bestOctave    = octaveIndex  
+        bestNote      = noteIndex  
+      }  
+    })  
+  })
+  
+  return {  
+    octave: bestOctave,  
+    note: bestNote,  
+    frequency: allFrequencies[bestOctave][bestNote]  
+  }  
+}
+
 const runInterval = (
 
   voice         : VoiceType, 
@@ -198,218 +451,19 @@ const noteNameToIndex: Record<string, number> = {
   C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
 }  
   
-const parseNoteFromKey = (key: string) => {  
-  
-  const match = key.match(/[/_]([A-G][b#]?)(\d+)(?:_|\.|$)/)
-  
-  if (!match) return null  
 
-  const noteName = match[1]  
-  const octave   = parseInt(match[2], 10)  
-  const note     = noteNameToIndex[noteName]  
 
-  if (
-    note === undefined || 
-    octave < 0 || 
-    octave >= allFrequencies.length
-  ) return null  
 
-  return { octave, note, frequency: allFrequencies[octave][note] }  
-}
 
-const detectPitch = (buffer: AudioBuffer, sampleRate: number) => {  
 
-  const data = buffer.getChannelData(0);
-  const size = 4096;
 
-  let startSample = 0;
 
-  for (let i = 0; i < data.length - size; i++) {
-    if (Math.abs(data[i]) > 0.05) {
-      startSample = i;
-      break;
-    }
-  }
 
-  const slice = data.slice(startSample, startSample + size);
-  const halfSize = size / 2  
-  
-  // Compute autocorrelation for all offsets up to halfSize  
 
-  const r0 = slice.slice(0, halfSize).reduce((sum, x) => sum + x * x, 0)  
-  if (r0 === 0) return null  
-  
-  const correlations = []  
 
-  for (let offset = 0; offset < halfSize; offset++) {  
-    let sum = 0  
-    for (let i = 0; i < halfSize; i++) sum += slice[i] * slice[i + offset]  
-    correlations.push(sum / r0)  
-  }  
-  
-  // Find the first zero crossing (autocorrelation goes negative)  
 
-  let firstZeroCrossing = -1  
-  
-  for (let i = 1; i < halfSize; i++) {  
-    if (correlations[i - 1] > 0 && correlations[i] <= 0) {  
-      firstZeroCrossing = i  
-      break  
-    }  
-  }  
 
-  if (firstZeroCrossing === -1) return null  // no zero crossing = no clear pitch  
-  
-  const maxOffset = Math.floor(sampleRate / 27)  // min ~27 Hz, covers full piano range  
-  const searchEnd = Math.min(maxOffset, halfSize - 1)  
-    
-  // Pass 1: find the global max correlation in the search range  
 
-  let globalMax = 0  
-
-  for (let offset = firstZeroCrossing; offset < searchEnd; offset++) {  
-    if (correlations[offset] > globalMax) globalMax = correlations[offset]  
-  }  
-    
-  // Pass 2: find the FIRST local peak above the threshold  
-
-  const threshold = 0.5  // tune between 0.85–0.93 if needed  
-  let bestOffset = -1  
-  let bestCorrelation = 0  
-
-  for (let offset = firstZeroCrossing; offset < searchEnd; offset++) {  
-
-    if (  
-      correlations[offset] > correlations[offset - 1] &&  
-      correlations[offset] > correlations[offset + 1] &&  
-      correlations[offset] >= threshold * globalMax  
-    ) {  
-      bestCorrelation = correlations[offset]  
-      bestOffset = offset  
-      break  // first significant peak = fundamental  
-    }  
-  }
-
-  if (bestOffset !== -1) {
-
-    ({ bestOffset, bestCorrelation } = refineFundamental(
-      correlations,
-      firstZeroCrossing,
-      bestOffset,
-      bestCorrelation
-    ));
-  }  
-
-  return getDetectedFrequency(
-    slice,
-    sampleRate,
-    bestOffset,
-    bestCorrelation
-  );
-}
-
-const getDetectedFrequency = (
-  slice: Float32Array,
-  sampleRate: number,
-  bestOffset: number,
-  bestCorrelation: number
-) => {
-  if (shouldUseFFTFallback(bestOffset, bestCorrelation)) {
-    return detectPitchFFT(slice, sampleRate);
-  }
-
-  return sampleRate / bestOffset;
-};
-
-const refineFundamental = (
-  correlations: number[],
-  firstZeroCrossing: number,
-  bestOffset: number,
-  bestCorrelation: number
-) => {
-
-  const originalCorrelation = bestCorrelation;
-
-  for (const divisor of [2, 3, 4, 5, 6, 7, 8, 10, 12, 16]) {
-
-    const candidateOffset = Math.round(bestOffset / divisor);
-    if (candidateOffset <= firstZeroCrossing) break;
-
-    const c     = correlations[candidateOffset]     ?? -Infinity;
-    const cPrev = correlations[candidateOffset - 1] ?? -Infinity;
-    const cNext = correlations[candidateOffset + 1] ?? -Infinity;
-
-    if (
-      c > cPrev &&
-      c > cNext &&
-      c >= 0.9 * originalCorrelation
-    ) {
-      bestOffset      = candidateOffset;
-      bestCorrelation = c;
-    }
-  }
-
-  return { bestOffset, bestCorrelation };
-};
-
-const detectPitchFFT = (slice: Float32Array, sampleRate: number) => {  
-
-  const N = slice.length  
-  let bestFreq = -1  
-  let bestMag = 0  
-  const minBin = Math.floor(27 * N / sampleRate)   // 27 Hz floor  
-  const maxBin = Math.floor(8000 * N / sampleRate) // 8000 Hz ceiling  
-  
-  for (let k = minBin; k < maxBin; k++) {  
-
-    let re = 0, im = 0  
-
-    for (let n = 0; n < N; n++) {  
-
-      const angle = (2 * Math.PI * k * n) / N  
-      re += slice[n] * Math.cos(angle)  
-      im -= slice[n] * Math.sin(angle)  
-    }  
-
-    const mag = Math.sqrt(re * re + im * im)  
-    if (mag > bestMag) { bestMag = mag; bestFreq = k * sampleRate / N }  
-  }  
-  return bestFreq > 0 ? bestFreq : null  
-}
-
-const shouldUseFFTFallback = (
-  bestOffset: number,
-  bestCorrelation: number
-) => bestOffset === -1 || bestCorrelation < 0.3;
-
-const findNearestNote = (frequency: number) => {  
-
-  let bestOctave = 0  
-  let bestNote = 0  
-  let bestCentsDiff = Infinity  
-  
-  allFrequencies.forEach((octave, octaveIndex) => {  
-    octave.forEach((noteFreq, noteIndex) => {  
-
-      if (noteIndex === 12) return  // skip duplicate boundary note  
-
-      const centsDiff = Math.abs(1200 * Math.log2(frequency / noteFreq))  
-
-      if (centsDiff < bestCentsDiff) {  
-
-        bestCentsDiff = centsDiff  
-        bestOctave    = octaveIndex  
-        bestNote      = noteIndex  
-      }  
-    })  
-  })
-  
-  return {  
-    octave: bestOctave,  
-    note: bestNote,  
-    frequency: allFrequencies[bestOctave][bestNote]  
-  }  
-}
 
 const findNearestSampleInFolder = ( 
 
@@ -444,45 +498,7 @@ const findNearestSampleInFolder = (
   return bestKey  
 }
   
-const loadSamples = (context: AudioContext) => {  
 
-  if (samplesLoading) return  Promise.resolve();
-  samplesLoading = true  
-
-  return Promise.all(  
-    Object.entries(samples).map(async ([name, url]) => {  
-
-      try {  
-        const response    = await fetch(url as string)  
-        const arrayBuffer = await response.arrayBuffer()  
-        const decoded     = await context.decodeAudioData(arrayBuffer)  
-
-        const parsed = parseNoteFromKey(name)
-        let detected = null  
-        let nearest
-          
-        if (parsed) {  
-          detected = parsed.frequency  
-          nearest  = parsed  
-        } else {  
-          detected = detectPitch(decoded, context.sampleRate)  
-          nearest  = detected ? findNearestNote(detected) : null  
-        }
-  
-        buffers[name] = {  
-          buffer            : decoded,  
-          detectedFrequency : detected,  
-          nearestFrequency  : nearest?.frequency ?? null,  
-          octave            : nearest?.octave ?? null,  
-          note              : nearest?.note ?? null,  
-        }
-      } catch (e) {  
-
-        console.error('Failed to load sample:', name, e)  
-      }  
-    })  
-  )  
-}
 
 
 const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
@@ -503,82 +519,6 @@ const isRest = (voice: VoiceType) => {
   const diceRoll = Math.random()  
 
   return diceRoll < restChance / 100  
-}
-
-const setUpSound = (
-
-  voice           : VoiceType, 
-  intervalLength  : number, 
-  context         : AudioContext,
-  recordedHits    : Hit[],
-  runStartTime    : number,
-  offsetTime      : number
-
-) => {
-
-  try {
-    
-    const hit = recordedHits[recordedHits.length-1]
-    const { sound, note, octave } = hit
-    let gainNode: GainNode
-
-    if (waveforms.includes(sound!)) {
-
-      const oscGain = setUpOscillator(context, hit)                  
-      gainNode = oscGain.gainNode
-      setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
-    
-    } else {
-    
-      let bufferKey = sound  
-
-      if (
-        sampleFolders[sound!] &&
-        note !== null && 
-        octave !== null
-      ) {  
-        bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
-      }
-
-      gainNode = setUpSample(
-        hit,
-        context,
-        voice.offsetInterval!
-      ) as GainNode
-    }
-
-    const noteLength = generateNoteLength(voice, intervalLength)
-
-    const thisInterval = voice.offsetInterval!
-    const attackPercentage = getRangeValue('Attack', voice)
-    const decayPercentage  = getRangeValue('Decay', voice)
-
-    const attackLength = getFadeLength(attackPercentage , noteLength)
-    const decayLength  = getFadeLength(decayPercentage, noteLength)
-
-    const endOfAttack  = thisInterval + attackLength
-    const startOfDecay = thisInterval + noteLength - decayLength
-
-    const peakPoint = (
-      thisInterval + noteLength * attackPercentage / 
-      (attackPercentage + decayPercentage)
-    )
-
-    const overlap   = endOfAttack >= startOfDecay
-    const peakStart = overlap ? peakPoint : endOfAttack
-    const peakEnd   = overlap ? peakPoint : startOfDecay
-    const endTime   = thisInterval + noteLength
-
-    hit.startTime = thisInterval - runStartTime
-    hit.endTime   = endTime - runStartTime
-    hit.peakStart = peakStart - runStartTime
-    hit.peakEnd   = peakEnd - runStartTime
-  
-    return gainNode
-
-  } catch (error) {
-    console.error(error instanceof Error ? error.message : "Unknown error", error)
-  }            
 }
 
 const setUpOscillator = (context: AudioContext, hit: Hit) => {
@@ -605,61 +545,6 @@ const removeOscillator = (oscGain: OscGain) => {
   oscillator.disconnect()
   gainNode.disconnect()
 }
-
-// const playSample = (  
-
-//   name          : string,  
-//   level         : number,  
-//   context       : AudioContext,  
-//   time          : number,  
-//   hitToPopulate : Hit,
-//   voice         : VoiceType,
-// ) => {  
-  
-//   let targetNote      : number | null = null  
-//   let targetOctave    : number | null = null
-//   let targetInterval  : number | null = null  
-  
-//   if (
-//     voice.activeNotes.length > 0 && 
-//     voice.activeOctaves.length > 0 && 
-//     voice.activeIntervals.length > 0
-//   ) {  
-//     targetNote     = +randomOneFrom(voice.activeNotes)  
-//     targetOctave   = +randomOneFrom(voice.activeOctaves)  
-//     targetInterval = +randomOneFrom(voice.activeIntervals)
-//   }
-  
-    
-//   // Resolve which buffer to actually play  
-
-//   let bufferKey = name  
-
-//   if (
-//     sampleFolders[name] &&
-//     targetNote !== null && 
-//     targetOctave !== null
-//   ) {  
-//     bufferKey = findNearestSampleInFolder(name, targetOctave, targetNote) ?? name  
-//   }
-
-//   const detune = getRangeValue('Detune', voice!)
- 
-//   const gain = setUpSample(
-//     bufferKey,
-//     context,
-//     detune,
-//     targetNote!,
-//     targetOctave!,
-//     time
-//   ) as GainNode
-
-//   shapeNote(gain, voice, targetInterval!, level, hitToPopulate)
-  
-//   hitToPopulate!.note = targetNote
-//   hitToPopulate!.octave = targetOctave
-//   hitToPopulate!.detune = detune  
-// }
 
 const setUpSample = (
   hit: Hit,
