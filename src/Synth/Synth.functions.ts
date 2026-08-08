@@ -73,13 +73,72 @@ const runInterval = (
 
       recordedHits.push(hit)
 
-      const gainNode = setUpSound(voice, intervalLength, context, recordedHits, runStartTime, offsetTime)
+      try {
+        
+        const hit = recordedHits[recordedHits.length-1]
+        const { sound, note, octave } = hit
+        let gainNode: GainNode
+
+        if (waveforms.includes(sound!)) {
+
+          const oscGain = setUpOscillator(context, hit)                  
+          gainNode = oscGain.gainNode
+          setTimeout(() => removeOscillator(oscGain), (intervalLength+offsetTime)*1000)
+        
+        } else {
+        
+          let bufferKey = sound  
+
+          if (
+            sampleFolders[sound!] &&
+            note !== null && 
+            octave !== null
+          ) {  
+            bufferKey = findNearestSampleInFolder(sound!, octave!, note!) ?? sound  
+          }
+
+          gainNode = setUpSample(
+            hit,
+            context,
+            voice.offsetInterval!
+          ) as GainNode
+        }
+
+        const noteLength = generateNoteLength(voice, intervalLength)
+
+        const thisInterval = voice.offsetInterval!
+        const attackPercentage = getRangeValue('Attack', voice)
+        const decayPercentage  = getRangeValue('Decay', voice)
+
+        const attackLength = getFadeLength(attackPercentage , noteLength)
+        const decayLength  = getFadeLength(decayPercentage, noteLength)
+
+        const endOfAttack  = thisInterval + attackLength
+        const startOfDecay = thisInterval + noteLength - decayLength
+
+        const peakPoint = (
+          thisInterval + noteLength * attackPercentage / 
+          (attackPercentage + decayPercentage)
+        )
+
+        const overlap   = endOfAttack >= startOfDecay
+        const peakStart = overlap ? peakPoint : endOfAttack
+        const peakEnd   = overlap ? peakPoint : startOfDecay
+        const endTime   = thisInterval + noteLength
+
+        hit.startTime = thisInterval - runStartTime
+        hit.endTime   = endTime - runStartTime
+        hit.peakStart = peakStart - runStartTime
+        hit.peakEnd   = peakEnd - runStartTime
       
-      scheduleGainEvents(
-        gainNode!,
-        hit,
-        runStartTime
-      )
+        scheduleGainEvents(
+          gainNode!,
+          hit,
+          runStartTime
+        )
+      } catch (error) {
+        console.error(error instanceof Error ? error.message : "Unknown error", error)
+      }            
     }
   } 
 
@@ -91,7 +150,6 @@ const runInterval = (
 }
 
 const playBack = (hitToPlay: Hit, context: AudioContext, runStartTime: number) => {
-
   
   let gainNode: GainNode
 
