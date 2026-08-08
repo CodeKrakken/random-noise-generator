@@ -471,7 +471,6 @@ const makeSound = (
     
     } else {
     
-      const interval = +randomOneFrom(voice.activeIntervals)
 
       let bufferKey = sound  
 
@@ -486,10 +485,10 @@ const makeSound = (
       const gain = setUpSample(
         hit,
         context,
-        voice.offsetInterval
+        voice.offsetInterval!
       ) as GainNode
 
-      shapeNote(gain, voice, interval!, hit, runStartTime)
+      shapeNote(gain, voice, intervalLength!, hit, runStartTime)
     }
 
   } catch (error) {
@@ -622,7 +621,9 @@ const shapeNote = (
   runStartTime    : number
 
 ) => {
-  
+  console.log(hit)
+  console.log(intervalLength)
+
   const noteLength = generateNoteLength(voice, intervalLength)
 
   const thisInterval = voice.offsetInterval!
@@ -666,7 +667,6 @@ const scheduleGainEvents = (
 ) => {
   const gain = gainNode.gain
   const { startTime, endTime, peakStart, peakEnd, level } = hit
-  console.log('Scheduling gain events for hit:', hit)
   gain.setValueAtTime(0, startTime! + runStartTime)
   gain.linearRampToValueAtTime(level!, peakStart! + runStartTime)
   gain.setValueAtTime(level!, peakEnd! + runStartTime)
