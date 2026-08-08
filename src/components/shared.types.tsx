@@ -61,6 +61,7 @@ type VoiceType = {
   maxAttack         : number
   minDecay          : number
   maxDecay          : number
+  sourceGain?       : any
 }
 
 export type {

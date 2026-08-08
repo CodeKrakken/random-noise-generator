@@ -61,6 +61,8 @@ export const Synth = {
 
     Synth.voices.forEach(voice => {
       voice.isActive = false;
+      voice.sourceGain.source.disconnect()
+      voice.sourceGain.gainNode.disconnect()  
     })
   },
 
