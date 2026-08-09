@@ -10,8 +10,9 @@ const Timeline = ({ hits }: TimelineProps) => {
   const pixelsPerSecond = 100
   const pixelsPerNote = 12
   const timelineSeconds = 60
+  const pianoWidth = 60
 
-  const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
+  const frequencies = Array.from(new Set(allFrequencies.flat()))
 
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
@@ -29,83 +30,141 @@ const Timeline = ({ hits }: TimelineProps) => {
         closestDifference = difference
         closestIndex = index
       }
+
     })
 
-    return closestIndex * pixelsPerNote
+    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
+  }
+
+  const getNoteName = (index: number) => {
+
+    const noteNames = [
+      'C', 'C#', 'D', 'D#', 'E', 'F',
+      'F#', 'G', 'G#', 'A', 'A#', 'B'
+    ]
+
+    return noteNames[index % 12]
   }
 
   return (
     <div
-      id="timeline"
+      className="timeline-container"
       style={{
-        position: 'relative',
-        width,
+        display: 'flex',
         height,
-        overflow: 'hidden',
+        overflow: 'auto'
       }}
     >
 
-      {/* 132-note grid */}
+      {/* Piano roll */}
 
-      {frequencies.map((frequency, index) => (
+      <div
+        className="piano-roll"
+        style={{
+          position: 'relative',
+          width: pianoWidth,
+          minWidth: pianoWidth,
+          height
+        }}
+      >
 
-        <div
-          key={frequency}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: index * pixelsPerNote,
-            width: '100%',
-            height: pixelsPerNote,
-            borderBottom: '1px dotted #383838',
-            boxSizing: 'border-box',
-          }}
-        />
+        {frequencies.map((frequency, index) => {
 
-      ))}
+          const isBlack =
+            getNoteName(index).includes('#')
 
-      {/* Recorded notes */}
-
-      {hits.map((hit, index) => {
-
-        if (
-          hit.startTime === undefined ||
-          hit.endTime === undefined ||
-          hit.frequency === undefined
-        ) {
-          return null
-        }
-
-        const left =
-          hit.startTime * pixelsPerSecond
-
-        const width =
-          Math.max(
-            (hit.endTime - hit.startTime) *
-            pixelsPerSecond,
-            3
+          return (
+            <div
+              key={frequency}
+              style={{
+                position: 'absolute',
+                top: (frequencies.length - 1 - index) * pixelsPerNote,
+                left: 0,
+                width: isBlack ? '65%' : '100%',
+                height: pixelsPerNote,
+                background: isBlack ? '#222' : '#fff',
+                border: '1px solid #333',
+                boxSizing: 'border-box',
+                color: isBlack ? '#fff' : '#222',
+                fontSize: 8,
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft: 3,
+                zIndex: isBlack ? 2 : 1
+              }}
+            >
+              {!isBlack && getNoteName(index)}
+            </div>
           )
 
-        const top =
-          frequencyToPixels(hit.frequency)
+        })}
 
-        return (
+      </div>
+
+      {/* Timeline */}
+
+      <div
+        className="timeline"
+        style={{
+          position: 'relative',
+          width,
+          minWidth: width,
+          height
+        }}
+      >
+
+        {/* Grid */}
+
+        {frequencies.map((frequency, index) => (
           <div
-            key={index}
+            key={frequency}
             style={{
               position: 'absolute',
-              left,
-              top: top + 1,
-              width,
-              height: pixelsPerNote - 2,
-              background: 'red',
-              borderRadius: 2,
-              zIndex: 1
+              left: 0,
+              top: index * pixelsPerNote,
+              width: '100%',
+              height: pixelsPerNote,
+              borderBottom: '1px solid #ddd',
+              boxSizing: 'border-box'
             }}
           />
-        )
+        ))}
 
-      })}
+        {/* Notes */}
+
+        {hits.map((hit, index) => {
+
+          if (
+            hit.startTime === undefined ||
+            hit.endTime === undefined ||
+            hit.frequency === undefined
+          ) {
+            return null
+          }
+
+          return (
+            <div
+              key={index}
+              style={{
+                position: 'absolute',
+                left: hit.startTime * pixelsPerSecond,
+                top: frequencyToPixels(hit.frequency) + 1,
+                width: Math.max(
+                  (hit.endTime - hit.startTime) *
+                  pixelsPerSecond,
+                  3
+                ),
+                height: pixelsPerNote - 2,
+                background: 'red',
+                borderRadius: 2,
+                zIndex: 10
+              }}
+            />
+          )
+
+        })}
+
+      </div>
 
     </div>
   )
