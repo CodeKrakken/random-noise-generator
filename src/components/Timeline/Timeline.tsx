@@ -11,7 +11,7 @@ const Timeline = ({ hits }: TimelineProps) => {
   const pixelsPerNote = 12
   const timelineSeconds = 60
 
-  const frequencies = Array.from(new Set(allFrequencies.flat()))
+  const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
 
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
@@ -36,12 +36,12 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   return (
     <div
-      className="timeline"
+      id="timeline"
       style={{
         position: 'relative',
         width,
         height,
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
 
@@ -57,8 +57,8 @@ const Timeline = ({ hits }: TimelineProps) => {
             top: index * pixelsPerNote,
             width: '100%',
             height: pixelsPerNote,
-            borderBottom: '1px solid #ddd',
-            boxSizing: 'border-box'
+            borderBottom: '1px dotted #383838',
+            boxSizing: 'border-box',
           }}
         />
 
@@ -100,7 +100,7 @@ const Timeline = ({ hits }: TimelineProps) => {
               height: pixelsPerNote - 2,
               background: 'red',
               borderRadius: 2,
-              zIndex: 10
+              zIndex: 1
             }}
           />
         )
