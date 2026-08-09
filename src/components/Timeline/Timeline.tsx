@@ -1,3 +1,4 @@
+import { allFrequencies } from '../../content/data'
 import { Hit } from '../../Synth/Synth.types'
 
 type TimelineProps = {
@@ -32,8 +33,9 @@ const Timeline = ({ hits }: TimelineProps) => {
   const lowestPitch = Math.floor(Math.min(...pitches))
 
   const width = maxTime * pixelsPerSecond
-  const height =
-    (highestPitch - lowestPitch + 1) * pixelsPerSemitone
+  const height = Array.from(
+    new Set(allFrequencies.flat())
+  ).length * pixelsPerSemitone
 
   const timeToPixels = (time: number) =>
     time * pixelsPerSecond
