@@ -23,7 +23,7 @@ export default function Piano ({
   const keys = [
     ...whiteKeys, 
     ...blackKeys
-  ].sort((a, b) => +a - +b)
+  ].sort((a, b) => +b - +a)
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     updateButton(e, 'activeNotes', voices, i, setVoices)

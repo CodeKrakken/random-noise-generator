@@ -6,7 +6,6 @@ body {
 
 button {
   border: calc(var(--u) * 0.025) solid black;
-  /* box-sizing: border-box;   */
 }
 
 .section {
@@ -15,18 +14,8 @@ button {
 
 :root {
   --u: 40px;
-
-  /* --name-w: calc(var(--u) * 2); */
   --slider-w: calc(var(--u) * 4);
   --label-w: calc(var(--u) * 1.5);
-
-  /* --notes-w: calc(var(--u) * 9); */
-  /* --octaves-w: calc(var(--u) * 9); */
-
-  /* --sounds-w: calc(var(--u) * 5); */
-  /* --intervals-w: calc(var(--u) * 4); */
-
-  /* --line: 1px; */
 }
 
 #voice {
@@ -35,7 +24,6 @@ button {
   font-size: calc(var(--u) * 0.35);
   padding: calc(var(--u) * 0.125);
   border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
-  /* box-sizing: border-box;   */
   text-align: center;
 }
 
@@ -52,10 +40,6 @@ button {
   display: flex;
   flex-direction: column;
 }
-
-
-/* row 1 */
-
 
 .range-slider__thumb::after {  
   content: attr(data-label);  
@@ -203,9 +187,6 @@ button:disabled {
   margin-bottom: calc(var(--u) * (-0.2));
 
   z-index: 1;
-
-  position: relative;
-  left: 40%
 }
 
 .active {
