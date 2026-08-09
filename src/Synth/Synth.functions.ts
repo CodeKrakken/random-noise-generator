@@ -454,9 +454,14 @@ const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
 
 const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
-const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
-  
-  const { sound, endTime } = hit
+const playHit = (
+  hit: Hit,
+  context: AudioContext,
+  runStartTime: number,
+  onFinished?: () => void
+) => {
+
+  const { sound } = hit
 
   let gainNode: GainNode
 
@@ -464,25 +469,26 @@ const playHit = (hit: Hit, context: AudioContext, runStartTime: number) => {
 
     hit.source = setUpSource(context, hit)
     gainNode = hit.source.gainNode
-    setTimeout(() => removeSource(hit.source!), (runStartTime + endTime!) * 1000)
+
+    hit.source.source.onended = () => {
+      removeSource(hit.source!)
+      onFinished?.()
+    }
 
   } else {
 
     gainNode = setUpGainNode(context)
-    
+
     setUpSample(
       hit,
       context,
       runStartTime + hit.startTime!,
-      gainNode
+      gainNode,
+      onFinished
     )
   }
 
-  scheduleGainEvents(
-    gainNode,
-    hit,
-    runStartTime
-  )
+  scheduleGainEvents(gainNode, hit, runStartTime)
 }
 
 const isWaveform = (sound: string) => waveforms.includes(sound as string)
@@ -492,14 +498,14 @@ const setUpSource = (context: AudioContext, hit: Hit) => {
 
   const source  = context.createOscillator()
   const gainNode    = setUpGainNode(context)
-  const { sound, frequency, detune } = hit
+  const { sound, frequency, detune, endTime, startTime } = hit
 
   source.connect(gainNode);
   source.start(0);
   source.type = sound as OscillatorType
   source.frequency.value = frequency as number
   source.detune.value = detune as number
-
+  source.stop((endTime! - startTime!) * 1000)
   return {source, gainNode}
 }
 
@@ -524,7 +530,8 @@ const setUpSample = (
   hit: Hit,
   context: AudioContext,
   time: number,
-  gainNode: GainNode
+  gainNode: GainNode,
+  onFinished?: () => void
 ) => {
 
   const { detune, note, octave } = hit
@@ -558,10 +565,13 @@ const setUpSample = (
 
   hit.source = sourceGain
 
-  source.start(time)  
+  source.start(time)
+  source.stop((hit.endTime! - hit.startTime!) * 1000)  
   
   source.onended = () => {
-    removeSource(sourceGain)
+    source.disconnect()
+    gainNode.disconnect()
+    onFinished?.()
   }
 
 }

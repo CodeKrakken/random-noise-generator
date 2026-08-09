@@ -64,17 +64,27 @@ export const Synth = {
     })
   },
 
-  replay: (setReplaying: React.Dispatch<React.SetStateAction<boolean>>) => { 
+  replay: (setReplaying: React.Dispatch<React.SetStateAction<boolean>>) => {
 
-    const context = setup.context
+    const context = setup.context!
+    const runStartTime = context.currentTime
 
-    runStartTime = context!.currentTime
+    const finalHit = Synth.recordedHits.reduce(
+      (latest, hit) =>
+        (hit.endTime ?? 0) > (latest.endTime ?? 0) ? hit : latest
+    )
 
     Synth.recordedHits.forEach(hit => {
       setup.masterGain!.gain.setValueAtTime(1, 0)
-      playHit(hit, context as AudioContext, runStartTime)
-    })
-    setTimeout(() => setReplaying(false), Math.max(...Synth.recordedHits.map((hit: Hit) => hit.endTime as number)) * 1000)
-  },
 
+      playHit(
+        hit,
+        context,
+        runStartTime,
+        hit === finalHit
+          ? () => setReplaying(false)
+          : undefined
+      )
+    })
+  }
 }
