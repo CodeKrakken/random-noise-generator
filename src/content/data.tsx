@@ -144,7 +144,7 @@ const buttonGroups = [
     ],
     id: "sounds",
     className: "right", 
-    columns: 5,
+    columns: 4,
     component: ButtonGrid
   }
 ]

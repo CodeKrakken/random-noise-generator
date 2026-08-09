@@ -1,3 +1,9 @@
+:root {
+  --u: 40px;
+  --slider-w: calc(var(--u) * 4);
+  --label-w: calc(var(--u) * 1.5);
+}
+
 body {
   background-color: black;
   color: white;
@@ -10,12 +16,6 @@ button {
 
 .section {
   margin: calc(var(--u) * 0.125)
-}
-
-:root {
-  --u: 40px;
-  --slider-w: calc(var(--u) * 4);
-  --label-w: calc(var(--u) * 1.5);
 }
 
 #voice {

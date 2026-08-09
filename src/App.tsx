@@ -172,7 +172,7 @@ function App() {
     </div>
 
     <div className="section">
-      <Timeline />
+      <Timeline hits={Synth.recordedHits} />
     </div>
   </>
 }
