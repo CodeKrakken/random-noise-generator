@@ -309,13 +309,15 @@ const findNearestNote = (frequency: number) => {
 
 const runInterval = (
 
-  voice         : VoiceType, 
-  voicesRef     : VoicesRef, 
-  context       : AudioContext,
-  recordedHits  : Hit[],
-  runStartTime  : number
-
+  voice           : VoiceType, 
+  voicesRef       : VoicesRef, 
+  context         : AudioContext,
+  recordedHits    : Hit[],
+  runStartTime    : number,
+  setRecordedHits : Function
 ) => {
+
+  console.log('setter:', setRecordedHits)
 
   const { nextInterval, activeSounds, activeFrequencies, activeNotes, activeOctaves } = voice
 
@@ -337,9 +339,7 @@ const runInterval = (
         note      : +randomOneFrom(activeNotes),
         octave    : +randomOneFrom(activeOctaves),
         ...getGainEvents(voice, intervalLength, runStartTime)
-      }
-
-      recordedHits.push(hit)
+      }      
 
       try {
               
@@ -347,14 +347,20 @@ const runInterval = (
 
       } catch (error) {
         console.error(error instanceof Error ? error.message : "Unknown error", error)
-      }            
-    }
+      }         
+      
+      recordedHits.push(hit)
+      console.log('hits:', recordedHits.length)
+      setRecordedHits?.([...recordedHits])
+    }    
   } 
 
   if (!voice.isActive) return
 
+  
+
   setTimeout(() => {
-    runInterval(voice, voicesRef, context, recordedHits, runStartTime)
+    runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
   }, (voice.nextInterval - context.currentTime)*1000)    
 }
 

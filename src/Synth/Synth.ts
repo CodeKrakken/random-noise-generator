@@ -2,6 +2,7 @@ import { VoiceType }                        from '../components/shared.types'
 import { Hit, VoicesRef }                   from './Synth.types'
 import { getContext, runInterval, playHit, removeSource } from './Synth.functions'
 import { demoVoices }                       from '../content/data'
+import { Dispatch, SetStateAction } from 'react'
 
 let setup: {
   context: AudioContext | undefined
@@ -19,6 +20,8 @@ export const Synth = {
 
   recordedHits: [] as Hit[],
 
+  setRecordedHits: undefined as Dispatch<SetStateAction<Hit[]>> | undefined,
+
   resumeContext: () => setup = getContext(setup),
 
   add: (
@@ -31,7 +34,7 @@ export const Synth = {
 
     if (running) {
       voice.isActive = true
-      runInterval(voice, voicesRef, setup.context as AudioContext, Synth.recordedHits, runStartTime)
+      runInterval(voice, voicesRef, setup.context as AudioContext, Synth.recordedHits, runStartTime, Synth.setRecordedHits!)
     }
   },
 
@@ -52,7 +55,7 @@ export const Synth = {
       voice.nextInterval = context.currentTime
       voice.isActive = true
 
-      runInterval(voice, voicesRef, context, Synth.recordedHits, runStartTime)
+      runInterval(voice, voicesRef, context, Synth.recordedHits, runStartTime, Synth.setRecordedHits!)
     })
   },
 
@@ -86,5 +89,5 @@ export const Synth = {
           : undefined
       )
     })
-  }
+  },
 }

@@ -1,5 +1,5 @@
-import { allFrequencies } from '../../content/data'
 import { Hit } from '../../Synth/Synth.types'
+import { allFrequencies } from '../../content/data'
 
 type TimelineProps = {
   hits: Hit[]
@@ -8,43 +8,30 @@ type TimelineProps = {
 const Timeline = ({ hits }: TimelineProps) => {
 
   const pixelsPerSecond = 100
-  const pixelsPerSemitone = 12
+  const pixelsPerNote = 12
+  const timelineSeconds = 60
 
-  const validHits = hits.filter(
-    hit =>
-      hit.startTime !== undefined &&
-      hit.endTime !== undefined &&
-      hit.frequency !== undefined
-  )
+  const frequencies = Array.from(new Set(allFrequencies.flat()))
 
-  if (!validHits.length) {
-    return <div className="timeline" />
-  }
-
-  const maxTime = Math.max(
-    ...validHits.map(hit => hit.endTime!)
-  )
-
-  const pitches = validHits.map(
-    hit => 69 + 12 * Math.log2(hit.frequency! / 440)
-  )
-
-  const highestPitch = Math.ceil(Math.max(...pitches))
-  const lowestPitch = Math.floor(Math.min(...pitches))
-
-  const width = maxTime * pixelsPerSecond
-  const height = Array.from(
-    new Set(allFrequencies.flat())
-  ).length * pixelsPerSemitone
-
-  const timeToPixels = (time: number) =>
-    time * pixelsPerSecond
+  const width = timelineSeconds * pixelsPerSecond
+  const height = frequencies.length * pixelsPerNote
 
   const frequencyToPixels = (frequency: number) => {
 
-    const midi = 69 + 12 * Math.log2(frequency / 440)
+    let closestIndex = 0
+    let closestDifference = Infinity
 
-    return (highestPitch - midi) * pixelsPerSemitone
+    frequencies.forEach((noteFrequency, index) => {
+
+      const difference = Math.abs(noteFrequency - frequency)
+
+      if (difference < closestDifference) {
+        closestDifference = difference
+        closestIndex = index
+      }
+    })
+
+    return closestIndex * pixelsPerNote
   }
 
   return (
@@ -53,54 +40,71 @@ const Timeline = ({ hits }: TimelineProps) => {
       style={{
         position: 'relative',
         width,
-        height
+        height,
+        overflow: 'hidden'
       }}
     >
 
-      {Array.from(
-        { length: highestPitch - lowestPitch + 1 },
-        (_, i) => {
+      {/* 132-note grid */}
 
-          const midi = highestPitch - i
+      {frequencies.map((frequency, index) => (
 
-          return (
-            <div
-              key={midi}
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                top: i * pixelsPerSemitone,
-                height: pixelsPerSemitone,
-                borderBottom: '1px solid #ddd'
-              }}
-            />
-          )
+        <div
+          key={frequency}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: index * pixelsPerNote,
+            width: '100%',
+            height: pixelsPerNote,
+            borderBottom: '1px solid #ddd',
+            boxSizing: 'border-box'
+          }}
+        />
+
+      ))}
+
+      {/* Recorded notes */}
+
+      {hits.map((hit, index) => {
+
+        if (
+          hit.startTime === undefined ||
+          hit.endTime === undefined ||
+          hit.frequency === undefined
+        ) {
+          return null
         }
-      )}
 
-      {validHits.map((hit, i) => {
+        const left =
+          hit.startTime * pixelsPerSecond
 
-        const left = timeToPixels(hit.startTime!)
-        const width = timeToPixels(
-          hit.endTime! - hit.startTime!
-        )
-        const top = frequencyToPixels(hit.frequency!)
+        const width =
+          Math.max(
+            (hit.endTime - hit.startTime) *
+            pixelsPerSecond,
+            3
+          )
+
+        const top =
+          frequencyToPixels(hit.frequency)
 
         return (
           <div
-            key={i}
+            key={index}
             style={{
               position: 'absolute',
               left,
-              top,
-              width: Math.max(width, 3),
-              height: pixelsPerSemitone - 2,
-              background: '#333',
-              borderRadius: 2
+              top: top + 1,
+              width,
+              height: pixelsPerNote - 2,
+              background: 'red',
+              borderRadius: 2,
+              zIndex: 10
             }}
           />
         )
+
       })}
 
     </div>

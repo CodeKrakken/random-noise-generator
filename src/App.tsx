@@ -6,6 +6,7 @@ import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
 import Timeline from './components/Timeline/Timeline';
+import { Hit } from './Synth/Synth.types';
 
 function App() {
 
@@ -16,7 +17,11 @@ function App() {
   const [voices,           setVoices] = useState<VoiceType[]>(demoVoices)
   const [improvising, setImprovising] = useState<boolean>(false)
   const [replaying,     setReplaying] = useState<boolean>(false)
+  const [recordedHits, setRecordedHits] = useState<Hit[]>([])
 
+  useEffect(() => {
+    Synth.setRecordedHits = setRecordedHits
+  }, [])
 
   const improvisingRef = useRef(improvising)
   const voicesRef = useRef(voices)
@@ -172,7 +177,7 @@ function App() {
     </div>
 
     <div className="section">
-      <Timeline hits={Synth.recordedHits} />
+      <Timeline hits={recordedHits} />    
     </div>
   </>
 }
