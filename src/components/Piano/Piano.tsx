@@ -11,32 +11,35 @@ export default function Piano ({
 
 } : {
   
-  voices      : VoiceType[]
-  i           : number
-  handleClick : React.MouseEventHandler<HTMLButtonElement>
-  keys        : string[]
+  voices?       : VoiceType[]
+  i?            : number
+  handleClick?  : React.MouseEventHandler<HTMLButtonElement>
+  keys          :  number[]
 
 }) {
 
-  const voice = voices[i]
+
+
+  let voice: VoiceType
+
+  if (voices) voice = voices[i!]
 
   const getNoteName = (index: number) => {
-
     const noteNames = Object.keys(noteNameToIndex)
-
-    return noteNames[index % 12]
+    const noteName = noteNames[index % 12]
+    return noteName
   }
 
-
+  const reversedKeys = keys.sort((a, b) => b - a)
   
   return (
     <div className="parent">
       <div className="button-grid piano">
         {
-          keys.map((key, i) => {
-
+          reversedKeys.map((key, i) => {
+            console.log(key)
             const colour = getNoteName(i).includes('b') ? 'black' : 'white'
-            const active = voice.activeNotes.includes(key) ? 'active' : ''
+            const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
             const checked = Boolean(active)
 
             const props = {
@@ -46,7 +49,7 @@ export default function Piano ({
               onClick   : handleClick,
               id        : `voice-${i}-note-${key}`
             };
-
+            
             return <button {...props} key={key} />
           })
         }

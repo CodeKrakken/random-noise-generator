@@ -313,8 +313,6 @@ const runInterval = (
   setRecordedHits : Function
 ) => {
 
-  console.log('setter:', setRecordedHits)
-
   const { nextInterval, activeSounds, activeFrequencies, activeNotes, activeOctaves } = voice
 
   voice.thisInterval = nextInterval
@@ -346,7 +344,6 @@ const runInterval = (
       }         
       
       recordedHits.push(hit)
-      console.log('hits:', recordedHits.length)
       setRecordedHits?.([...recordedHits])
     }    
   } 

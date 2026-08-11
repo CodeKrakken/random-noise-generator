@@ -1,5 +1,5 @@
 import ButtonGrid from "../components/ButtonGrid/ButtonGrid";
-import VoicePiano      from "../components/VoicePiano/VoicePiano";
+import VoicePiano from "../components/VoicePiano/VoicePiano";
 
 
 // Load images

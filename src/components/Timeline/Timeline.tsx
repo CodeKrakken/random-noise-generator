@@ -1,5 +1,6 @@
 import { Hit } from '../../Synth/Synth.types'
 import { allFrequencies, noteNameToIndex } from '../../content/data'
+import Piano from '../Piano/Piano'
 
 type TimelineProps = {
   hits: Hit[]
@@ -31,7 +32,7 @@ const Timeline = ({ hits }: TimelineProps) => {
       }
     })
 
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
+    return String((frequencies.length - 1 - closestIndex) * pixelsPerNote)
   }
 
   const getNoteName = (index: number) => {
@@ -50,43 +51,9 @@ const Timeline = ({ hits }: TimelineProps) => {
         overflow: 'auto'
       }}
     >
-
-      {/* VoicePiano roll */}
-
-      <div id="timeline-piano">
-
-        {frequencies.map((frequency, index) => {
-
-          const isBlack =
-            getNoteName(index).includes('b')
-
-          return (
-            <div
-              key={frequency}
-              style={{
-                position: 'absolute',
-                top: (frequencies.length - 1 - index) * pixelsPerNote,
-                left: 0,
-                width: isBlack ? '65%' : '100%',
-                height: pixelsPerNote,
-                background: isBlack ? '#222' : '#fff',
-                border: '1px solid #333',
-                boxSizing: 'border-box',
-                color: isBlack ? '#fff' : '#222',
-                fontSize: 8,
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: 3,
-                zIndex: isBlack ? 2 : 1
-              }}
-            >
-              {!isBlack && getNoteName(index)}
-            </div>
-          )
-
-        })}
-
-      </div>
+      <Piano
+        keys={frequencies}
+      />
 
       {/* Timeline */}
 
