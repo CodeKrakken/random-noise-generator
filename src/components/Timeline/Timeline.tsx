@@ -51,7 +51,7 @@ const Timeline = ({ hits }: TimelineProps) => {
       }}
     >
 
-      {/* Piano roll */}
+      {/* VoicePiano roll */}
 
       <div id="timeline-piano">
 

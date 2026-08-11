@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';  
-import Piano from './Piano'
+import Piano from './VoicePiano'
 import * as shared from '../shared.functions';
 
 describe('Piano', () => {

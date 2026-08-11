@@ -1,5 +1,5 @@
 import ButtonGrid from "../components/ButtonGrid/ButtonGrid";
-import Piano      from "../components/Piano/Piano";
+import VoicePiano      from "../components/VoicePiano/VoicePiano";
 
 
 // Load images
@@ -117,7 +117,7 @@ const buttonGroups = [
   { 
     label: 'Piano' as const, 
     id: 'piano' as const,
-    component: Piano
+    component: VoicePiano
   },
   {
     label: 'Octaves',

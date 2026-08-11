@@ -1,3 +1,4 @@
+import { noteNameToIndex } from "../../content/data";
 import { updateButton } from "../shared.functions";
 import { VoiceType }    from "../shared.types";
 
@@ -5,48 +6,45 @@ export default function Piano ({
 
   voices,
   i,
-  setVoices
+  handleClick,
+  keys
 
 } : {
   
-  voices    : VoiceType[]
-  i         : number
-  setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>
+  voices      : VoiceType[]
+  i           : number
+  handleClick : React.MouseEventHandler<HTMLButtonElement>
+  keys        : string[]
 
 }) {
 
   const voice = voices[i]
 
-  const whiteKeys = ['1', '3', '5', '6', '8', '10', '12', '13']
-  const blackKeys = ['2', '4', '7', '9', '11']
+  const getNoteName = (index: number) => {
 
-  const keys = [
-    ...whiteKeys, 
-    ...blackKeys
-  ].sort((a, b) => +b - +a)
+    const noteNames = Object.keys(noteNameToIndex)
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    updateButton(e, 'activeNotes', voices, i, setVoices)
+    return noteNames[index % 12]
   }
+
+
   
   return (
     <div className="parent">
-      <div className="button-grid voice-piano">
+      <div className="button-grid piano">
         {
-          keys.map(key => {
+          keys.map((key, i) => {
 
-            const colour = blackKeys.includes(key) ? 'black' : 'white'
+            const colour = getNoteName(i).includes('b') ? 'black' : 'white'
             const active = voice.activeNotes.includes(key) ? 'active' : ''
             const checked = Boolean(active)
 
             const props = {
-              className         : `${active} ${colour} key`,
-              'data-attribute'  : 'Notes',
-              'data-voice'      : i,
-              value             : key,
-              checked           : checked,
-              onClick           : handleClick,
-              id              : `voice-${i}-note-${key}`
+              className : `${active} ${colour} key`,
+              value     : key,
+              checked   : checked,
+              onClick   : handleClick,
+              id        : `voice-${i}-note-${key}`
             };
 
             return <button {...props} key={key} />
