@@ -124,7 +124,7 @@ const Timeline = ({ hits }: TimelineProps) => {
               top: index * pixelsPerNote,
               width: '100%',
               height: pixelsPerNote,
-              borderBottom: '1px solid #ddd',
+              borderBottom: '1px dotted #363636',
               boxSizing: 'border-box'
             }}
           />
