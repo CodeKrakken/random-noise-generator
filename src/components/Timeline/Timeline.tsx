@@ -1,5 +1,5 @@
 import { Hit } from '../../Synth/Synth.types'
-import { allFrequencies } from '../../content/data'
+import { allFrequencies, noteNameToIndex } from '../../content/data'
 
 type TimelineProps = {
   hits: Hit[]
@@ -10,7 +10,6 @@ const Timeline = ({ hits }: TimelineProps) => {
   const pixelsPerSecond = 100
   const pixelsPerNote = 12
   const timelineSeconds = 60
-  const pianoWidth = 60
 
   const frequencies = Array.from(new Set(allFrequencies.flat()))
 
@@ -30,7 +29,6 @@ const Timeline = ({ hits }: TimelineProps) => {
         closestDifference = difference
         closestIndex = index
       }
-
     })
 
     return (frequencies.length - 1 - closestIndex) * pixelsPerNote
@@ -38,10 +36,7 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   const getNoteName = (index: number) => {
 
-    const noteNames = [
-      'C', 'C#', 'D', 'D#', 'E', 'F',
-      'F#', 'G', 'G#', 'A', 'A#', 'B'
-    ]
+    const noteNames = Object.keys(noteNameToIndex)
 
     return noteNames[index % 12]
   }
@@ -58,20 +53,12 @@ const Timeline = ({ hits }: TimelineProps) => {
 
       {/* Piano roll */}
 
-      <div
-        className="piano-roll"
-        style={{
-          position: 'relative',
-          width: pianoWidth,
-          minWidth: pianoWidth,
-          height
-        }}
-      >
+      <div id="timeline-piano">
 
         {frequencies.map((frequency, index) => {
 
           const isBlack =
-            getNoteName(index).includes('#')
+            getNoteName(index).includes('b')
 
           return (
             <div
