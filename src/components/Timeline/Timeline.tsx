@@ -14,7 +14,6 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
 
-  console.log(frequencies)
 
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
@@ -100,6 +99,8 @@ const Timeline = ({ hits }: TimelineProps) => {
           ) {
             return null
           }
+
+          console.log(frequencyToPixels(hit.frequency))
 
           return (
             <div

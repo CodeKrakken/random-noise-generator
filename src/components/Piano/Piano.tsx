@@ -21,7 +21,6 @@ export default function Piano ({
 
   const id = props.id
 
-  console.log(id)
 
   let voice: VoiceType
 
