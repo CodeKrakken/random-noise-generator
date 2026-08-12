@@ -53,6 +53,7 @@ const Timeline = ({ hits }: TimelineProps) => {
     >
       <Piano
         keys={frequencies}
+        props={{id: 'timeline-piano'}}
       />
 
       {/* Timeline */}

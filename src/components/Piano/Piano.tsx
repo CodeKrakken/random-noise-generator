@@ -7,15 +7,16 @@ export default function Piano ({
   voices,
   i,
   handleClick,
-  keys
+  keys,
+  props
 
 } : {
   
   voices?       : VoiceType[]
   i?            : number
   handleClick?  : React.MouseEventHandler<HTMLButtonElement>
-  keys          :  number[]
-
+  keys          : number[]
+  props         : { [key: string]: string }
 }) {
 
 
@@ -34,7 +35,10 @@ export default function Piano ({
   
   return (
     <div className="parent">
-      <div className="button-grid piano">
+      <div 
+        className="button-grid piano" 
+        {...props}
+      >
         {
           reversedKeys.map((key, i) => {
             console.log(key)
@@ -47,7 +51,7 @@ export default function Piano ({
               value     : key,
               checked   : checked,
               onClick   : handleClick,
-              id        : `voice-${i}-note-${key}`
+              id        : `voice-${i}-note-${key}`,
             };
             
             return <button {...props} key={key} />
