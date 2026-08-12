@@ -1,5 +1,5 @@
 import { Hit } from '../../Synth/Synth.types'
-import { allFrequencies, noteNameToIndex } from '../../content/data'
+import { allFrequencies } from '../../content/data'
 import Piano from '../Piano/Piano'
 
 type TimelineProps = {
@@ -34,13 +34,6 @@ const Timeline = ({ hits }: TimelineProps) => {
     })
 
     return (frequencies.length - 1 - closestIndex) * pixelsPerNote
-  }
-
-  const getNoteName = (index: number) => {
-
-    const noteNames = Object.keys(noteNameToIndex)
-
-    return noteNames[index % 12]
   }
 
   return (

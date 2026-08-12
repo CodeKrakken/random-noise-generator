@@ -21,7 +21,6 @@ export default function Piano ({
 
   const id = props.id
 
-
   let voice: VoiceType
 
   if (voices) voice = voices[i!]
@@ -31,8 +30,6 @@ export default function Piano ({
     const noteName = noteNames[index % 12]
     return noteName
   }
-
-  const reversedKeys = keys.sort((a, b) => b - a)
   
   return (
     <div className="parent">
@@ -41,7 +38,10 @@ export default function Piano ({
         {...props}
       >
         {
-          reversedKeys.map((key, i) => {
+          keys.map((key, i) => {
+
+            console.log(key)
+            console.log(i)
             const colour = getNoteName(i).includes('b') ? 'black' : 'white'
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
             const checked = Boolean(active)

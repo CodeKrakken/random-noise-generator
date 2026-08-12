@@ -172,6 +172,10 @@ button:disabled {
   width: calc(var(--u) * 1.25);
   min-width: calc(var(--u) * 1.25);
   height: 1584px; /* 132 notes x 12px */
+
+  button {
+    cursor: default;
+  }
 }
 
 .key {
