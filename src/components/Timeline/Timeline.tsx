@@ -12,7 +12,9 @@ const Timeline = ({ hits }: TimelineProps) => {
   const pixelsPerNote = 12
   const timelineSeconds = 60
 
-  const frequencies = Array.from(new Set(allFrequencies.flat()))
+  const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
+
+  console.log(frequencies)
 
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
@@ -53,7 +55,9 @@ const Timeline = ({ hits }: TimelineProps) => {
     >
       <Piano
         keys={frequencies}
-        props={{id: 'timeline-piano'}}
+        props={{
+          id: 'timeline-piano'
+        }}
       />
 
       {/* Timeline */}

@@ -19,7 +19,9 @@ export default function Piano ({
   props         : { [key: string]: string }
 }) {
 
+  const id = props.id
 
+  console.log(id)
 
   let voice: VoiceType
 
@@ -41,7 +43,6 @@ export default function Piano ({
       >
         {
           reversedKeys.map((key, i) => {
-            console.log(key)
             const colour = getNoteName(i).includes('b') ? 'black' : 'white'
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
             const checked = Boolean(active)
@@ -51,7 +52,7 @@ export default function Piano ({
               value     : key,
               checked   : checked,
               onClick   : handleClick,
-              id        : `voice-${i}-note-${key}`,
+              id        : `${id}-${key}`,
             };
             
             return <button {...props} key={key} />
