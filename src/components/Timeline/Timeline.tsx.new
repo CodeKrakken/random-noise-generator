@@ -33,7 +33,7 @@ const Timeline = ({ hits }: TimelineProps) => {
       }
     })
 
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
+    return String((frequencies.length - 1 - closestIndex) * pixelsPerNote)
   }
 
   const getNoteName = (index: number) => {
@@ -100,6 +100,7 @@ const Timeline = ({ hits }: TimelineProps) => {
             return null
           }
 
+          console.log(frequencyToPixels(hit.frequency))
 
           return (
             <div
