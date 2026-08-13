@@ -100,7 +100,7 @@ const Timeline = ({ hits }: TimelineProps) => {
               style={{
                 position: 'absolute',
                 left: hit.startTime * pixelsPerSecond,
-                top: frequencyToPixels(hit.frequency) + 1,
+                bottom: frequencyToPixels(hit.frequency) + 1,
                 width: Math.max(
                   (hit.endTime - hit.startTime) *
                   pixelsPerSecond,

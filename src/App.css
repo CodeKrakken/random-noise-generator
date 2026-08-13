@@ -171,8 +171,9 @@ button:disabled {
   position: relative;
   width: calc(var(--u) * 1.25);
   min-width: calc(var(--u) * 1.25);
-  height: 1584px; /* 132 notes x 12px */
+  height: 1596px; /* 133 notes x 12px */
   z-index: 0;
+  top: 0;
 
   button {
     cursor: default;
@@ -202,6 +203,8 @@ button:disabled {
 
   z-index: 1;
 }
+
+
 
 .active {
   background: green;
