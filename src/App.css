@@ -16,17 +16,16 @@ button {
   border: calc(var(--u) * 0.025) solid black;
 }
 
-.section {
-  margin: calc(var(--u) * 0.125)
-}
-
 #voice {
   width: fit-content;
   height: fit-content;
   font-size: calc(var(--u) * 0.35);
   padding: calc(var(--u) * 0.125);
-  border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
   text-align: center;
+}
+
+.component-border {
+  border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
 }
 
 .row {

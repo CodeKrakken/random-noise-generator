@@ -46,6 +46,7 @@ export default function Voice({
   return (
     <div 
       id="voice"
+      className="component-border"
       data-voice={i}
       data-attribute={dataAttribute}
     >

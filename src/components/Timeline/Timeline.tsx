@@ -41,7 +41,10 @@ const Timeline = ({ hits }: TimelineProps) => {
 
       {/* Piano */}
 
-      <div id="timeline-piano-container">
+      <div 
+        id="timeline-piano-container"
+        className="component-border"
+      >
         <Piano
           keys={frequencies}
           props={{
@@ -52,7 +55,10 @@ const Timeline = ({ hits }: TimelineProps) => {
 
       {/* Horizontally scrolling timeline */}
 
-      <div id="timeline-grid-container">
+      <div 
+        id="timeline-grid-container"
+        className="component-border"
+      >
         <div 
           id="timeline-grid"
           style={{
