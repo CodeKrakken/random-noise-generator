@@ -1,5 +1,6 @@
 :root {
   --u: 40px;
+  --pix-per-note: 12px;
   --slider-w: calc(var(--u) * 4);
   --label-w: calc(var(--u) * 1.5);
   --piano-w: calc(var(--u) * 1.25);
@@ -254,4 +255,12 @@ button:disabled {
 
 #timeline {
   z-index: 0
+}
+
+.timeline-grid-row {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px dotted #363636;
+  box-sizing: border-box;
 }

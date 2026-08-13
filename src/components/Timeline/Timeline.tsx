@@ -64,14 +64,10 @@ const Timeline = ({ hits }: TimelineProps) => {
         {frequencies.map((frequency, index) => (
           <div
             key={frequency}
+            className="timeline-grid-row"
             style={{
-              position: 'absolute',
-              left: 0,
               top: index * pixelsPerNote,
-              width: '100%',
               height: pixelsPerNote,
-              borderBottom: '1px dotted #363636',
-              boxSizing: 'border-box'
             }}
           />
         ))}
