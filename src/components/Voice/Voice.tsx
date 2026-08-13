@@ -4,49 +4,48 @@ import { buttonGroups, sliders }    from '../../content/data'
 import DoubleSlider                 from '../DoubleSlider/DoubleSlider'
 import SingleSlider                 from '../SingleSlider/SingleSlider'
 import Button                       from '../Button/Button'
-import { useState }                 from 'react'
-import DropdownPortal from '../DropDownPortal/DropDownPortal'
+import DropdownPortal               from '../DropdownPortal/DropdownPortal'
+import { useRef, useState }         from 'react'
 
 export default function Voice({
 
-    i, 
-    voices,  
+    i,
+    voices,
     handleDelete,
     setVoices,
     dataAttribute
 
-  } : {
+  }: {
 
-    i             : number, 
-    setVoices     : React.Dispatch<React.SetStateAction<VoiceType[]>>, 
-    voices        : VoiceType[], 
+    i             : number,
+    setVoices     : React.Dispatch<React.SetStateAction<VoiceType[]>>,
+    voices        : VoiceType[],
     handleDelete  : Function
     dataAttribute : string
 
   }) {
 
-  const [hiddenStates, setHiddenStates] = useState<Record<string, boolean>>({  
-    piano     : true,  
-    octaves   : true,  
-    intervals : true,  
-    sounds    : true  
-  })
+  const [openDropdown, setOpenDropdown] =
+    useState<string | null>(null)
 
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [dropdownAnchor, setDropdownAnchor] = useState<HTMLElement | null>(null)
-  
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
     label: "X"
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {  
+  const handleClick = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+
     const value = e.currentTarget.value
-    setHiddenStates(prev => ({ ...prev, [value]: !prev[value] }))  
+
+    setOpenDropdown(prev =>
+      prev === value ? null : value
+    )
   }
 
-  // const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
-  
   return (
     <div
       className="voice component-border"
@@ -56,7 +55,7 @@ export default function Voice({
 
       <div className="justified row">
 
-        <TextField 
+        <TextField
           attrName  = {'label'}
           i         = {i}
           voices    = {voices}
@@ -64,78 +63,109 @@ export default function Voice({
         />
 
         <Button {...deleteButtonProps} />
-        
-      </div>       
-        
+
+      </div>
+
       <div>
         <div className="sliders column">
           {
             sliders.map((slider: Slider) => {
-              
-              const Component = slider.className === 'single' ? SingleSlider : DoubleSlider
+
+              const Component =
+                slider.className === 'single'
+                  ? SingleSlider
+                  : DoubleSlider
 
               return (
 
                 <div key={slider.attrName} className="row">
-                  <div className="slider-label">{slider.label}</div>
-                  <div className={`${slider.className} slider`}>
-                    <Component 
-                      slider={slider}
-                      i={i}
-                      voices={voices}
-                      setVoices={setVoices}
-                    />
+
+                  <div className="slider-label">
+                    {slider.label}
                   </div>
+
+                  <div className={`${slider.className} slider`}>
+
+                    <Component
+                      slider    = {slider}
+                      i         = {i}
+                      voices    = {voices}
+                      setVoices = {setVoices}
+                    />
+
+                  </div>
+
                 </div>
-              )}
-            )
+
+              )
+            })
           }
         </div>
       </div>
 
       <div className="centred row">
+
         {
           buttonGroups.map(group => {
 
-            const ComponentToRender = group.component;  
-                        
-            const props = {
-              className : "group-button",  
-              // onClick   : handleClick,
-              value     : group.id,
-              ref:  setDropdownAnchor,
-              onClick: () => setDropdownOpen(open => !open)
-            }
+            const ComponentToRender = group.component
 
-            return <>
-
+            return (
               <Button
-                props   = {props}
+                key={group.id}
+
+                props={{
+                  className : "group-button",
+
+                  onClick: handleClick,
+
+                  value: group.id,
+
+                  ref: (element: HTMLButtonElement | null) => {
+                    buttonRefs.current[group.id] = element
+                  }
+                }}
+
                 label   = {group.label}
                 imgPath = {group.id}
               />
-
-              {
-                dropdownOpen ? (
-                  <DropdownPortal anchor={dropdownAnchor}>
-                    <div className="dropdown">
-                      <ComponentToRender   
-                        group     = {group as Group}  
-                        voices    = {voices}  
-                        i         = {i}  
-                        setVoices = {setVoices}
-                        props     = {{className:"dropdown"}}
-                      />  
-                    </div>
-                  </DropdownPortal>
-                ) 
-                  : 
-                <></>
-              }
-            </>
+            )
           })
         }
+
       </div>
+
+      {
+        openDropdown &&
+        buttonGroups.map(group => {
+
+          if (
+            group.id !== openDropdown ||
+            !group.component
+          ) {
+            return null
+          }
+
+          const ComponentToRender = group.component
+
+          return (
+            <DropdownPortal
+              key={group.id}
+              anchor={buttonRefs.current[group.id]}
+            >
+
+              <ComponentToRender
+                group     = {group as Group}
+                voices    = {voices}
+                i         = {i}
+                setVoices = {setVoices}
+              />
+
+            </DropdownPortal>
+          )
+        })
+      }
+
     </div>
   )
 }

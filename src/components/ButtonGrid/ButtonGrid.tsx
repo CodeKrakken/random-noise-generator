@@ -16,7 +16,7 @@ export default function ButtonGrid({
   voices    : VoiceType[]  
   i         : number  
   setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>
-  props     : { [key: string]: string }
+  props?     : { [key: string]: string }
     
 }) {
 
