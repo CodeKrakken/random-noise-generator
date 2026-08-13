@@ -37,12 +37,29 @@ const Timeline = ({ hits }: TimelineProps) => {
   }
 
   return (
+
+  <div
+    className="timeline-container"
+    style={{
+      display: 'flex',
+      height,
+      overflowY: 'auto',
+      overflowX: 'hidden'
+    }}
+  >
+
+    {/* Piano */}
+
     <div
-      className="timeline-container"
+      className="piano-roll"
       style={{
-        display: 'flex',
+        position: 'sticky',
+        left: 0,
+        width: 60,
+        minWidth: 60,
         height,
-        overflow: 'auto'
+        flexShrink: 0,
+        zIndex: 20
       }}
     >
       <Piano
@@ -51,9 +68,17 @@ const Timeline = ({ hits }: TimelineProps) => {
           id: 'timeline-piano'
         }}
       />
+</div>
 
-      {/* Timeline */}
+    {/* Horizontally scrolling timeline */}
 
+    <div
+      style={{
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        flex: 1
+      }}
+    >
       <div
         className="timeline"
         style={{
@@ -63,9 +88,6 @@ const Timeline = ({ hits }: TimelineProps) => {
           height
         }}
       >
-
-        {/* Grid */}
-
         {frequencies.map((frequency, index) => (
           <div
             key={frequency}
@@ -115,11 +137,11 @@ const Timeline = ({ hits }: TimelineProps) => {
           )
 
         })}
-
-      </div>
-
+</div>
     </div>
-  )
+
+  </div>
+)
 }
 
 export default Timeline
