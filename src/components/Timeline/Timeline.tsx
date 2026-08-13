@@ -41,25 +41,14 @@ const Timeline = ({ hits }: TimelineProps) => {
 
     {/* Piano */}
 
-    <div
-      className="piano-roll"
-      style={{
-        position: 'sticky',
-        left: 0,
-        width: 60,
-        minWidth: 60,
-        height,
-        flexShrink: 0,
-        zIndex: 20
-      }}
-    >
+    <div id="timeline-piano-container">
       <Piano
         keys={frequencies}
         props={{
           id: 'timeline-piano'
         }}
       />
-</div>
+    </div>
 
     {/* Horizontally scrolling timeline */}
 

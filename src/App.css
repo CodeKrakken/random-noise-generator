@@ -167,6 +167,16 @@ button:disabled {
   width: calc(var(--u) * 1.25);
 }
 
+#timeline-piano-container {
+  position: sticky;
+  left: 0;
+  width: 60;
+  min-width: 60;
+  height: 1596px; /* 133 notes x 12px */;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
 #timeline-piano {
   /* position: relative; */
   width: calc(var(--u) * 1.25);
