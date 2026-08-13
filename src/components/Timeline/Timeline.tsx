@@ -14,7 +14,6 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
 
-
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
 
@@ -38,15 +37,7 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   return (
 
-  <div
-    className="timeline-container"
-    style={{
-      display: 'flex',
-      height,
-      overflowY: 'auto',
-      overflowX: 'hidden'
-    }}
-  >
+  <div id="timeline-container">
 
     {/* Piano */}
 

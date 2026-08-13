@@ -225,6 +225,13 @@ button:disabled {
   margin-top: calc(var(--u) * 0.5)
 }
 
+#timeline-container {
+  display: flex;
+  height: 1596px; /* 133 notes x 12px */
+  overflow-y: 'auto';
+  overflow-x: 'hidden';
+}
+
 #timeline {
   z-index: 0
 }
