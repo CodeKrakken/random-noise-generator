@@ -10,6 +10,7 @@ body {
   background-color: black;
   color: white;
   padding-top: calc(var(--u) * 3);
+  overflow-x: hidden;
 }
 
 button {
