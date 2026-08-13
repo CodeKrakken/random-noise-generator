@@ -110,7 +110,7 @@ export default function Header ({
         {letterImages(title, '50px')}
       </div>
     
-      <div className="centred section">
+      <div className="centred">
         {
           buttons.map((button, i) => 
             <button 

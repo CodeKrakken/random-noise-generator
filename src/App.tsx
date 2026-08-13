@@ -160,7 +160,7 @@ function App() {
     />
     
     <div 
-      className="row section" 
+      className="row" 
       id="voices"
     >
       {
@@ -178,7 +178,7 @@ function App() {
       }
     </div>
 
-    <div className="section">
+    <div>
       <Timeline hits={recordedHits} />    
     </div>
   </>
