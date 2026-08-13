@@ -160,22 +160,25 @@ function App() {
     />
     
     <div 
-      className="row" 
-      id="voices"
+      id="voices-container"
     >
-      {
-        voices.map((voice, i) => 
+      <div className="voices">
+        <div className="row">
+          {
+            voices.map((voice, i) => 
 
-          <Voice
-            i             = {i} 
-            setVoices     = {setVoices} 
-            voices        = {voices}
-            handleDelete  = {handleDelete}
-            dataAttribute = "Voices"
-            key           = {voice.id}
-          />
-        )
-      }
+              <Voice
+                i             = {i} 
+                setVoices     = {setVoices} 
+                voices        = {voices}
+                handleDelete  = {handleDelete}
+                dataAttribute = "Voices"
+                key           = {voice.id}
+              />
+            )
+          }
+        </div>
+      </div>
     </div>
 
     <div>

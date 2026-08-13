@@ -71,10 +71,14 @@ button img {
   border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
 }
 
-#voices {
+#voices-container {
   margin-top: calc(var(--u) * 0.5);
+  overflow: visible;
+}
+
+#voices {
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
 }
 
 .voice {
