@@ -44,9 +44,8 @@ export default function Voice({
   // const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
   
   return (
-    <div 
-      id="voice"
-      className="component-border"
+    <div
+      className="voice component-border"
       data-voice={i}
       data-attribute={dataAttribute}
     >

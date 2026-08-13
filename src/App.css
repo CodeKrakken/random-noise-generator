@@ -17,30 +17,30 @@ button {
   border: calc(var(--u) * 0.025) solid black;
 }
 
-#voice {
-  width: fit-content;
-  height: fit-content;
-  font-size: calc(var(--u) * 0.35);
-  padding: calc(var(--u) * 0.125);
-  text-align: center;
-}
-
-.component-border {
-  border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
-}
-
 .row {
   display: flex;
   text-align: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
 .justified {
   justify-content: space-between;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
+.component-border {
+  border: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
+}
+
+.voice {
+  width: fit-content;
+  height: fit-content;
+  font-size: calc(var(--u) * 0.35);
+  padding: calc(var(--u) * 0.125);
+  text-align: center;
 }
 
 .range-slider__thumb::after {  
@@ -173,7 +173,7 @@ button:disabled {
   left: 0;
   width: 60;
   min-width: 60;
-  height: 1596px; /* 133 notes x 12px */;
+  /* height: 1596px; 133 notes x 12px; */
   flex-shrink: 0;
 }
 
@@ -195,11 +195,13 @@ button:disabled {
 #timeline-grid-container {
   overflow-x: auto;
   overflow-y: hidden;
+   /* height: 1596px;133 notes x 12px */;
   flex: 1
 }
 
 #timeline-grid {
   position: relative;
+  /* height: 1596px; 133 notes x 12px */
 }
 
 .key {
@@ -244,13 +246,12 @@ button:disabled {
 
 #timeline-container {
   display: flex;
-  height: 1596px; /* 133 notes x 12px */
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 #timeline {
-  z-index: 0
+  z-index: 0;
 }
 
 .timeline-grid-row {
