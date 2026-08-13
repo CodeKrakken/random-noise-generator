@@ -63,8 +63,8 @@ export default function Voice({
         
       </div>       
         
-      <div id="sliders">
-        <div className="column">
+      <div>
+        <div className="sliders column">
           {
             sliders.map((slider: Slider) => {
               

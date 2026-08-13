@@ -49,7 +49,7 @@ button {
   white-space: nowrap;  
 }
 
-#sliders {
+.sliders {
   padding-bottom: calc(var(--u) * 0.125);
 }
 
