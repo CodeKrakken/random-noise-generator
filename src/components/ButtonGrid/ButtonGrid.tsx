@@ -33,7 +33,7 @@ export default function ButtonGrid({
   return <>
     <div className="button-grid-parent">
       <div
-        className={`button-grid ${className}`}
+        className={`${className} button-grid`}
         style={{gridTemplateColumns: `repeat(${columns}, 1fr)`}}
       >
         {

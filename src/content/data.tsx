@@ -123,7 +123,7 @@ const buttonGroups = [
     label: 'Octaves',
     buttons: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     id: "octaves",
-    className: "left",
+    className: "octaves",
     columns: 2,
     component: ButtonGrid
   },
@@ -131,7 +131,7 @@ const buttonGroups = [
     label: 'Intervals',
     buttons: ['4', '2', '1', '0.5', '0.25', '0.125'],
     id: "intervals",
-    className: "center",
+    className: "intervals",
     columns: 2,
     component: ButtonGrid
   },
@@ -143,7 +143,7 @@ const buttonGroups = [
       ...Object.keys(sampleFolders)
     ],
     id: "sounds",
-    className: "right", 
+    className: "sounds", 
     columns: 4,
     component: ButtonGrid
   }
