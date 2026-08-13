@@ -264,3 +264,10 @@ button:disabled {
   border-bottom: 1px dotted #363636;
   box-sizing: border-box;
 }
+
+.hit {
+  position: absolute;
+  background: red;
+  border-radius: 2;
+  z-index: 10;
+}

@@ -91,8 +91,8 @@ const Timeline = ({ hits }: TimelineProps) => {
               return (
                 <div
                   key={index}
+                  className="hit"
                   style={{
-                    position: 'absolute',
                     left: hit.startTime * pixelsPerSecond,
                     bottom: frequencyToPixels(hit.frequency) + 1,
                     width: Math.max(
@@ -101,9 +101,6 @@ const Timeline = ({ hits }: TimelineProps) => {
                       3
                     ),
                     height: pixelsPerNote - 2,
-                    background: 'red',
-                    borderRadius: 2,
-                    zIndex: 10
                   }}
                 />
               )
