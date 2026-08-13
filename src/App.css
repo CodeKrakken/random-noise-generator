@@ -175,23 +175,17 @@ button:disabled {
   min-width: 60;
   height: 1596px; /* 133 notes x 12px */;
   flex-shrink: 0;
-  z-index: 20;
 }
 
 #timeline-piano {
-  /* position: relative; */
   width: calc(var(--u) * 1.25);
   min-width: calc(var(--u) * 1.25);
   height: 1596px; /* 133 notes x 12px */
-  z-index: 0;
   top: 0;
 
   position: sticky;
   left: 0;
-  /* width: pianoWidth; */
-  /* min-width: pianoWidth; */
   flex-shrink: 0;
-  z-index: 20;
 
   button {
     cursor: default;
@@ -269,5 +263,4 @@ button:disabled {
   position: absolute;
   background: red;
   border-radius: 2;
-  z-index: 10;
 }
