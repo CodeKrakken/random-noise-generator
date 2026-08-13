@@ -197,6 +197,13 @@ button:disabled {
   }
 }
 
+#timeline-grid {
+  position: relative;
+  width,
+  minWidth: width;
+  height;
+}
+
 .key {
   cursor: pointer;
   border: calc(var(--u) * 0.025) solid black;

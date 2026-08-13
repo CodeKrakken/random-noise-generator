@@ -59,10 +59,9 @@ const Timeline = ({ hits }: TimelineProps) => {
         flex: 1
       }}
     >
-      <div
-        className="timeline"
+      <div 
+        id="timeline-grid"
         style={{
-          position: 'relative',
           width,
           minWidth: width,
           height
