@@ -77,16 +77,20 @@ button img {
   white-space: nowrap;  
 }
 
-.button-group {
-  height: calc(var(--u) * 0.625);
-}
+.group-button {  
+  width: calc((var(--u) * 0.625) * 2);  
+  height: calc(var(--u) * 1.25);  
+  padding: 0;  
+  margin: 0;  
+  box-sizing: border-box;  
+  border: calc(var(--u) * 0.025) solid black;  
 
-.button-grid {
-  display: grid;
-  position: absolute;
-  top: 0;
-  z-index: 10;
-}
+  img {
+    width: calc(var(--u) * 1.225);
+    height: calc(var(--u) * 1.225);
+    box-sizing: border-box;
+  }
+}  
 
 .button-grid-parent {
   position: relative;
@@ -102,25 +106,19 @@ button img {
   }
 }
 
-.group-button {  
-  width: calc((var(--u) * 0.625) * 2);  
-  height: calc(var(--u) * 1.25);  
-  padding: 0;  
-  margin: 0;  
-  box-sizing: border-box;  
-  border: calc(var(--u) * 0.025) solid black;  
-}  
+.button-grid {
+  display: grid;
+  position: absolute;
+  top: 0;
+  z-index: 10;
 
-.group-button img {
-  width: calc(var(--u) * 1.225);
-  height: calc(var(--u) * 1.225);
-  box-sizing: border-box;
+  .intervals, .octaves, .sounds {
+    width: calc(var(--u) * 0.625);
+    height: calc(var(--u) * 0.625);
+  }
 }
 
-#intervals, #octaves, #sounds {
-  width: calc(var(--u) * 0.625);
-  height: calc(var(--u) * 0.625);
-}
+
 
 #header {
   text-align: center;
@@ -222,8 +220,6 @@ button:disabled {
 
   z-index: 1;
 }
-
-
 
 .active {
   background: green;

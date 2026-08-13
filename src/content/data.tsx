@@ -117,6 +117,7 @@ const buttonGroups = [
   { 
     label: 'Piano' as const, 
     id: 'piano' as const,
+    className: 'notes',
     component: VoicePiano
   },
   {

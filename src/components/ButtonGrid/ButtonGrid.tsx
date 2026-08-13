@@ -43,13 +43,12 @@ export default function ButtonGrid({
             const checked = Boolean(active)
 
             const props = {
-              className         : `${active} key`,
+              className         : `${active} ${className} key`,
               'data-attribute'  : label,
               'data-voice'      : i,
               value             : button,
               checked           : checked,
               onClick           : handleClick,
-              id                : id,
               title             : button
             };
 
