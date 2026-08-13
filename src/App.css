@@ -72,13 +72,13 @@ button img {
 }
 
 #voices-container {
-  margin-top: calc(var(--u) * 0.5);
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 #voices {
-  overflow-x: auto;
-  overflow-y: visible;
+  margin-top: calc(var(--u) * 0.5);
+  
 }
 
 .voice {

@@ -7,15 +7,17 @@ export default function ButtonGrid({
   group,
   voices,
   i,
-  setVoices
+  setVoices,
+  props
 
 } : {  
 
   group     : Group  
   voices    : VoiceType[]  
   i         : number  
-  setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>  
-  
+  setVoices : React.Dispatch<React.SetStateAction<VoiceType[]>>
+  props     : { [key: string]: string }
+    
 }) {
 
   const { className, label, id } = group

@@ -5,6 +5,7 @@ import DoubleSlider                 from '../DoubleSlider/DoubleSlider'
 import SingleSlider                 from '../SingleSlider/SingleSlider'
 import Button                       from '../Button/Button'
 import { useState }                 from 'react'
+import DropdownPortal from '../DropDownPortal/DropDownPortal'
 
 export default function Voice({
 
@@ -31,6 +32,9 @@ export default function Voice({
     sounds    : true  
   })
 
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownAnchor, setDropdownAnchor] = useState<HTMLElement | null>(null)
+  
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
     label: "X"
@@ -97,8 +101,10 @@ export default function Voice({
                         
             const props = {
               className : "group-button",  
-              onClick   : handleClick,
-              value     : group.id
+              // onClick   : handleClick,
+              value     : group.id,
+              ref:  setDropdownAnchor,
+              onClick: () => setDropdownOpen(open => !open)
             }
 
             return <>
@@ -110,14 +116,18 @@ export default function Voice({
               />
 
               {
-                !hiddenStates[group.id] && ComponentToRender ? (  
-                  
-                  <ComponentToRender   
-                    group     = {group as Group}  
-                    voices    = {voices}  
-                    i         = {i}  
-                    setVoices = {setVoices}  
-                  />  
+                dropdownOpen ? (
+                  <DropdownPortal anchor={dropdownAnchor}>
+                    <div className="dropdown">
+                      <ComponentToRender   
+                        group     = {group as Group}  
+                        voices    = {voices}  
+                        i         = {i}  
+                        setVoices = {setVoices}
+                        props     = {{className:"dropdown"}}
+                      />  
+                    </div>
+                  </DropdownPortal>
                 ) 
                   : 
                 <></>
