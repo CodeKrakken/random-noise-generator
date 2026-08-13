@@ -52,13 +52,7 @@ const Timeline = ({ hits }: TimelineProps) => {
 
     {/* Horizontally scrolling timeline */}
 
-    <div
-      style={{
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        flex: 1
-      }}
-    >
+    <div id="timeline-grid-container">
       <div 
         id="timeline-grid"
         style={{

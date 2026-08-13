@@ -197,11 +197,14 @@ button:disabled {
   }
 }
 
+#timeline-grid-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1
+}
+
 #timeline-grid {
   position: relative;
-  width,
-  minWidth: width;
-  height;
 }
 
 .key {
