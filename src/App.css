@@ -17,6 +17,10 @@ button {
   border: calc(var(--u) * 0.025) solid black;
 }
 
+button img {
+  pointer-events: none;
+}
+
 .row {
   display: flex;
   text-align: center;
@@ -43,20 +47,9 @@ button {
   text-align: center;
 }
 
-.range-slider__thumb::after {  
-  content: attr(data-label);  
-  font-size: c;  
-  white-space: nowrap;  
-}
-
 .sliders {
   padding-bottom: calc(var(--u) * 0.125);
 }
-
-.button-label {
-  width: var(--label-w);
-}
-
 
 .slider {
   width: var(--slider-w);
@@ -78,8 +71,10 @@ button {
   justify-content: center;  
 }
 
-button img {
-  pointer-events: none;
+.range-slider__thumb::after {  
+  content: attr(data-label);  
+  font-size: c;  
+  white-space: nowrap;  
 }
 
 .button-group {
@@ -103,7 +98,7 @@ button img {
   left: calc(var(--u) * (-1.25));
 }
 
-.parent {
+.button-grid-parent {
   position: relative;
 }
 

@@ -32,7 +32,7 @@ export default function Piano ({
   }
   
   return (
-    <div className="parent">
+    <div className="button-grid-parent">
       <div 
         className="button-grid piano" 
         {...props}
