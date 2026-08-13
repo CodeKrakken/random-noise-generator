@@ -239,7 +239,8 @@ button img {
 #timeline-grid-container {
   overflow-x: auto;
   overflow-y: hidden;
-  flex: 1
+  flex: 1;
+  border-right: none;
 }
 
 #timeline-grid {
