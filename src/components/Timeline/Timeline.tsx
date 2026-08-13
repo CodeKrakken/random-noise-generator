@@ -37,80 +37,83 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   return (
 
-  <div id="timeline-container">
+    <div id="timeline-container">
 
-    {/* Piano */}
+      {/* Piano */}
 
-    <div id="timeline-piano-container">
-      <Piano
-        keys={frequencies}
-        props={{
-          id: 'timeline-piano'
-        }}
-      />
-    </div>
+      <div id="timeline-piano-container">
+        <Piano
+          keys={frequencies}
+          props={{
+            id: 'timeline-piano'
+          }}
+        />
+      </div>
 
-    {/* Horizontally scrolling timeline */}
+      {/* Horizontally scrolling timeline */}
 
-    <div id="timeline-grid-container">
-      <div 
-        id="timeline-grid"
-        style={{
-          width,
-          minWidth: width,
-          height
-        }}
-      >
-        {frequencies.map((frequency, index) => (
-          <div
-            key={frequency}
-            className="timeline-grid-row"
-            style={{
-              top: index * pixelsPerNote,
-              height: pixelsPerNote,
-            }}
-          />
-        ))}
-
-        {/* Notes */}
-
-        {hits.map((hit, index) => {
-
-          if (
-            hit.startTime === undefined ||
-            hit.endTime === undefined ||
-            hit.frequency === undefined
-          ) {
-            return null
+      <div id="timeline-grid-container">
+        <div 
+          id="timeline-grid"
+          style={{
+            width,
+            minWidth: width,
+            height
+          }}
+        >
+          {
+            frequencies.map((frequency, index) => (
+              <div
+                key={frequency}
+                className="timeline-grid-row"
+                style={{
+                  top: index * pixelsPerNote,
+                  height: pixelsPerNote,
+                }}
+              />
+            ))
           }
 
+          {/* Notes */}
 
-          return (
-            <div
-              key={index}
-              style={{
-                position: 'absolute',
-                left: hit.startTime * pixelsPerSecond,
-                bottom: frequencyToPixels(hit.frequency) + 1,
-                width: Math.max(
-                  (hit.endTime - hit.startTime) *
-                  pixelsPerSecond,
-                  3
-                ),
-                height: pixelsPerNote - 2,
-                background: 'red',
-                borderRadius: 2,
-                zIndex: 10
-              }}
-            />
-          )
+          {
+            hits.map((hit, index) => {
 
-        })}
-</div>
+              if (
+                hit.startTime === undefined ||
+                hit.endTime === undefined ||
+                hit.frequency === undefined
+              ) {
+                return null
+              }
+
+
+              return (
+                <div
+                  key={index}
+                  style={{
+                    position: 'absolute',
+                    left: hit.startTime * pixelsPerSecond,
+                    bottom: frequencyToPixels(hit.frequency) + 1,
+                    width: Math.max(
+                      (hit.endTime - hit.startTime) *
+                      pixelsPerSecond,
+                      3
+                    ),
+                    height: pixelsPerNote - 2,
+                    background: 'red',
+                    borderRadius: 2,
+                    zIndex: 10
+                  }}
+                />
+              )
+
+            })
+          }
+        </div>
+      </div>
     </div>
-
-  </div>
-)
+  )
 }
 
 export default Timeline
