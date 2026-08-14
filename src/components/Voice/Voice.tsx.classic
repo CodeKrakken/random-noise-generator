@@ -4,22 +4,21 @@ import { buttonGroups, sliders }    from '../../content/data'
 import DoubleSlider                 from '../DoubleSlider/DoubleSlider'
 import SingleSlider                 from '../SingleSlider/SingleSlider'
 import Button                       from '../Button/Button'
-import DropdownPortal               from '../DropdownPortal/DropdownPortal'
-import { useRef, useState }         from 'react'
+import { useState }                 from 'react'
 
 export default function Voice({
 
-    i,
-    voices,
+    i, 
+    voices,  
     handleDelete,
     setVoices,
     dataAttribute
 
-  }: {
+  } : {
 
-    i             : number,
-    setVoices     : React.Dispatch<React.SetStateAction<VoiceType[]>>,
-    voices        : VoiceType[],
+    i             : number, 
+    setVoices     : React.Dispatch<React.SetStateAction<VoiceType[]>>, 
+    voices        : VoiceType[], 
     handleDelete  : Function
     dataAttribute : string
 
@@ -32,21 +31,18 @@ export default function Voice({
     sounds    : true  
   })
 
-  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({})
-
   const deleteButtonProps = {
     props: { onClick: () => handleDelete(i) },
     label: "X"
   }
 
-  const handleClick = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {  
     const value = e.currentTarget.value
     setHiddenStates(prev => ({ ...prev, [value]: !prev[value] }))  
   }
 
+  // const sliderRows = Array.from(new Set(sliders.map(slider => slider.row)))
+  
   return (
     <div
       className="voice component-border"
@@ -56,7 +52,7 @@ export default function Voice({
 
       <div className="justified row">
 
-        <TextField
+        <TextField 
           attrName  = {'label'}
           i         = {i}
           voices    = {voices}
@@ -64,42 +60,31 @@ export default function Voice({
         />
 
         <Button {...deleteButtonProps} />
-
-      </div>
-
+        
+      </div>       
+        
       <div>
         <div className="sliders column">
           {
             sliders.map((slider: Slider) => {
-
-              const Component =
-                slider.className === 'single'
-                  ? SingleSlider
-                  : DoubleSlider
+              
+              const Component = slider.className === 'single' ? SingleSlider : DoubleSlider
 
               return (
 
                 <div key={slider.attrName} className="row">
-
-                  <div className="slider-label">
-                    {slider.label}
-                  </div>
-
+                  <div className="slider-label">{slider.label}</div>
                   <div className={`${slider.className} slider`}>
-
-                    <Component
-                      slider    = {slider}
-                      i         = {i}
-                      voices    = {voices}
-                      setVoices = {setVoices}
+                    <Component 
+                      slider={slider}
+                      i={i}
+                      voices={voices}
+                      setVoices={setVoices}
                     />
-
                   </div>
-
                 </div>
-
-              )
-            })
+              )}
+            )
           }
         </div>
       </div>
@@ -108,21 +93,17 @@ export default function Voice({
         {
           buttonGroups.map(group => {
 
-            const ComponentToRender = group.component
-
+            const ComponentToRender = group.component;  
+                        
             const props = {
-              className : "group-button",
+              className : "group-button",  
               onClick   : handleClick,
-              value     : group.id,
-              ref       : (element: HTMLButtonElement | null) => {
-                buttonRefs.current[group.id] = element
-              }
+              value     : group.id
             }
 
             return <>
 
               <Button
-                key     = {group.id}
                 props   = {props}
                 label   = {group.label}
                 imgPath = {group.id}
@@ -130,22 +111,16 @@ export default function Voice({
 
               {
                 !hiddenStates[group.id] && ComponentToRender ? (  
-
-                  <DropdownPortal
-                    key={group.id}
-                    anchor={buttonRefs.current[group.id]}
-                  >
-                    <ComponentToRender
-                      group     = {group as Group}
-                      voices    = {voices}
-                      i         = {i}
-                      setVoices = {setVoices}
-                    />
-
-                  </DropdownPortal>
+                  
+                  <ComponentToRender   
+                    group     = {group as Group}  
+                    voices    = {voices}  
+                    i         = {i}  
+                    setVoices = {setVoices}  
+                  />  
                 ) 
-                  :
-                <></>         
+                  : 
+                <></>
               }
             </>
           })
