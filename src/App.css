@@ -134,19 +134,9 @@ button img {
   }
 }  
 
-.button-grid-parent {
+/* .button-grid-parent {
   position: relative;
-
-  .octaves {
-    right: 0px;
-    top: calc(var(--u) * 0.625);
-  }
-
-  .intervals, .sounds {
-    top: calc(var(--u) * 0.625);
-    left: calc(var(--u) * (-1.25));
-  }
-}
+} */
 
 .button-grid {
   display: grid;
@@ -164,8 +154,6 @@ button img {
   display: flex;
   flex-direction: column;
   position: absolute;
-  right: 0px;
-  top: calc(var(--u) * 0.625);
   width: calc(var(--u) * 1.25);
 }
 
