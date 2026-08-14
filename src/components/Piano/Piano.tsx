@@ -40,8 +40,6 @@ export default function Piano ({
         {
           keys.map((key, i) => {
 
-            console.log(key)
-            console.log(i)
             const colour = getNoteName(i).includes('b') ? 'black' : 'white'
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
             const checked = Boolean(active)
