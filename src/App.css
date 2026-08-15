@@ -9,7 +9,7 @@
 body {
   background-color: black;
   color: white;
-  padding-top: calc(var(--u) * 3);
+  padding-top: calc(var(--u) * 1.75);
   overflow-x: hidden;
 }
 
@@ -47,14 +47,14 @@ button img {
 }
 
 #header {
-  text-align: center;
-  padding-top: calc(var(--u) * 0.25);
   z-index: 100;  
   background-color: black;
   position: fixed;  
   top: 0;  
   left: 0;  
   width: 100%;  
+  display: flex;
+  flex-direction: row;
 }
 
 #title {
@@ -78,7 +78,6 @@ button img {
 
 #voices {
   margin-top: calc(var(--u) * 0.5);
-  
 }
 
 .voice {

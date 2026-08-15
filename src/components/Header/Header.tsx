@@ -19,7 +19,7 @@ const letterImages = (string: string, height: string = "40px") => {
     letter
   )
 
-  return <div className="centred">{letterArray.map(letter => letter)}</div>
+  return <div className="row">{letterArray.map(letter => letter)}</div>
 }
 
 export default function Header ({
@@ -103,14 +103,14 @@ export default function Header ({
 
   return (
     <div 
-      className="column" 
+      // className="column" 
       id="header"
     >
       <div id="title">
         {letterImages(title, '50px')}
       </div>
     
-      <div className="centred">
+      <div>
         {
           buttons.map((button, i) => 
             <button 
