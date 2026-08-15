@@ -160,6 +160,7 @@ button img {
   cursor: pointer;
   border: calc(var(--u) * 0.025) solid black;
   box-sizing: border-box;  
+  text-align: right;
 }
 
 .white {

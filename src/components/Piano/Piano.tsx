@@ -22,6 +22,7 @@ export default function Piano ({
   const id = props.id
 
   let voice: VoiceType
+  let octaveIndex = 11
 
   if (voices) voice = voices[i!]
 
@@ -53,8 +54,17 @@ export default function Piano ({
               onClick   : handleClick,
               id        : `${id}-${key}`,
             };
+
+            let label = ''
+
+            if (noteName === 'C' && keys.length > 13) {
+              label = String(octaveIndex)
+              octaveIndex--
+            }
             
-            return <button {...props} key={key}>{noteName}</button>
+            return <button {...props} key={key}>
+              {label}
+            </button>
           })
         }
       </div>
