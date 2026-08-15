@@ -40,7 +40,9 @@ export default function Piano ({
         {
           keys.map((key, i) => {
 
-            const colour = getNoteName(i).includes('b') ? 'black' : 'white'
+            const noteName = getNoteName(i)
+            const colour = noteName.includes('b') ? 'black' : 'white'
+            
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
             const checked = Boolean(active)
 
@@ -52,7 +54,7 @@ export default function Piano ({
               id        : `${id}-${key}`,
             };
             
-            return <button {...props} key={key} />
+            return <button {...props} key={key}>{noteName}</button>
           })
         }
       </div>
