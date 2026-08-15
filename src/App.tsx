@@ -162,7 +162,7 @@ function App() {
     <div 
       id="voices-container"
     >
-      <div className="voices">
+      <div id="voices">
         <div className="row">
           {
             voices.map((voice, i) => 

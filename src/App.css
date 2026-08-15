@@ -77,7 +77,14 @@ button img {
 }
 
 #voices {
-  margin-top: calc(var(--u) * 0.5);
+  z-index: 100;  
+  background-color: black;
+  position: sticky;  
+  top: calc(var(--u) * 1.75);  
+  left: 0;  
+  width: 100%;  
+  display: flex;
+  flex-direction: row;
 }
 
 .voice {
@@ -194,6 +201,7 @@ button img {
   display: flex;
   overflow-y: auto;
   overflow-x: hidden;
+  margin-top: calc(var(--u) * 8);
 }
 
 #timeline {
@@ -212,7 +220,7 @@ button img {
 #timeline-piano {
   width: calc(var(--u) * 1.25);
   min-width: calc(var(--u) * 1.25);
-  height: 1596px;
+  height: calc(var(--u) * 40);
   top: 0;
 
   position: sticky;
