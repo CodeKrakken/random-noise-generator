@@ -102,15 +102,12 @@ export default function Header ({
   ]
 
   return (
-    <div 
-      // className="column" 
-      id="header"
-    >
+    <div id="header">
       <div id="title">
         {letterImages(title, '50px')}
       </div>
     
-      <div>
+      <div className="centred">
         {
           buttons.map((button, i) => 
             <button 
