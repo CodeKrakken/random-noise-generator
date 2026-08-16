@@ -201,7 +201,6 @@ button img {
   display: flex;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: calc(var(--u) * 8);
 }
 
 #timeline {
