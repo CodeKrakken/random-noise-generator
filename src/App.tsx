@@ -47,8 +47,19 @@ function App() {
 
     voices.addEventListener('wheel', handleWheel, { passive: false })
 
+    const header = document.querySelector('#header')
+
+    if (!header) return
+
+    const handleHeaderWheel = (e: WheelEvent) => {
+      e.preventDefault()
+    }
+
+    header.addEventListener('wheel', handleHeaderWheel, { passive: false })
+    
     return () => {
       voices.removeEventListener('wheel', handleWheel)
+      header.removeEventListener('wheel', handleHeaderWheel)
     }
 
   }, [])
