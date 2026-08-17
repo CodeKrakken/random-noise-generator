@@ -34,6 +34,25 @@ function App() {
 
   }, [voices])
 
+  useEffect(() => {
+
+    const voices = document.querySelector('#voices')
+
+    if (!voices) return
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      voices.scrollLeft += e.deltaY
+    }
+
+    voices.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      voices.removeEventListener('wheel', handleWheel)
+    }
+
+  }, [])
+
 
   const handleAddVoice = () => {
     const newVoice = setUpVoice(voices)
