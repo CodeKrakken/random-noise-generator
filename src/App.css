@@ -97,10 +97,6 @@ button img {
   width: 100%;  
   display: flex;
   flex-direction: row;
-
-  .row {
-    width: max-content;
-  }
 }
 
 .voice {
