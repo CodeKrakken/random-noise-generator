@@ -148,9 +148,19 @@ function App() {
       minAttack         : template?.minAttack         ??  100,
       maxAttack         : template?.maxAttack         ??  100,
       minDecay          : template?.minDecay          ??  100,
-      maxDecay          : template?.maxDecay          ??  100
+      maxDecay          : template?.maxDecay          ??  100,
+      colour            : randomColour()
     }
   }
+
+  const randomColour = () => {
+
+  const r = Math.floor(Math.random() * 256)
+  const g = Math.floor(Math.random() * 256)
+  const b = Math.floor(Math.random() * 256)
+
+  return `rgba(${r}, ${g}, ${b})`
+}
 
   const generateNewLabel = (
     template: VoiceType | null, 
