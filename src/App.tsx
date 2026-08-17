@@ -7,7 +7,6 @@ import Header                           from './components/Header/Header';
 import './App.css';
 import Timeline from './components/Timeline/Timeline';
 import { Hit } from './Synth/Synth.types';
-import Piano from './components/Piano/Piano';
 
 function App() {
 

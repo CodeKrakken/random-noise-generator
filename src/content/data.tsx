@@ -247,6 +247,7 @@ const demoVoices = [
     maxDecay: 0,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#ff0000"
   },
   {
     id: "9cda77a4-04ea-484c-baf4-2e4c8ba9736c",
@@ -274,6 +275,7 @@ const demoVoices = [
     maxDecay: 0,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#ff8800"
   },
     {
     id: "c6dcf197-e0d3-4941-876c-1c6f05dac8fc",
@@ -301,6 +303,7 @@ const demoVoices = [
     maxDecay: 100,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#ffee00"
   },
   {
     id: "7c9db110-eb12-42e8-b24d-c366eb21dd81",
@@ -354,6 +357,7 @@ const demoVoices = [
     maxDecay: 100,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#33ff00"
   },
   {
     id: "6e288e57-7bc3-4719-a4ab-120b2a16b4b1",
@@ -406,6 +410,7 @@ const demoVoices = [
     minDecay: 100,
     maxDecay: 100,
     thisInterval: 0,
+    colour: "#0400ff"
   },
   {
     id: "0dd0632e-4dfb-4cbc-a887-a2bf716ccb55",
@@ -458,6 +463,7 @@ const demoVoices = [
     minDecay: 100,
     maxDecay: 100,
     thisInterval: 0,
+    colour: "#ae00ff"
   },
   {
     id: "97ecfcd9-c0d0-42a0-a887-184fae815b06",
@@ -485,6 +491,7 @@ const demoVoices = [
     maxDecay: 0,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#ff00d4"
   },
     {
     id: "0c4f5a93-2228-427c-a4f8-342d9c7a8c38",
@@ -512,6 +519,7 @@ const demoVoices = [
     maxDecay: 100,
     thisInterval: 0,
     offsetInterval: 0,
+    colour: "#00e1ff"
   }
 ];
 

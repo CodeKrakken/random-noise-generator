@@ -29,7 +29,8 @@ export default function TextField ({
     'data-attribute'  : {attrName},
     type              : 'text',
     value             : voices[i].label,
-    onChange          : handleClick
+    onChange          : handleClick,
+    style             : { backgroundColor: voices[i].colour }
   }
 
   return <input {...props} />
