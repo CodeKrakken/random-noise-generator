@@ -107,6 +107,7 @@ const Timeline = ({ hits }: TimelineProps) => {
                       3
                     ),
                     height: pixelsPerNote - 2,
+                    backgroundColor: hit.colour
                   }}
                 />
               )

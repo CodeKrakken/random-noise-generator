@@ -332,7 +332,8 @@ const runInterval = (
         detune    : getRangeValue('Detune', voice),
         note      : +randomOneFrom(activeNotes),
         octave    : +randomOneFrom(activeOctaves),
-        ...getGainEvents(voice, intervalLength, runStartTime)
+        ...getGainEvents(voice, intervalLength, runStartTime),
+        colour    : voice.colour
       }      
 
       try {

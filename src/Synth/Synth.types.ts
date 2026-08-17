@@ -15,6 +15,7 @@ type Hit = {
   peakEnd?   : number
   level?     : number
   source?    : SourceGain
+  colour     : string
 }
 
 type SourceGain = {
