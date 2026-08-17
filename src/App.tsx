@@ -42,7 +42,7 @@ function App() {
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault()
-      voices.scrollLeft += e.deltaY
+      voices.scrollLeft += e.deltaX + e.deltaY
     }
 
     voices.addEventListener('wheel', handleWheel, { passive: false })
