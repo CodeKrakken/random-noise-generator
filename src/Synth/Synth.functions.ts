@@ -334,7 +334,8 @@ const runInterval = (
         octave    : +randomOneFrom(activeOctaves),
         ...getGainEvents(voice, intervalLength, runStartTime),
         colour    : voice.colour
-      }      
+      }
+
 
       try {
               
