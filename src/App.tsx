@@ -70,11 +70,12 @@ function App() {
     Synth.add(newVoice, improvising, voicesRef)
   }
 
-  const handleDelete = (i: number) => {  
-    const voice = voices[i]  
+  const handleDelete = (id: string) => {  
+    const voice = voices.find(v => v.id === id)  
+    if (!voice) return  
     voice.isActive = false  
-    setVoices(voices => voices.filter((voice, j) => j !== i))  
-    Synth.delete(i)  
+    setVoices(voices => voices.filter((voice, j) => voice.id !== id))  
+    Synth.delete(voice.id)  
   }
 
   const startImprovising = () => {

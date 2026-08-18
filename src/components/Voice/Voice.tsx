@@ -35,7 +35,7 @@ export default function Voice({
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
   const deleteButtonProps = {
-    props: { onClick: () => handleDelete(i) },
+    props: { onClick: () => handleDelete(voices[i].id) },
     label: "X"
   }
 
@@ -46,6 +46,7 @@ export default function Voice({
     const value = e.currentTarget.value
     setHiddenStates(prev => ({ ...prev, [value]: !prev[value] }))  
   }
+
 
   return (
     <div

@@ -38,7 +38,10 @@ export const Synth = {
     }
   },
 
-  delete: (i: number) => Synth.voices.splice(i, 1),
+  delete: (id: string) => {
+    const i = Synth.voices.findIndex(v => v.id === id)
+    Synth.voices.splice(i, 1)
+  },
 
   update: (voice: VoiceType, i: number) => Synth.voices[i] = voice,
 
