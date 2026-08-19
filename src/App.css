@@ -76,6 +76,7 @@ button img {
   top: calc(var(--u) * 1.75);  
   z-index: 20;
   width: 100%;
+  height: calc(var(--u) * 8);
 }
 
 /* #voices {
