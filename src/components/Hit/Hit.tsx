@@ -42,6 +42,8 @@ export default function Hit({
     return (frequencies.length - 1 - closestIndex) * pixelsPerNote
   }
 
+
+
   return <>
     <div
       key={key}
@@ -61,15 +63,8 @@ export default function Hit({
     >
       {
         showDetails ? <>
-          {/* {
-            Object.keys(hit).filter(attr => attr !== 'source').map(attr => (
-              <div>
-                {`${attr} - ${hit[attr]}`}
-              </div>
-            ))
-          } */}
           <HitDetails
-            sound={hit.sound!}
+            hit={hit}
           />
         </> : <></>
       }

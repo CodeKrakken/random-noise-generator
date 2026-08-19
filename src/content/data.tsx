@@ -562,6 +562,12 @@ const demoVoices = [
 const noteNameToIndex: Record<string, number> = {  
   C:0, B:1, Bb:2, A:3, Ab:4, G:5, Gb:6, F:7, E:8, Eb:9, D:10, Db:11  
 }
+
+const noteNumberToLetter = Object.fromEntries(
+  Object.entries(noteNameToIndex).map(
+    ([key, value]) => [value+1, key]
+  )
+) as Record<number, string>
  
 export {
   title,
@@ -577,5 +583,6 @@ export {
   sampleFolders,
   demoVoices,
   buttonImages,
-  noteNameToIndex
+  noteNameToIndex,
+  noteNumberToLetter
 }

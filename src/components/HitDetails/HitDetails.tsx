@@ -1,10 +1,23 @@
+import { noteNameToIndex, noteNumberToLetter } from "../../content/data"
+import { HitType } from "../shared.types"
+
 export default function HitDetails({
-  sound
+  hit
 } : {
-  sound: string
+  hit: HitType
 }) {
   
+  const { 
+    sound, 
+    level,
+    note,
+    octave  
+  } = hit
+  
   return <div className="component-border hit-details">
-    {sound}
+    <div>{sound}</div>
+    <div>Level - {level}</div>
+    <div>Note{`${noteNumberToLetter[note!]}${octave}`}</div>
+
   </div>
 }
