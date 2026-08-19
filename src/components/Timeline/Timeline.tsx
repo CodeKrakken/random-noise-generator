@@ -1,9 +1,19 @@
-import { HitType } from '../../components/shared.types'
+import { HitType, VoiceType } from '../../components/shared.types'
 import { allFrequencies } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
 
-const Timeline = ({ hits }: {hits: HitType[]}) => {
+const Timeline = ({ 
+
+  hits,
+  voices 
+
+} : {
+
+  hits: HitType[]
+  voices: VoiceType[]
+  
+}) => {
 
   const pixelsPerSecond = 100
   const pixelsPerNote = 12
@@ -80,6 +90,7 @@ const Timeline = ({ hits }: {hits: HitType[]}) => {
                   pixelsPerSecond={pixelsPerSecond}
                   key={i}
                   hit={hit}
+                  voices={voices}
                 />
               )
 

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { HitType } from "../shared.types"
+import { HitType, VoiceType } from "../shared.types"
 import HitDetails from "../HitDetails/HitDetails"
 
 export default function Hit({
@@ -8,7 +8,8 @@ export default function Hit({
   pixelsPerNote,
   pixelsPerSecond,
   key,
-  hit
+  hit,
+  voices
 
 } : {
 
@@ -17,6 +18,7 @@ export default function Hit({
   pixelsPerSecond: number
   key: number
   hit: HitType
+  voices: VoiceType[]
 
 }) {
 
@@ -58,7 +60,7 @@ export default function Hit({
           3
         ),
         height: pixelsPerNote - 2,
-        backgroundColor: hit.colour
+        backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >
       {

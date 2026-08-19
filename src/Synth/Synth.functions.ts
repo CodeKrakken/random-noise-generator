@@ -333,7 +333,7 @@ const runInterval = (
         note      : +randomOneFrom(activeNotes),
         octave    : +randomOneFrom(activeOctaves),
         ...getGainEvents(voice, intervalLength, runStartTime),
-        colour    : voice.colour
+        voiceId   : voice.id
       }
  
 

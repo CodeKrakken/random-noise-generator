@@ -77,7 +77,7 @@ type HitType = {
   peakEnd?   : number
   level?     : number
   source?    : SourceGain
-  colour     : string
+  voiceId    : string
 }
 
 export type {
