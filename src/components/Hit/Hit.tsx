@@ -24,7 +24,12 @@ export default function Hit({
 
   const [showDetails, setShowDetails] = useState(false)
 
-  const handleClick = () => setShowDetails(!showDetails)
+  const handleLeftClick = (e: React.MouseEvent<HTMLDivElement>) => setShowDetails(false)
+
+  const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setShowDetails(!showDetails)
+  }
 
   const frequencyToPixels = (frequency: number) => {
   
@@ -50,7 +55,8 @@ export default function Hit({
     <div
       key={key}
       className="hit"
-      onClick={handleClick}
+      onClick={handleLeftClick}
+      onContextMenu={handleRightClick}
       style={{
         left: hit.startTime! * pixelsPerSecond,
         bottom: frequencyToPixels(hit.frequency!) + 1,
