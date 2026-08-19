@@ -24,6 +24,8 @@ const Timeline = ({
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
 
+  const blackNoteIndexes = [1, 3, 6, 8, 10];
+
   return (
 
     <div id="timeline-container">
@@ -57,16 +59,23 @@ const Timeline = ({
           }}
         >
           {
-            frequencies.map((frequency, index) => (
-              <div
-                key={frequency}
-                className="timeline-grid-row"
-                style={{
-                  top: index * pixelsPerNote,
-                  height: pixelsPerNote,
-                }}
-              />
-            ))
+            frequencies.map((frequency, index) => {
+
+              const noteIndex = index % 12
+
+
+              return (
+                <div
+                  key={frequency}
+                  className="timeline-grid-row"
+                  style={{
+                    top: index * pixelsPerNote,
+                    height: pixelsPerNote,
+                    backgroundColor: blackNoteIndexes.includes(noteIndex) ? '#000000' : '#ffffff'
+                  }}
+                />
+              )
+            })
           }
 
           {/* Notes */}
