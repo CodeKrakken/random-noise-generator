@@ -262,5 +262,6 @@ button img {
   height: fit-content; 
   width: fit-content; 
   position: relative;
-  top: calc(var(--u) * 0.3)
+  top: calc(var(--u) * 0.3);
+  z-index: 100;
 }
