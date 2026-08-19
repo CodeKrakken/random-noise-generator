@@ -24,7 +24,7 @@ const Timeline = ({
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
 
-  const blackNoteIndexes = [1, 3, 6, 8, 10];
+  const blackNoteIndexes = [2, 4, 6, 9, 11];
 
   return (
 
@@ -32,7 +32,7 @@ const Timeline = ({
 
       {/* Piano */}
 
-      <div 
+      {/* <div 
         id="timeline-piano-container"
         className="component-border"
       >
@@ -42,7 +42,7 @@ const Timeline = ({
             id: 'timeline-piano'
           }}
         />
-      </div>
+      </div> */}
 
       {/* Horizontally scrolling timeline */}
 
@@ -68,6 +68,7 @@ const Timeline = ({
                 <div
                   key={frequency}
                   className="timeline-grid-row"
+                  id={`${frequency}`}
                   style={{
                     top: index * pixelsPerNote,
                     height: pixelsPerNote,
