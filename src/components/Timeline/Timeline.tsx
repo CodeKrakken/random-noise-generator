@@ -1,9 +1,9 @@
-import { Hit } from '../../Synth/Synth.types'
+import { HitType } from '../../components/shared.types'
 import { allFrequencies } from '../../content/data'
 import Piano from '../Piano/Piano'
 
 type TimelineProps = {
-  hits: Hit[]
+  hits: HitType[]
 }
 
 const Timeline = ({ hits }: TimelineProps) => {

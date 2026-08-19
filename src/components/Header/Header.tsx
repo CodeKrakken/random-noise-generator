@@ -1,7 +1,6 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps, MouseEventHandler, useEffect, useState } from 'react'
 import { title, addLabel }                        from '../../content/data'
-import { VoiceType }                              from '../shared.types'
-import { Hit } from '../../Synth/Synth.types'
+import { VoiceType, HitType }                              from '../shared.types'
 
 const letterImages = (string: string, height: string = "40px") => {
 
@@ -42,7 +41,7 @@ export default function Header ({
   voices          : VoiceType[]
   loadVoices      : MouseEventHandler<HTMLButtonElement>,
   handlePlayback  : MouseEventHandler<HTMLButtonElement>
-  recordedHits    : Hit[]
+  recordedHits    : HitType[]
 }) {
 
   const [disableLoad, setDisableLoad] = useState(false)

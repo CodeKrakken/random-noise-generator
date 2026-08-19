@@ -1,5 +1,5 @@
-import { VoiceType }                        from '../components/shared.types'
-import { Hit, VoicesRef }                   from './Synth.types'
+import { VoiceType, HitType }                        from '../components/shared.types'
+import { VoicesRef }                   from './Synth.types'
 import { getContext, runInterval, playHit, removeSource } from './Synth.functions'
 import { demoVoices }                       from '../content/data'
 import { Dispatch, SetStateAction } from 'react'
@@ -18,9 +18,9 @@ export const Synth = {
 
   voices: demoVoices as VoiceType[],
 
-  recordedHits: [] as Hit[],
+  recordedHits: [] as HitType[],
 
-  setRecordedHits: undefined as Dispatch<SetStateAction<Hit[]>> | undefined,
+  setRecordedHits: undefined as Dispatch<SetStateAction<HitType[]>> | undefined,
 
   resumeContext: () => setup = getContext(setup),
 

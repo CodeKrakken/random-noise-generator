@@ -1,5 +1,5 @@
-import { VoiceType, RangeKey }                                                    from '../components/shared.types'
-import { Hit, SourceGain, VoicesRef }                                                         from './Synth.types'
+import { VoiceType, HitType, RangeKey }                                                    from '../components/shared.types'
+import { SourceGain, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex }  from '../content/data';
 
 
@@ -308,7 +308,7 @@ const runInterval = (
   voice           : VoiceType, 
   voicesRef       : VoicesRef, 
   context         : AudioContext,
-  recordedHits    : Hit[],
+  recordedHits    : HitType[],
   runStartTime    : number,
   setRecordedHits : Function
 ) => {
@@ -325,7 +325,7 @@ const runInterval = (
   
     if (!isRest(voice)) {
 
-      const hit: Hit = {
+      const hit: HitType = {
         sound     : randomOneFrom(activeSounds) as string,
         level     : calculateLevel(voice),
         frequency : randomOneFrom(activeFrequencies),
@@ -456,7 +456,7 @@ const generateNoteLength = (voice: VoiceType, intervalLength: number) => {
 const getFadeLength = (percentage: number, noteLength: number) => noteLength * percentage / 100
 
 const playHit = (
-  hit: Hit,
+  hit: HitType,
   context: AudioContext,
   runStartTime: number,
   onFinished?: () => void
@@ -495,7 +495,7 @@ const playHit = (
 const isWaveform = (sound: string) => waveforms.includes(sound as string)
 
 
-const setUpSource = (context: AudioContext, hit: Hit) => {
+const setUpSource = (context: AudioContext, hit: HitType) => {
 
   const source  = context.createOscillator()
   const gainNode    = setUpGainNode(context)
@@ -528,7 +528,7 @@ const removeSource = (sourceGain: SourceGain) => {
 }
 
 const setUpSample = (
-  hit: Hit,
+  hit: HitType,
   context: AudioContext,
   time: number,
   gainNode: GainNode,
@@ -613,7 +613,7 @@ const findNearestSampleInFolder = (
 const scheduleGainEvents = (
 
   gainNode: GainNode,
-  hit: Hit,
+  hit: HitType,
   runStartTime: number
 
 ) => {

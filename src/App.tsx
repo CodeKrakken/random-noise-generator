@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState }  from 'react';
 import { Synth }                        from './Synth/Synth';
-import { VoiceType }                    from './components/shared.types';
+import { VoiceType, HitType }           from './components/shared.types';
 import { demoVoices }                   from './content/data';
 import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
 import Timeline from './components/Timeline/Timeline';
-import { Hit } from './Synth/Synth.types';
 
 function App() {
 
@@ -17,7 +16,7 @@ function App() {
   const [voices,           setVoices] = useState<VoiceType[]>(demoVoices)
   const [improvising, setImprovising] = useState<boolean>(false)
   const [replaying,     setReplaying] = useState<boolean>(false)
-  const [recordedHits, setRecordedHits] = useState<Hit[]>([])
+  const [recordedHits, setRecordedHits] = useState<HitType[]>([])
 
   useEffect(() => {
     Synth.setRecordedHits = setRecordedHits

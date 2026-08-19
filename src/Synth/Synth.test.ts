@@ -1,8 +1,7 @@
 import { Synth }                            from './Synth';  
-import { VoiceType }                        from '../components/shared.types';  
+import { VoiceType, HitType }                        from '../components/shared.types';  
 import { runInterval, getContext }          from './Synth.functions';  
 import { createMockContext }                from './Synth.test.functions';  
-import { Hit } from './Synth.types';
   
   
 jest.mock('../content/data', () => ({  
@@ -39,7 +38,8 @@ const makeVoice = (): VoiceType => ({
   minAttack:        100,  
   maxAttack:        100,  
   minDecay:         100,  
-  maxDecay:         100,  
+  maxDecay:         100,
+  colour:           "#33ff00"
 })  
   
 describe('Synth', () => {  
@@ -70,7 +70,7 @@ describe('Synth', () => {
       const voicesRef = { current: [voice1, voice2] };  
       const mockContext = createMockContext();  
       (getContext as jest.Mock).mockReturnValue(mockContext);  
-      const recordedHits: Hit[] = []
+      const recordedHits: HitType[] = []
   
       const args = [voicesRef, mockContext, recordedHits];  
   
