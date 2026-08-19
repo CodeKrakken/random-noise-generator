@@ -1,12 +1,9 @@
 import { HitType } from '../../components/shared.types'
 import { allFrequencies } from '../../content/data'
+import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
 
-type TimelineProps = {
-  hits: HitType[]
-}
-
-const Timeline = ({ hits }: TimelineProps) => {
+const Timeline = ({ hits }: {hits: HitType[]}) => {
 
   const pixelsPerSecond = 100
   const pixelsPerNote = 12
@@ -16,24 +13,6 @@ const Timeline = ({ hits }: TimelineProps) => {
 
   const width = timelineSeconds * pixelsPerSecond
   const height = frequencies.length * pixelsPerNote
-
-  const frequencyToPixels = (frequency: number) => {
-
-    let closestIndex = 0
-    let closestDifference = Infinity
-
-    frequencies.forEach((noteFrequency, index) => {
-
-      const difference = Math.abs(noteFrequency - frequency)
-
-      if (difference < closestDifference) {
-        closestDifference = difference
-        closestIndex = index
-      }
-    })
-
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
-  }
 
   return (
 
@@ -83,7 +62,7 @@ const Timeline = ({ hits }: TimelineProps) => {
           {/* Notes */}
 
           {
-            hits.map((hit, index) => {
+            hits.map((hit, i) => {
 
               if (
                 hit.startTime === undefined ||
@@ -95,20 +74,12 @@ const Timeline = ({ hits }: TimelineProps) => {
 
 
               return (
-                <div
-                  key={index}
-                  className="hit"
-                  style={{
-                    left: hit.startTime * pixelsPerSecond,
-                    bottom: frequencyToPixels(hit.frequency) + 1,
-                    width: Math.max(
-                      (hit.endTime - hit.startTime) *
-                      pixelsPerSecond,
-                      3
-                    ),
-                    height: pixelsPerNote - 2,
-                    backgroundColor: hit.colour
-                  }}
+                <Hit 
+                  frequencies={frequencies}
+                  pixelsPerNote={pixelsPerNote}
+                  pixelsPerSecond={pixelsPerSecond}
+                  key={i}
+                  hit={hit}
                 />
               )
 

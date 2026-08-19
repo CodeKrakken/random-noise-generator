@@ -335,7 +335,7 @@ const runInterval = (
         ...getGainEvents(voice, intervalLength, runStartTime),
         colour    : voice.colour
       }
-
+ 
 
       try {
               
@@ -351,8 +351,6 @@ const runInterval = (
   } 
 
   if (!voice.isActive) return
-
-  
 
   setTimeout(() => {
     runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
