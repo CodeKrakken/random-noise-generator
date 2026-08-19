@@ -255,3 +255,12 @@ button img {
   border-radius: 2;
   cursor: pointer;
 }
+
+.hit-details {
+  background: black;
+  overflow: scroll;
+  height: calc(var(--u) * 4);
+  width: calc(var(--u) * 3);
+  position: relative;
+  top: calc(var(--u) * 0.3)
+}

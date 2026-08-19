@@ -4,7 +4,7 @@ export default function HitDetails({
   sound: string
 }) {
   
-  return <>
+  return <div className="component-border hit-details">
     {sound}
-  </>
+  </div>
 }
