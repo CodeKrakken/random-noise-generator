@@ -79,15 +79,6 @@ button img {
   height: calc(var(--u) * 8);
 }
 
-/* #voices {
-  z-index: 100;  
-  left: 0;  
-  width: 100%;  
-  display: flex;
-  flex-direction: row;
-  overflow-y: hidden;
-} */
-
 #voices {
   overflow-x: auto;
   overflow-y: visible;
@@ -152,10 +143,6 @@ button img {
     box-sizing: border-box;
   }
 }  
-
-/* .button-grid-parent {
-  position: relative;
-} */
 
 .button-grid {
   display: grid;
@@ -266,4 +253,5 @@ button img {
 .hit {
   position: absolute;
   border-radius: 2;
+  cursor: pointer;
 }
