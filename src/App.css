@@ -259,8 +259,8 @@ button img {
 .hit-details {
   background: black;
   overflow: scroll;
-  height: calc(var(--u) * 4);
-  width: calc(var(--u) * 3);
+  height: fit-content; 
+  width: fit-content; 
   position: relative;
   top: calc(var(--u) * 0.3)
 }
