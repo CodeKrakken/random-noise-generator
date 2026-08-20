@@ -161,6 +161,7 @@ button img {
   flex-direction: column;
   position: absolute;
   width: calc(var(--u) * 1.25);
+  height: calc(var(--u) * 5)
 }
 
 .key {
@@ -228,6 +229,29 @@ button img {
 
   button {
     cursor: default;
+  }
+}
+
+#timeline-grid-piano-container {
+  border-top: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
+}
+
+#timeline-grid-piano {
+  width: 100vw;
+  min-width: 100vw;
+  height: calc(var(--u) * 40);
+  top: 0;
+
+  position: sticky;
+  left: 0;
+  flex-shrink: 0;
+
+  button {
+    cursor: default;
+  }
+
+  .black {
+    width: 100%
   }
 }
 

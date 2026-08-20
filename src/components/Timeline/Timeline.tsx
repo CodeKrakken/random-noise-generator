@@ -46,12 +46,16 @@ const Timeline = ({
       </div>
 
       {/* Horizontally scrolling timeline */}
-
-      <TimelineGrid 
-        frequencies = {frequencies}
-        hits        = {hits}
-        voices      = {voices}
-      />
+      <div 
+        id="timeline-grid-piano-container"
+      >
+        <Piano
+          keys={frequencies}
+          props={{
+            id: 'timeline-grid-piano'
+          }}
+        />
+      </div>
     </div>
   )
 }
