@@ -167,7 +167,7 @@ button img {
 .key {
   cursor: pointer;
   border: calc(var(--u) * 0.025) solid black;
-  box-sizing: border-box;  
+  /* box-sizing: border-box;   */
   text-align: right;
 }
 
@@ -202,6 +202,8 @@ button img {
   display: flex;
   overflow-y: auto;
   overflow-x: hidden;
+  /* height: calc(var(--u) * 0.625 * 78); */
+  height: fit-content
 }
 
 #timeline {
@@ -220,7 +222,8 @@ button img {
 #timeline-piano {
   width: calc(var(--u) * 1.25);
   min-width: calc(var(--u) * 1.25);
-  height: calc(var(--u) * 40);
+  /* height: calc(var(--u) * 0.625 * 78); */
+  height: fit-content;
   top: 0;
 
   position: sticky;
@@ -239,8 +242,8 @@ button img {
 #timeline-grid-piano {
   width: 100vw;
   min-width: 100vw;
-  height: calc(var(--u) * 40);
-  top: 0;
+  height: fit-content;
+  /* top: 0; */
 
   position: sticky;
   left: 0;
@@ -278,6 +281,7 @@ button img {
   position: absolute;
   border-radius: 2;
   cursor: pointer;
+  z-index: 100;
 }
 
 .hit-details {

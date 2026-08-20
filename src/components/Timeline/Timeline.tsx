@@ -48,6 +48,7 @@ const Timeline = ({
       {/* Horizontally scrolling timeline */}
       <div 
         id="timeline-grid-piano-container"
+        className="component-border"
       >
         <Piano
           keys={frequencies}
@@ -55,6 +56,30 @@ const Timeline = ({
             id: 'timeline-grid-piano'
           }}
         />
+
+        {
+          hits.map((hit, i) => {
+
+            if (
+              hit.startTime === undefined ||
+              hit.endTime === undefined ||
+              hit.frequency === undefined
+            ) {
+              return null
+            }
+            
+            return (
+              <Hit 
+                frequencies={frequencies}
+                pixelsPerNote={pixelsPerNote}
+                pixelsPerSecond={pixelsPerSecond}
+                key={i}
+                hit={hit}
+                voices={voices}
+              />
+            )
+          })
+        }
       </div>
     </div>
   )
