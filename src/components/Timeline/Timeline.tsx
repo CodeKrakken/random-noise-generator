@@ -57,6 +57,7 @@ const Timeline = ({
           }}
         />
 
+
         {
           hits.map((hit, i) => {
 

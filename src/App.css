@@ -282,6 +282,7 @@ button img {
   border-radius: 2;
   cursor: pointer;
   z-index: 100;
+  height: calc(var(--u) * 0.325)
 }
 
 .hit-details {

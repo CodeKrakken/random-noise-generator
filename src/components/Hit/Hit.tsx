@@ -49,6 +49,13 @@ export default function Hit({
     return (frequencies.length - 1 - closestIndex) * pixelsPerNote
   }
 
+  const pianoKey = document.getElementById(
+    `timeline-grid-piano-${hit.frequency}`
+  )
+
+  const top = (pianoKey?.offsetTop ?? 0) + 398
+  // const height = pianoKey?.offsetHeight ?? 0
+
 
 
   return <>
@@ -59,13 +66,13 @@ export default function Hit({
       onContextMenu={handleRightClick}
       style={{
         left: hit.startTime! * pixelsPerSecond,
+        top,
         bottom: frequencyToPixels(hit.frequency!) + 1,
         width: Math.max(
           (hit.endTime! - hit.startTime!) *
           pixelsPerSecond,
           3
         ),
-        height: pixelsPerNote - 2,
         backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >
