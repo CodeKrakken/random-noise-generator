@@ -2,6 +2,7 @@ import { HitType, VoiceType } from '../../components/shared.types'
 import { allFrequencies } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
+import TimelineGrid from '../TimelineGrid'
 
 const Timeline = ({ 
 
@@ -32,7 +33,7 @@ const Timeline = ({
 
       {/* Piano */}
 
-      {/* <div 
+      <div 
         id="timeline-piano-container"
         className="component-border"
       >
@@ -42,72 +43,15 @@ const Timeline = ({
             id: 'timeline-piano'
           }}
         />
-      </div> */}
+      </div>
 
       {/* Horizontally scrolling timeline */}
 
-      <div 
-        id="timeline-grid-container"
-        className="component-border"
-      >
-        <div 
-          id="timeline-grid"
-          style={{
-            width,
-            minWidth: width,
-            height
-          }}
-        >
-          {
-            frequencies.map((frequency, index) => {
-
-              const noteIndex = index % 12
-
-
-              return (
-                <div
-                  key={frequency}
-                  className="timeline-grid-row"
-                  id={`${frequency}`}
-                  style={{
-                    top: index * pixelsPerNote,
-                    height: pixelsPerNote,
-                    backgroundColor: blackNoteIndexes.includes(noteIndex) ? '#000000' : '#ffffff'
-                  }}
-                />
-              )
-            })
-          }
-
-          {/* Notes */}
-
-          {
-            hits.map((hit, i) => {
-
-              if (
-                hit.startTime === undefined ||
-                hit.endTime === undefined ||
-                hit.frequency === undefined
-              ) {
-                return null
-              }
-
-
-              return (
-                <Hit 
-                  frequencies={frequencies}
-                  pixelsPerNote={pixelsPerNote}
-                  pixelsPerSecond={pixelsPerSecond}
-                  key={i}
-                  hit={hit}
-                  voices={voices}
-                />
-              )
-
-            })
-          }
-        </div>
-      </div>
+      <TimelineGrid 
+        frequencies = {frequencies}
+        hits        = {hits}
+        voices      = {voices}
+      />
     </div>
   )
 }

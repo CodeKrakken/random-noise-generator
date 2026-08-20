@@ -42,8 +42,9 @@ function App() {
       e.preventDefault()
       voices.scrollLeft += e.deltaX + e.deltaY
     }
+    
 
-    voices.addEventListener('wheel' as any, handleWheel, { passive: false })
+    voices.addEventListener('wheel' as any, handleWheel, { passive: false })     // Fix this later
 
     const header = document.querySelector('#header')
 
@@ -53,11 +54,12 @@ function App() {
       e.preventDefault()
     }
 
-    header.addEventListener('wheel' as any, handleHeaderWheel, { passive: false })
+    header.addEventListener('wheel' as any, handleHeaderWheel, { passive: false })    // Fix this later
     
     return () => {
-      voices.removeEventListener('wheel' as any, handleWheel)
-      header.removeEventListener('wheel' as any, handleHeaderWheel)
+
+      voices.removeEventListener('wheel' as any, handleWheel)    // Fix this later
+      header.removeEventListener('wheel' as any, handleHeaderWheel)    // Fix this later
     }
 
   }, [])
