@@ -59,6 +59,7 @@ export default function Hit({
           pixelsPerSecond,
           3
         ),
+        height: pixelsPerNote - 2,  
         backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >

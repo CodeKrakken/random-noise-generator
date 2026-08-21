@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import ButtonGrid from "../components/ButtonGrid/ButtonGrid";
 import VoicePiano from "../components/VoicePiano/VoicePiano";
 
@@ -219,6 +220,9 @@ const sliders = [
     row: 3
   }
 ]
+
+
+
 
 const demoVoices = [
   {

@@ -113,15 +113,7 @@ const Timeline = ({
 
 
         {
-          hits.map((hit, i) => {
-
-            if (
-              hit.startTime === undefined ||
-              hit.endTime === undefined ||
-              hit.frequency === undefined
-            ) {
-              return null
-            }
+          visibleHits.map((hit, i) => {
             
             return (
               <Hit 
@@ -136,7 +128,7 @@ const Timeline = ({
             )
           })
         }
-
+{/* 
         {  
           visibleHits.map((hit, index) => (  
             <div  
@@ -153,7 +145,7 @@ const Timeline = ({
               }}  
             />  
           ))  
-        }
+        } */}
       </div>
     </div>
   )
