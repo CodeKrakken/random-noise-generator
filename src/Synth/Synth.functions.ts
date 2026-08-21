@@ -1,6 +1,7 @@
 import { VoiceType, HitType, RangeKey }                                                    from '../components/shared.types'
 import { SourceGain, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex }  from '../content/data';
+import { Synth } from './Synth';
 
 
 // variables
@@ -345,8 +346,8 @@ const runInterval = (
         console.error(error instanceof Error ? error.message : "Unknown error", error)
       }         
       
-      recordedHits.push(hit)
-      setRecordedHits?.([...recordedHits])
+      recordedHits.push(hit)  
+      Synth.hitsDirty = true
     }    
   } 
 
