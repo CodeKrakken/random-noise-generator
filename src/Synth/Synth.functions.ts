@@ -319,43 +319,55 @@ const runInterval = (
   voice.thisInterval = nextInterval
   const thisInterval = voice.thisInterval
 
-  if (isTimeFor(thisInterval, context)) {
-    
-    const intervalLength = getIntervalLength(voice)
-    voice.nextInterval += intervalLength
-  
-    if (!isRest(voice)) {
+  // try
 
-      const hit: HitType = {
-        sound     : randomOneFrom(activeSounds) as string,
-        level     : calculateLevel(voice),
-        frequency : randomOneFrom(activeFrequencies),
-        detune    : getRangeValue('Detune', voice),
-        note      : +randomOneFrom(activeNotes),
-        octave    : +randomOneFrom(activeOctaves),
-        ...getGainEvents(voice, intervalLength, runStartTime),
-        voiceId   : voice.id
-      }
- 
+  try {
+    if (isTimeFor(thisInterval, context)) {
+      
+      const intervalLength = getIntervalLength(voice)
+      voice.nextInterval += intervalLength
 
       try {
-              
-        playHit(hit, context, runStartTime)
-
+        
       } catch (error) {
-        console.error(error instanceof Error ? error.message : "Unknown error", error)
-      }         
-      
-      recordedHits.push(hit)  
-      Synth.hitsDirty = true
-    }    
-  } 
+        
+      }
+    
+      if (!isRest(voice)) {
 
-  if (!voice.isActive) return
+        const hit: HitType = {
+          sound     : randomOneFrom(activeSounds) as string,
+          level     : calculateLevel(voice),
+          frequency : randomOneFrom(activeFrequencies),
+          detune    : getRangeValue('Detune', voice),
+          note      : +randomOneFrom(activeNotes),
+          octave    : +randomOneFrom(activeOctaves),
+          ...getGainEvents(voice, intervalLength, runStartTime),
+          voiceId   : voice.id
+        }
+  
 
-  setTimeout(() => {
-    runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
-  }, (voice.nextInterval - context.currentTime)*1000)    
+        try {
+                
+          playHit(hit, context, runStartTime)
+
+        } catch (error) {
+          console.error(error instanceof Error ? error.message : "Unknown error", error)
+        }         
+        
+        // recordedHits.push(hit)  
+        // Synth.hitsDirty = true
+      }    
+    } 
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unknown error", error)
+  } finally {
+    if (!voice.isActive) return
+
+    setTimeout(() => {
+      runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
+    }, (voice.nextInterval - context.currentTime)*1000) 
+  }
 }
 
 const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode
