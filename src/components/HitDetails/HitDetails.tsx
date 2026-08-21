@@ -1,4 +1,4 @@
-import { noteNameToIndex, noteNumberToLetter } from "../../content/data"
+import { noteNumberToLetter } from "../../content/data"
 import { HitType } from "../shared.types"
 
 export default function HitDetails({

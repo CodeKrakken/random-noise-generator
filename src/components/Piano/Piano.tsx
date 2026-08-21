@@ -1,5 +1,4 @@
 import { noteNameToIndex } from "../../content/data";
-import { updateButton } from "../shared.functions";
 import { VoiceType }    from "../shared.types";
 
 export default function Piano ({
