@@ -9,7 +9,8 @@ export default function Hit({
   pixelsPerSecond,
   key,
   hit,
-  voices
+  voices,
+  frequencyToPixels
 
 } : {
 
@@ -19,6 +20,7 @@ export default function Hit({
   key: number
   hit: HitType
   voices: VoiceType[]
+  frequencyToPixels: (frequency: number) => number
 
 }) {
 
@@ -31,23 +33,7 @@ export default function Hit({
     setShowDetails(!showDetails)
   }
 
-  const frequencyToPixels = (frequency: number) => {
   
-    let closestIndex = 0
-    let closestDifference = Infinity
-
-    frequencies.forEach((noteFrequency, index) => {
-
-      const difference = Math.abs(noteFrequency - frequency)
-
-      if (difference < closestDifference) {
-        closestDifference = difference
-        closestIndex = index
-      }
-    })
-
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
-  }
 
   const pianoKey = document.getElementById(
     `timeline-grid-piano-${hit.frequency}`
