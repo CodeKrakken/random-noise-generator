@@ -111,7 +111,7 @@ describe('Synth', () => {
       expect(Synth.voices[0].bpm).toBe(200);  
   
       // delete  
-      Synth.delete(0);  
+      Synth.delete('test-id');  
       expect(Synth.voices.length).toBe(1);  
       expect(Synth.voices[0]).toBe(voice2);  
   

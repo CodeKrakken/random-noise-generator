@@ -26,6 +26,7 @@ const makeVoice = (): VoiceType => ({
   maxAttack:        100,  
   minDecay:         100,  
   maxDecay:         100,  
+  colour:            '#ff0000',
 })  
 
 export {
