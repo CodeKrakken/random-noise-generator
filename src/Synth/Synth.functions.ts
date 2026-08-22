@@ -327,12 +327,6 @@ const runInterval = (
       const intervalLength = getIntervalLength(voice)
       voice.nextInterval += intervalLength
 
-      try {
-        
-      } catch (error) {
-        
-      }
-    
       if (!isRest(voice)) {
 
         const hit: HitType = {
@@ -345,15 +339,8 @@ const runInterval = (
           ...getGainEvents(voice, intervalLength, runStartTime),
           voiceId   : voice.id
         }
-  
-
-        try {
-                
-          playHit(hit, context, runStartTime)
-
-        } catch (error) {
-          console.error(error instanceof Error ? error.message : "Unknown error", error)
-        }         
+                 
+        playHit(hit, context, runStartTime)
         
         // recordedHits.push(hit)  
         // Synth.hitsDirty = true

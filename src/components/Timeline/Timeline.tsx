@@ -3,7 +3,6 @@ import { HitType, VoiceType } from '../../components/shared.types'
 import { allFrequencies } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
-import TimelineGrid from '../TimelineGrid'
 
 const Timeline = ({ 
 
