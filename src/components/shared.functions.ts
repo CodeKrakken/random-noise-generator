@@ -48,8 +48,13 @@ const updateVoice = (
   Synth.update(voice, i)
 }
 
+const randomOneFrom = <T>(array: T[]): T => {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
 export {
   updateVoice,
   updateButton,
-  getActiveFrequencies
+  getActiveFrequencies,
+  randomOneFrom
 }

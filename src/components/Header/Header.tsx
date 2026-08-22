@@ -25,6 +25,7 @@ export default function Header ({
 
   handleAddVoice,
   handleImprov,
+  handleRandomiseVoices,
   improvising,
   replaying,
   voices,
@@ -34,14 +35,15 @@ export default function Header ({
 
 } : {
 
-  handleAddVoice  : React.MouseEventHandler<HTMLButtonElement>
-  handleImprov    : React.MouseEventHandler<HTMLButtonElement>
-  improvising     : Boolean
-  replaying       : Boolean
-  voices          : VoiceType[]
-  loadVoices      : MouseEventHandler<HTMLButtonElement>,
-  handlePlayback  : MouseEventHandler<HTMLButtonElement>
-  recordedHits    : HitType[]
+  handleAddVoice        : React.MouseEventHandler<HTMLButtonElement>
+  handleImprov          : React.MouseEventHandler<HTMLButtonElement>
+  handleRandomiseVoices : React.MouseEventHandler<HTMLButtonElement>
+  improvising           : Boolean
+  replaying             : Boolean
+  voices                : VoiceType[]
+  loadVoices            : MouseEventHandler<HTMLButtonElement>,
+  handlePlayback        : MouseEventHandler<HTMLButtonElement>
+  recordedHits          : HitType[]
 }) {
 
   const [disableLoad, setDisableLoad] = useState(false)
@@ -97,6 +99,14 @@ export default function Header ({
         disabled  : improvising || !recordedHits.length
       },
       label: letterImages(replaying ? 'Stop' : 'Replay', buttonLabelHeight)
+    },
+    {
+      props: {
+        onClick   : handleRandomiseVoices,
+        className : "header-button",
+        disabled  : false
+      },
+      label: letterImages('Randomise', buttonLabelHeight)
     }
   ]
 
