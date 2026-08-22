@@ -134,6 +134,7 @@ function App() {
       randomVoices.push(randomVoice(voices, bpm))
     }
     setVoices(randomVoices)
+    Synth.voices = randomVoices
   }
 
   const randomVoice = (voices: VoiceType[], bpm: number) => {
