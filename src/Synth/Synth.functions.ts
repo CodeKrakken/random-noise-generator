@@ -462,7 +462,7 @@ const playHit = (
   let gainNode: GainNode
 
   if (isWaveform(sound!)) {
-    console.log(hit)
+
     hit.source = setUpSource(context, hit)
     gainNode = hit.source.gainNode
 
@@ -499,7 +499,6 @@ const setUpSource = (context: AudioContext, hit: HitType) => {
   source.connect(gainNode);
   source.start(0);
   source.type = sound as OscillatorType
-  console.log(frequency)
   source.frequency.value = frequency as number
   source.detune.value = detune as number
   source.stop((endTime! - startTime!) * 1000)

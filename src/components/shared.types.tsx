@@ -50,7 +50,7 @@ type VoiceType = {
   activeOctaves     : string[]
   activeIntervals   : string[]
   activeSounds      : string[]
-  activeFrequencies : [] | number[]
+  activeFrequencies : number[]
   restChance        : number
   minLength         : number
   maxLength         : number

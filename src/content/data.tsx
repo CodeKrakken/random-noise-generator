@@ -579,13 +579,6 @@ const noteNumberToLetter = Object.fromEntries(
     ([key, value]) => [value+1, key]
   )
 ) as Record<number, string>
-
-const melodicScales = [
-  ['1', '3', '5', '6', '8', '10', '12'],  // major
-  ['1', '3', '4', '6', '8', '9', '12'],   // minor
-  ['1', '2', '5', '6', '8', '9', '12'],   // minor
-  ['1', '4', '6', '8', '11']              // blues
-]
  
 export {
   title,
@@ -606,6 +599,5 @@ export {
   notes,
   octaves,
   intervals,
-  sounds,
-  melodicScales
+  sounds
 }
