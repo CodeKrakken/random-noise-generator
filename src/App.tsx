@@ -174,18 +174,16 @@ function App() {
   }
 
   const randomItemsFrom = (options: string[]) => {
-    const numberOfItems = Math.ceil(Math.random() * options.length)
+    const numberOfItems = Math.floor(Math.random() * options.length)
     const items = []
-
-    const remainingOptions = Array.from(options)
 
     for (let i = 0; i < numberOfItems; i++) {
 
-      const j = Math.floor(Math.random() * remainingOptions.length)
-      const selection = remainingOptions.splice(j, 1)
-      items.push(selection[0])
+      const j = Math.floor(Math.random() * options.length)
+      const selection = options.splice(j)
+      items.push(selection)
     }
-    console.log(items)
+
     return items
   }
 

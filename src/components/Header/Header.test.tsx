@@ -8,11 +8,10 @@ jest.mock('../../content/data', () => ({
 }));  
   
 describe('Header', () => {  
-  const mockHandleAddVoice        = jest.fn();  
-  const mockHandleStartStop       = jest.fn();  
-  const mockLoadVoices            = jest.fn();  
-  const mockHandleReplay          = jest.fn();
-  const mockHandleRandomiseVoices  = jest.fn();
+  const mockHandleAddVoice  = jest.fn();  
+  const mockHandleStartStop = jest.fn();  
+  const mockLoadVoices      = jest.fn();  
+  const mockHandleReplay    = jest.fn();
   
   const header = (state: Boolean) => (  
     <Header  
@@ -24,7 +23,6 @@ describe('Header', () => {
       loadVoices={mockLoadVoices}  
       handlePlayback={mockHandleReplay}
       recordedHits={[]}
-      handleRandomiseVoices={mockHandleRandomiseVoices}
     />  
   )  
   
