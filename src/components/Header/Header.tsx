@@ -25,7 +25,7 @@ export default function Header ({
 
   handleAddVoice,
   handleImprov,
-  handleRandomiseVoices,
+  handleReallyRandomVoices,
   improvising,
   replaying,
   voices,
@@ -37,7 +37,7 @@ export default function Header ({
 
   handleAddVoice        : React.MouseEventHandler<HTMLButtonElement>
   handleImprov          : React.MouseEventHandler<HTMLButtonElement>
-  handleRandomiseVoices : React.MouseEventHandler<HTMLButtonElement>
+  handleReallyRandomVoices : React.MouseEventHandler<HTMLButtonElement>
   improvising           : Boolean
   replaying             : Boolean
   voices                : VoiceType[]
@@ -102,11 +102,11 @@ export default function Header ({
     },
     {
       props: {
-        onClick   : handleRandomiseVoices,
+        onClick   : handleReallyRandomVoices,
         className : "header-button",
         disabled  : false
       },
-      label: letterImages('Randomise', buttonLabelHeight)
+      label: letterImages('Really Randomise', buttonLabelHeight)
     }
   ]
 

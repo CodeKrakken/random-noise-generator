@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState }  from 'react';
 import { Synth }                        from './Synth/Synth';
 import { VoiceType, HitType }           from './components/shared.types';
-import { demoVoices, intervals, notes, octaves, sounds }                   from './content/data';
+import { demoVoices, intervals, octaves, sounds, melodicScales, notes } from './content/data';
 import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
 import Timeline from './components/Timeline/Timeline';
-import { getActiveFrequencies } from './components/shared.functions';
+import { getActiveFrequencies, randomOneFrom } from './components/shared.functions';
 
 function App() {
 
@@ -124,29 +124,28 @@ function App() {
 
   const handlePlayback = () => replaying ? stopPlayback() : startPlayback()
   
-  const handleRandomiseVoices = () => {
-    const numberOfVoices = Math.floor(Math.random() * 9) + 3
-    const bpm = Math.floor(Math.random() * 120) + 60
+  const handleReallyRandomVoices = () => {
+    const numberOfVoices = Math.floor(Math.random() * 37) + 3
 
     const randomVoices = []
 
     for (let i = 0; i < numberOfVoices; i++) {
-      randomVoices.push(randomVoice(voices, bpm))
+      randomVoices.push(reallyRandomVoice(voices))
     }
     setVoices(randomVoices)
     Synth.voices = randomVoices
   }
 
-  const randomVoice = (voices: VoiceType[], bpm: number) => {
+  const reallyRandomVoice = (voices: VoiceType[]) => {
 
     const template = voices[voices.length - 1]
     
-    const randomVoice = {
+    const randomVoice: VoiceType = {
       id                : crypto.randomUUID(),
       isActive          : false,
       label             : generateNewLabel(template, voices),
       nextInterval      : 0,
-      bpm               : bpm,
+      bpm               : Math.floor(Math.random() * 479) + 1,
       minLevel          : Math.floor(Math.random() * 100),
       maxLevel          : Math.floor(Math.random() * 100),
       activeNotes       : randomItemsFrom(notes),
@@ -157,10 +156,10 @@ function App() {
       restChance        : Math.floor(Math.random() * 100),
       minLength         : Math.floor(Math.random() * 100),
       maxLength         : Math.floor(Math.random() * 100),
-      minOffset         : template?.minOffset         ??  0,  
-      maxOffset         : template?.maxOffset         ??  0,
-      minDetune         : template?.minDetune         ??  0,
-      maxDetune         : template?.maxDetune         ??  0,
+      minOffset         : Math.floor(Math.random() * 100),
+      maxOffset         : Math.floor(Math.random() * 100),
+      minDetune         : Math.floor(Math.random() * 100),
+      maxDetune         : Math.floor(Math.random() * 100),
       minAttack         : Math.floor(Math.random() * 100),
       maxAttack         : Math.floor(Math.random() * 100),
       minDecay          : Math.floor(Math.random() * 100),
@@ -168,9 +167,10 @@ function App() {
       colour            : randomColour()
     }
 
+    randomVoice.activeFrequencies = getActiveFrequencies(randomVoice) as number[]
+
     return randomVoice
 
-    // randomVoice.activeFrequencies = getActiveFrequencies(randomVoice)
   }
 
   const randomItemsFrom = (options: string[]) => {
@@ -260,7 +260,7 @@ function App() {
       improvising           = {improvising}
       replaying             = {replaying}
       handleAddVoice        = {handleAddVoice}
-      handleRandomiseVoices = {handleRandomiseVoices}
+      handleReallyRandomVoices = {handleReallyRandomVoices}
       voices                = {voices}
       loadVoices            = {loadVoices}
       handlePlayback        = {handlePlayback}
