@@ -136,6 +136,19 @@ function App() {
     Synth.voices = randomVoices
   }
 
+  const handleQuiteRandomVoices = () => {
+    const numberOfVoices = Math.floor(Math.random() * 9) + 3
+    const bpm = Math.floor(Math.random() * 120) + 60
+
+    const randomVoices = []
+
+    for (let i = 0; i < numberOfVoices; i++) {
+      randomVoices.push(quiteRandomVoice(voices, bpm))
+    }
+    setVoices(randomVoices)
+    Synth.voices = randomVoices
+  }
+
   const reallyRandomVoice = (voices: VoiceType[]) => {
 
     const template = voices[voices.length - 1]
@@ -187,6 +200,43 @@ function App() {
     }
     console.log(items)
     return items
+  }
+
+  const quiteRandomVoice = (voices: VoiceType[], bpm: number) => {
+
+    const template = voices[voices.length - 1]
+    
+    const randomVoice: VoiceType = {
+      id                : crypto.randomUUID(),
+      isActive          : false,
+      label             : generateNewLabel(template, voices),
+      nextInterval      : 0,
+      bpm               : bpm,
+      minLevel          : Math.floor(Math.random() * 100),
+      maxLevel          : Math.floor(Math.random() * 100),
+      activeNotes       : randomItemsFrom(randomOneFrom(melodicScales)),
+      activeOctaves     : randomItemsFrom(octaves),
+      activeFrequencies : [],
+      activeIntervals   : randomItemsFrom(intervals),
+      activeSounds      : randomItemsFrom(sounds),
+      restChance        : Math.floor(Math.random() * 25),
+      minLength         : Math.floor(Math.random() * 100),
+      maxLength         : Math.floor(Math.random() * 100),
+      minOffset         : Math.floor(Math.random() * 10),
+      maxOffset         : Math.floor(Math.random() * 10),
+      minDetune         : Math.floor(Math.random() * 25),
+      maxDetune         : Math.floor(Math.random() * 25),
+      minAttack         : Math.floor(Math.random() * 100),
+      maxAttack         : Math.floor(Math.random() * 100),
+      minDecay          : Math.floor(Math.random() * 100),
+      maxDecay          : Math.floor(Math.random() * 100),
+      colour            : randomColour()
+    }
+
+    randomVoice.activeFrequencies = getActiveFrequencies(randomVoice) as number[]
+
+    return randomVoice
+
   }
 
   const setUpVoice = (voices: VoiceType[]) => {
@@ -261,6 +311,7 @@ function App() {
       replaying             = {replaying}
       handleAddVoice        = {handleAddVoice}
       handleReallyRandomVoices = {handleReallyRandomVoices}
+      handleQuiteRandomVoices = {handleQuiteRandomVoices}
       voices                = {voices}
       loadVoices            = {loadVoices}
       handlePlayback        = {handlePlayback}
