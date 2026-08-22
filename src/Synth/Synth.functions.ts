@@ -2,7 +2,6 @@ import { VoiceType, HitType, RangeKey }                                         
 import { SourceGain, VoicesRef }                                                         from './Synth.types'
 import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex }  from '../content/data';
 import { Synth } from './Synth';
-import { randomOneFrom } from '../components/shared.functions';
 
 
 // variables
@@ -376,6 +375,10 @@ const isRest = (voice: VoiceType) => {
   const diceRoll = Math.random()  
 
   return diceRoll < restChance / 100  
+}
+
+const randomOneFrom = <T>(array: T[]): T => {
+  return array[Math.floor(Math.random() * array.length)]
 }
 
 

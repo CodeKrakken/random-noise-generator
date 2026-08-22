@@ -114,17 +114,6 @@ const allFrequencies = [
   [16744.04, 17739.68, 18794.52, 19912.12, 21096.16, 22350.60, 23679.64, 25087.72, 26579.52, 28160.00, 29834.48, 31608.52, 33488.08]
 ]
 
-
-const notes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-const octaves = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-const intervals = ['4', '2', '1', '0.5', '0.25', '0.125']
-const sounds = [
-  ...waveforms,
-  ...nonFolderSamples,
-  ...Object.keys(sampleFolders)
-]
-
-
 const buttonGroups = [
   { 
     label: 'Piano' as const, 
@@ -134,7 +123,7 @@ const buttonGroups = [
   },
   {
     label: 'Octaves',
-    buttons: octaves,
+    buttons: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     id: "octaves",
     className: "octaves",
     columns: 2,
@@ -142,7 +131,7 @@ const buttonGroups = [
   },
   {
     label: 'Intervals',
-    buttons: intervals,
+    buttons: ['4', '2', '1', '0.5', '0.25', '0.125'],
     id: "intervals",
     className: "intervals",
     columns: 2,
@@ -150,7 +139,11 @@ const buttonGroups = [
   },
   {
     label: 'Sounds',
-    buttons: sounds,
+    buttons: [
+      ...waveforms,
+      ...nonFolderSamples,
+      ...Object.keys(sampleFolders)
+    ],
     id: "sounds",
     className: "sounds", 
     columns: 4,
@@ -595,9 +588,5 @@ export {
   demoVoices,
   buttonImages,
   noteNameToIndex,
-  noteNumberToLetter,
-  notes,
-  octaves,
-  intervals,
-  sounds
+  noteNumberToLetter
 }

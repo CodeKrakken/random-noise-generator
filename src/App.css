@@ -64,7 +64,7 @@ button img {
 .header-button {
   background-color: black;
   width: calc(var(--u) * 2.5);
-  margin: 0 calc(var(--u) * 1);
+  margin: calc(var(--u) * 0.25);
 }
 
 .component-border {

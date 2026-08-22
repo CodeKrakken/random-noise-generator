@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState }  from 'react';
 import { Synth }                        from './Synth/Synth';
 import { VoiceType, HitType }           from './components/shared.types';
-import { demoVoices, intervals, notes, octaves, sounds }                   from './content/data';
+import { demoVoices }                   from './content/data';
 import Voice                            from './components/Voice/Voice';
 import Header                           from './components/Header/Header';
 import './App.css';
 import Timeline from './components/Timeline/Timeline';
-import { getActiveFrequencies } from './components/shared.functions';
 
 function App() {
 
@@ -124,68 +123,6 @@ function App() {
 
   const handlePlayback = () => replaying ? stopPlayback() : startPlayback()
   
-  const handleRandomiseVoices = () => {
-    const numberOfVoices = Math.floor(Math.random() * 9) + 3
-    const bpm = Math.floor(Math.random() * 120) + 60
-
-    const randomVoices = []
-
-    for (let i = 0; i < numberOfVoices; i++) {
-      randomVoices.push(randomVoice(voices, bpm))
-    }
-    setVoices(randomVoices)
-  }
-
-  const randomVoice = (voices: VoiceType[], bpm: number) => {
-
-    const template = voices[voices.length - 1]
-    
-    const randomVoice = {
-      id                : crypto.randomUUID(),
-      isActive          : false,
-      label             : generateNewLabel(template, voices),
-      nextInterval      : 0,
-      bpm               : bpm,
-      minLevel          : Math.floor(Math.random() * 100),
-      maxLevel          : Math.floor(Math.random() * 100),
-      activeNotes       : randomItemsFrom(notes),
-      activeOctaves     : randomItemsFrom(octaves),
-      activeFrequencies : [],
-      activeIntervals   : randomItemsFrom(intervals),
-      activeSounds      : randomItemsFrom(sounds),
-      restChance        : Math.floor(Math.random() * 100),
-      minLength         : Math.floor(Math.random() * 100),
-      maxLength         : Math.floor(Math.random() * 100),
-      minOffset         : template?.minOffset         ??  0,  
-      maxOffset         : template?.maxOffset         ??  0,
-      minDetune         : template?.minDetune         ??  0,
-      maxDetune         : template?.maxDetune         ??  0,
-      minAttack         : Math.floor(Math.random() * 100),
-      maxAttack         : Math.floor(Math.random() * 100),
-      minDecay          : Math.floor(Math.random() * 100),
-      maxDecay          : Math.floor(Math.random() * 100),
-      colour            : randomColour()
-    }
-
-    return randomVoice
-
-    // randomVoice.activeFrequencies = getActiveFrequencies(randomVoice)
-  }
-
-  const randomItemsFrom = (options: string[]) => {
-    const numberOfItems = Math.floor(Math.random() * options.length)
-    const items = []
-
-    for (let i = 0; i < numberOfItems; i++) {
-
-      const j = Math.floor(Math.random() * options.length)
-      const selection = options.splice(j)
-      items.push(selection)
-    }
-
-    return items
-  }
-
   const setUpVoice = (voices: VoiceType[]) => {
 
     const template = voices[voices.length - 1]
@@ -220,12 +157,12 @@ function App() {
 
   const randomColour = () => {
 
-    const r = Math.floor(Math.random() * 256)
-    const g = Math.floor(Math.random() * 256)
-    const b = Math.floor(Math.random() * 256)
+  const r = Math.floor(Math.random() * 256)
+  const g = Math.floor(Math.random() * 256)
+  const b = Math.floor(Math.random() * 256)
 
-    return `rgba(${r}, ${g}, ${b})`
-  }
+  return `rgba(${r}, ${g}, ${b})`
+}
 
   const generateNewLabel = (
     template: VoiceType | null, 
@@ -253,15 +190,14 @@ function App() {
   return <>
 
     <Header 
-      handleImprov          = {handleImprov}
-      improvising           = {improvising}
-      replaying             = {replaying}
-      handleAddVoice        = {handleAddVoice}
-      handleRandomiseVoices = {handleRandomiseVoices}
-      voices                = {voices}
-      loadVoices            = {loadVoices}
-      handlePlayback        = {handlePlayback}
-      recordedHits          = {Synth.recordedHits}
+      handleImprov    = {handleImprov}
+      improvising     = {improvising}
+      replaying       = {replaying}
+      handleAddVoice  = {handleAddVoice}
+      voices          = {voices}
+      loadVoices      = {loadVoices}
+      handlePlayback  = {handlePlayback}
+      recordedHits    = {Synth.recordedHits}
     />
     
     <div 
