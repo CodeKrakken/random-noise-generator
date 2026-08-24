@@ -6,8 +6,6 @@ export default function HitDetails({
 } : {
   hit: HitType
 }) {
-
-  console.log(hit)
   
   const { 
     sound, 

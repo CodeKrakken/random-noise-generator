@@ -342,8 +342,8 @@ const runInterval = (
                  
         playHit(hit, context, runStartTime)
         
-        // recordedHits.push(hit)  
-        // Synth.hitsDirty = true
+        recordedHits.push(hit)  
+        Synth.hitsDirty = true
       }    
     } 
   } catch (error) {
