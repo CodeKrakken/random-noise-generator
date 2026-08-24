@@ -13,6 +13,8 @@ describe('Header', () => {
   const mockLoadVoices            = jest.fn();  
   const mockHandleReplay          = jest.fn();
   const mockHandleReallyRandomVoices  = jest.fn();
+  const mockHandleQuiteRandomVoices  = jest.fn();
+
   
   const header = (state: Boolean) => (  
     <Header  
@@ -25,6 +27,7 @@ describe('Header', () => {
       handlePlayback={mockHandleReplay}
       recordedHits={[]}
       handleReallyRandomVoices={mockHandleReallyRandomVoices}
+      handleQuiteRandomVoices={mockHandleQuiteRandomVoices}
     />  
   )  
   
