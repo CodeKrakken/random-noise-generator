@@ -5,7 +5,6 @@ import HitDetails from "../HitDetails/HitDetails"
 export default function Hit({
 
   frequencies,
-  pixelsPerNote,
   pixelsPerSecond,
   key,
   hit,
@@ -33,16 +32,12 @@ export default function Hit({
     setShowDetails(!showDetails)
   }
 
-  
-
   const pianoKey = document.getElementById(
     `timeline-grid-piano-${hit.frequency}`
   )
 
-  const top = (pianoKey?.offsetTop ?? 0) + 398
-  // const height = pianoKey?.offsetHeight ?? 0
-
-
+  const top = pianoKey?.offsetTop ?? 0
+  const height = pianoKey?.offsetHeight ?? 0
 
   return <>
     <div
@@ -51,15 +46,11 @@ export default function Hit({
       onClick={handleLeftClick}
       onContextMenu={handleRightClick}
       style={{
-        left: hit.startTime! * pixelsPerSecond,
         top,
+        height,
+        left: hit.startTime * pixelsPerSecond,
+        width: (hit.endTime - hit.startTime) * pixelsPerSecond,
         bottom: frequencyToPixels(hit.frequency!) + 1,
-        width: Math.max(
-          (hit.endTime! - hit.startTime!) *
-          pixelsPerSecond,
-          3
-        ),
-        height: pixelsPerNote - 2,  
         backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >

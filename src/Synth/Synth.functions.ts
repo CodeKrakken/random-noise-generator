@@ -332,13 +332,15 @@ const runInterval = (
         const hit: HitType = {
           sound     : randomOneFrom(activeSounds) as string,
           level     : calculateLevel(voice),
-          frequency : randomOneFrom(activeFrequencies),
+          frequency : 0,
           detune    : getRangeValue('Detune', voice),
           note      : +randomOneFrom(activeNotes),
           octave    : +randomOneFrom(activeOctaves),
           ...getGainEvents(voice, intervalLength, runStartTime),
           voiceId   : voice.id
         }
+
+        hit.frequency = allFrequencies[hit.octave!][hit.note!]
                  
         playHit(hit, context, runStartTime)
         

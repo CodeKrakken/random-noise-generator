@@ -60,23 +60,14 @@ const Timeline = ({
   )
 
   const frequencyToPixels = (frequency: number) => {
-  
-    let closestIndex = 0
-    let closestDifference = Infinity
+    const key = document.getElementById(
+      `timeline-grid-piano-${frequency}`
+    )
 
-    frequencies.forEach((noteFrequency, index) => {
+    if (!key) return 0
 
-      const difference = Math.abs(noteFrequency - frequency)
-
-      if (difference < closestDifference) {
-        closestDifference = difference
-        closestIndex = index
-      }
-    })
-
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
+    return key.offsetTop
   }
-
 
   return (
 
@@ -110,7 +101,6 @@ const Timeline = ({
           }}
         />
 
-
         {
           visibleHits.map((hit, i) => {
             
@@ -127,24 +117,6 @@ const Timeline = ({
             )
           })
         }
-{/* 
-        {  
-          visibleHits.map((hit, index) => (  
-            <div  
-              key={index}  
-              className="hit"  
-              style={{  
-                left: hit.startTime! * pixelsPerSecond,  
-                bottom: frequencyToPixels(hit.frequency!) + 1,  
-                width: Math.max(  
-                  (hit.endTime! - hit.startTime!) * pixelsPerSecond,  
-                  3  
-                ),  
-                height: pixelsPerNote - 2,  
-              }}  
-            />  
-          ))  
-        } */}
       </div>
     </div>
   )

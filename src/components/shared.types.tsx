@@ -66,18 +66,18 @@ type VoiceType = {
 }
 
 type HitType = {
-  sound?     : string
-  frequency? : number
-  detune?    : number
-  note?      : number | null
-  octave?    : number | null
-  startTime? : number
-  endTime?   : number
-  peakStart? : number
-  peakEnd?   : number
-  level?     : number
-  source?    : SourceGain
-  voiceId    : string
+  sound     : string
+  frequency : number
+  detune    : number
+  note      : number
+  octave    : number
+  startTime : number
+  endTime   : number
+  peakStart : number
+  peakEnd   : number
+  level     : number
+  source?   : SourceGain
+  voiceId   : string
 }
 
 export type {
