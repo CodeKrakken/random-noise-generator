@@ -237,6 +237,7 @@ button img {
 
 #timeline-grid-piano-container {
   border-top: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
+  position: relative;
 }
 
 #timeline-grid-piano {
@@ -281,7 +282,7 @@ button img {
   position: absolute;
   border-radius: 2;
   cursor: pointer;
-  z-index: 100;
+  z-index: 10;
   height: calc(var(--u) * 0.325)
 }
 
