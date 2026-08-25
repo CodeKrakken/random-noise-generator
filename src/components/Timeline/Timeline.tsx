@@ -60,13 +60,34 @@ const Timeline = ({
   )
 
   const frequencyToPixels = (frequency: number) => {
+
+    let closestIndex = 0
+    let closestDifference = Infinity
+
+    frequencies.forEach((noteFrequency, index) => {
+
+      const difference = Math.abs(noteFrequency - frequency)
+
+      if (difference < closestDifference) {
+        closestDifference = difference
+        closestIndex = index
+      }
+    })
+
     const key = document.getElementById(
-      `timeline-grid-piano-${frequency}`
+      `timeline-grid-piano-${closestIndex}`
     )
 
-    if (!key) return 0
+    const piano = document.getElementById(
+      'timeline-grid-piano'
+    )
 
-    return key.offsetTop
+    if (!key || !piano) return 0
+
+    const keyRect = key.getBoundingClientRect()
+    const pianoRect = piano.getBoundingClientRect()
+
+    return keyRect.top - pianoRect.top
   }
 
   return (
