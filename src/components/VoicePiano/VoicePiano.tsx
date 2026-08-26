@@ -35,6 +35,7 @@ export default function VoicePiano ({
       handleClick={handleClick}
       keys={keys}
       props={{id: `voice-${i}-key`}}
+      showKeyLabels={false}
     />
   )
 }

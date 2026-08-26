@@ -8,7 +8,8 @@ export default function Piano ({
   i,
   handleClick,
   keys,
-  props
+  props,
+  showKeyLabels
 
 } : {
   
@@ -17,6 +18,7 @@ export default function Piano ({
   handleClick?  : React.MouseEventHandler<HTMLButtonElement>
   keys          : number[]
   props         : { [key: string]: string | object }
+  showKeyLabels : Boolean
 }) {
 
   const id = props.id
@@ -57,7 +59,7 @@ export default function Piano ({
 
             let label = ''
 
-            if (noteName === 'C' && keys.length > 13) {
+            if (noteName === 'C' && showKeyLabels) {
               label = String(octaveIndex)
               octaveIndex--
             }

@@ -84,6 +84,7 @@ const Timeline = ({
           props={{
             id: 'timeline-piano'
           }}
+          showKeyLabels={true}
         />
       </div>
 
@@ -102,6 +103,7 @@ const Timeline = ({
               width: Math.max(...hits.map(h => h.endTime)) * pixelsPerSecond
             }
           }}
+          showKeyLabels={false}          
         />
 
         {
