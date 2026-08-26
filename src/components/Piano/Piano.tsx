@@ -16,7 +16,7 @@ export default function Piano ({
   i?            : number
   handleClick?  : React.MouseEventHandler<HTMLButtonElement>
   keys          : number[]
-  props         : { [key: string]: string }
+  props         : { [key: string]: string | object }
 }) {
 
   const id = props.id

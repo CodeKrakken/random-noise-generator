@@ -97,7 +97,10 @@ const Timeline = ({
         <Piano
           keys={frequencies}
           props={{
-            id: 'timeline-grid-piano'
+            id: 'timeline-grid-piano',
+            style: {
+              width: Math.max(...hits.map(h => h.endTime)) * pixelsPerSecond
+            }
           }}
         />
 
