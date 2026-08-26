@@ -47,7 +47,6 @@ button img {
 }
 
 #header {
-  z-index: 100;  
   background-color: black;
   position: fixed;  
   top: 0;  
@@ -55,6 +54,7 @@ button img {
   width: 100%;  
   display: flex;
   flex-direction: row;
+  z-index: 10;
 }
 
 #title {
@@ -74,9 +74,9 @@ button img {
 #voices-container {
   position: sticky;
   top: calc(var(--u) * 1.75);  
-  z-index: 20;
   width: 100%;
   height: calc(var(--u) * 8);
+  z-index: 10;
 }
 
 #voices {
@@ -84,7 +84,6 @@ button img {
   overflow-y: visible;
   background-color: black;
   top: calc(var(--u) * 1.75);  
-  z-index: 100;  
   left: 0;  
   width: 100%;  
   display: flex;
@@ -148,7 +147,6 @@ button img {
   display: grid;
   position: absolute;
   top: 0;
-  z-index: 10;
 
   .intervals, .octaves, .sounds {
     width: calc(var(--u) * 0.625);
@@ -189,8 +187,7 @@ button img {
 
   margin-top: calc(var(--u) * (-0.2));
   margin-bottom: calc(var(--u) * (-0.2));
-
-  z-index: 1;
+  z-index: 2;
 }
 
 .black.active {
@@ -205,11 +202,6 @@ button img {
   /* height: calc(var(--u) * 0.625 * 78); */
   height: fit-content
 }
-
-#timeline {
-  z-index: 0;
-}
-
 
 #timeline-piano-container {
   /* position: sticky; */
@@ -282,7 +274,6 @@ button img {
   position: absolute;
   border-radius: 2;
   cursor: pointer;
-  z-index: 10;
   height: calc(var(--u) * 0.325)
 }
 
@@ -293,5 +284,5 @@ button img {
   width: fit-content; 
   position: relative;
   top: calc(var(--u) * 0.3);
-  z-index: 100;
+  z-index: 5;
 }
