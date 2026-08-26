@@ -340,7 +340,7 @@ const runInterval = (
           voiceId   : voice.id
         }
 
-        hit.frequency = allFrequencies[hit.octave!][hit.note!]
+        hit.frequency = allFrequencies[hit.octave!][hit.note!-1]
                  
         playHit(hit, context, runStartTime)
         

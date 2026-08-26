@@ -274,7 +274,7 @@ button img {
   position: absolute;
   border-radius: 2;
   cursor: pointer;
-  height: calc(var(--u) * 0.325)
+  height: calc(var(--u) * 0.2)
 }
 
 .hit-details {

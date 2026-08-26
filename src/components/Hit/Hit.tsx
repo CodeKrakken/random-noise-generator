@@ -36,18 +36,10 @@ export default function Hit({
     `timeline-grid-piano-${hit.frequency}`
   )
 
-  const whiteKey = document.getElementById(
-    `timeline-grid-piano-16.35`
-  )
-
-  const blackKey = document.getElementById(
-    `timeline-grid-piano-17.32`
-  )
-
-  const gapHeight = whiteKey!.offsetHeight - blackKey!.offsetHeight
-
-  const height = whiteKey!.offsetHeight - blackKey!.offsetHeight - Math.min((gapHeight * 0.2), 2)
   const top = pianoKey?.offsetTop ?? 0
+
+  console.log(hit)
+  console.log(pianoKey)
 
   return <>
     <div
@@ -57,7 +49,6 @@ export default function Hit({
       onContextMenu={handleRightClick}
       style={{
         top,
-        height,
         left: hit.startTime * pixelsPerSecond,
         width: (hit.endTime - hit.startTime) * pixelsPerSecond,
         bottom: frequencyToPixels(hit.frequency!) + 1,
