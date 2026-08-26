@@ -37,10 +37,9 @@ export default function Hit({
   )
 
   const top = pianoKey?.offsetTop ?? 0
-  // const height = pianoKey?.offsetHeight ?? 0
-  const height = 10 
+  const height = pianoKey?.offsetHeight ?? 0
 
-  return <>    
+  return <>
     <div
       key={key}
       className="hit"
@@ -51,6 +50,7 @@ export default function Hit({
         height,
         left: hit.startTime * pixelsPerSecond,
         width: (hit.endTime - hit.startTime) * pixelsPerSecond,
+        bottom: frequencyToPixels(hit.frequency!) + 1,
         backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >

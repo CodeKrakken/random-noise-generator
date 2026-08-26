@@ -52,7 +52,7 @@ export default function Piano ({
               value     : key,
               checked   : checked,
               onClick   : handleClick,
-              id        : `${id}-${i}`,
+              id        : `${id}-${key}`,
             };
 
             let label = ''
