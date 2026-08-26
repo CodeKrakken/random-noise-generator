@@ -96,6 +96,8 @@ button img {
   font-size: calc(var(--u) * 0.35);
   padding: calc(var(--u) * 0.125);
   text-align: center;
+
+  
 }
 
 .sliders {
@@ -230,10 +232,14 @@ button img {
 #timeline-grid-piano-container {
   border-top: calc(var(--u) * 0.125) groove rgb(68, 14, 14);
   position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  border-right: none;
 }
 
 #timeline-grid-piano {
-  width: 100vw;
+  width: fit-content;
   min-width: 100vw;
   height: fit-content;
   /* top: 0; */
