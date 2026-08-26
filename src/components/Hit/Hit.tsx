@@ -51,7 +51,6 @@ export default function Hit({
         top,
         left: hit.startTime * pixelsPerSecond,
         width: (hit.endTime - hit.startTime) * pixelsPerSecond,
-        bottom: frequencyToPixels(hit.frequency!) + 1,
         backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
       }}
     >
