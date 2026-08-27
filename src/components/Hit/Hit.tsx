@@ -16,7 +16,7 @@ export default function Hit({
   frequencies: number[]
   pixelsPerNote: number
   pixelsPerSecond: number
-  key: number
+  key: string
   hit: HitType
   voices: VoiceType[]
   frequencyToPixels: (frequency: number) => number
