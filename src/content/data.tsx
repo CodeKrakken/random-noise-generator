@@ -563,8 +563,12 @@ const demoVoices = [
   }
 ];
 
-const noteNameToIndex: Record<string, number> = {  
+const noteNameToIndexBackwards: Record<string, number> = {  
   C:0, B:1, Bb:2, A:3, Ab:4, G:5, Gb:6, F:7, E:8, Eb:9, D:10, Db:11  
+}
+
+const noteNameToIndex: Record<string, number> = {  
+  C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
 }
 
 const noteNumberToLetter = Object.fromEntries(
@@ -588,5 +592,6 @@ export {
   demoVoices,
   buttonImages,
   noteNameToIndex,
+  noteNameToIndexBackwards,
   noteNumberToLetter
 }

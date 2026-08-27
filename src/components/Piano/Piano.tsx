@@ -1,4 +1,4 @@
-import { noteNameToIndex } from "../../content/data";
+import { noteNameToIndex, noteNameToIndexBackwards } from "../../content/data";
 import { updateButton } from "../shared.functions";
 import { VoiceType }    from "../shared.types";
 
@@ -29,7 +29,7 @@ export default function Piano ({
   if (voices) voice = voices[i!]
 
   const getNoteName = (index: number) => {
-    const noteNames = Object.keys(noteNameToIndex)
+    const noteNames = Object.keys(noteNameToIndexBackwards)
     const noteName = noteNames[index % 12]
     return noteName
   }
