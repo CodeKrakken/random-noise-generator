@@ -1,4 +1,4 @@
-import { noteNameToIndex, noteNameToIndexBackwards } from "../../content/data";
+import { noteNameToIndex, noteNameToIndexDisplay, reversedNoteNames } from "../../content/data";
 import { updateButton } from "../shared.functions";
 import { VoiceType }    from "../shared.types";
 
@@ -27,12 +27,6 @@ export default function Piano ({
   let octaveIndex = 11
 
   if (voices) voice = voices[i!]
-
-  const getNoteName = (index: number) => {
-    const noteNames = Object.keys(noteNameToIndexBackwards)
-    const noteName = noteNames[index % 12]
-    return noteName
-  }
   
   return (
     <div className="button-grid-parent">
@@ -43,7 +37,8 @@ export default function Piano ({
         {
           keys.map((key, i) => {
 
-            const noteName = getNoteName(i)
+            const noteName = reversedNoteNames[i % 12]
+            console.log(noteName)
             const colour = noteName.includes('b') ? 'black' : 'white'
             
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''

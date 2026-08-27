@@ -563,9 +563,12 @@ const demoVoices = [
   }
 ];
 
-const noteNameToIndexBackwards: Record<string, number> = {  
+const noteNameToIndexDisplay: Record<string, number> = {  
   C:0, B:1, Bb:2, A:3, Ab:4, G:5, Gb:6, F:7, E:8, Eb:9, D:10, Db:11  
 }
+
+const noteNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C']
+const reversedNoteNames = noteNames.reverse()
 
 const noteNameToIndex: Record<string, number> = {  
   C:0, Db:1, D:2, Eb:3, E:4, F:5, Gb:6, G:7, Ab:8, A:9, Bb:10, B:11  
@@ -578,8 +581,6 @@ const noteNumberToLetter = Object.fromEntries(
 ) as Record<number, string>
 
 noteNumberToLetter[13] = 'C'
-
-console.log(noteNumberToLetter)
  
 export {
   title,
@@ -596,6 +597,7 @@ export {
   demoVoices,
   buttonImages,
   noteNameToIndex,
-  noteNameToIndexBackwards,
-  noteNumberToLetter
+  noteNameToIndexDisplay,
+  noteNumberToLetter,
+  reversedNoteNames
 }

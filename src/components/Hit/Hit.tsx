@@ -35,8 +35,7 @@ export default function Hit({
   const pianoKey = document.getElementById(
     `timeline-grid-piano-${hit.frequency}`
   )
-
-  console.log(frequencies)
+  
   const whiteKey = document.getElementById(
     `timeline-grid-piano-16.35`
   )
@@ -52,9 +51,6 @@ export default function Hit({
   const hitHeight = (whiteKey!.offsetHeight - blackKey!.offsetHeight) * 0.8
 
   const top = pianoKey!.offsetTop + (rowHeight - hitHeight) / 2
-
-  console.log(hit)
-  console.log(pianoKey)
 
   return <>
     <div
