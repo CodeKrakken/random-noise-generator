@@ -341,7 +341,12 @@ const runInterval = (
         }
 
         hit.frequency = allFrequencies[hit.octave!][hit.note!-1]
-                 
+        
+        if (hit.note === 13) {
+          hit.note = 1
+          hit.octave ++
+        }
+
         playHit(hit, context, runStartTime)
         
         recordedHits.push(hit)  

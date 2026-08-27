@@ -576,6 +576,10 @@ const noteNumberToLetter = Object.fromEntries(
     ([key, value]) => [value+1, key]
   )
 ) as Record<number, string>
+
+noteNumberToLetter[13] = 'C'
+
+console.log(noteNumberToLetter)
  
 export {
   title,
