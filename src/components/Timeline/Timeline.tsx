@@ -1,28 +1,50 @@
-import { HitType, VoiceType } from '../../components/shared.types'
-import { allFrequencies } from '../../content/data'
+import { useEffect, useRef, useState } from 'react'
+import { HitType } from '../../components/shared.types'
+import { allFrequencies, pixelsPerSecond } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
 
-const Timeline = ({ 
+const Timeline = ({ hits } : { hits: HitType[] }) => {
 
-  hits,
-  voices 
-
-} : {
-
-  hits: HitType[]
-  voices: VoiceType[]
-  
-}) => {
-
-  const pixelsPerSecond = 100
-  const pixelsPerNote = 12
-  const timelineSeconds = 60
+  const containerRef = useRef<HTMLDivElement>(null)  
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 0 })
 
   const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
 
-  const width = timelineSeconds * pixelsPerSecond
-  const height = frequencies.length * pixelsPerNote
+  const updateVisibleRange = () => {  
+    const el = containerRef.current  
+    if (!el) return  
+    
+    const buffer = pixelsPerSecond * 2
+    
+    const startPx = Math.max(el.scrollLeft - buffer, 0)  
+    const endPx = el.scrollLeft + el.clientWidth + buffer  
+    
+    setVisibleRange({  
+      start: startPx / pixelsPerSecond,  
+      end: endPx / pixelsPerSecond  
+    })  
+  }  
+  
+  useEffect(() => {  
+    updateVisibleRange()  
+    
+    const el = containerRef.current  
+    if (!el) return  
+    
+    const resizeObserver = new ResizeObserver(updateVisibleRange)  
+    resizeObserver.observe(el)  
+    
+    return () => resizeObserver.disconnect()  
+  }, [])
+
+  const visibleHits = hits.filter(hit =>  
+    hit.startTime !== undefined &&  
+    hit.endTime   !== undefined &&  
+    hit.frequency !== undefined &&  
+    hit.endTime   >=  visibleRange.start &&  
+    hit.startTime <=  visibleRange.end  
+  )
 
   return (
 
@@ -39,64 +61,36 @@ const Timeline = ({
           props={{
             id: 'timeline-piano'
           }}
+          showKeyLabels={true}
         />
       </div>
 
       {/* Horizontally scrolling timeline */}
-
       <div 
-        id="timeline-grid-container"
+        id="timeline-grid-piano-container"
         className="component-border"
+        ref={containerRef}  
+        onScroll={updateVisibleRange}  
       >
-        <div 
-          id="timeline-grid"
-          style={{
-            width,
-            minWidth: width,
-            height
+        <Piano
+          keys={frequencies}
+          props={{
+            id: 'timeline-grid-piano',
+            style: {
+              width: Math.max(...hits.map(h => h.endTime)) * pixelsPerSecond
+            }
           }}
-        >
-          {
-            frequencies.map((frequency, index) => (
-              <div
-                key={frequency}
-                className="timeline-grid-row"
-                style={{
-                  top: index * pixelsPerNote,
-                  height: pixelsPerNote,
-                }}
-              />
-            ))
-          }
+          showKeyLabels={false}          
+        />
 
-          {/* Notes */}
-
-          {
-            hits.map((hit, i) => {
-
-              if (
-                hit.startTime === undefined ||
-                hit.endTime === undefined ||
-                hit.frequency === undefined
-              ) {
-                return null
-              }
-
-
-              return (
-                <Hit 
-                  frequencies={frequencies}
-                  pixelsPerNote={pixelsPerNote}
-                  pixelsPerSecond={pixelsPerSecond}
-                  key={i}
-                  hit={hit}
-                  voices={voices}
-                />
-              )
-
-            })
-          }
-        </div>
+        {
+          visibleHits.map(hit => {
+            
+            return (
+              <Hit hit={hit} />
+            )
+          })
+        }
       </div>
     </div>
   )

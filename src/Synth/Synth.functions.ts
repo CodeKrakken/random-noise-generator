@@ -1,6 +1,7 @@
 import { VoiceType, HitType, RangeKey }                                                    from '../components/shared.types'
 import { SourceGain, VoicesRef }                                                         from './Synth.types'
-import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex }  from '../content/data';
+import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex, pixelsPerSecond }  from '../content/data';
+import { Synth } from './Synth';
 
 
 // variables
@@ -313,48 +314,80 @@ const runInterval = (
   setRecordedHits : Function
 ) => {
 
-  const { nextInterval, activeSounds, activeFrequencies, activeNotes, activeOctaves } = voice
+  const { nextInterval, activeSounds, activeNotes, activeOctaves } = voice
 
   voice.thisInterval = nextInterval
   const thisInterval = voice.thisInterval
 
-  if (isTimeFor(thisInterval, context)) {
-    
-    const intervalLength = getIntervalLength(voice)
-    voice.nextInterval += intervalLength
-  
-    if (!isRest(voice)) {
+  // try
 
-      const hit: HitType = {
-        sound     : randomOneFrom(activeSounds) as string,
-        level     : calculateLevel(voice),
-        frequency : randomOneFrom(activeFrequencies),
-        detune    : getRangeValue('Detune', voice),
-        note      : +randomOneFrom(activeNotes),
-        octave    : +randomOneFrom(activeOctaves),
-        ...getGainEvents(voice, intervalLength, runStartTime),
-        voiceId   : voice.id
-      }
- 
-
-      try {
-              
-        playHit(hit, context, runStartTime)
-
-      } catch (error) {
-        console.error(error instanceof Error ? error.message : "Unknown error", error)
-      }         
+  try {
+    if (isTimeFor(thisInterval, context)) {
       
-      recordedHits.push(hit)
-      setRecordedHits?.([...recordedHits])
-    }    
-  } 
+      const intervalLength = getIntervalLength(voice)
+      voice.nextInterval += intervalLength
 
-  if (!voice.isActive) return
+      if (!isRest(voice)) {
 
-  setTimeout(() => {
-    runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
-  }, (voice.nextInterval - context.currentTime)*1000)    
+        const hit: HitType = {
+          sound     : randomOneFrom(activeSounds) as string,
+          level     : calculateLevel(voice),
+          frequency : 0,
+          detune    : getRangeValue('Detune', voice),
+          note      : +randomOneFrom(activeNotes),
+          octave    : +randomOneFrom(activeOctaves),
+          ...getGainEvents(voice, intervalLength, runStartTime),
+          voiceId   : voice.id,
+          style     : {}
+        }
+
+        hit.frequency = allFrequencies[hit.octave!][hit.note!-1]
+        
+        const pianoKey = document.getElementById(
+          `timeline-grid-piano-${hit.frequency}`
+        )
+        
+        const whiteKey = document.getElementById(
+          `timeline-grid-piano-16.35`
+        )
+
+        const blackKey = document.getElementById(
+          `timeline-grid-piano-17.32`
+        )
+
+        const rowHeight = pianoKey?.offsetHeight ?? 0
+
+        const hitHeight = (whiteKey!.offsetHeight - blackKey!.offsetHeight) * 0.8
+
+        const top = pianoKey!.offsetTop + (rowHeight - hitHeight) / 2
+
+        hit.style = {
+          top,
+          left: hit.startTime * pixelsPerSecond,
+          width: (hit.endTime - hit.startTime) * pixelsPerSecond,
+          backgroundColor: voicesRef.current.filter(voice => voice.id === hit.voiceId)[0].colour
+        }
+        
+        if (hit.note === 13) {
+          hit.note = 1
+          hit.octave ++
+        }
+
+        playHit(hit, context, runStartTime)
+        
+        recordedHits.push(hit)  
+        Synth.hitsDirty = true
+      }    
+    } 
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unknown error", error)
+  } finally {
+    if (!voice.isActive) return
+
+    setTimeout(() => {
+      runInterval(voice, voicesRef, context, recordedHits, runStartTime, setRecordedHits)
+    }, (voice.nextInterval - context.currentTime)*1000) 
+  }
 }
 
 const isTimeFor = (timeCode: number, context: AudioContext) => context.currentTime >= timeCode

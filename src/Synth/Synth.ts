@@ -12,13 +12,16 @@ let setup: {
   masterGain: undefined
 }
 
-let runStartTime: number
+let runStartTime: number  
+let flushIntervalId: ReturnType<typeof setInterval> | undefined
 
 export const Synth = {
 
   voices: demoVoices as VoiceType[],
 
   recordedHits: [] as HitType[],
+
+  hitsDirty: false,
 
   setRecordedHits: undefined as Dispatch<SetStateAction<HitType[]>> | undefined,
 
@@ -53,6 +56,10 @@ export const Synth = {
 
     runStartTime = context.currentTime
 
+    if (!flushIntervalId) {  
+      flushIntervalId = setInterval(Synth.flushRecordedHits, 100)  
+    }  
+
     Synth.voices.forEach(voice => {
 
       voice.nextInterval = context.currentTime
@@ -60,6 +67,7 @@ export const Synth = {
 
       runInterval(voice, voicesRef, context, Synth.recordedHits, runStartTime, Synth.setRecordedHits!)
     })
+
   },
 
   stop: () => {
@@ -68,6 +76,13 @@ export const Synth = {
     Synth.voices.forEach(voice => {
       voice.isActive = false;
     })
+
+    if (flushIntervalId) {  
+      clearInterval(flushIntervalId)  
+      flushIntervalId = undefined  
+    }  
+  
+    Synth.flushRecordedHits()
   },
 
   replay: (setReplaying: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -93,4 +108,11 @@ export const Synth = {
       )
     })
   },
+
+  flushRecordedHits: () => {  
+    if (Synth.hitsDirty && Synth.setRecordedHits) {  
+      Synth.setRecordedHits([...Synth.recordedHits])  
+      Synth.hitsDirty = false  
+    }  
+  },  
 }

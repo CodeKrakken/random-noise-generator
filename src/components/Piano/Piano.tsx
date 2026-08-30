@@ -1,4 +1,5 @@
-import { noteNameToIndex } from "../../content/data";
+import { noteNameToIndex, noteNameToIndexDisplay, reversedNoteNames } from "../../content/data";
+import { updateButton } from "../shared.functions";
 import { VoiceType }    from "../shared.types";
 
 export default function Piano ({
@@ -7,7 +8,8 @@ export default function Piano ({
   i,
   handleClick,
   keys,
-  props
+  props,
+  showKeyLabels
 
 } : {
   
@@ -15,7 +17,8 @@ export default function Piano ({
   i?            : number
   handleClick?  : React.MouseEventHandler<HTMLButtonElement>
   keys          : number[]
-  props         : { [key: string]: string }
+  props         : { [key: string]: string | object }
+  showKeyLabels : Boolean
 }) {
 
   const id = props.id
@@ -24,12 +27,6 @@ export default function Piano ({
   let octaveIndex = 11
 
   if (voices) voice = voices[i!]
-
-  const getNoteName = (index: number) => {
-    const noteNames = Object.keys(noteNameToIndex)
-    const noteName = noteNames[index % 12]
-    return noteName
-  }
   
   return (
     <div className="button-grid-parent">
@@ -40,7 +37,8 @@ export default function Piano ({
         {
           keys.map((key, i) => {
 
-            const noteName = getNoteName(i)
+            const noteName = reversedNoteNames[i % 12]
+            console.log(noteName)
             const colour = noteName.includes('b') ? 'black' : 'white'
             
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
@@ -56,7 +54,7 @@ export default function Piano ({
 
             let label = ''
 
-            if (noteName === 'C' && keys.length > 13) {
+            if (noteName === 'C' && showKeyLabels) {
               label = String(octaveIndex)
               octaveIndex--
             }

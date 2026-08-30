@@ -1,73 +1,21 @@
 import { useState } from "react"
-import { HitType, VoiceType } from "../shared.types"
+import { HitType } from "../shared.types"
 import HitDetails from "../HitDetails/HitDetails"
 
-export default function Hit({
-
-  frequencies,
-  pixelsPerNote,
-  pixelsPerSecond,
-  key,
-  hit,
-  voices
-
-} : {
-
-  frequencies: number[]
-  pixelsPerNote: number
-  pixelsPerSecond: number
-  key: number
-  hit: HitType
-  voices: VoiceType[]
-
-}) {
+export default function Hit( { hit } : { hit:HitType } ) {
 
   const [showDetails, setShowDetails] = useState(false)
 
-  const handleLeftClick = (e: React.MouseEvent<HTMLDivElement>) => setShowDetails(false)
+  const { voiceId, style } = hit
 
-  const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setShowDetails(!showDetails)
-  }
-
-  const frequencyToPixels = (frequency: number) => {
-  
-    let closestIndex = 0
-    let closestDifference = Infinity
-
-    frequencies.forEach((noteFrequency, index) => {
-
-      const difference = Math.abs(noteFrequency - frequency)
-
-      if (difference < closestDifference) {
-        closestDifference = difference
-        closestIndex = index
-      }
-    })
-
-    return (frequencies.length - 1 - closestIndex) * pixelsPerNote
-  }
-
-
+  const handleLeftClick = (e: React.MouseEvent<HTMLDivElement>) => setShowDetails(!showDetails)
 
   return <>
     <div
-      key={key}
+      key={voiceId}
       className="hit"
       onClick={handleLeftClick}
-      onContextMenu={handleRightClick}
-      style={{
-        left: hit.startTime! * pixelsPerSecond,
-        bottom: frequencyToPixels(hit.frequency!) + 1,
-        width: Math.max(
-          (hit.endTime! - hit.startTime!) *
-          pixelsPerSecond,
-          3
-        ),
-        height: pixelsPerNote - 2,
-        backgroundColor: voices.filter(voice => voice.id === hit.voiceId)[0].colour
-      }}
+      style={style}
     >
       {
         showDetails ? <>
