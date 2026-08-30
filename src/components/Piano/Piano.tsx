@@ -1,5 +1,4 @@
-import { noteNameToIndex, noteNameToIndexDisplay, reversedNoteNames } from "../../content/data";
-import { updateButton } from "../shared.functions";
+import { reversedNoteNames } from "../../content/data";
 import { VoiceType }    from "../shared.types";
 
 export default function Piano ({
