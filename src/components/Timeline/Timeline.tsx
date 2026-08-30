@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { HitType, VoiceType } from '../../components/shared.types'
-import { allFrequencies } from '../../content/data'
+import { allFrequencies, pixelsPerSecond } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
 
@@ -19,7 +19,6 @@ const Timeline = ({
   const containerRef = useRef<HTMLDivElement>(null)  
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: 0 })
 
-  const pixelsPerSecond = 100
   const pixelsPerNote = 12
 
   const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()

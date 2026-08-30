@@ -78,6 +78,7 @@ type HitType = {
   level     : number
   source?   : SourceGain
   voiceId   : string
+  style     : {}
 }
 
 export type {

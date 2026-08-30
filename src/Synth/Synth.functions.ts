@@ -1,6 +1,6 @@
 import { VoiceType, HitType, RangeKey }                                                    from '../components/shared.types'
 import { SourceGain, VoicesRef }                                                         from './Synth.types'
-import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex }  from '../content/data';
+import { allFrequencies, extrema, oneMinute, samples, sampleFolders, waveforms, noteNameToIndex, pixelsPerSecond }  from '../content/data';
 import { Synth } from './Synth';
 
 
@@ -337,10 +337,36 @@ const runInterval = (
           note      : +randomOneFrom(activeNotes),
           octave    : +randomOneFrom(activeOctaves),
           ...getGainEvents(voice, intervalLength, runStartTime),
-          voiceId   : voice.id
+          voiceId   : voice.id,
+          style     : {}
         }
 
         hit.frequency = allFrequencies[hit.octave!][hit.note!-1]
+        
+        const pianoKey = document.getElementById(
+          `timeline-grid-piano-${hit.frequency}`
+        )
+        
+        const whiteKey = document.getElementById(
+          `timeline-grid-piano-16.35`
+        )
+
+        const blackKey = document.getElementById(
+          `timeline-grid-piano-17.32`
+        )
+
+        const rowHeight = pianoKey?.offsetHeight ?? 0
+
+        const hitHeight = (whiteKey!.offsetHeight - blackKey!.offsetHeight) * 0.8
+
+        const top = pianoKey!.offsetTop + (rowHeight - hitHeight) / 2
+
+        hit.style = {
+          top,
+          left: hit.startTime * pixelsPerSecond,
+          width: (hit.endTime - hit.startTime) * pixelsPerSecond,
+          backgroundColor: voicesRef.current.filter(voice => voice.id === hit.voiceId)[0].colour
+        }
         
         if (hit.note === 13) {
           hit.note = 1

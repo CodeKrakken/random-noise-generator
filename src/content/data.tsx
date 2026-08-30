@@ -581,6 +581,8 @@ const noteNumberToLetter = Object.fromEntries(
 ) as Record<number, string>
 
 noteNumberToLetter[13] = 'C'
+
+const pixelsPerSecond = 100
  
 export {
   title,
@@ -599,5 +601,6 @@ export {
   noteNameToIndex,
   noteNameToIndexDisplay,
   noteNumberToLetter,
-  reversedNoteNames
+  reversedNoteNames,
+  pixelsPerSecond
 }
