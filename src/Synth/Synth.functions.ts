@@ -314,7 +314,7 @@ const runInterval = (
   setRecordedHits : Function
 ) => {
 
-  const { nextInterval, activeSounds, activeFrequencies, activeNotes, activeOctaves } = voice
+  const { nextInterval, activeSounds, activeNotes, activeOctaves } = voice
 
   voice.thisInterval = nextInterval
   const thisInterval = voice.thisInterval

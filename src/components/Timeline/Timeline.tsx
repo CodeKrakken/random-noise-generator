@@ -1,25 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { HitType, VoiceType } from '../../components/shared.types'
+import { HitType } from '../../components/shared.types'
 import { allFrequencies, pixelsPerSecond } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
 
-const Timeline = ({ 
-
-  hits,
-  voices 
-
-} : {
-
-  hits: HitType[]
-  voices: VoiceType[]
-  
-}) => {
+const Timeline = ({ hits } : { hits: HitType[] }) => {
 
   const containerRef = useRef<HTMLDivElement>(null)  
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: 0 })
-
-  const pixelsPerNote = 12
 
   const frequencies = Array.from(new Set(allFrequencies.flat())).reverse()
 
@@ -27,7 +15,7 @@ const Timeline = ({
     const el = containerRef.current  
     if (!el) return  
     
-    const buffer = pixelsPerSecond * 2 // small buffer so hits don't pop in/out abruptly at the edge  
+    const buffer = pixelsPerSecond * 2
     
     const startPx = Math.max(el.scrollLeft - buffer, 0)  
     const endPx = el.scrollLeft + el.clientWidth + buffer  
@@ -52,21 +40,11 @@ const Timeline = ({
 
   const visibleHits = hits.filter(hit =>  
     hit.startTime !== undefined &&  
-    hit.endTime !== undefined &&  
+    hit.endTime   !== undefined &&  
     hit.frequency !== undefined &&  
-    hit.endTime >= visibleRange.start &&  
-    hit.startTime <= visibleRange.end  
+    hit.endTime   >=  visibleRange.start &&  
+    hit.startTime <=  visibleRange.end  
   )
-
-  const frequencyToPixels = (frequency: number) => {
-    const key = document.getElementById(
-      `timeline-grid-piano-${frequency}`
-    )
-
-    if (!key) return 0
-
-    return key.offsetTop
-  }
 
   return (
 
@@ -106,18 +84,10 @@ const Timeline = ({
         />
 
         {
-          visibleHits.map((hit, i) => {
+          visibleHits.map(hit => {
             
             return (
-              <Hit 
-                frequencies={frequencies}
-                pixelsPerNote={pixelsPerNote}
-                pixelsPerSecond={pixelsPerSecond}
-                key={hit.voiceId}
-                hit={hit}
-                voices={voices}
-                frequencyToPixels={frequencyToPixels}
-              />
+              <Hit hit={hit} />
             )
           })
         }

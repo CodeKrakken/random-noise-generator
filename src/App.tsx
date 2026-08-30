@@ -223,10 +223,7 @@ function App() {
     </div>
 
     <div>
-      <Timeline 
-        hits={recordedHits} 
-        voices={voices}
-      />    
+      <Timeline hits={recordedHits} />    
     </div>
   </>
 } 
