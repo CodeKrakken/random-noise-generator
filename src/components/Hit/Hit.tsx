@@ -6,13 +6,15 @@ export default function Hit( { hit } : { hit:HitType } ) {
 
   const [showDetails, setShowDetails] = useState(false)
 
-  const { voiceId, style } = hit
+  const { voiceId, style, startTime } = hit
 
   const handleLeftClick = (e: React.MouseEvent<HTMLDivElement>) => setShowDetails(!showDetails)
 
+
+
   return <>
     <div
-      key={voiceId}
+      key={`${voiceId}-${startTime}`}
       className="hit"
       onClick={handleLeftClick}
       style={style}

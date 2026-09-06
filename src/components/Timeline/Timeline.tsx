@@ -3,6 +3,7 @@ import { HitType } from '../../components/shared.types'
 import { allFrequencies, pixelsPerSecond } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
+import { DndContext } from '@dnd-kit/core'
 
 const Timeline = ({ hits } : { hits: HitType[] }) => {
 
@@ -66,32 +67,35 @@ const Timeline = ({ hits } : { hits: HitType[] }) => {
       </div>
 
       {/* Horizontally scrolling timeline */}
-      <div 
-        id="timeline-grid-piano-container"
-        className="component-border"
-        ref={containerRef}  
-        onScroll={updateVisibleRange}  
-      >
-        <Piano
-          keys={frequencies}
-          props={{
-            id: 'timeline-grid-piano',
-            style: {
-              width: Math.max(...hits.map(h => h.endTime)) * pixelsPerSecond
-            }
-          }}
-          showKeyLabels={false}          
-        />
 
-        {
-          visibleHits.map(hit => {
-            
-            return (
-              <Hit hit={hit} />
-            )
-          })
-        }
-      </div>
+      <DndContext>      
+        <div 
+          id="timeline-grid-piano-container"
+          className="component-border"
+          ref={containerRef}  
+          onScroll={updateVisibleRange}  
+        >
+          <Piano
+            keys={frequencies}
+            props={{
+              id: 'timeline-grid-piano',
+              style: {
+                width: Math.max(...hits.map(h => h.endTime)) * pixelsPerSecond
+              }
+            }}
+            showKeyLabels={false}          
+          />
+
+          {
+            visibleHits.map(hit => {
+              
+              return (
+                <Hit hit={hit} />
+              )
+            })
+          }
+        </div>
+      </DndContext>
     </div>
   )
 }

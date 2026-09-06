@@ -38,7 +38,6 @@ export default function Piano ({
           keys.map((key, i) => {
 
             const noteName = reversedNoteNames[i % 12]
-            console.log(noteName)
             const colour = noteName.includes('b') ? 'black' : 'white'
             
             const active = voice?.activeNotes.includes(String(key)) ? 'active' : ''
