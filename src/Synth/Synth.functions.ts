@@ -330,6 +330,7 @@ const runInterval = (
       if (!isRest(voice)) {
 
         const hit: HitType = {
+          id        : crypto.randomUUID(),  
           sound     : randomOneFrom(activeSounds) as string,
           level     : calculateLevel(voice),
           frequency : 0,

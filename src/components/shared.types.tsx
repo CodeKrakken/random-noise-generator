@@ -66,6 +66,7 @@ type VoiceType = {
 }
 
 type HitType = {
+  id        : string
   sound     : string
   frequency : number
   detune    : number

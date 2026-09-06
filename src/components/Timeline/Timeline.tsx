@@ -3,7 +3,8 @@ import { HitType } from '../../components/shared.types'
 import { allFrequencies, pixelsPerSecond } from '../../content/data'
 import Hit from '../Hit/Hit'
 import Piano from '../Piano/Piano'
-import { DndContext } from '@dnd-kit/core'
+import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { Synth } from '../../Synth/Synth'
 
 const Timeline = ({ hits } : { hits: HitType[] }) => {
 
@@ -47,6 +48,59 @@ const Timeline = ({ hits } : { hits: HitType[] }) => {
     hit.startTime <=  visibleRange.end  
   )
 
+  const handleDragEnd = (event: DragEndEvent) => {  
+    const { active, delta } = event  
+    const hit = Synth.recordedHits.find(h => h.id === active.id)  
+    if (!hit) return  
+    
+    // --- horizontal: startTime/endTime ---  
+    const timeDelta = delta.x / pixelsPerSecond  
+    hit.startTime += timeDelta  
+    hit.endTime   += timeDelta  
+    
+    // --- vertical: frequency/note/octave ---  
+    const currentTop = (hit.style as any).top as number  
+    const newTop = currentTop + delta.y  
+    
+    // find nearest piano row to newTop (same DOM-lookup approach runInterval uses)  
+    const rowEl = document.elementFromPoint(  
+      containerRef.current!.getBoundingClientRect().left + 10,  
+      containerRef.current!.getBoundingClientRect().top + newTop  
+    )  
+    // or, more robustly, iterate frequencies and compare offsetTop directly:  
+    let nearestFrequency = hit.frequency  
+    let smallestDiff = Infinity  
+    frequencies.forEach(freq => {  
+      const el = document.getElementById(`timeline-grid-piano-${freq}`)  
+      if (!el) return  
+      const diff = Math.abs(el.offsetTop - newTop)  
+      if (diff < smallestDiff) {  
+        smallestDiff = diff  
+        nearestFrequency = freq  
+      }  
+    })  
+    hit.frequency = nearestFrequency  
+    // derive note/octave from nearestFrequency using allFrequencies, mirroring findNearestNote  
+    
+    // --- recompute style, same math as runInterval (lines 358-369) ---  
+    const pianoKey = document.getElementById(`timeline-grid-piano-${hit.frequency}`)  
+    const whiteKey = document.getElementById(`timeline-grid-piano-16.35`)  
+    const blackKey = document.getElementById(`timeline-grid-piano-17.32`)  
+    const rowHeight = pianoKey?.offsetHeight ?? 0  
+    const hitHeight = (whiteKey!.offsetHeight - blackKey!.offsetHeight) * 0.8  
+    const top = pianoKey!.offsetTop + (rowHeight - hitHeight) / 2  
+    
+    hit.style = {  
+      top,  
+      left: hit.startTime * pixelsPerSecond,  
+      width: (hit.endTime - hit.startTime) * pixelsPerSecond,  
+      backgroundColor: (hit.style as any).backgroundColor  
+    }  
+    
+    // --- commit: force React re-render ---  
+    Synth.setRecordedHits!([...Synth.recordedHits])  
+  }
+
   return (
 
     <div id="timeline-container">
@@ -68,7 +122,7 @@ const Timeline = ({ hits } : { hits: HitType[] }) => {
 
       {/* Horizontally scrolling timeline */}
 
-      <DndContext>      
+      <DndContext onDragEnd={handleDragEnd}>      
         <div 
           id="timeline-grid-piano-container"
           className="component-border"
