@@ -380,7 +380,8 @@ const runInterval = (
       }    
     } 
   } catch (error) {
-    console.error(error instanceof Error ? error.message : "Unknown error", error)
+    // console.error(error instanceof Error ? error.message : "Unknown error", error)
+    console.error(voice.id, error)  
   } finally {
     if (!voice.isActive) return
 

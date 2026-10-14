@@ -133,7 +133,7 @@ export default function Voice({
                 !hiddenStates[group.id] && ComponentToRender ? (  
 
                   <DropdownPortal
-                    key={group.id}
+                    key={`${group.id}-portal`}
                     anchor={buttonRefs.current[group.id]}
                   >
                     <ComponentToRender
