@@ -1,5 +1,6 @@
 import { allFrequencies }                   from "../content/data"
 import { Synth }                            from "../Synth/Synth"
+import { buffers } from "../Synth/Synth.functions"
 import { ActiveButtonGroupKey, VoiceType }  from "./shared.types"
 
 const getActiveFrequencies = (voice: VoiceType) => {
@@ -30,6 +31,14 @@ const updateButton = (
   voices[i][attribute].includes(e.currentTarget.value as any) 
   ? voices[i][attribute] = voices[i][attribute].filter(value => value !== e.currentTarget.value)
   : voices[i][attribute] = [voices[i][attribute], e.currentTarget.value].flat()
+
+  if (attribute === 'activeSounds' && voices[i].activeSounds.includes(e.currentTarget.value)) {  
+    const buf = buffers[e.currentTarget.value]  
+    if (buf?.note != null && buf?.octave != null) {  
+      voices[i].activeNotes   = [String(buf.note + 1)]  
+      voices[i].activeOctaves = [String(buf.octave)]  
+    }  
+  }
   
   updateVoice(voices, i, setVoices)
 }
