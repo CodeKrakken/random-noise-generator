@@ -14,7 +14,6 @@ export default function Voice({
     handleDelete,
     setVoices,
     dataAttribute
-
   }: {
 
     i             : number,
@@ -22,7 +21,6 @@ export default function Voice({
     voices        : VoiceType[],
     handleDelete  : Function
     dataAttribute : string
-
   }) {
 
   const [hiddenStates, setHiddenStates] = useState<Record<string, boolean>>({  
@@ -78,9 +76,11 @@ export default function Voice({
                   ? SingleSlider
                   : DoubleSlider
 
+              const key = `${i}-${slider.attrName}`
+
               return (
 
-                <div key={slider.attrName} className="row">
+                <div key={key} className="row">
 
                   <div className="slider-label">
                     {slider.label}
@@ -120,10 +120,14 @@ export default function Voice({
               }
             }
 
-            return <>
+            const key = `${i}-${group.id}`
+
+            const portalKey = `${i}-${group.id}-portal`
+
+            return <div key={key}>
 
               <Button
-                key     = {group.id}
+                key     = {key}
                 props   = {props}
                 label   = {group.label}
                 imgPath = {group.id}
@@ -133,7 +137,7 @@ export default function Voice({
                 !hiddenStates[group.id] && ComponentToRender ? (  
 
                   <DropdownPortal
-                    key={`${group.id}-portal`}
+                    key={portalKey}
                     anchor={buttonRefs.current[group.id]}
                   >
                     <ComponentToRender
@@ -148,7 +152,7 @@ export default function Voice({
                   :
                 <></>         
               }
-            </>
+            </div>
           })
         }
       </div>

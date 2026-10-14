@@ -79,6 +79,7 @@ type HitType = {
   source?   : SourceGain
   voiceId   : string
   style     : {}
+  key       : string
 }
 
 export type {

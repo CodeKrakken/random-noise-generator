@@ -86,9 +86,9 @@ const Timeline = ({ hits } : { hits: HitType[] }) => {
         {
           visibleHits.map(hit => {
             
-            return (
+            return <div key={hit.key}>
               <Hit hit={hit} />
-            )
+            </div>
           })
         }
       </div>

@@ -206,9 +206,8 @@ function App() {
       <div id="voices">
         <div className="row">
           {
-            voices.map((voice, i) => 
-
-              <Voice
+            voices.map((voice, i) => {
+              return <Voice
                 i             = {i} 
                 setVoices     = {setVoices} 
                 voices        = {voices}
@@ -216,7 +215,7 @@ function App() {
                 dataAttribute = "Voices"
                 key           = {voice.id}
               />
-            )
+            })
           }
         </div>
       </div>

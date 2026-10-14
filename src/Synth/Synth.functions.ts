@@ -338,10 +338,12 @@ const runInterval = (
           octave    : +randomOneFrom(activeOctaves),
           ...getGainEvents(voice, intervalLength, runStartTime),
           voiceId   : voice.id,
-          style     : {}
+          style     : {},
+          key       : ''
         }
 
         hit.frequency = allFrequencies[hit.octave!][hit.note!-1]
+        hit.key       = `${voice.id}-${hit.startTime}`
         
         const pianoKey = document.getElementById(
           `timeline-grid-piano-${hit.frequency}`
